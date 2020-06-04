@@ -1,6 +1,7 @@
 # Smart-Time-And-Attendance-Tracker
 
 ### Project Description
+Smart Time and Attendance Tracker allows people to track time and attendance based on what they are currently working on in order to decrease costs, whilst increasing productivity. With the use of the latest innovations in AI, IOT and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
 
 ### Demo 1 Links
 - Video: 
