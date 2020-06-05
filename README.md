@@ -30,8 +30,8 @@ STAT is a web and desktop application that allows people to track time and atten
 - https://18102639.github.io/
 > stuff
 
-**Vedha Velthapu**
-- https://munasheghub.github.io/
+**Vedha Krishna Velthapu**
+- https://vedha286.github.io/
 > stuff
 
 ### LinkedIn Profiles
@@ -39,4 +39,4 @@ STAT is a web and desktop application that allows people to track time and atten
 - Munashe Mujaji: https://www.linkedin.com/in/munashe-m-7754831a9
 - Jesse Mwiti:
 - Jana Sander:
-- Vedha Velthapu:
+- Vedha Krishna Velthapu:https://www.linkedin.com/in/vedha-krishna-velthapu-983445187
