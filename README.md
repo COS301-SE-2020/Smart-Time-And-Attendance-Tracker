@@ -36,7 +36,7 @@ STAT is a web and desktop application that allows people to track time and atten
 
 ### LinkedIn Profiles
 - Vianka Naidoo: https://www.linkedin.com/in/vianka-naidoo-063305157/
-- Munashe Mujaji:
+- Munashe Mujaji: https://www.linkedin.com/in/munashe-m-7754831a9
 - Jesse Mwiti:
 - Jana Sander:
 - Vedha Velthapu:
