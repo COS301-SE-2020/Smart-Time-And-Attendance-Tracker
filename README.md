@@ -5,7 +5,7 @@ STAT is a web and desktop application that allows people to track time and atten
 
 ### Demo 1 Links
 - Video: 
-- SRS Document:
+- SRS Document: https://www.overleaf.com/2591338744kghrbspxvprz
 
 ### Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
@@ -39,4 +39,4 @@ STAT is a web and desktop application that allows people to track time and atten
 - Munashe Mujaji: https://www.linkedin.com/in/munashe-m-7754831a9
 - Jesse Mwiti:
 - Jana Sander:
-- Vedha Krishna Velthapu:https://www.linkedin.com/in/vedha-krishna-velthapu-983445187
+- Vedha Krishna Velthapu: https://www.linkedin.com/in/vedha-krishna-velthapu-983445187
