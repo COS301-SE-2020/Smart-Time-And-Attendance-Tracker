@@ -32,7 +32,7 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 
 **Jana Sander**
 - https://18102639.github.io/
-> stuff
+> I am a final year Information and Knowledge Systems (Data Science Elective) student at the University of Pretoria. My interests in the field include data science, data mining and digital forensics, all of which I intend on on persuing further during my Honours degree next year. I am determined and hard-working, and keen to continue learning something new everyday.
 
 **Vedha Krishna Velthapu**
 - https://vedha286.github.io/
@@ -42,5 +42,5 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 - Vianka Naidoo: https://www.linkedin.com/in/vianka-naidoo-063305157/
 - Munashe Mujaji: https://www.linkedin.com/in/munashe-m-7754831a9
 - Jesse Mwiti:
-- Jana Sander:
+- Jana Sander: https://www.linkedin.com/in/jana-sander-72337a1a7/
 - Vedha Krishna Velthapu: https://www.linkedin.com/in/vedha-krishna-velthapu-983445187
