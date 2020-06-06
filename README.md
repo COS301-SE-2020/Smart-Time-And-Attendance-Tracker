@@ -23,7 +23,8 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 
 **Munashe Mujaji**
 - https://munasheghub.github.io/
-> stuff
+> I am a third year Multimedia student at the University of Pretoria. My interest in the IT industry was sparked when I took the subject in high school.
+> My interests revolve around creative works including traditional and digital art, video games, and animation. I would love to use the artistic and programming skills I have garnered during the course of my degree to become a contributor to creative industries and tell interesting stories.
 
 **Jesse Mwiti**
 - http://chirgugh.github.io/
