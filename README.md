@@ -36,7 +36,7 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 
 **Vedha Krishna Velthapu**
 - https://vedha286.github.io/
-> stuff
+> I am a final year Computer Science student at University of Pretoria. I developed a passion for programming and web designing while learning to code during school recess as a new hobby. I am interested in web and mobile application development and plan to my Honours degree next year. I am hardworking and willing to do my best with everything I do.
 
 ### LinkedIn Profiles
 - Vianka Naidoo: https://www.linkedin.com/in/vianka-naidoo-063305157/
