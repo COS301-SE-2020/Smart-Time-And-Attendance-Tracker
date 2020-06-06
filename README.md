@@ -14,9 +14,12 @@ STAT is a web and desktop application that allows people to track time and atten
 
 ### Profile Descriptions
 
-**Vianka Naidoo**
+**Vianka Naidoo**\
+_Team Leader_
 - https://Vianka213.github.io
-> stuff
+> Final year Information & Knowledge Systems student at the University of Pretoria, majoring in Software Development. I'm particularly interested in the fields of UI and UX design, as well as cyber-security and digital forensics, which I plan to learn more about while pursuing my Honours degree next year.
+My greatest passion is learning. I love igniting my curiosity, thinking outside the box and experiencing new things.
+I'm extremely ambitious, adaptable and a great problem-solver. My creativity and strong work ethic are amongst my strengths. I strive to utilise my abilities and skills to achieve my goals and help others to achieve theirs.
 
 **Munashe Mujaji**
 - https://munasheghub.github.io/
