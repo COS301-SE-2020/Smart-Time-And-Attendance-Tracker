@@ -28,7 +28,8 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 
 **Jesse Mwiti**
 - http://chirgugh.github.io/
-> stuff
+> Am a final year computer science student at University of Pretoria.
+I have an interest in data mining, Fintech, digital marketing, android and web deveopment. I am an open-minded invidual and pride myself in my ability to keep progressing and thriving under new or tough conditions.
 
 **Jana Sander**
 - https://18102639.github.io/
@@ -41,6 +42,6 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 ### LinkedIn Profiles
 - Vianka Naidoo: https://www.linkedin.com/in/vianka-naidoo-063305157/
 - Munashe Mujaji: https://www.linkedin.com/in/munashe-m-7754831a9
-- Jesse Mwiti:
+- Jesse Mwiti: www.linkedin.com/in/jesseMwiti
 - Jana Sander: https://www.linkedin.com/in/jana-sander-72337a1a7/
 - Vedha Krishna Velthapu: https://www.linkedin.com/in/vedha-krishna-velthapu-983445187
