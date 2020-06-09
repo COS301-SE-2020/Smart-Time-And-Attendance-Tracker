@@ -7,13 +7,15 @@ import { FeaturesComponent } from './components/features/features.component';
 import { DesktopComponent } from './components/desktop/desktop.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { MaterialComponentsModule } from '../material-components/material-components.module';
 
 
 @NgModule({
   declarations: [HomeComponent, FeaturesComponent, DesktopComponent, SignUpComponent, SignInComponent],
   imports: [
     CommonModule,
-    StartupRoutingModule
+    StartupRoutingModule,
+    MaterialComponentsModule
   ],
   exports: [
     HomeComponent,
