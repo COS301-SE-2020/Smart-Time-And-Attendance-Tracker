@@ -6,6 +6,14 @@ var UserSchema = new mongoose.Schema({
         required : "Required",
         unique: true
     },
+    ProfileName:{
+        type: String,
+        required : "Required"
+    },
+    ProfilePicture:{
+        type: String,  
+        required : "Required"
+    },
     Name:{
         type: String,
         required : "Required"
