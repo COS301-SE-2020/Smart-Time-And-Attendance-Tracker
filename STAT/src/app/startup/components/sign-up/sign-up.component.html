@@ -1,6 +1,6 @@
 <div class="container right-panel-active" id="container">
 	<div class="form-container sign-up-container">
-		<form action="#">
+		<form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)">
 			<h1>Sign Up</h1>
                 <mat-form-field appearance="standard">
                     <mat-label>Name</mat-label>

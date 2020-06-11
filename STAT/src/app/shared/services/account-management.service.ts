@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AccountManagementService {
 
-  constructor(private http : HttpClient) { }
+  constructor() { }
 
   // sign up
   public signUp() {

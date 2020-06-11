@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignUpComponent implements OnInit {
 
-  constructor() { }
+  constructor(public service : AccountManagementService) { }
 
   ngOnInit(): void {
     const signUpButton = document.getElementById('signUp');
@@ -23,4 +25,8 @@ export class SignUpComponent implements OnInit {
     });
   }
 
+  // submit
+  signUp(form : NgForm) {
+    console.log(form.value);
+  }
 }

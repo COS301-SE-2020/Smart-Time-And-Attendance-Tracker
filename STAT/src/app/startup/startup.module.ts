@@ -10,6 +10,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MaterialComponentsModule } from '../material-components/material-components.module';
 import { HeaderComponent } from '../shared/components/header/header.component';
 import { SharedModule } from '../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     StartupRoutingModule,
     MaterialComponentsModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   exports: [
     HomeComponent,
