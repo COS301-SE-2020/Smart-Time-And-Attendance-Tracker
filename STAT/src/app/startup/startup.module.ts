@@ -8,6 +8,8 @@ import { DesktopComponent } from './components/desktop/desktop.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MaterialComponentsModule } from '../material-components/material-components.module';
+import { HeaderComponent } from '../shared/components/header/header.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -15,7 +17,8 @@ import { MaterialComponentsModule } from '../material-components/material-compon
   imports: [
     CommonModule,
     StartupRoutingModule,
-    MaterialComponentsModule
+    MaterialComponentsModule,
+    SharedModule
   ],
   exports: [
     HomeComponent,
