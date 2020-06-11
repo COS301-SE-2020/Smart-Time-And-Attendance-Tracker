@@ -7,7 +7,6 @@ router.get("/", (req, res)=>{
     res.send("User controller");
 });
 
-
 router.post("/add", (req, res) => {
     var user = new UserModel();
     user.ID = db.User.find().Count()+1;
@@ -22,7 +21,7 @@ router.post("/add", (req, res) => {
         else{
             res.send("Error Occured");
         }
-    })
+    });
 });
 
 module.exports = router;
