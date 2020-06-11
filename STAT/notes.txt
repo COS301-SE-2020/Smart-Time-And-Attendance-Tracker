@@ -1,0 +1,27 @@
+Database name: STAT
+
+Tables(collections):- Organisation
+                    - User
+                    - Project
+                    - Task
+                    - Team
+                    - Role
+		    
+Organisation schema:{"ID":1, "OrganistionName":"name", "SystemAdmin":[1], "SecurityAdmin":[1], "DataAnalyst":[1]}
+
+User schema: 	    {"ID":1, "Name":"name", "Surname":"surname", "Email":"email", Role:[]}  
+==>since some users are general users and don't have a role until they are working in a team, they will not have a role till they are working in a team
+
+Project schema:	    {"ID":1, "OrganisationID":1, "ClientName":"name", "ProjectTitle":"title", "TotalTime": 22}	
+==> not sure about total time => hours/minutes
+
+Task schema:	    {"ID":1, "ProjectID":1, "Name":"name, "StartTime":"12/05/2020 09:30", "TimeSpent":123871, "ExpectedCost":40, MonetaryValue:30}
+
+Team schema: 	    {"ID":1, "ProjectID":1, "TeamLeader":1, "TeamMembers":[2,3,4]}
+
+Role schema:	    {"ID":1, "Role":"Data Analyst"}
+                    {"ID":2, "Role":"System Adminstrator"}
+                    {"ID":3, "Role":"Security Adminstrator"}
+                    {"ID":4, "Role":"Team Leader"}
+                    {"ID":5, "Role":"General Team Member"}
+
