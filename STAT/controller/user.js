@@ -64,7 +64,7 @@ router.post("/api/register", (req, res) => {
     user.Name = req.body.name;
     user.Surname = req.body.surname;
     user.Email = req.body.email;
-    user.Role = [2];
+    user.Role = [2,3];
     user.save((err, doc) => {
         if(!err){
             res.send("Created System Administrator");
