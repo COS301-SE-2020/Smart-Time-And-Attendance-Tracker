@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 var RoleSchema = new mongoose.Schema({
     ID:{
-        type: Number,
+        type: Int32Array,
         required : "Required",
         unique: true
     },

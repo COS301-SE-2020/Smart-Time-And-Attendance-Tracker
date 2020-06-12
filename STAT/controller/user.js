@@ -35,7 +35,7 @@ router.get("/api/login", (req, res)=>{//// only returning all user details in th
  
 });
 
-router.post("/add", (req, res) => {
+router.post("/api/addUser", (req, res) => {
     var user = new UserModel();
     user.ID = db.User.find().Count()+1;
     user.ProfileName = req.body.profileName;
@@ -44,7 +44,7 @@ router.post("/add", (req, res) => {
     user.Name = req.body.name;
     user.Surname = req.body.surname;
     user.Email = req.body.email;
-    user.Role = [];
+    user.Role = [5];
     user.save((err, doc) => {
         if(!err){
             res.send("Created User");
@@ -55,8 +55,25 @@ router.post("/add", (req, res) => {
     })
 });
 
-
-
+router.post("/api/register", (req, res) => {
+    var user = new UserModel();
+    user.ID = db.User.find().Count()+1;
+    user.ProfileName = req.body.profileName;
+    user.ProfilePicture = req.body.profilePicture;
+    user.Password = req.body.password;
+    user.Name = req.body.name;
+    user.Surname = req.body.surname;
+    user.Email = req.body.email;
+    user.Role = [2];
+    user.save((err, doc) => {
+        if(!err){
+            res.send("Created System Administrator");
+        }
+        else{
+            res.send("Error Occured");
+        }
+    })
+});
 
 router.post("/api/update", (req, res) => {
     res.send("Under Construction");

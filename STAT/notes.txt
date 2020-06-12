@@ -20,8 +20,8 @@ Task schema:	    {"ID":1, "ProjectID":1, "Name":"name, "StartTime":"12/05/2020 0
 Team schema: 	    {"ID":1, "ProjectID":1, "TeamLeader":1, "TeamMembers":[2,3,4]}
 
 Role schema:	    {"ID":1, "Role":"Data Analyst"}
-                    {"ID":2, "Role":"System Adminstrator"}
-                    {"ID":3, "Role":"Security Adminstrator"}
+                    {"ID":2, "Role":"System Administrator"}
+                    {"ID":3, "Role":"Security Administrator"}
                     {"ID":4, "Role":"Team Leader"}
                     {"ID":5, "Role":"General Team Member"}
 
