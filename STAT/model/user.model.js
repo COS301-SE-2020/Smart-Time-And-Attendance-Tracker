@@ -31,7 +31,7 @@ var UserSchema = new mongoose.Schema({
         required : "Required"
     },
     Role:{
-        type: Array
+        type: Int32Array
     }
 });
 

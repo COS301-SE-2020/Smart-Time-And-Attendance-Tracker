@@ -15,7 +15,7 @@ var TeamSchema = new mongoose.Schema({
         required : "Required"
     },
     TeamMembers:{
-        type: Array,
+        type: Int32Array,
         required : "Required"
     }
 });
