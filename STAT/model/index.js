@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-
+//mongodb+srv://<username>:<password>@cluster0-ocdej.azure.mongodb.net/test
 mongoose.connect("mongodb://localhost:27017/STAT", {useNewUrlParser: true}, (error)=>{
 
     if(!error)
