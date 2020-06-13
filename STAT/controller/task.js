@@ -1,7 +1,6 @@
 const express = require("express");
-const mongoose = require("mongoose");
-
 const router = express.Router();
+
 const TaskModel = mongoose.model("Task");
 router.get("/", (req, res)=>{
     res.send("Task controller");

@@ -1,17 +1,21 @@
+require("./config/passportConfig");
+
 const express = require("express");
-const mongoose = require("mongoose");
 const router = express.Router();
-const UserModel = mongoose.model("User");
-const bcrypt=require("bcrypt");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+
+const ctrlUser = require("./controller/user");
+
 var assert = require('assert');
 const bodyParser = require("body-parser");
 router.use( bodyParser.json() ); 
+router.use(passport.initialize());
 
 
-var url = "mongodb+srv://TeamVisionary:Capstone301@cluster0-ocdej.azure.mongodb.net/Smart-Time-And-Attendance-Tracker?retryWrites=true&w=majority"; 
+router.post("/api/login", ctrlUser.authenticate);
 
-
-router.get("/api/login", (req, res)=>{
+/*(req, res)=>{
     var user = new UserModel();
     if (req.body.email && req.body.password){
         mongoose.connect(url,function(err, db){
@@ -54,7 +58,7 @@ router.get("/api/login", (req, res)=>{
         res.send(errors);
         return;
     }
-});
+});*/
 
 
 // create application/json parser
@@ -136,6 +140,22 @@ router.post("/api/register", (req, res) => { ///missing validations -
 router.post("/api/update", (req, res) => {
     res.send("Under Construction");
 });
+
+
+module.exports.authenticate = (req, res,next) =>{
+    //call for passport authentication
+    passport.authenticate('local', (err,user,info)=>{
+        //error from passport
+        if(err)
+            return res.status(400).json(err);
+        //registered user
+        else if(user) 
+            return res.status(200).json({"token": user.generateJWT()});
+        //unknown user or wrong password
+        else
+            return res.status(404).json(info);
+    })(req,res);
+}
 
 
 module.exports = router;

@@ -1,4 +1,6 @@
 const mongoose = require("mongoose")
+const bcrypt=require("bcrypt");
+const jwt = require('jsonwebtoken');
 
 var UserSchema = new mongoose.Schema({
     ID:{
@@ -34,5 +36,16 @@ var UserSchema = new mongoose.Schema({
         type: Array
     }
 });
+
+//Methods
+
+UserSchema.methods.verifyPassword = function(password){
+    return bcrypt.compareSync(password, this.password);
+};
+
+UserSchema.methods.generateJWT = function() {
+    return jwt.sign({id: this.ID, roles: this.Role},
+        process.env.JWT_SECRET);
+}
 
 mongoose.model("User", UserSchema);

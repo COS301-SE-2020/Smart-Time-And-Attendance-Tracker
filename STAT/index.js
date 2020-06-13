@@ -1,4 +1,6 @@
+require('./model/db');
 const connection = require("./model")
+
 
 const express = require("express");
 const application = express();
