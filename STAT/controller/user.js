@@ -3,14 +3,13 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const UserModel = mongoose.model("User");
 const bcrypt=require("bcrypt");
+var assert = require('assert');
+const bodyParser = require("body-parser");
+router.use( bodyParser.json() ); 
 
 
 var url = "mongodb+srv://TeamVisionary:Capstone301@cluster0-ocdej.azure.mongodb.net/Smart-Time-And-Attendance-Tracker?retryWrites=true&w=majority"; 
 
-
-var assert = require('assert');
-const bodyParser = require("body-parser");
-router.use( bodyParser.json() ); 
 
 router.get("/api/login", (req, res)=>{
     var user = new UserModel();
