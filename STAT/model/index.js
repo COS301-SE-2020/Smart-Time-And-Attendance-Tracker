@@ -1,9 +1,12 @@
 const mongoose = require("mongoose")
-var uri = "mongodb+srv://<Team>:<Capstone301>@cluster0-ocdej.azure.mongodb.net/test";
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}, (error)=>{
+
+var testing="";
+var uri = "mongodb+srv://TeamVisionary:Capstone301@cluster0-ocdej.azure.mongodb.net/Smart-Time-And-Attendance-Tracker?retryWrites=true&w=majority"; 
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}, (error,db)=>{
 
     if(!error)
     {
+        testing=db;
         console.log("Sucess Connected")
     }
     else{
