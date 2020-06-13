@@ -12,7 +12,7 @@ const TeamModel = mongoose.model("Team");
 passport.use(
     new localStrategy({usernameField:'email'}, 
     (username, password, done) =>{
-        UserModel.findOne({email: username},
+        UserModel.findOne({"Email": username},
             (err, user)=> {
                 if(err)
                     return done(err);

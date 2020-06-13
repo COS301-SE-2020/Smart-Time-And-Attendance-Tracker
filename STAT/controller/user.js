@@ -1,5 +1,5 @@
 require("../config/passportConfig");
-
+const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
@@ -7,12 +7,11 @@ const bodyParser = require("body-parser");
 router.use(passport.initialize());
 var assert = require('assert');
 router.use( bodyParser.json() ); 
-
-
+const UserModel = mongoose.model("User");
+const bcrypt=require("bcrypt");
+const JWThelper = require("../config/jwtHelper");
 
 router.post("/api/login", (req, res,next) =>{
-    console.log(req.body.email);
-    console.log(req.body.password);
     //call for passport authentication
     passport.authenticate('local', (err,user,info)=>{
         //error from passport
@@ -20,7 +19,7 @@ router.post("/api/login", (req, res,next) =>{
             return res.status(400).json(err);
         //registered user
         else if(user) 
-            return res.status(200).json({"token": user.generateJWT()});
+            return res.status(200).json({"token": user.generateJWT(), "roles": user.Roles});
         //unknown user or wrong password
         else
             return res.status(404).json(info);
@@ -100,20 +99,13 @@ router.post("/api/addUser", (req, res) => {
 });*/
 
 router.post("/api/register", (req, res) => { ///missing validations - 
-    /*if (req.body.password !== req.body.passwordConf) {
+    if (req.body.password !== req.body.passwordConf) {
         var errors = new Error('Passwords do not match.');
         errors.status = 400;
         errors.name = 'Passwords do not match.';
         res.send(errors);
         return;
-      }*/
-      console.log(req.body.email);
-        console.log(req.body.profilePicture );
-        console.log(req.body.password);
-        console.log(req.body.passwordConf);
-        console.log(req.body.profileName);
-        console.log(req.body.name);
-        console.log(req.body.surname);
+      }
     if (req.body.email && req.body.profilePicture && 
         req.body.password && req.body.passwordConf &&
         req.body.profileName && req.body.name &&
@@ -141,7 +133,7 @@ router.post("/api/register", (req, res) => { ///missing validations -
                  user.Password = hash;
                  user.save((err, doc) => {
                     if(!err){
-                        res.send("User created successfully");
+                    return res.status(200).json({"token": user.generateJWT(), "roles": user.Roles});
                     }
                     else{
                         res.send(err);

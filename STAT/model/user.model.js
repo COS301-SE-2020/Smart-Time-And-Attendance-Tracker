@@ -40,12 +40,15 @@ var UserSchema = new mongoose.Schema({
 //Methods
 
 UserSchema.methods.verifyPassword = function(password){
-    return bcrypt.compareSync(password, this.password);
+    return bcrypt.compare(password, this.password);
 };
 
 UserSchema.methods.generateJWT = function() {
-    return jwt.sign({id: this.ID, roles: this.Role},
-        process.env.JWT_SECRET);
+    return jwt.sign({id: this.ID, roles: this.Role,  },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: process.env.JWT_EXP
+        });
 }
 
 mongoose.model("User", UserSchema);
