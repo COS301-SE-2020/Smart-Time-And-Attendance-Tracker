@@ -102,7 +102,8 @@ const materialComponents = [
     MatSnackBarModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatIconModule
   ],
   exports: [
     MatCheckboxModule,
@@ -135,7 +136,8 @@ const materialComponents = [
     MatSnackBarModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatIconModule
   ]
 })
 export class MaterialComponentsModule { }

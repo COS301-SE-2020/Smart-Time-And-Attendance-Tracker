@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { StartupModule } from './startup/startup.module';
 import { MaterialComponentsModule } from './material-components/material-components.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { MaterialComponentsModule } from './material-components/material-compone
     SharedModule,
     StartupModule,
     MaterialComponentsModule,
-    FormsModule
+    FormsModule,
+    DashboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
