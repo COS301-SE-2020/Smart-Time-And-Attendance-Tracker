@@ -105,14 +105,21 @@ router.post("/api/register", (req, res) => { ///missing validations -
         errors.name = 'Passwords do not match.';
         res.send(errors);
         return;
-      }
+    }
+    if(UserModel.findOne({"Email": req.body.email}))
+    {
+        var errors = new Error('An account is already registered with that email.');
+        errors.status = 400;
+        errors.name = 'An account is already registered with that email.';
+        res.send(errors);
+        return;
+    }
     if (req.body.email && req.body.profilePicture && 
         req.body.password && req.body.passwordConf &&
         req.body.profileName && req.body.name &&
         req.body.surname )
         
-        {
-           
+        {  
             var user = new UserModel();
             user.ID =Math.floor(Math.random() * Math.floor(1000));; //db.User.find().Count()+1;
             user.ProfileName = req.body.profileName;
