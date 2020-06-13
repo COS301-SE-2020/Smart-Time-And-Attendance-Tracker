@@ -1,1 +1,57 @@
-<p>sign-in works!</p>
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="#">
+			<h1>Sign Up</h1>
+                <mat-form-field appearance="standard">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="John">
+                </mat-form-field>
+                <mat-form-field appearance="standard">
+                    <mat-label>Surname</mat-label>
+                    <input matInput placeholder="Doe">
+                </mat-form-field>
+                <mat-form-field appearance="standard" type="email">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" placeholder="johndoe@example.com">
+                </mat-form-field>
+                <mat-form-field appearance="standard">
+                    <mat-label>Enter password</mat-label>
+                    <input matInput type="password" placeholder="">
+                    <mat-hint>Password should be at least 6 characters long</mat-hint>
+                </mat-form-field><br>
+                <mat-form-field appearance="standard">
+                    <mat-label>Confirm password</mat-label>
+                    <input matInput placeholder="John">
+                </mat-form-field>
+			<button mat-raised-button color="primary">Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form class="signForm" action="#">
+            <h1>Sign In</h1>
+            <mat-form-field appearance="standard" type="email">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="johndoe@example.com">
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" placeholder="">
+            </mat-form-field>
+			<button mat-raised-button color="primary">Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us, please sign in with your info</p>
+				<button mat-raised-button color="accent" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>You're just a few clicks away from starting your journey with us</p>
+				<button mat-raised-button color="accent" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>
