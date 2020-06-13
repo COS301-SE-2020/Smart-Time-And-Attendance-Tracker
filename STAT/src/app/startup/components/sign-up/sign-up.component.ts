@@ -10,7 +10,7 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 export class SignUpComponent implements OnInit {
 
   constructor(public service : AccountManagementService) { }
-
+  
   ngOnInit(): void {
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
@@ -25,6 +25,7 @@ export class SignUpComponent implements OnInit {
     });
   }
 
+    
   // submit
   signUp(form : NgForm) {
     console.log(form.value);
