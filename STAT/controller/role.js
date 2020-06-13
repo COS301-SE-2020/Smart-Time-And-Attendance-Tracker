@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const mongoose = require("mongoose");
 const RoleModel = mongoose.model("Role");
 router.get("/", (req, res)=>{
     res.send("Role controller");

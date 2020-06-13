@@ -1,19 +1,31 @@
-require("./config/passportConfig");
+require("../config/passportConfig");
 
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const bodyParser = require("body-parser");
-
-const ctrlUser = require("./controller/user");
-
-var assert = require('assert');
-const bodyParser = require("body-parser");
-router.use( bodyParser.json() ); 
 router.use(passport.initialize());
+var assert = require('assert');
+router.use( bodyParser.json() ); 
 
 
-router.post("/api/login", ctrlUser.authenticate);
+
+router.post("/api/login", (req, res,next) =>{
+    console.log(req.body.email);
+    console.log(req.body.password);
+    //call for passport authentication
+    passport.authenticate('local', (err,user,info)=>{
+        //error from passport
+        if(err)
+            return res.status(400).json(err);
+        //registered user
+        else if(user) 
+            return res.status(200).json({"token": user.generateJWT()});
+        //unknown user or wrong password
+        else
+            return res.status(404).json(info);
+    })(req,res);
+});
 
 /*(req, res)=>{
     var user = new UserModel();
@@ -88,17 +100,26 @@ router.post("/api/addUser", (req, res) => {
 });*/
 
 router.post("/api/register", (req, res) => { ///missing validations - 
-    if (req.body.password !== req.body.passwordConf) {
+    /*if (req.body.password !== req.body.passwordConf) {
         var errors = new Error('Passwords do not match.');
         errors.status = 400;
         errors.name = 'Passwords do not match.';
         res.send(errors);
         return;
-      }
+      }*/
+      console.log(req.body.email);
+        console.log(req.body.profilePicture );
+        console.log(req.body.password);
+        console.log(req.body.passwordConf);
+        console.log(req.body.profileName);
+        console.log(req.body.name);
+        console.log(req.body.surname);
     if (req.body.email && req.body.profilePicture && 
         req.body.password && req.body.passwordConf &&
         req.body.profileName && req.body.name &&
-        req.body.surname ) {
+        req.body.surname )
+        
+        {
            
             var user = new UserModel();
             user.ID =Math.floor(Math.random() * Math.floor(1000));; //db.User.find().Count()+1;
@@ -140,22 +161,6 @@ router.post("/api/register", (req, res) => { ///missing validations -
 router.post("/api/update", (req, res) => {
     res.send("Under Construction");
 });
-
-
-module.exports.authenticate = (req, res,next) =>{
-    //call for passport authentication
-    passport.authenticate('local', (err,user,info)=>{
-        //error from passport
-        if(err)
-            return res.status(400).json(err);
-        //registered user
-        else if(user) 
-            return res.status(200).json({"token": user.generateJWT()});
-        //unknown user or wrong password
-        else
-            return res.status(404).json(info);
-    })(req,res);
-}
 
 
 module.exports = router;

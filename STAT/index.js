@@ -1,4 +1,4 @@
-require('./model/db');
+
 const connection = require("./model")
 
 
@@ -7,6 +7,8 @@ const application = express();
 const path = require("path");
 const expressHandlerbars = require("express-handlebars");
 const bodyParser = require("body-parser");
+
+require('./model/db');
 
 application.use(bodyParser.urlencoded({
     extended : true

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const mongoose = require("mongoose");
 const TeamModel = mongoose.model("Team");
 router.get("/", (req, res)=>{
     res.send("Team controller");
