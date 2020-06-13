@@ -9,9 +9,9 @@ export class HeaderComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  // know which header to display
   isLoggedIn: boolean = false;
 
+  ngOnInit(): void {
+  }
 }
