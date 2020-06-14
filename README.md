@@ -3,7 +3,7 @@
 ### Project Description
 STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
 
-### Repository layout
+### Repository Layout
 This is how the branches will be laid out
 
 ```
