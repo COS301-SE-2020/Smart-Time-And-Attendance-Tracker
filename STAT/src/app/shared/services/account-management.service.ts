@@ -39,6 +39,7 @@ export class AccountManagementService {
     .subscribe(data => {
     AccountManagementService.token = data["token"];
     AccountManagementService.roles = data["roles"];
+    localStorage.setItem('roles', data['roles']);
   });
   }
 

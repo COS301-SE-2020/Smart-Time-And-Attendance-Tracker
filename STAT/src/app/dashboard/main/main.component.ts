@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({
   selector: 'app-main',
@@ -10,10 +11,14 @@ export class MainComponent implements OnInit {
   projects: any = [
     {value: '0', name: 'Project 0'},
     {value: '1', name: 'Project 1'},
-    {value: '2', name: 'Porject 2'}
+    {value: '2', name: 'Project 2'}
   ];
 
-  constructor() { }
+  admin : boolean;
+  dataAnalyst : boolean;
+  general : boolean;
+
+  constructor(public service : AccountManagementService) { }
 
   ngOnInit(): void {
     const hamburger = document.getElementById('hamburger');
@@ -22,6 +27,8 @@ export class MainComponent implements OnInit {
     hamburger.addEventListener('click', () => {
       wrapper.classList.toggle('open')
     })
+
+    this.dataAnalyst = false;
   }
 
   // set active tab after component initialisation

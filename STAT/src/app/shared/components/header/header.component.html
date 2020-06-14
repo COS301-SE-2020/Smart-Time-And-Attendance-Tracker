@@ -1,4 +1,4 @@
-<nav *ngIf="!isLoggedIn" class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" [routerLink]="['home']">
         <img src="https://img.icons8.com/bubbles/2x/overtime.png" width="50" height="50" alt="logo" loading="lazy">
     </a>
@@ -13,6 +13,6 @@
     <button mat-raised-button color="primary" [routerLink]="['sign-in']">Sign In</button>
 </nav>
 
-<nav *ngIf="isLoggedIn">
+<nav>
     <!-- navbar when user is logged in -->
 </nav>

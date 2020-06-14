@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -9,7 +10,7 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 })
 export class SignUpComponent implements OnInit {
 
-  constructor(public service : AccountManagementService) { }
+  constructor(public service : AccountManagementService, public router : Router) { }
   
   ngOnInit(): void {
     const signUpButton = document.getElementById('signUp');
@@ -29,11 +30,15 @@ export class SignUpComponent implements OnInit {
   signUp(form : NgForm) {
     console.log(form.value);
     this.service.signUp(form.value);
+    this.router.navigate(['main']);
+    localStorage.setItem('loggedIn', 'true');
   }
 
   //submit sign in form
   signIn(form : NgForm) {
     console.log(form.value);
     this.service.signIn(form.value);
+    this.router.navigate(['main']);
+    localStorage.setItem('loggedIn', 'true');
   }
 }
