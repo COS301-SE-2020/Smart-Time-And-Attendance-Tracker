@@ -3,6 +3,20 @@
 ### Project Description
 STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
 
+### Repository layout
+This is how the branches will be laid out
+
+```
+  master
+  └── server-master
+      └──── server-develop
+        └──── server-feature-API
+        └──── server-feature-authentication
+      angular-master
+      └──── angular-develop
+        └──── angular-feature-home
+        └──── angular-feature-API-calls
+```
 ### Demo 1 Links
 - Video: 
 - SRS Document: https://www.overleaf.com/read/bkqdtqzspmtc
