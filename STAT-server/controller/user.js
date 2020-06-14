@@ -4,9 +4,12 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const bodyParser = require("body-parser");
+const cors = require('cors');
+
 router.use(passport.initialize());
 var assert = require('assert');
 router.use( bodyParser.json() ); 
+router.use(cors());
 const UserModel = mongoose.model("User");
 const bcrypt=require("bcrypt");
 const JWThelper = require("../config/jwtHelper");
