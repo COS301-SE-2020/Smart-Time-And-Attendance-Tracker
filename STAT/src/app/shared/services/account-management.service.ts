@@ -37,9 +37,9 @@ export class AccountManagementService {
       headers: headers
     })
     .subscribe(data => {
-      console.log(data);
-    });
-
+    AccountManagementService.token = data["token"];
+    AccountManagementService.roles = data["roles"];
+  });
   }
 
   // edit profile
