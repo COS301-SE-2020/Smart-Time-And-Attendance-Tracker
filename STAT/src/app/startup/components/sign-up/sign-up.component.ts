@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NgModule } from '@angular/core';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({

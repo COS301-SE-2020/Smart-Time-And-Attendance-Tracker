@@ -10,6 +10,7 @@ import { StartupModule } from './startup/startup.module';
 import { MaterialComponentsModule } from './material-components/material-components.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MatIconModule } from '@angular/material/icon';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MatIconModule } from '@angular/material/icon';
     StartupModule,
     MaterialComponentsModule,
     FormsModule,
-    DashboardModule
+    DashboardModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

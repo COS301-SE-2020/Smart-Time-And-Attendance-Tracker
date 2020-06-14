@@ -3,13 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',  
 })
+
 export class AccountManagementService {
+ 
 
   public static token :string;
-  public static roles: Array<{id: number, text: string}>
-  constructor(private http: HttpClient) { }
+  public static roles: Array<{id: number, text: string}>;
+  constructor(public http: HttpClient) { }
 
   // sign up
   public signUp(values) {
@@ -17,7 +19,7 @@ export class AccountManagementService {
           .set('Authorization', 'my-auth-token')
           .set('Content-Type', 'application/json');
 
-    this.http.post('http://127.0.0.1:3000', JSON.stringify(values), {
+    this.http.post('http://localhost:3000/api/register', JSON.stringify(values), {
       headers: headers
     })
     .subscribe(data => {
