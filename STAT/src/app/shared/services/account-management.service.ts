@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Injectable({
@@ -7,11 +7,22 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AccountManagementService {
 
-  constructor() { }
+  public static token :string;
+  public static roles: Array<{id: number, text: string}>
+  constructor(private http: HttpClient) { }
 
   // sign up
-  public signUp() {
+  public signUp(values) {
+    const headers = new HttpHeaders()
+          .set('Authorization', 'my-auth-token')
+          .set('Content-Type', 'application/json');
 
+    this.http.post('http://127.0.0.1:3000', JSON.stringify(values), {
+      headers: headers
+    })
+    .subscribe(data => {
+      console.log(data);
+    });
   }
 
   // sign in 

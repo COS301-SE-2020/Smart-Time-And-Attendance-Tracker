@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { summaryFileName } from '@angular/compiler/src/aot/util';
 
 @Component({
@@ -9,7 +8,7 @@ import { summaryFileName } from '@angular/compiler/src/aot/util';
 })
 export class SignInComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit(): void {
     const signUpButton = document.getElementById('signUp');
@@ -28,33 +27,11 @@ export class SignInComponent implements OnInit {
       container.classList.remove("right-panel-active");
     });
 
-    signUp.addEventListener('click', () => {
-      this.callServer
-    });
 
     signIn.addEventListener('click', () => {
       container.classList.remove("right-panel-active");
     });
   }
  
-  callServer() {
-    const name = document.getElementById('name');
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const passwordConf = document.getElementById('passwordConfirm');
-    const surname = document.getElementById('surname');
-
-    const headers = new HttpHeaders()
-          .set('Authorization', 'my-auth-token')
-          .set('Content-Type', 'application/json');
-
-    this.http.post('http://127.0.0.1:3000', JSON.stringify({
-      "name": name, "surname": surname}), {
-      headers: headers
-    })
-    .subscribe(data => {
-      console.log(data);
-    });
-  }
 
 }

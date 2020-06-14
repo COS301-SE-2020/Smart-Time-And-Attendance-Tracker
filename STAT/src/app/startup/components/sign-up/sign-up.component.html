@@ -2,40 +2,40 @@
 	<div class="form-container sign-up-container">
 		<form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)">
 			<h1>Sign Up</h1>
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="standard" >
                     <mat-label>Name</mat-label>
-                    <input matInput placeholder="John">
+                    <input matInput placeholder="John" name = "name" ngModel>
                 </mat-form-field>
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="standard" >
                     <mat-label>Surname</mat-label>
-                    <input matInput placeholder="Doe">
+                    <input matInput placeholder="Doe" name = "surname" ngModel>
                 </mat-form-field>
-                <mat-form-field appearance="standard" type="email">
+                <mat-form-field appearance="standard" type="email" >
                     <mat-label>Email</mat-label>
-                    <input matInput type="email" placeholder="johndoe@example.com">
+                    <input matInput type="email" placeholder="johndoe@example.com" name = "email" ngModel>
                 </mat-form-field>
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="standard" >
                     <mat-label>Enter password</mat-label>
-                    <input matInput type="password" placeholder="">
+                    <input matInput type="password" placeholder="" name = "password" ngModel>
                     <mat-hint>Password should be at least 6 characters long</mat-hint>
                 </mat-form-field><br>
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="standard" >
                     <mat-label>Confirm password</mat-label>
-                    <input matInput placeholder="John">
+                    <input matInput placeholder="John" name = "passwordConf" ngModel>
                 </mat-form-field>
 			<button mat-raised-button color="primary" type="submit">Sign Up</button>
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
-		<form class="signForm" action="#">
+		<form #signInForm="ngForm" (ngSubmit)="signIn(signInForm)">
             <h1>Sign In</h1>
             <mat-form-field appearance="standard" type="email">
                 <mat-label>Email</mat-label>
-                <input matInput placeholder="johndoe@example.com">
+                <input matInput placeholder="johndoe@example.com" name = "email" ngModel>
             </mat-form-field>
             <mat-form-field appearance="standard">
                 <mat-label>Password</mat-label>
-                <input matInput type="password" placeholder="">
+                <input matInput type="password" placeholder="" name = "password" ngModel>
             </mat-form-field>
 			<button mat-raised-button color="primary">Sign In</button>
 		</form>

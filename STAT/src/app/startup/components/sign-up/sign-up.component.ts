@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { NgModule } from '@angular/core';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({
@@ -24,10 +25,15 @@ export class SignUpComponent implements OnInit {
       container.classList.remove("right-panel-active");
     });
   }
-
-    
-  // submit
+  
+  // submit sign up form
   signUp(form : NgForm) {
+    console.log(form.value);
+    this.service.signUp(form.value);
+  }
+
+  //submit sign in form
+  signIn(form : NgForm) {
     console.log(form.value);
   }
 }
