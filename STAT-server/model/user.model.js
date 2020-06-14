@@ -9,8 +9,7 @@ var UserSchema = new mongoose.Schema({
         unique: true
     },
     ProfileName:{
-        type: String,
-        required : "Required"
+        type: String
     },
     ProfilePicture:{
         type: String
