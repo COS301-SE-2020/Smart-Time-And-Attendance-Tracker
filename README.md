@@ -18,12 +18,12 @@ This is how the branches will be laid out
         └──── angular-feature-API-calls
 ```
 ### Demo 1 Links
-- Video: 
+- Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
 - SRS Document: https://www.overleaf.com/read/bkqdtqzspmtc
 
 ### Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
-- Discord: (add before demo)
+- Discord: https://discord.gg/teMKux
 - Microsoft Teams: https://teams.microsoft.com/l/team/19%3aefca1c4844c14661859786c02d55c48b%40thread.tacv2/conversations?groupId=1a1bcfe4-fd5a-4647-8363-e219880bbfb2&tenantId=ddfa59c8-38d0-49a3-822e-1d3bcb5bf85b
 
 ### Profile Descriptions
@@ -31,7 +31,7 @@ This is how the branches will be laid out
 **Vianka Naidoo**\
 _Team Leader_
 - https://Vianka213.github.io
-> Final year Information & Knowledge Systems student at the University of Pretoria, majoring in Software Development. I'm particularly interested in the fields of UI and UX design, as well as cyber-security and digital forensics, which I plan to learn more about while pursuing my Honours degree next year.
+> I am a final year Information & Knowledge Systems student at the University of Pretoria, majoring in Software Development. I'm particularly interested in the fields of UI and UX design, as well as cyber-security and digital forensics, which I plan to learn more about while pursuing my Honours degree next year.
 My greatest passion is learning. I love igniting my curiosity, thinking outside the box and experiencing new things.
 I'm extremely ambitious, adaptable and a great problem-solver. My creativity and strong work ethic are amongst my strengths. I strive to utilise my abilities and skills to achieve my goals and help others to achieve theirs.
 
@@ -42,7 +42,7 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 
 **Jesse Mwiti**
 - http://chirgugh.github.io/
-> Am a final year computer science student at University of Pretoria.
+> I am a final year computer science student at University of Pretoria.
 I have an interest in data mining, Fintech, digital marketing, android and web deveopment. I am an open-minded invidual and pride myself in my ability to keep progressing and thriving under new or tough conditions.
 
 **Jana Sander**
