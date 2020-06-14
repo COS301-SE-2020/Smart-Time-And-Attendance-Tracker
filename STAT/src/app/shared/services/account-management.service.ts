@@ -19,7 +19,7 @@ export class AccountManagementService {
           .set('Authorization', 'my-auth-token')
           .set('Content-Type', 'application/json');
 
-    this.http.post('http://localhost:3000/api/register', JSON.stringify(values), {
+    this.http.post('https://localhost:3000/user/api/register', JSON.stringify(values), {
       headers: headers
     })
     .subscribe(data => {
@@ -28,7 +28,17 @@ export class AccountManagementService {
   }
 
   // sign in 
-  public signIn() {
+  public signIn(values) {
+    const headers = new HttpHeaders()
+          .set('Authorization', 'my-auth-token')
+          .set('Content-Type', 'application/json');
+
+    this.http.post('https://localhost:3000/user/api/login', JSON.stringify(values), {
+      headers: headers
+    })
+    .subscribe(data => {
+      console.log(data);
+    });
 
   }
 

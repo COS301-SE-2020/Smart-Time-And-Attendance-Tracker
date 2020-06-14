@@ -34,5 +34,6 @@ export class SignUpComponent implements OnInit {
   //submit sign in form
   signIn(form : NgForm) {
     console.log(form.value);
+    this.service.signIn(form.value);
   }
 }
