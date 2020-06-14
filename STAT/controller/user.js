@@ -106,16 +106,18 @@ router.post("/api/register", (req, res) => { ///missing validations -
         res.send(errors);
         return;
     }
-    if(UserModel.findOne({"Email": req.body.email}))
-    {
-        var errors = new Error('An account is already registered with that email.');
-        errors.status = 400;
-        errors.name = 'An account is already registered with that email.';
-        res.send(errors);
-        return;
-    }
-    if (req.body.email && req.body.profilePicture && 
-        req.body.password && req.body.passwordConf &&
+    UserModel.findOne({"Email": req.body.email},
+    (err, user)=> {
+        if(user)
+        {
+            var errors = new Error('An account is already registered with that email.');
+            errors.status = 400;
+            errors.name = 'An account is already registered with that email.';
+            res.send(errors);
+            return;
+        }
+        else{}});
+    if (req.body.email && req.body.password && req.body.passwordConf &&
         req.body.profileName && req.body.name &&
         req.body.surname )
         
@@ -123,12 +125,11 @@ router.post("/api/register", (req, res) => { ///missing validations -
             var user = new UserModel();
             user.ID =Math.floor(Math.random() * Math.floor(1000));; //db.User.find().Count()+1;
             user.ProfileName = req.body.profileName;
-            user.ProfilePicture = req.body.profilePicture;
            // user.Password = req.body.password;
             user.Name = req.body.name;
             user.Surname = req.body.surname;
             user.Email = req.body.email;
-            user.Role = [2,3];
+            user.Role = [5];
 
             bcrypt.hash(req.body.password, 10, function (err, hash){
                 if (err) {

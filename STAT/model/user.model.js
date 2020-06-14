@@ -13,8 +13,7 @@ var UserSchema = new mongoose.Schema({
         required : "Required"
     },
     ProfilePicture:{
-        type: String,  
-        required : "Required"
+        type: String
     },
     Password:{
         type: String,  
