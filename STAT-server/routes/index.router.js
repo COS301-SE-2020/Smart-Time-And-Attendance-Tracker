@@ -5,7 +5,7 @@ const user = require('../controllers/user.controller');
 
 const jwtHelper = require('../config/jwtHelper');
 
-//router.post("/api/register", user.register);
-router.post("/api/login", user.authenticate);
+//router.post("/user/register", user.register);
+router.post("/user/login", user.authenticate);
 
 module.exports = router;
