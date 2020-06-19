@@ -3,11 +3,6 @@ const localStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 
 const UserModel = mongoose.model("User");
-const OrganisationModel = mongoose.model("Organisation");
-const ProjectModel = mongoose.model("Project");
-const RoleModel = mongoose.model("Role");
-const TaskModel = mongoose.model("Task");
-const TeamModel = mongoose.model("Team");
 
 passport.use(
     new localStrategy({usernameField:'email'}, 
