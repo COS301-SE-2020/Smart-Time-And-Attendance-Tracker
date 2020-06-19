@@ -48,3 +48,4 @@ Thumbs.db
 # node_modules
 STAT/node_modules/
 STAT/node_modules/*
+node_modules
