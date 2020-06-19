@@ -1,4 +1,4 @@
 node_modules/
 STAT-server/node_modules/
-STAT-server\node_modules/
+STAT-server/node_modules/*
 config/config.json
