@@ -96,12 +96,17 @@ module.exports.register = (req, res, next) => {
 
     var user = new UserModel();
     ////change this to read db size
-    user.ID = Math.floor(Math.random() * Math.floor(1000)); // db.User.find().Count()+1;
+    var currentID = Math.floor(Math.random() * Math.floor(1000));
+     // db.User.find().Count()+1;
+
+    while(db.User.findOne({ID:currentID}) != 0)
+        currentID = Math.floor(Math.random() * Math.floor(1000));
+    user.ID = currentID;
     user.Name = req.body.name;
     user.Surname = req.body.surname;
     user.Email = req.body.email;
     user.Password = req.body.password;
-    user.Role = [3];  
+    user.Role = [5];  
     user.ProfilePicture = req.body.profilePicture;
 
 
