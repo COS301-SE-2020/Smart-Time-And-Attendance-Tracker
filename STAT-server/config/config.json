@@ -1,7 +1,0 @@
-{
-    "development":{
-        "MONGODB_URI" : "mongodb+srv://TeamVisionary:Capstone301@cluster0-ocdej.azure.mongodb.net/Smart-Time-And-Attendance-Tracker?retryWrites=true&w=majority",
-        "JWT_SECRET" : "301TeAmViSioNarY2020",
-        "JWT_EXP" : "24h"
-    }
-}
