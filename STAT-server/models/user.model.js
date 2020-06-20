@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 var UserSchema = new mongoose.Schema({
     ID:{
         type: Number,
-        required : "Required",
+        required : "ID required.",
         unique: true
     },
     ProfilePicture:{
@@ -13,19 +13,20 @@ var UserSchema = new mongoose.Schema({
     },
     Password:{
         type: String,  
-        required : "Required"
+        required : "Password required."
     },
     Name:{
         type: String,
-        required : "Required"
+        required : "Name required."
     },
     Surname:{
         type: String,
-        required : "Required"
+        required : "Surname required."
     },
     Email:{
         type: String,
-        required : "Required"
+        required : "Email required.",
+        unique: true
     },
     Role:{
         type: Array
@@ -45,5 +46,15 @@ UserSchema.methods.generateJWT = function() {
             expiresIn: process.env.JWT_EXP
         });
 }
+
+UserSchema.pre('save',function(next){
+    bcrypt.genSalt(10,(err,salt) => {
+       bcrypt.hash(this.Password,salt,(err,hash) => {
+           this.Password=hash;
+           this.saltedsecret=salt;
+           next();
+       });
+    });
+});
 
 mongoose.model("User", UserSchema);

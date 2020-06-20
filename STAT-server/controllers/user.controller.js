@@ -87,5 +87,36 @@ module.exports.authenticate = (req, res, next) => {
         else
             return res.status(404).json(info);
     })(req,res);
+
+
 }
     
+
+module.exports.register = (req, res, next) => {
+
+    var user = new UserModel();
+    ////change this to read db size
+    user.ID = Math.floor(Math.random() * Math.floor(1000)); // db.User.find().Count()+1;
+    user.Name = req.body.name;
+    user.Surname = req.body.surname;
+    user.Email = req.body.email;
+    user.Password = req.body.password;
+    user.Role = [3];  
+    user.ProfilePicture = req.body.profilePicture;
+
+
+    user.save((err, doc) => {
+        if (!err){
+            res.send(doc);
+        }
+        else {
+            if (err.code == 11000){
+                res.status(422).send(['User already exists.']);
+            }else{
+                return next(err);
+            }
+        }
+    });
+
+
+}
