@@ -40,7 +40,7 @@ module.exports.register = (req, res, next) => {
             UserModel.findOne({ Email: req.body.email }, function(err, cons) { //check email duplicates
                 if (err) throw err;
                 if (cons){
-                    return res.status(422).send(['User already exists.']);
+                    return res.status(422).send({message: 'User already exists.'});
                 }
                 else{
                     user.Name = req.body.name;
@@ -48,14 +48,13 @@ module.exports.register = (req, res, next) => {
                     user.Email = req.body.email;
                     user.Password = req.body.password;
                     user.Role = [5];  
-                    user.ProfilePicture = req.body.profilePicture;
                     user.save((err, doc) => {
                         if (!err){
                             return res.status(200).json({"token": user.generateJWT(), "user": doc});
                         }
                         else {
                             if (err.code == 11000){
-                                res.status(422).send(['User already exists.']);
+                                res.status(422).send({message: 'User already exists.'});
                             }else{
                                 return next(err);
                             }
@@ -72,22 +71,17 @@ module.exports.register = (req, res, next) => {
     
 
 module.exports.getRoles = (req, res, next) => {
-    // call for passport authentication
-    //res.header("Access-Control-Allow-Origin", "*");
-    //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    passport.authenticate('local', (err,user,info)=>{
-        //error from passport
-        if(err)
-            return res.status(400).json(err);
-        //registered user
-        else if(user) 
-        {
-            return res.status(200).json({"roles": user.Role});
+    UserModel.findOne({ ID: req.ID },
+        (err, user) => {
+            if(err) throw err;
+            else if (!user)
+                return res.status(404).json({ status: false, message: 'User record not found.' });
+            else
+                return res.status(200).json({ status: true, roles : user.Role});
         }
-        //unknown user or wrong password
-        else
-            return res.status(404).json(info);
-    })(req,res);
-
+    );
+    
 }
+
+
 
