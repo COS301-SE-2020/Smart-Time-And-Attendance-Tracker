@@ -5,11 +5,10 @@ const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
 
-
 module.exports.authenticate = (req, res, next) => {
     // call for passport authentication
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     passport.authenticate('local', (err,user,info)=>{
         //error from passport
         if(err)
@@ -23,7 +22,6 @@ module.exports.authenticate = (req, res, next) => {
         else
             return res.status(404).json(info);
     })(req,res);
-
 
 }
 
@@ -70,5 +68,27 @@ module.exports.register = (req, res, next) => {
             
        });
     }
+}
     
+    
+
+
+module.exports.getRoles = (req, res, next) => {
+    // call for passport authentication
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    passport.authenticate('local', (err,user,info)=>{
+        //error from passport
+        if(err)
+            return res.status(400).json(err);
+        //registered user
+        else if(user) 
+        {
+            return res.status(200).json({"roles": user.Role});
+        }
+        //unknown user or wrong password
+        else
+            return res.status(404).json(info);
+    })(req,res);
+
 }
