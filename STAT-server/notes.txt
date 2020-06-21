@@ -30,10 +30,4 @@ Role schema:	    {"ID":1, "Role":"Data Analyst"}
     API ISSUES
 
 Registration
-      - Emails not unique.
       - ID is randomly generated - solution-> read database using a counter then ID=counter+1.
-      - Any need to return a JWT token?
-
-
-Login
-      - Can log in with wrong password.
