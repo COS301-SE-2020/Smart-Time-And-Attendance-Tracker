@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +9,10 @@ export class HeaderComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  // know which header to display
+  isLoggedIn: string;
 
+  ngOnInit(): void {
+    this.isLoggedIn = localStorage.getItem('loggedIn');
+  }
 }
