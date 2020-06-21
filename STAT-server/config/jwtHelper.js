@@ -14,7 +14,7 @@ module.exports.verifyJWTtoken = (req, res, next)=>
                 if(err)
                     return res.status(500).send({auth: false, message: "Token authentication failed."});
                 else{
-                    //req.ID = decoded.ID;
+                    req.ID = decoded.ID;
                     next();
                 }
             })

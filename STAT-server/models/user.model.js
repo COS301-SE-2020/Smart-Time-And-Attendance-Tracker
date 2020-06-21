@@ -36,7 +36,7 @@ var UserSchema = new mongoose.Schema({
 //Methods
 
 UserSchema.methods.verifyPassword = function(password){
-    return bcrypt.compare(password, this.password);
+    return bcrypt.compareSync(password, this.Password);
 };
 
 UserSchema.methods.generateJWT = function() {
