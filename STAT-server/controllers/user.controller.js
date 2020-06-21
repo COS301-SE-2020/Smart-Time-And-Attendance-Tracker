@@ -50,7 +50,7 @@ module.exports.register = (req, res, next) => {
                     user.Role = [5];  
                     user.save((err, doc) => {
                         if (!err){
-                            return res.status(200).json({"token": user.generateJWT(), "user": doc});
+                            return res.status(200).json({"token": user.generateJWT(), "roles": user.Role});
                         }
                         else {
                             if (err.code == 11000){
