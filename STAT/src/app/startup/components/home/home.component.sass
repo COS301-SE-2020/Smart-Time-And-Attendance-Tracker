@@ -6,169 +6,65 @@
   font-family: OpenSans
   src: url(fonts/open-sans/OpenSans-Regular.ttf)
 
-*
-  border-radius: 2px
-  font-family: OpenSans
-  font-size: 1.05em
-  width: 100%
-
-body
-  background-color: rgba(245, 245, 245, 1)
-  background: url(http://api.thumbr.it/whitenoise-361x370.png?background=ffffffff&noise=000000&density=15&opacity=15)
-  margin: 0em auto
-  padding-bottom: 0em
-  top: 0em
-  width: 100%
-
-button
-  background-color: #222222
-  border: none
-  border-radius: 2px
-  bottom: 1em
-  color: #FFFFFF
-  display: inline-block
-  float: right
-  font-size: 0.75em
-  padding: 0.5em
-  right: 1em
-  text-transform: uppercase
-  max-width: 10em
-  width: 20%
-
-#container
-  margin: 0em
-
-div
-  display: block
-  height: auto
-  margin-top: 2em
-  min-height: 5vh
-
-div #container
-  left: 0
-  max-width: 100%
-  position: relative
-  text-align: center
-  top: 0
-  width: 100vw
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600&family=PT+Mono&display=swap')
 
 footer
-  align-content: center
-  background-color: #222222
+  background-color: #4c585b
   color: white
   display: flex
   flex-direction: column
   height: auto
   max-width: 100%
-  justify-content: center
   margin: 0em
-  margin-top: 5em
-  padding: 2.5em
+  padding: 1em
+  padding-top: 0em
   text-align: center
   width: 100%
 
-footer button
-  margin: 1em
+  #teamLogo
+    width: 8em
+    display: inline-block
 
-h1
-  font-family: Chivo
-  font-size: 15em
-  text-align: center
-  text-transform: uppercase
-  max-width: 100%
+  #teamDetails
+    position: absolute
+    width: auto
+    margin-left: 11em
+    margin-top: 2em
 
-h6
-  font-family: Chivo
-  font-size: 2em
+  #teamName
+    letter-spacing: 0.5em
+    font-family: 'PT Mono', monospace
+    font-size: 1.7em
 
-header
-  align-content: center
-  background-color: #222222
-  color: white
-  display: flex
-  flex-direction: column
-  min-height: 100vh
-  max-width: 100%
-  justify-content: center
-  margin: 0em
-  margin-bottom: 5em
-  padding: 2.5em
-  text-align: center
-  width: 100%
+  #teamSlogan
+    margin-left: -0.7em
+    font-size: 0.8em
+    text-transform: uppercase
 
-.header-content
-  align-content: center
-  background-color: #222222
-  display: flex
-  flex-direction: column
-  justify-content: center
-  height: 100%
-  margin: 0em auto
-  min-height: 100%
-  width: 100%
+  #teamAbout
+    position: absolute
+    width: 40%
+    margin-left: 50%
+    margin-top: 2em
+    text-align: right
+    font-size: 0.8em
 
-.header-content h1, .header-content h6, .header-content p
-  display: block
-  margin-bottom: 0.25em
+  #teamLinks
+    position: absolute
+    width: 2em
+    margin-left: 91%
+    margin-top: 2.8em
 
-.header-content div
-  margin-bottom: 0.25em
+  a.teamLink
+    border-radius: 100%
+    color: #C8AC84
+    font-size: 1.2em
 
-#home a
-  text-decoration: none
+    &:hover
+      cursor: pointer
+      color: #fff
 
-#home a:link
-  color: white
 
-#home a:visited
-  colour: white
+  hr
+    opacity: 0.5
 
-mat-card-title
-  font-family: Chivo
-  font-size: 5em
-  text-transform: uppercase
-
-p
-  text-align: left
-
-  &#brought-to-you
-    text-align: center
-
-.section
-  background-color: black
-  display: block
-  height: auto
-  margin: 2.5em auto
-  margin-bottom: 3.5em
-  margin-top: 3.5em
-  max-width: 100%
-  padding: 2.5em
-  width: 85vw
-
-.section-content
-  background-color: #FFFAFB
-  display: flex
-  flex-direction: column
-  height: 100%
-  padding: 2.5em
-
-.section-content button
-  right: 2em
-
-.background-colour-black
-  /*background-color: #222222;
-
-.background-colour-yellow
-  background-color: #FCFC62
-
-.background-colour-green
-  background-color: #a2fc62
-
-.background-colour-blue
-  background-color: #7DE2D1
-
-.background-colour-purple
-  background-color: #ac6ffc
-
-.background-colour-pink
-  background-color: #fa8ef5
