@@ -11,7 +11,7 @@ import { MaterialComponentsModule } from '../material-components/material-compon
 
 import { HeaderComponent } from '../shared/components/header/header.component';
 import { SharedModule } from '../shared/shared.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -21,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     StartupRoutingModule,
     MaterialComponentsModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     HomeComponent,
