@@ -115,17 +115,26 @@ export class SignInComponent implements OnInit {
   
   // submit sign up form
   signUp(form : NgForm) {
-    console.log(form.value);
-    this.service.signUp(form.value);
+    console.log(form);
+    this.service.signUp(form);
     this.router.navigate(['main']);
     localStorage.setItem('loggedIn', 'true');
   }
 
   //submit sign in form
   signIn(form : NgForm) {
-    console.log(form.value);
-    this.service.signIn(form.value);
-    this.router.navigate(['main']);
-    localStorage.setItem('loggedIn', 'true');
+    console.log(form);
+    this.service.signIn(form).subscribe( (value) =>
+      {
+        console.log(value);
+        if(value == "Success")
+        {
+          this.router.navigate(['main']);
+          localStorage.setItem('loggedIn', 'true');
+        }
+        else{
+
+        }
+    });
   }
 }
