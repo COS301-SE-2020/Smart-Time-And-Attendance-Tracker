@@ -43,7 +43,7 @@ module.exports.register = (req, res, next) => {
                 else{
                     user.Name = req.body.name;
                     user.Surname = req.body.surname;
-                    user.Email = req.body.email;
+                    user.Email = req.body.email.toLowerCase();
                     user.Password = req.body.password;
                     user.Role = [5];  
                     user.save((err, doc) => {
