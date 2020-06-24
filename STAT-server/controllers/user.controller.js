@@ -71,12 +71,27 @@ module.exports.register = (req, res, next) => {
     
 
 module.exports.getRoles = (req, res, next) => {
-    UserModel.find({}, { ID: req.body.ID}).toArray(function(err, result) {
+    const RoleModel = mongoose.model("Role");
+
+    UserModel.findOne({}, { ID: req.body.ID}).toArray(function(err, result) {
         if (err) throw err;
-        else if (!user)
+        else if (!result)
             return res.status(404).json({ status: false, message: 'User record not found.' });
         else
-            return res.status(200).json({ status: true, roles : result[0].Role});
+        {
+            console.log(result.Role);
+            var rolesOfUser = [];
+            for(var i=0; i<result.Role.length; i++)
+            {
+                RoleModel.findOne({ ID: result.Role[i]},(err, role) => {
+                    if(err) throw err;
+                    else if (role)
+                        rolesOfUser.push(role.Role);
+                    
+                });
+            }
+            return res.status(200).json({ status: true, roles : rolesOfUser});
+        }
     });
 
     /*UserModel.findOne({ ID: req.ID },
