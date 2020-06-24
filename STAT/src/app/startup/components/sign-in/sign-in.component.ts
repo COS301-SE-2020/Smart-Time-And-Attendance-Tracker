@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { Router } from '@angular/router';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,8 +13,10 @@ export class SignInComponent implements OnInit {
 
   signUpForm : FormGroup
   signInForm : FormGroup
+  signUpError : string
+  signInError : string
 
-  constructor(public service : AccountManagementService, public router : Router) { }
+  constructor(public service : AccountManagementService, public router : Router, private headerService : HeaderService) { }
 
   ngOnInit(): void {
     const signUpButton = document.getElementById('signUp');
@@ -60,6 +63,7 @@ export class SignInComponent implements OnInit {
   get su() { return this.signUpForm.controls; }
   get si() { return this.signInForm.controls; }
 
+  // SIGN UP
   // display errors for email
   getEmailError() {
     if (this.signUpForm.controls.email.hasError('required')) {
@@ -109,6 +113,26 @@ export class SignInComponent implements OnInit {
     }
   }
 
+  // SIGN IN
+  // display errors for email
+  getEmailErrorSI() {
+    if (this.signInForm.controls.email.hasError('required')) {
+      return 'Please enter a value';
+    }
+
+    return this.signInForm.controls.email.hasError('email') ? 'Invalid email address' : '';
+  }
+
+  // display errors for password
+  getPassErrorSI() {
+    if (this.signInForm.controls.password.hasError('required')) {
+      return 'Please enter a value';
+    }
+
+    return this.signInForm.controls.password.hasError('minlength') ? 'Invalid password length' : '';
+  }
+
+
   /********
   API CALLS
   *********/
@@ -119,11 +143,13 @@ export class SignInComponent implements OnInit {
       localStorage.setItem('token', data['token']);
       localStorage.setItem('roles', data['roles']);
       localStorage.setItem('loggedIn', 'true');
+      this.headerService.isUserLoggedIn.next(true);
       this.router.navigate(['main']);
     },
     error => {
       console.log(error.error.message);  
       localStorage.setItem('loggedIn', 'false');
+      this.signUpError = error.error.message;
     }); 
   }
   //submit sign in form
@@ -132,11 +158,13 @@ export class SignInComponent implements OnInit {
       localStorage.setItem('token', data['token']);
       localStorage.setItem('roles', data['roles']);
       localStorage.setItem('loggedIn', 'true');
+      this.headerService.isUserLoggedIn.next(true);
       this.router.navigate(['main']);
     },
     error => {
       console.log(error.error.message); 
       localStorage.setItem('loggedIn', 'false'); 
+      this.signInError = error.error.message;  
     }); 
   }
 }
