@@ -36,12 +36,12 @@
             <h1>Sign In</h1>
             <mat-form-field appearance="standard" type="email">
                 <mat-label>Email</mat-label>
-                <input matInput formControlName="email" placeholder="johndoe@example.com" name = "email">
+                <input matInput formControlName="email" placeholder="johndoe@example.com" name = "email" required>
                 <mat-error *ngIf="si.email.errors">{{getEmailError()}}</mat-error>
             </mat-form-field>
             <mat-form-field appearance="standard">
                 <mat-label>Password</mat-label>
-                <input matInput formControlName="password" type="password" placeholder="" name = "password">
+                <input matInput formControlName="password" type="password" placeholder="" name = "password" required>
                 <mat-error *ngIf="si.password.errors">{{getPassError()}}</mat-error>
             </mat-form-field>
 			<button mat-raised-button color="primary" id="sign_in">Sign In</button>
