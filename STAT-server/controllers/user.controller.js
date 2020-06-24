@@ -71,7 +71,15 @@ module.exports.register = (req, res, next) => {
     
 
 module.exports.getRoles = (req, res, next) => {
-    UserModel.findOne({ ID: req.ID },
+    UserModel.find({}, { ID: req.body.ID}).toArray(function(err, result) {
+        if (err) throw err;
+        else if (!user)
+            return res.status(404).json({ status: false, message: 'User record not found.' });
+        else
+            return res.status(200).json({ status: true, roles : result[0].Role});
+    });
+
+    /*UserModel.findOne({ ID: req.ID },
         (err, user) => {
             if(err) throw err;
             else if (!user)
@@ -79,8 +87,7 @@ module.exports.getRoles = (req, res, next) => {
             else
                 return res.status(200).json({ status: true, roles : user.Role});
         }
-    );
-    
+    );*/
 }
 
 
