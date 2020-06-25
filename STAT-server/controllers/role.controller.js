@@ -23,3 +23,27 @@ module.exports.add = (req, res) => {
         })
     });
 };
+
+
+module.exports.getRole = (req, res, next) => {
+    console.log("getting roles  " + req.body.ID);
+    RoleModel.findOne({ ID: req.body.ID},(err, result) => {
+
+        if(err) 
+        {
+            console.log("h");
+            throw err;
+        }
+        else if (!result)
+        {
+            console.log("h1");
+            return res.status(404).json({ status: false, message: 'Role record not found.' });
+        }
+        else if (result)
+        {
+            console.log("2");
+            return res.status(200).json({ status: true, roles : result.Role});
+        }
+    });
+}
+
