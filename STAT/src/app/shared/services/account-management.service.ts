@@ -28,6 +28,14 @@ export class AccountManagementService {
       headers: headers
     });
   }
+  //get roles
+  public getRoles(values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/api/user/getRoles', JSON.stringify(values), {
+      headers: headers
+    });
+  }
    
   // edit profile
 
