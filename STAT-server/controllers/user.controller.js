@@ -4,7 +4,6 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
-
 module.exports.authenticate = (req, res, next) => {
     // call for passport authentication
     passport.authenticate('local', (err,user,info)=>{
@@ -14,7 +13,7 @@ module.exports.authenticate = (req, res, next) => {
         //registered user
         else if(user) 
         {
-            return res.status(200).json({token: user.generateJWT(), message: 'Sign in successful.'});
+            return res.status(200).json({token: user.generateJWT(), message :"Sign in successful."});
         }
         //unknown user or wrong password
         else
@@ -25,9 +24,12 @@ module.exports.authenticate = (req, res, next) => {
 
 
 module.exports.register = (req, res, next) => {
-
     var user = new UserModel();
-    if (req.body.password !== req.body.passwordConf) { //pass=passconfirm
+    if(!( req.body.name &&  req.body.surname && req.body.email && req.body.password && req.body.passwordConf)) 
+    {
+        return res.status(400).send({message: "Missing credentials."});
+    }
+    else if (req.body.password !== req.body.passwordConf) { //pass=passconfirm
         return res.status(400).send({message: "Passwords do not match."});
     }
     else{
@@ -48,7 +50,7 @@ module.exports.register = (req, res, next) => {
                     user.Role = [5];  
                     user.save((err, doc) => {
                         if (!err){
-                            return res.status(200).json({token: user.generateJWT(), message : 'Sign up successful.'});
+                            return res.status(200).json({token: user.generateJWT(), message :"Sign up successful."});
                         }
                         else {
                             if (err.code == 11000){
@@ -69,7 +71,47 @@ module.exports.register = (req, res, next) => {
     
 
 module.exports.getRoles = (req, res, next) => {
-    UserModel.findOne({ ID: req.ID },
+    UserModel.findOne({ ID: req.ID},(err, result) => {
+        if (err) 
+            throw err;
+        else if (!result)
+            return res.status(404).json({ status: false, message: 'User record not found.' });
+        else
+        {
+            var rolesOfUser = [];
+            var i=0, done = false;
+            for(i=0; i<result.Role.length; i++)
+            {
+                /*var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        consolee.log(this.responseText);
+                    }
+                };
+                xhttp.open("POST", "localhost:3000/api/role/getRole", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("ID=" +result.Role[i] );
+                xhttp.send();
+                */
+                const RoleModel = mongoose.model("Role");
+                RoleModel.findOne({ ID: result.Role[i]},(err, role) => {
+                    if(err) throw err;
+                    else if (role)
+                    {
+                        rolesOfUser.push(role.Role);
+                        if(rolesOfUser.length == result.Role.length)
+                        {
+                            return res.status(200).json({ status: true, roles : rolesOfUser});
+                        }
+                    }
+                });
+            }
+        }
+    });
+    
+
+    /*UserModel.findOne({ ID: req.ID },
         (err, user) => {
             if(err) throw err;
             else if (!user)
@@ -77,8 +119,7 @@ module.exports.getRoles = (req, res, next) => {
             else
                 return res.status(200).json({ status: true, roles : user.Role, message: 'Sign up successful.'});
         }
-    );
-    
+    );*/
 }
 
 
