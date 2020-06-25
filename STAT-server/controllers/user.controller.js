@@ -4,7 +4,6 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
-
 module.exports.authenticate = (req, res, next) => {
     // call for passport authentication
     //res.header("Access-Control-Allow-Origin", "*");
@@ -27,7 +26,6 @@ module.exports.authenticate = (req, res, next) => {
 
 
 module.exports.register = (req, res, next) => {
-
     var user = new UserModel();
     if (req.body.password !== req.body.passwordConf) { //pass=passconfirm
         return res.status(400).send({message: "Passwords do not match."});
@@ -71,28 +69,45 @@ module.exports.register = (req, res, next) => {
     
 
 module.exports.getRoles = (req, res, next) => {
-    const RoleModel = mongoose.model("Role");
-
-    UserModel.findOne({}, { ID: req.body.ID}).toArray(function(err, result) {
-        if (err) throw err;
+    UserModel.findOne({ ID: req.body.ID},(err, result) => {
+        if (err) 
+            throw err;
         else if (!result)
             return res.status(404).json({ status: false, message: 'User record not found.' });
         else
         {
-            console.log(result.Role);
             var rolesOfUser = [];
-            for(var i=0; i<result.Role.length; i++)
+            var i=0, done = false;
+            for(i=0; i<result.Role.length; i++)
             {
+                /*var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        consolee.log(this.responseText);
+                    }
+                };
+                xhttp.open("POST", "localhost:3000/api/role/getRole", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("ID=" +result.Role[i] );
+                xhttp.send();
+                */
+                const RoleModel = mongoose.model("Role");
                 RoleModel.findOne({ ID: result.Role[i]},(err, role) => {
                     if(err) throw err;
                     else if (role)
+                    {
                         rolesOfUser.push(role.Role);
-                    
+                        if(rolesOfUser.length == result.Role.length)
+                        {
+                            return res.status(200).json({ status: true, roles : rolesOfUser});
+                        }
+                    }
                 });
             }
-            return res.status(200).json({ status: true, roles : rolesOfUser});
         }
     });
+    
 
     /*UserModel.findOne({ ID: req.ID },
         (err, user) => {
