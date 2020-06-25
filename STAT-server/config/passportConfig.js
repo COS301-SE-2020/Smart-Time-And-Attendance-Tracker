@@ -7,7 +7,7 @@ const UserModel = mongoose.model("User");
 passport.use(
     new localStrategy({usernameField:'email'}, 
     (username, password, done) =>{
-        UserModel.findOne({"Email": username},
+        UserModel.findOne({"Email": username.toLowerCase()},
             (err, user)=> {
                 if(err)
                     return done(err);

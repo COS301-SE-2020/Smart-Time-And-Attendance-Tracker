@@ -15,7 +15,7 @@ module.exports.authenticate = (req, res, next) => {
         //registered user
         else if(user) 
         {
-            return res.status(200).json({"token": user.generateJWT(), "roles": user.Role});
+            return res.status(200).json({token: user.generateJWT(), message :"Sign in successful."});
         }
         //unknown user or wrong password
         else
@@ -27,7 +27,11 @@ module.exports.authenticate = (req, res, next) => {
 
 module.exports.register = (req, res, next) => {
     var user = new UserModel();
-    if (req.body.password !== req.body.passwordConf) { //pass=passconfirm
+    if(!( req.body.name &&  req.body.surname && req.body.email && req.body.password && req.body.passwordConf)) 
+    {
+        return res.status(400).send({message: "Missing credentials."});
+    }
+    else if (req.body.password !== req.body.passwordConf) { //pass=passconfirm
         return res.status(400).send({message: "Passwords do not match."});
     }
     else{
@@ -43,12 +47,12 @@ module.exports.register = (req, res, next) => {
                 else{
                     user.Name = req.body.name;
                     user.Surname = req.body.surname;
-                    user.Email = req.body.email;
+                    user.Email = req.body.email.toLowerCase();
                     user.Password = req.body.password;
                     user.Role = [5];  
                     user.save((err, doc) => {
                         if (!err){
-                            return res.status(200).json({"token": user.generateJWT(), "roles": user.Role});
+                            return res.status(200).json({token: user.generateJWT(), message :"Sign up successful."});
                         }
                         else {
                             if (err.code == 11000){
@@ -69,7 +73,7 @@ module.exports.register = (req, res, next) => {
     
 
 module.exports.getRoles = (req, res, next) => {
-    UserModel.findOne({ ID: req.body.ID},(err, result) => {
+    UserModel.findOne({ ID: req.ID},(err, result) => {
         if (err) 
             throw err;
         else if (!result)
