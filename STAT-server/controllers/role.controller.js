@@ -1,23 +1,25 @@
-const express = require("express");
-const router = express.Router();
 const mongoose = require("mongoose");
 const RoleModel = mongoose.model("Role");
-router.get("/", (req, res)=>{
-    res.send("Role controller");
-});
 
-router.post("/add", (req, res) => {
-    var role = new RoleModel();
-    role.ID = db.Role.find().Count()+1;
-    role.Role = req.body.role;
-    role.save((err, doc) => {
-        if(!err){
-            res.send("Created Role");
-        }
-        else{
-            res.send("Error Occured");
-        }
-    })
-});
-
-module.exports = router;
+module.exports.add = (req, res) => {
+    RoleModel.countDocuments({}, function(err, totalCount) { //get id
+        var  currentID = totalCount+1;
+        var role = new RoleModel();
+        role.ID = currentID;
+        role.Role = req.body.role;
+        role.save((err, doc) => {
+            if(!err){
+                res.send("Created Role " + currentID);
+                return res.status(200).json({message: "Role created"});
+            }
+            else{
+                if (err.code == 11000){
+                    return res.status(422).json({message: "Role already exists."});
+                }
+                else{
+                    return next(err);
+                }
+            }
+        })
+    });
+};
