@@ -12,6 +12,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { MatIconModule } from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DashboardModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    HttpClientTestingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
