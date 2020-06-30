@@ -15,15 +15,15 @@ export class SignInComponent implements OnInit {
   signInForm : FormGroup
   signUpError : string
   signInError : string
-
+  
   constructor(public service : AccountManagementService, public router : Router, private headerService : HeaderService) { }
 
   ngOnInit(): void {
-    const signUpButton = document.getElementById('signUp');
-    const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
+     const signUpButton = document.getElementById('signUp');
+     const signInButton = document.getElementById('signIn');
+     const container = document.getElementById('container');
 
-    const signIn = document.getElementById("sign_in");
+    //const signIn = document.getElementById("sign_in");
 
     signUpButton.addEventListener('click', () => {
       container.classList.add("right-panel-active");
@@ -33,9 +33,9 @@ export class SignInComponent implements OnInit {
       container.classList.remove("right-panel-active");
     });
 
-    signIn.addEventListener('click', () => {
+    /*signIn.addEventListener('click', () => {
       container.classList.remove("right-panel-active");
-    });
+    });*/
 
     // sign up form
     this.signUpForm = new FormGroup({
@@ -174,4 +174,5 @@ export class SignInComponent implements OnInit {
       this.signInError = error.error.message;  
     }); 
   }
+
 }

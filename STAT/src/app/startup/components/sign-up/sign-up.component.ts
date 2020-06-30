@@ -15,19 +15,22 @@ export class SignUpComponent implements OnInit {
   signInForm : FormGroup
   signUpError : string
   signInError : string
-  
-  constructor(public service : AccountManagementService, public router : Router, private headerService : HeaderService) { }
+
+  constructor(public service : AccountManagementService, public router : Router, private headerService : HeaderService) {}
   
   ngOnInit(): void {
+
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
     const container = document.getElementById('container');
 
     signUpButton.addEventListener('click', () => {
+
       container.classList.add("right-panel-active");
     });
 
     signInButton.addEventListener('click', () => {
+   
       container.classList.remove("right-panel-active");
     });
 

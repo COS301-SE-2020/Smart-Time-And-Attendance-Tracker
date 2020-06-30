@@ -9,7 +9,6 @@ import { SignInComponent } from './sign-in.component';
 
 
 describe('SignInComponent', () => {
-  describe('Unit tests', () => {
     let component: SignInComponent;
     let fixture: ComponentFixture<SignInComponent>;
     let de: DebugElement;
@@ -42,9 +41,23 @@ describe('SignInComponent', () => {
 
     });
   }));
-
-  it('should be created', () => {
+  describe('Unit tests', () => {
+  it('should be created', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
+
+  it('should call the signUp method', async(() => {
+    spyOn(component,'signUp');
+    el = fixture.debugElement.query(By.css("#sign_up")).nativeElement;
+    el.click();
+    expect(component.signUp).toHaveBeenCalledTimes(1);
+  }));
+
+  it('should call the signIn method', async(() => {
+    spyOn(component,'signIn');
+    el = fixture.debugElement.query(By.css("#sign_in")).nativeElement;
+    el.click();
+    expect(component.signIn).toHaveBeenCalledTimes(1);
+  }));
 });
 });

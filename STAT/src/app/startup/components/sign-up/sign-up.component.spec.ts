@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SignUpComponent } from './sign-up.component';
 
 describe('SignUpComponent', () => {
-  describe('Unit tests', () => {
+
   let component: SignUpComponent;
   let fixture: ComponentFixture<SignUpComponent>;
   let de: DebugElement;
@@ -42,9 +42,23 @@ describe('SignUpComponent', () => {
     });
   }));
 
-
+  describe('Unit tests:', () => {
   it('should be created', async() => {
     expect(component).toBeTruthy();
   });
+
+  it('should call the signUp method when sign up button is pressed', async(() => {
+    spyOn(component,'signUp');
+    el = fixture.debugElement.query(By.css("#sign_up")).nativeElement;
+    el.click();
+    expect(component.signUp).toHaveBeenCalledTimes(1);
+  }));
+
+  it('should call the signIn method when sign in button is pressed', async(() => {
+    spyOn(component,'signIn');
+    el = fixture.debugElement.query(By.css("#sign_in")).nativeElement;
+    el.click();
+    expect(component.signIn).toHaveBeenCalledTimes(1);
+  }));
 });
 });
