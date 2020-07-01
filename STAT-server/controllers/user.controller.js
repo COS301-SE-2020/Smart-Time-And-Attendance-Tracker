@@ -73,7 +73,7 @@ module.exports.register = (req, res, next) => {
 module.exports.getRoles = (req, res, next) => {
     UserModel.findOne({ ID: req.ID},(err, result) => {
         if (err) 
-            throw err;
+            return res.status(500).send({message: 'Internal Server Error'});
         else if (!result)
             return res.status(404).json({ status: false, message: 'User record not found.' });
         else
@@ -96,7 +96,7 @@ module.exports.getRoles = (req, res, next) => {
                 */
                 const RoleModel = mongoose.model("Role");
                 RoleModel.findOne({ ID: result.Role[i]},(err, role) => {
-                    if(err) throw err;
+                    if (err) return res.status(500).send({message: 'Internal Server Error'});
                     else if (role)
                     {
                         rolesOfUser.push(role.Role);
