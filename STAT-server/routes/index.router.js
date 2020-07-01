@@ -8,8 +8,8 @@ const jwtHelper = require('../config/jwtHelper');
 
 router.post("/user/register", user.register);
 router.post("/user/login", user.authenticate);
-router.post("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
+router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 
-router.post("/role/getRole", role.getRole);
-router.post("/role/add", role.add);
+router.get("/role/getRole", jwtHelper.verifyJWTtoken, role.getRole);
+router.post("/role/addRole",jwtHelper.verifyJWTtoken, user.isSecurityAdmin, role.add);
 module.exports = router;
