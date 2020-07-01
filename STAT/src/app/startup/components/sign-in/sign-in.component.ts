@@ -145,7 +145,7 @@ export class SignInComponent implements OnInit {
       localStorage.setItem('loggedIn', 'true');
       this.headerService.isUserLoggedIn.next(true);
       this.service.getRoles({token :  localStorage.getItem('token')}).subscribe(res => {
-      console.log(res['roles']);
+      //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
       })
@@ -164,7 +164,7 @@ export class SignInComponent implements OnInit {
       localStorage.setItem('loggedIn', 'true');
       this.headerService.isUserLoggedIn.next(true);
       this.service.getRoles({token :  localStorage.getItem('token')}).subscribe(res => {
-      console.log(res['roles']);
+     // console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
       })
