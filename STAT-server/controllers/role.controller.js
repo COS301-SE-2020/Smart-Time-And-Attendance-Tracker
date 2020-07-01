@@ -13,10 +13,14 @@ module.exports.add = (req, res) => {
        json: true
        }, (error, response, body) => {
         if (error) {
-            console.error(error)
-            return
+            return res.status(500).json({message: "Internal Server Error"});
+
         }
-        else if(response.statusCode == 200 && response.body.roles.includes("Security Administrator"))
+        else if(response.statusCode == 200 && body.authenticate == false)
+        {
+            return res.status(401).json({message: "Unauthenticate user"});
+        }
+        else if(response.statusCode == 200 && body.roles.includes("Security Administrator") && body.authenticate == true)
         {
             RoleModel.find({}, function(err, allDocuments) {
                 if(err) return res.status(500).json({message: "Internal Server Error"});
@@ -39,9 +43,10 @@ module.exports.add = (req, res) => {
                 })
             }).sort({ ID: -1 });    //sorting all documents in descinding order of ID
         }
-        else if(response.statusCode == 200 && !response.body.roles.includes("Security Administrator")) {
+        else if(response.statusCode == 200 && !body.roles.includes("Security Administrator")) {
             return res.status(403).json({message: "Access forbidden"});
         }
+        console.log(body);
     });        
 };
 

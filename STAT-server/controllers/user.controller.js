@@ -49,6 +49,7 @@ module.exports.register = (req, res, next) => {
                     user.Email = req.body.email.toLowerCase();
                     user.Password = req.body.password;
                     user.Role = [5];  
+                    user.Authenticate = false;
                     user.save((err, doc) => {
                         if (!err){
                             return res.status(200).json({token: user.generateJWT(), message :"Sign up successful."});
@@ -77,7 +78,7 @@ module.exports.getRoles = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error'});
         else if (!result)
             return res.status(404).json({ status: false, message: 'User record not found.' });
-        else
+        else 
         {
             var rolesOfUser = [];
             var i=0, done = false;
@@ -100,7 +101,7 @@ module.exports.getRoles = (req, res, next) => {
                         rolesOfUser.push(response.body.role);
                         if(rolesOfUser.length == result.Role.length)
                         {
-                            return res.status(200).json({ status: true, roles : rolesOfUser});
+                            return res.status(200).json({ status: true, roles : rolesOfUser, authenticate: req.Authenticate});
                         }
                     }
                 });

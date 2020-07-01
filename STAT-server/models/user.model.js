@@ -30,6 +30,10 @@ var UserSchema = new mongoose.Schema({
     },
     Role:{
         type: Array
+    },
+    Authenticate: {
+        type: Boolean,
+        required : "Authenticatation required."
     }
 });
 
@@ -40,7 +44,7 @@ UserSchema.methods.verifyPassword = function(password){
 };
 
 UserSchema.methods.generateJWT = function() {
-    return jwt.sign({id: this.ID, roles: this.Role},
+    return jwt.sign({id: this.ID, authenticate: this.Authenticate},
         process.env.JWT_SECRET,
         {
             expiresIn: process.env.JWT_EXP
