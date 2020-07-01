@@ -47,7 +47,6 @@ module.exports.add = (req, res) => {
 
 
 module.exports.getRole = (req, res, next) => {
-    console.log("getting roles  " + req.body);
     RoleModel.findOne({ ID: req.body.ID},(err, result) => {
         if(err) 
         {
@@ -59,8 +58,7 @@ module.exports.getRole = (req, res, next) => {
         }
         else if (result)
         {
-            console.log("2");
-            return res.status(200).json({ status: true, roles : result.Role});
+            return res.status(200).json({ status: true, role : result.Role});
         }
     });
 }

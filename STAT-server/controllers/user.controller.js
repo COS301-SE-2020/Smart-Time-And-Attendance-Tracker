@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
+const request = require('request');
 
 module.exports.authenticate = (req, res, next) => {
     // call for passport authentication
@@ -82,31 +83,28 @@ module.exports.getRoles = (req, res, next) => {
             var i=0, done = false;
             for(i=0; i<result.Role.length; i++)
             {
-                /*var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        consolee.log(this.responseText);
+                request({
+                    method: 'POST',
+                    url: 'http://127.0.0.1:3000' + '/api/role/getRole',
+                    body: {
+                        ID:  result.Role[i]
+                    },
+                    json: true
+                }, (error, response, body) => {
+                    if (error) {
+                        console.error(error)
+                        return
                     }
-                };
-                xhttp.open("POST", "localhost:3000/api/role/getRole", true);
-                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhttp.send("ID=" +result.Role[i] );
-                xhttp.send();
-                */
-                const RoleModel = mongoose.model("Role");
-                RoleModel.findOne({ ID: result.Role[i]},(err, role) => {
-                    if (err) return res.status(500).send({message: 'Internal Server Error'});
-                    else if (role)
+                    else if(response.statusCode == 200)
                     {
-                        rolesOfUser.push(role.Role);
+                        rolesOfUser.push(response.body.role);
                         if(rolesOfUser.length == result.Role.length)
                         {
                             return res.status(200).json({ status: true, roles : rolesOfUser});
                         }
                     }
                 });
-            }
+            }    
         }
     });
     
