@@ -18,12 +18,10 @@ export class AccountManagementService {
       headers: headers
     });
   }
-
   // sign in 
   public signIn(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
-
     return this.http.post('http://localhost:3000/api/user/login', JSON.stringify(values), {
       headers: headers
     });
@@ -31,8 +29,8 @@ export class AccountManagementService {
   //get roles
   public getRoles(values){
     const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/api/user/getRoles', JSON.stringify(values), {
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.get('http://localhost:3000/api/user/getRoles', {
       headers: headers
     });
   }

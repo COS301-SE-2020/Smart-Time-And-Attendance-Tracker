@@ -139,16 +139,17 @@ export class SignInComponent implements OnInit {
   
   // submit sign up form
   signUp(form : NgForm) {
-    this.service.signUp(form).subscribe(data => {
+    this.service.signUp(form).subscribe((data) => {
       localStorage.setItem('token', data['token']);
-      localStorage.setItem('roles', data['roles']);
       localStorage.setItem('loggedIn', 'true');
+
       this.headerService.isUserLoggedIn.next(true);
-      this.service.getRoles({token :  localStorage.getItem('token')}).subscribe(res => {
+
+      this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
-      })
+      });
     },
     error => {
       //console.log(error.error.message);  
@@ -158,21 +159,25 @@ export class SignInComponent implements OnInit {
   }
   //submit sign in form
   signIn(form : NgForm) {
-    this.service.signIn(form).subscribe(data => {
+    this.service.signIn(form).subscribe(data => 
+    {
       localStorage.setItem('token', data['token']);
-      localStorage.setItem('roles', data['roles']);
       localStorage.setItem('loggedIn', 'true');
+
       this.headerService.isUserLoggedIn.next(true);
-      this.service.getRoles({token :  localStorage.getItem('token')}).subscribe(res => {
+      
+      this.service.getRoles( localStorage.getItem('token')).subscribe(res => {
      // console.log(res['roles']);
+
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
       })
     },
     error => {
+
       localStorage.setItem('loggedIn', 'false'); 
       this.signInError = error.error.message;  
-    }); 
+    })
   }
 
 }

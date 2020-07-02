@@ -140,11 +140,11 @@ export class SignUpComponent implements OnInit {
       localStorage.setItem('loggedIn', 'true');
       this.headerService.isUserLoggedIn.next(true);
 
-      this.service.getRoles({token :  localStorage.getItem('token')}).subscribe(res => {
+      this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
-      })
+      });
     },
     error => {
       //console.log(error.error.message);  
@@ -160,11 +160,11 @@ export class SignUpComponent implements OnInit {
 
       this.headerService.isUserLoggedIn.next(true);
 
-      this.service.getRoles({token :  localStorage.getItem('token')}).subscribe(res => {
+      this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
-      })
+      });
   
     },
     error => {

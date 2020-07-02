@@ -17,8 +17,6 @@ describe('Unit tests:', () => {
     let fixture: ComponentFixture<SignUpComponent>;
     let de: DebugElement;
     let el: HTMLElement;
-    let ACService;
-    let router: Router;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -31,15 +29,7 @@ describe('Unit tests:', () => {
           HttpClientTestingModule,
           RouterTestingModule,
           SharedModule
-        ],
-       providers: [
-        {provide: Router, useValue: {navigate: () => {}}},
-        {provide: AccountManagementService, useValue: {
-          signUp: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign up successful."}),
-          signIn: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign in successful."}),
-          getRoles: () => of({status:true, roles: ["General Team Member"]}),
-          params: of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18"})}}
-       ]
+        ]
       })
       .compileComponents().then(()=>
       {
@@ -51,8 +41,6 @@ describe('Unit tests:', () => {
 
         de = fixture.debugElement.query(By.css('form'));
         el = de.nativeElement;
-        ACService = TestBed.get(AccountManagementService);
-        router = TestBed.get(Router);
 
       });
     }));
@@ -179,7 +167,56 @@ describe('Unit tests:', () => {
       expect(component.getEmailErrorSI()).toBe('');
       expect(component.getPassErrorSI()).toBe('');
     }));
+  });
+});
 
+describe('Integration tests:', () => {
+    describe('SignInComponent', () => {
+  
+      let component: SignUpComponent;
+      let fixture: ComponentFixture<SignUpComponent>;
+      let de: DebugElement;
+      let el: HTMLElement;
+      let ACService;
+      let router: Router;
+  
+      beforeEach(async(() => {
+        TestBed.configureTestingModule({
+          declarations: [ SignUpComponent ],
+          imports:
+          [
+            BrowserModule,
+            FormsModule,
+            ReactiveFormsModule,
+            HttpClientTestingModule,
+            RouterTestingModule,
+            SharedModule
+          ],
+         providers: [
+          {provide: Router, useValue: {navigate: () => {}}},
+          {provide: AccountManagementService, useValue: {
+            signUp: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign up successful."}),
+            signIn: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign in successful."}),
+            getRoles: () => of({roles: ["General Team Member"]}),
+            params: of( "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18")}}
+         ]
+        })
+        .compileComponents().then(()=>
+        {
+          fixture = TestBed.createComponent(SignUpComponent);
+  
+          component = fixture.componentInstance;
+  
+          fixture.detectChanges();
+  
+          de = fixture.debugElement.query(By.css('form'));
+          el = de.nativeElement;
+          ACService = TestBed.get(AccountManagementService);
+          router = TestBed.get(Router);
+  
+        });
+      }));
+  
     describe('signUp()', () => {
 
       it('should store correct variables when valid', async(() => {
@@ -253,7 +290,6 @@ describe('Unit tests:', () => {
       expect(component.signInError).toBe('Incorrect password.');
 
     }));
-
-});
   });
+});
 });

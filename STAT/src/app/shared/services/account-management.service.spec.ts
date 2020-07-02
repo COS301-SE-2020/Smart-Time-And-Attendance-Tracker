@@ -85,8 +85,8 @@ describe('Unit tests:', () => {
   });
 
   describe('getRoles()', () => { 
-    it('should return a response object from the API via POST', async() => {
-      const req ={token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18"};
+    it('should return a response object from the API via GET', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={status: true, roles: [
         "General Team Member"
       ] };
@@ -97,11 +97,11 @@ describe('Unit tests:', () => {
       );
 
       const req2 = HttpMock.expectOne('http://localhost:3000/api/user/getRoles');
-      expect(req2.request.method).toEqual('POST');
+      expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
-    it('should return an error object from the API via POST', async() => {
-      const req ={};
+    it('should return an error object from the API via GET', async() => {
+      const req ="";
       const res ={ auth: false, message: "No token provided." };
 
       service.getRoles(req).subscribe(
@@ -110,7 +110,7 @@ describe('Unit tests:', () => {
         });
 
       const req2 = HttpMock.expectOne('http://localhost:3000/api/user/getRoles');
-      expect(req2.request.method).toEqual('POST');
+      expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
   });

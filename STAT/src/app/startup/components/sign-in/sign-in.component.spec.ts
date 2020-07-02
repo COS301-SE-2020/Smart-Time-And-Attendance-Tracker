@@ -16,8 +16,7 @@ describe('Unit tests', () => {
       let fixture: ComponentFixture<SignInComponent>;
       let de: DebugElement;
       let el: HTMLElement;
-      let ACService;
-      let router: Router
+
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -30,15 +29,7 @@ describe('Unit tests', () => {
           HttpClientTestingModule,
           RouterTestingModule,
           SharedModule
-        ],
-        providers: [
-          {provide: Router, useValue: {navigate: () => {}}},
-          {provide: AccountManagementService, useValue: {
-            signUp: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign up successful."}),
-            signIn: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign in successful."}),
-            getRoles: () => of({status:true, roles: ["General Team Member"]}),
-            params: of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18"})}}
-         ]
+        ]
       })
       .compileComponents().then(()=>
       {
@@ -50,8 +41,6 @@ describe('Unit tests', () => {
 
         de = fixture.debugElement.query(By.css('form'));
         el = de.nativeElement;
-        ACService = TestBed.get(AccountManagementService);
-        router = TestBed.get(Router);
 
       });
     }));
@@ -176,53 +165,66 @@ describe('Unit tests', () => {
       expect(component.getPassErrorSI()).toBe('');
     }));
 
-    describe('signUp()', () => {
-
-      it('should store correct variables when valid', async(() => {
-        component.signUpForm.controls['name'].setValue('Jane');
-        component.signUpForm.controls['surname'].setValue('Doe');
-        component.signUpForm.controls['email'].setValue('janeDoe@mail.com');
-        component.signUpForm.controls['password'].setValue('12345678');
-        component.signUpForm.controls['passwordConf'].setValue('12345678');
-        spyOn(ACService, 'signUp').and.callThrough();
-        spyOn(router, 'navigate').and.callThrough();
-        component.signUp( component.signUpForm.value);
-        fixture.detectChanges();
-
-        expect(localStorage.getItem('token')).toBe("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18");
-        expect(localStorage.getItem('loggedIn')).toBe('true');
-        expect(localStorage.getItem('roles')).toBe("General Team Member");
-        expect(router.navigate).toHaveBeenCalledWith(['main']);
-      }));
-
-      it('should store correct variables when invalid', async(() => {
-        component.signUpForm.controls['name'].setValue('Jane');
-        component.signUpForm.controls['surname'].setValue('Doe');
-        component.signUpForm.controls['email'].setValue('janeDoe@mail.com');
-        component.signUpForm.controls['password'].setValue('12345678');
-        component.signUpForm.controls['passwordConf'].setValue('12345678');
-        spyOn(router, 'navigate').and.callThrough();
-
-        spyOn(ACService, 'signUp').and.returnValue(throwError({error:{message: "User already registered."}}));
-        component.signUp( component.signUpForm.value);
-        fixture.detectChanges();
-
-        expect(localStorage.getItem('loggedIn')).toBe('false');
-  
-        expect(router.navigate).not.toHaveBeenCalled();
-        expect(component.signUpError).toBe('User already registered.');
-      }));
-
   });
-  describe('signIn()', () => {
+});
+describe('Integration tests:', () => {
+  describe('SignInComponent', () => {
+
+    let component: SignInComponent;
+    let fixture: ComponentFixture<SignInComponent>;
+    let de: DebugElement;
+    let el: HTMLElement;
+    let ACService;
+    let router: Router;
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [ SignInComponent ],
+        imports:
+        [
+          BrowserModule,
+          FormsModule,
+          ReactiveFormsModule,
+          HttpClientTestingModule,
+          RouterTestingModule,
+          SharedModule
+        ],
+       providers: [
+        {provide: Router, useValue: {navigate: () => {}}},
+        {provide: AccountManagementService, useValue: {
+          signUp: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign up successful."}),
+          signIn: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign in successful."}),
+          getRoles: () => of({roles: ["General Team Member"]}),
+          params: of( "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18")}}
+       ]
+      })
+      .compileComponents().then(()=>
+      {
+        fixture = TestBed.createComponent(SignInComponent);
+
+        component = fixture.componentInstance;
+
+        fixture.detectChanges();
+
+        de = fixture.debugElement.query(By.css('form'));
+        el = de.nativeElement;
+        ACService = TestBed.get(AccountManagementService);
+        router = TestBed.get(Router);
+
+      });
+    }));
+
+  describe('signUp()', () => {
 
     it('should store correct variables when valid', async(() => {
-      component.signInForm.controls['email'].setValue('janeDoe@mail.com');
-      component.signInForm.controls['password'].setValue('12345678');
-
-      spyOn(ACService, 'signIn').and.callThrough();
+      component.signUpForm.controls['name'].setValue('Jane');
+      component.signUpForm.controls['surname'].setValue('Doe');
+      component.signUpForm.controls['email'].setValue('janeDoe@mail.com');
+      component.signUpForm.controls['password'].setValue('12345678');
+      component.signUpForm.controls['passwordConf'].setValue('12345678');
+      spyOn(ACService, 'signUp').and.callThrough();
       spyOn(router, 'navigate').and.callThrough();
-      component.signIn( component.signInForm.value);
+      component.signUp( component.signUpForm.value);
       fixture.detectChanges();
 
       expect(localStorage.getItem('token')).toBe("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18");
@@ -232,23 +234,59 @@ describe('Unit tests', () => {
     }));
 
     it('should store correct variables when invalid', async(() => {
-
-      component.signInForm.controls['email'].setValue('janeDoe@mail.com');
-      component.signInForm.controls['password'].setValue('123456789');
-
+      component.signUpForm.controls['name'].setValue('Jane');
+      component.signUpForm.controls['surname'].setValue('Doe');
+      component.signUpForm.controls['email'].setValue('janeDoe@mail.com');
+      component.signUpForm.controls['password'].setValue('12345678');
+      component.signUpForm.controls['passwordConf'].setValue('12345678');
       spyOn(router, 'navigate').and.callThrough();
 
-      spyOn(ACService, 'signIn').and.returnValue(throwError({error:{message: "Incorrect password."}}));
-      component.signIn( component.signInForm.value);
+      spyOn(ACService, 'signUp').and.returnValue(throwError({error:{message: "User already registered."}}));
+      component.signUp( component.signUpForm.value);
       fixture.detectChanges();
 
       expect(localStorage.getItem('loggedIn')).toBe('false');
 
       expect(router.navigate).not.toHaveBeenCalled();
-      expect(component.signInError).toBe('Incorrect password.');
+      expect(component.signUpError).toBe('User already registered.');
 
     }));
 
 });
-  });
+describe('signIn()', () => {
+
+  it('should store correct variables when valid', async(() => {
+    component.signInForm.controls['email'].setValue('janeDoe@mail.com');
+    component.signInForm.controls['password'].setValue('12345678');
+
+    spyOn(ACService, 'signIn').and.callThrough();
+    spyOn(router, 'navigate').and.callThrough();
+    component.signIn( component.signInForm.value);
+    fixture.detectChanges();
+
+    expect(localStorage.getItem('token')).toBe("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18");
+    expect(localStorage.getItem('loggedIn')).toBe('true');
+    expect(localStorage.getItem('roles')).toBe("General Team Member");
+    expect(router.navigate).toHaveBeenCalledWith(['main']);
+  }));
+
+  it('should store correct variables when invalid', async(() => {
+
+    component.signInForm.controls['email'].setValue('janeDoe@mail.com');
+    component.signInForm.controls['password'].setValue('123456789');
+
+    spyOn(router, 'navigate').and.callThrough();
+
+    spyOn(ACService, 'signIn').and.returnValue(throwError({error:{message: "Incorrect password."}}));
+    component.signIn( component.signInForm.value);
+    fixture.detectChanges();
+
+    expect(localStorage.getItem('loggedIn')).toBe('false');
+
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(component.signInError).toBe('Incorrect password.');
+
+  }));
+});
+});
 });
