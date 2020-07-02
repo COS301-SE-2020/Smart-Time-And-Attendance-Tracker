@@ -144,6 +144,10 @@ export class SignUpComponent implements OnInit {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
       });
     },
     error => {
@@ -164,6 +168,10 @@ export class SignUpComponent implements OnInit {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
       });
   
     },

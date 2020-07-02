@@ -149,6 +149,10 @@ export class SignInComponent implements OnInit {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
       });
     },
     error => {
@@ -171,6 +175,10 @@ export class SignInComponent implements OnInit {
 
       localStorage.setItem('roles', res['roles']);
       this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
       })
     },
     error => {
