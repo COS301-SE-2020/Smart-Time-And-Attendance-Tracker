@@ -13,10 +13,11 @@ passport.use(
                     return done(err);
                 //User not found
                 else if(!user)
-                    return done(null, false, {message: "No user with the given email was found."});
+                    return done(null, false, {message: "No user with the given email was found"});
+    
                 //Wrong password
                 else if(!user.verifyPassword(password))
-                    return done(null, false, {message: "Incorrect password."});  
+                    return done(null, false, {message: "Incorrect password"});    
                 //Successful authentication
                 else
                     return done(null, user);
