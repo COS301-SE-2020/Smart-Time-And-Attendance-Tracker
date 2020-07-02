@@ -105,7 +105,8 @@ module.exports.getRoles = (req, res, next) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error'});
         else if (!result)
-            return res.status(404).json({ message: 'User record not found' });
+            return res.status(404).json({ message: 'User not found' });
+        
         else
         {
             var rolesOfUser = [];
@@ -141,7 +142,7 @@ module.exports.getRoles = (req, res, next) => {
                         return res.status(500).send({message: 'Internal Server Error'});
 
                     else if(val == false) 
-                        return res.status(404).json({ message: 'Role record not found' });
+                        return res.status(404).json({ message: 'Role not found' });
                     else 
                     {
                         rolesOfUser.push(val);

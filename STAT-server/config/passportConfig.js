@@ -13,7 +13,7 @@ passport.use(
                     return done(err);
                 //User not found
                 else if(!user)
-                    return done(null, false, {message: "No user with the given email was found"});
+                    return done(null, false, {message: "User not found"});
     
                 //Wrong password
                 else if(!user.verifyPassword(password))

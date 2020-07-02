@@ -9,7 +9,7 @@ const userHelper = require('../helpers/user.helper');
 
 router.post("/user/register", user.register);
 router.post("/user/login", user.login);
-router.get("/user/getRoles",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getRoles);
+router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 //router.get("/user/authenticateUser",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, user.authenticate);
 
 router.get("/role/getRole", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, role.getRole);
