@@ -19,18 +19,18 @@ module.exports.add = (req, res) => {
         else if(response.statusCode == 200 && response.body.roles.includes("Security Administrator"))
         {*/
             RoleModel.find({}, function(err, allDocuments) {
-                if(err) return res.status(500).json({message: "Internal Server Error."});
+                if(err) return res.status(500).json({message: "Internal Server Error"});
                 var currentID = (allDocuments[0].ID) + 1;          
                 var role = new RoleModel();
                 role.ID = currentID;
                 role.Role = req.body.role;
                 role.save((err, doc) => {
                     if(!err)
-                        return res.status(200).json({status :true, message: "Role created."});
+                        return res.status(201).json({ message: "Role created"});
                     
                     else{
                         if (err.code == 11000){
-                            return res.status(422).json({status: false, message: "Role already exists."});
+                            return res.status(409).json({message: "Role already exists"});
                         }
                         else{
                             return next(err);
@@ -50,15 +50,15 @@ module.exports.getRole = (req, res, next) => {
     RoleModel.findOne({ ID: req.body.ID},(err, result) => {
         if(err) 
         {
-            return res.status(500).send({message: 'Internal Server Error.'});
+            return res.status(500).send({message: 'Internal Server Error'});
         }
         else if (!result)
         {
-            return res.status(404).json({ status: false, message: 'Role record not found.' });
+            return res.status(404).json({ message: 'Role record not found' });
         }
         else if (result)
         {
-            return res.status(200).json({ status: true, role : result.Role});
+            return res.status(200).json({ role : result.Role});
         }
     });
 }
