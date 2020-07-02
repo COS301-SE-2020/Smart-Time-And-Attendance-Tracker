@@ -8,6 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SignInComponent } from './sign-in.component';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 describe('Unit tests', () => {
   describe('SignInComponent', () => {
@@ -27,7 +28,8 @@ describe('Unit tests', () => {
           FormsModule,
           ReactiveFormsModule,
           HttpClientTestingModule,
-          RouterTestingModule
+          RouterTestingModule,
+          SharedModule
         ],
         providers: [
           {provide: Router, useValue: {navigate: () => {}}},
@@ -71,14 +73,56 @@ describe('Unit tests', () => {
       expect(component.signIn).toHaveBeenCalledTimes(1);
     }));
 
-    it('sign up form should be invalid', async(() => {
+    // **************************
+    // INVALID SIGN UP FORM TESTS
+    // **************************
+
+    it('sign up form should be invalid with empty details', async(() => {
       component.signUpForm.controls['name'].setValue('');
       component.signUpForm.controls['surname'].setValue('');
       component.signUpForm.controls['email'].setValue('');
       component.signUpForm.controls['password'].setValue('');
       component.signUpForm.controls['passwordConf'].setValue('');
       expect(component.signUpForm.valid).toBeFalsy();
+      expect(component.signUpForm.controls.email.hasError('required')).toBe(true);
+      expect(component.signUpForm.controls.password.hasError('required')).toBe(true);
+      expect(component.signUpForm.controls.passwordConf.hasError('required')).toBe(true);
     }));
+
+    it('sign up form should be invalid with incorrect email format', async(() => {
+      component.signUpForm.controls['name'].setValue('John');
+      component.signUpForm.controls['surname'].setValue('Doe');
+      component.signUpForm.controls['email'].setValue('jdoe');
+      component.signUpForm.controls['password'].setValue('12345678');
+      component.signUpForm.controls['passwordConf'].setValue('12345678');
+      expect(component.signUpForm.valid).toBeFalsy();
+      expect(component.signUpForm.controls.email.hasError('email')).toBe(true);
+      expect(component.getEmailError()).toBe('Invalid email address');
+    }));
+
+    it('sign up form should be invalid with incorrect password length', async(() => {
+      component.signUpForm.controls['name'].setValue('John');
+      component.signUpForm.controls['surname'].setValue('Doe');
+      component.signUpForm.controls['email'].setValue('jdoe@mail.com');
+      component.signUpForm.controls['password'].setValue('1234567');
+      component.signUpForm.controls['passwordConf'].setValue('12345678');
+      expect(component.signUpForm.valid).toBeFalsy();
+      expect(component.signUpForm.controls.password.hasError('minlength')).toBe(true);
+      expect(component.getPassError()).toBe('Invalid password length');
+    }));
+
+    it('sign up form should be invalid when password confirmation does not match', async(() => {
+      component.signUpForm.controls['name'].setValue('John');
+      component.signUpForm.controls['surname'].setValue('Doe');
+      component.signUpForm.controls['email'].setValue('jdoe@mail.com');
+      component.signUpForm.controls['password'].setValue('12345678');
+      component.signUpForm.controls['passwordConf'].setValue('123456789');
+      expect(component.signUpForm.valid).toBeFalsy();
+      expect(component.signUpForm.controls.passwordConf.hasError('mustMatch')).toBe(true);
+      expect(component.getConfError()).toBe('Passwords do not match');
+    }));
+
+    // ****************************************** END
 
     it('sign up form should be valid', async(() => {
       component.signUpForm.controls['name'].setValue('Jane');
@@ -87,19 +131,51 @@ describe('Unit tests', () => {
       component.signUpForm.controls['password'].setValue('12345678');
       component.signUpForm.controls['passwordConf'].setValue('12345678');
       expect(component.signUpForm.valid).toBeTruthy();
+      expect(component.getEmailError()).toBe('');
+      expect(component.getPassError()).toBe('');
+      expect(component.getConfError()).toBe('');
     }));
 
-    it('sign in form should be invalid', async(() => {
+    // **************************
+    // INVALID SIGN IN FORM TESTS
+    // **************************
+
+    it('sign in form should be invalid with missing details', async(() => {
       component.signInForm.controls['email'].setValue('');
       component.signInForm.controls['password'].setValue('');
       expect(component.signInForm.valid).toBeFalsy();
     }));
+
+    it('sign in form should be invalid with incorrect email format', async(() => {
+      component.signInForm.controls['email'].setValue('jdoe@');
+      component.signInForm.controls['password'].setValue('12345678');
+      expect(component.signInForm.valid).toBeFalsy();
+      expect(component.signInForm.controls.email.hasError('email')).toBe(true);
+      expect(component.getEmailErrorSI()).toBe('Invalid email address');
+      expect(component.signInForm.controls.password.hasError('minlength')).toBe(false);
+      expect(component.getPassErrorSI()).toBe('');
+    }));
+
+    it('sign in form should be invalid with incorrect password length', async(() => {
+      component.signInForm.controls['email'].setValue('jdoe@mail.com');
+      component.signInForm.controls['password'].setValue('1234567');
+      expect(component.signInForm.valid).toBeFalsy();
+      expect(component.signInForm.controls.password.hasError('minlength')).toBe(true);
+      expect(component.getPassErrorSI()).toBe('Invalid password length');
+      expect(component.signInForm.controls.email.hasError('email')).toBe(false);
+      expect(component.getEmailErrorSI()).toBe('');
+    }));
+
+    // ****************************************** END
 
     it('sign in form should be valid', async(() => {
-      component.signInForm.controls['email'].setValue('');
-      component.signInForm.controls['password'].setValue('');
-      expect(component.signInForm.valid).toBeFalsy();
+      component.signInForm.controls['email'].setValue('john@mail.com');
+      component.signInForm.controls['password'].setValue('12345678');
+      expect(component.signInForm.valid).toBeTruthy();
+      expect(component.getEmailErrorSI()).toBe('');
+      expect(component.getPassErrorSI()).toBe('');
     }));
+
     describe('signUp()', () => {
 
       it('should store correct variables when valid', async(() => {
@@ -134,6 +210,7 @@ describe('Unit tests', () => {
         expect(localStorage.getItem('loggedIn')).toBe('false');
   
         expect(router.navigate).not.toHaveBeenCalled();
+        expect(component.signUpError).toBe('User already registered.');
       }));
 
   });
@@ -168,6 +245,8 @@ describe('Unit tests', () => {
       expect(localStorage.getItem('loggedIn')).toBe('false');
 
       expect(router.navigate).not.toHaveBeenCalled();
+      expect(component.signInError).toBe('Incorrect password.');
+
     }));
 
 });
