@@ -13,8 +13,12 @@ module.exports.add = (req, res) => {
        json: true
        }, (error, response, body) => {
         if (error) {
-            console.error(error)
-            return
+            return res.status(500).json({message: "Internal Server Error"});
+
+        }
+        else if(response.statusCode == 200 && body.authenticate == false)
+        {
+            return res.status(401).json({message: "Unauthenticate user"});
         }
         else if(response.statusCode == 200 && response.body.roles.includes("Security Administrator"))
         {*/

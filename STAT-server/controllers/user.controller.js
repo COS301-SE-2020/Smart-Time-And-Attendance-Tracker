@@ -131,7 +131,7 @@ module.exports.getRoles = (req, res, next) => {
                         rolesOfUser.push(response.body.role);
                         if(rolesOfUser.length == result.Role.length)
                         {
-                            return res.status(200).json({ status: true, roles : rolesOfUser});
+                            return res.status(200).json({ status: true, roles : rolesOfUser, authenticate: req.Authenticate});
                         }
                     }
                 });
