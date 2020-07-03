@@ -1,7 +1,8 @@
 <div class="container right-panel-active" id="container">
 	<div class="form-container sign-up-container">
 		<form [formGroup]="signUpForm" (ngSubmit)="signUp(signUpForm.value)">
-			<h1>Sign Up</h1>
+            <h1>Sign Up</h1>
+            <mat-error class="form-error" *ngIf="signUpError">{{signUpError}}</mat-error>
                 <mat-form-field appearance="standard" >
                     <mat-label>Name</mat-label>
                     <input matInput formControlName="name" placeholder="John" name = "name" required>
@@ -28,23 +29,24 @@
                     <input matInput formControlName="passwordConf" type="password" placeholder="" name = "passwordConf" required>
                     <mat-error *ngIf="su.passwordConf.errors">{{getConfError()}}</mat-error>
                 </mat-form-field>
-			<button mat-raised-button color="primary" type="submit">Sign Up</button>
+			<button mat-raised-button color="primary" id="sign_up" type="submit">Sign Up</button>
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
 		<form [formGroup]="signInForm" (ngSubmit)="signIn(signInForm.value)">
             <h1>Sign In</h1>
+            <mat-error class="form-error" *ngIf="signInError">{{signInError}}</mat-error>
             <mat-form-field appearance="standard" type="email">
                 <mat-label>Email</mat-label>
-                <input matInput formControlName="email" placeholder="johndoe@example.com" name = "email">
-                <mat-error *ngIf="si.email.errors">{{getEmailError()}}</mat-error>
+                <input matInput formControlName="email" placeholder="johndoe@example.com" name = "email" required>
+                <mat-error *ngIf="si.email.errors">{{getEmailErrorSI()}}</mat-error>
             </mat-form-field>
             <mat-form-field appearance="standard">
                 <mat-label>Password</mat-label>
-                <input matInput formControlName="password" type="password" placeholder="" name = "password">
-                <mat-error *ngIf="si.password.errors">{{getPassError()}}</mat-error>
+                <input matInput formControlName="password" type="password" placeholder="" name = "password" required>
+                <mat-error *ngIf="si.password.errors">{{getPassErrorSI()}}</mat-error>
             </mat-form-field>
-			<button mat-raised-button color="primary">Sign In</button>
+			<button mat-raised-button color="primary" id="sign_in" type="submit">Sign In</button>
 		</form>
 	</div>
 	<div class="overlay-container">
@@ -57,7 +59,7 @@
 			<div class="overlay-panel overlay-right">
 				<h1>Hello, Friend!</h1>
 				<p>You're just a few clicks away from starting your journey with us</p>
-				<button mat-raised-button color="accent" id="signUp">Sign Up</button>
+				<button mat-raised-button color="accent" id="signUp" >Sign Up</button>
 			</div>
 		</div>
 	</div>

@@ -11,6 +11,7 @@ import { MaterialComponentsModule } from './material-components/material-compone
 import { DashboardModule } from './dashboard/dashboard.module';
 import { MatIconModule } from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {HttpClientModule} from '@angular/common/http';
     FormsModule,
     DashboardModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

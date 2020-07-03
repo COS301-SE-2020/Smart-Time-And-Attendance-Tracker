@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { Router } from '@angular/router';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,15 +13,17 @@ export class SignInComponent implements OnInit {
 
   signUpForm : FormGroup
   signInForm : FormGroup
-
-  constructor(public service : AccountManagementService, public router : Router) { }
+  signUpError : string
+  signInError : string
+  
+  constructor(public service : AccountManagementService, public router : Router, private headerService : HeaderService) { }
 
   ngOnInit(): void {
-    const signUpButton = document.getElementById('signUp');
-    const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
+     const signUpButton = document.getElementById('signUp');
+     const signInButton = document.getElementById('signIn');
+     const container = document.getElementById('container');
 
-    const signIn = document.getElementById("sign_in");
+    //const signIn = document.getElementById("sign_in");
 
     signUpButton.addEventListener('click', () => {
       container.classList.add("right-panel-active");
@@ -30,9 +33,9 @@ export class SignInComponent implements OnInit {
       container.classList.remove("right-panel-active");
     });
 
-    signIn.addEventListener('click', () => {
+    /*signIn.addEventListener('click', () => {
       container.classList.remove("right-panel-active");
-    });
+    });*/
 
     // sign up form
     this.signUpForm = new FormGroup({
@@ -60,6 +63,7 @@ export class SignInComponent implements OnInit {
   get su() { return this.signUpForm.controls; }
   get si() { return this.signInForm.controls; }
 
+  // SIGN UP
   // display errors for email
   getEmailError() {
     if (this.signUpForm.controls.email.hasError('required')) {
@@ -109,23 +113,79 @@ export class SignInComponent implements OnInit {
     }
   }
 
+  // SIGN IN
+  // display errors for email
+  getEmailErrorSI() {
+    if (this.signInForm.controls.email.hasError('required')) {
+      return 'Please enter a value';
+    }
+
+    return this.signInForm.controls.email.hasError('email') ? 'Invalid email address' : '';
+  }
+
+  // display errors for password
+  getPassErrorSI() {
+    if (this.signInForm.controls.password.hasError('required')) {
+      return 'Please enter a value';
+    }
+
+    return this.signInForm.controls.password.hasError('minlength') ? 'Invalid password length' : '';
+  }
+
+
   /********
   API CALLS
   *********/
   
   // submit sign up form
   signUp(form : NgForm) {
-    console.log(form.value);
-    this.service.signUp(form.value);
-    this.router.navigate(['main']);
-    localStorage.setItem('loggedIn', 'true');
-  }
+    this.service.signUp(form).subscribe((data) => {
+      localStorage.setItem('token', data['token']);
+      localStorage.setItem('loggedIn', 'true');
 
+      this.headerService.isUserLoggedIn.next(true);
+
+      this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
+      //console.log(res['roles']);
+      localStorage.setItem('roles', res['roles']);
+      this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
+      });
+    },
+    error => {
+      //console.log(error.error.message);  
+      localStorage.setItem('loggedIn', 'false');
+      this.signUpError = error.error.message;
+    }); 
+  }
   //submit sign in form
   signIn(form : NgForm) {
-    console.log(form.value);
-    this.service.signIn(form.value);
-    this.router.navigate(['main']);
-    localStorage.setItem('loggedIn', 'true');
+    this.service.signIn(form).subscribe(data => 
+    {
+      localStorage.setItem('token', data['token']);
+      localStorage.setItem('loggedIn', 'true');
+
+      this.headerService.isUserLoggedIn.next(true);
+      
+      this.service.getRoles( localStorage.getItem('token')).subscribe(res => {
+     // console.log(res['roles']);
+
+      localStorage.setItem('roles', res['roles']);
+      this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
+      })
+    },
+    error => {
+
+      localStorage.setItem('loggedIn', 'false'); 
+      this.signInError = error.error.message;  
+    })
   }
+
 }

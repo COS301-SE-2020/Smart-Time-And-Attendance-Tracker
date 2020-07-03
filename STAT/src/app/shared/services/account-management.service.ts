@@ -1,48 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-
 @Injectable({
-  providedIn: 'root',  
+  providedIn: 'root'
 })
 
 export class AccountManagementService {
  
-
-  public static token :string;
-  public static roles: Array<{id: number, text: string}>;
   constructor(public http: HttpClient) { }
 
   // sign up
   public signUp(values) {
     const headers = new HttpHeaders()
-          .set('Authorization', 'my-auth-token')
           .set('Content-Type', 'application/json');
 
-    this.http.post('http://localhost:3000/user/api/register', JSON.stringify(values), {
+    return this.http.post('http://localhost:3000/api/user/register', JSON.stringify(values), {
       headers: headers
-    })
-    .subscribe(data => {
-      console.log(data);
     });
   }
-
   // sign in 
-  public signIn(values) {
+  public signIn(values){
     const headers = new HttpHeaders()
-          .set('Authorization', 'my-auth-token')
           .set('Content-Type', 'application/json');
-
-    this.http.post('http://localhost:3000/user/api/login', JSON.stringify(values), {
+    return this.http.post('http://localhost:3000/api/user/login', JSON.stringify(values), {
       headers: headers
-    })
-    .subscribe(data => {
-    AccountManagementService.token = data["token"];
-    AccountManagementService.roles = data["roles"];
-    localStorage.setItem('roles', data['roles']);
-  });
+    });
   }
-
+  //get roles
+  public getRoles(values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.get('http://localhost:3000/api/user/getRoles', {
+      headers: headers
+    });
+  }
+   
   // edit profile
 
   // edit settings
