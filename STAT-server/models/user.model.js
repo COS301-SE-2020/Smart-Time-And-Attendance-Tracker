@@ -34,13 +34,7 @@ var UserSchema = new mongoose.Schema({
     Authenticate:{
         type: Boolean,  
         required : "Authentication required."
-    },
-    TimeEntry: [
-        { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'TimeEntry' 
-        }
-    ]
+    }
 });
 
 //Methods
