@@ -109,9 +109,9 @@ module.exports.getName = (req, res, next) => {
         
         else
         {
-            var name = result.Name;
-            var surname = result.Surname;
-            return res.status(200).json({name : name, surname : surname});
+            //var name = result.Name;
+           // var surname = result.Surname;
+            return res.status(200).json({name : result.Name, surname : result.Surname});
         }
     });
 }
