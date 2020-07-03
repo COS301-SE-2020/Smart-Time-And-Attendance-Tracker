@@ -14,9 +14,4 @@ mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}, (error,
     }
 });
 
-const Organisation = require("./organisation.model")
-const Project = require("./project.model")
-const User = require("./user.model")
-const Task = require("./task.model")
-const Team = require("./team.model")
-const Role = require("./role.model")
+
