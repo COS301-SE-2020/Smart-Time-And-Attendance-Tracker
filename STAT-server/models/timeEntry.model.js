@@ -7,7 +7,7 @@ const TimeEntrySchema = mongoose.Schema({
     unique: true
   },
   TaskID: {
-    type: String,
+    type: Integer,
     required : "Task required.",
   },
   Duration: { 

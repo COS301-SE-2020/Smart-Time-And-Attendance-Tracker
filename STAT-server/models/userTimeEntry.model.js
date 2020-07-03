@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 var UserTimeEntrySchema = new mongoose.Schema({
-    ID:{
+    UserID:{
         type: String,
         required : "ID required.",
         unique: true
