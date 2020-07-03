@@ -100,6 +100,23 @@ module.exports.register = (req, res, next) => {
 }
     
 
+module.exports.getName = (req, res, next) => {
+    UserModel.findOne({ ID: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error'});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            var name = result.Name;
+            var surname = result.Surname;
+            return res.status(200).json({name : name, surname : surname});
+        }
+    });
+}
+
+
 module.exports.getRoles = (req, res, next) => {
     UserModel.findOne({ ID: req.ID},(err, result) => {
         if (err) 
