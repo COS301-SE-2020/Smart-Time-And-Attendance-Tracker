@@ -12,3 +12,5 @@ const User = require("./user.model")
 const Task = require("./task.model")
 const Team = require("./team.model")
 const Role = require("./role.model")
+const TimeEntry = require("./timeEntry.model");
+const UserTimeEntry = require("./userTimeEntry.model");

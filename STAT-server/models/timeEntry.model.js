@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
 
 const TimeEntrySchema = mongoose.Schema({
-  TimeID: { 
-    type: Integer,
-    required : "ID required.",
-    unique: true
-  },
   TaskID: {
-    type: Integer,
-    required : "Task required.",
+    type: String,
+    required : "Task required."
   },
   Duration: { 
     type: String,

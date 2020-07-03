@@ -2,12 +2,12 @@ const mongoose = require("mongoose")
 
 var TaskSchema = new mongoose.Schema({
     ID:{
-        type: Integer,
+        type: String,
         required : "Required",
         unique: true
     },
     ProjectID:{
-        type: Integer,
+        type: String,
         required : "Required"
     },    
     TaskName:{

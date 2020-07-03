@@ -3,6 +3,7 @@ const router = express.Router();
 
 const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
+const userTimeEntry = require('../controllers/userTimeEntry.controller');
 
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
@@ -15,4 +16,6 @@ router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 
 router.get("/role/getRole", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, role.getRole);
 router.post("/role/addRole",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, role.add);
+
+router.post("/userTimeEntry/addTimeEntry", jwtHelper.verifyJWTtoken, userTimeEntry.addTimeEntry);
 module.exports = router;
