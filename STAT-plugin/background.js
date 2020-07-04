@@ -1,26 +1,52 @@
-function Update(t, tabId, url) {
-  if (!url) {
-    return;
-  }
-  if (tabId in History) {
-    if (url == History[tabId][0][1]) {
-      return;
+function getCookie(cname) {
+    //alert(cname.includes("historyTime"));
+    if(document.cookie.includes(cname) == false && cname.includes("historyTime"))
+      return "0:0:0";
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
     }
-  } else {
-    History[tabId] = [];
-  }
-  History[tabId].unshift([t, url]);
-
-  var history_limit = parseInt(localStorage["history_size"]);
-  if (! history_limit) {
-    history_limit = 23;
-  }
-  while (History[tabId].length > history_limit) {
-    History[tabId].pop();
-  }
-
-  chrome.browserAction.setBadgeText({ 'tabId': tabId, 'text': '0:00'});
-  chrome.browserAction.setPopup({ 'tabId': tabId, 'popup': "popup.html#tabId=" + tabId});
+    return "";
+}
+  
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+  
+  function Update(t, tabId, url) {
+    if (!url) {
+        return;
+    }
+    if (tabId in History) {
+        if (url == History[tabId][0][1]) {
+            return;
+        }
+    }
+    else {
+        History[tabId] = [];
+    }
+    History[tabId].unshift([t, url]);
+    
+    var history_limit = parseInt(localStorage["history_size"]);
+    if (! history_limit) {
+        history_limit = 23;
+    }
+    while (History[tabId].length > history_limit) {
+        History[tabId].pop();
+    }
+    
+    chrome.browserAction.setBadgeText({ 'tabId': tabId, 'text': '0:00'});
+    chrome.browserAction.setPopup({ 'tabId': tabId, 'popup': "popup.html#tabId=" + tabId});
 }
 
 function HandleUpdate(tabId, changeInfo, tab) {
