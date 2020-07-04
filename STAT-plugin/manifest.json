@@ -15,7 +15,6 @@
   },
   "background": {
     "scripts": [
-      "FormatDuration.js",
       "background.js"
       ],
     "persistent": true
