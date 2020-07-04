@@ -177,3 +177,31 @@ module.exports.getRoles = (req, res, next) => {
 
 
 
+module.exports.getUnauthenticatedUsers = (req, res, next) => {
+    UserModel.find({  Authenticate : false},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'No unauthenticated users found' }); 
+        else
+        {
+            UnauthenticatedUsers=[];
+            for(var a=0; a<result.length; a++){
+                UnauthenticatedUsers.push({"ID":result[a].ID, "Email":result[a].Email, "Name":result[a].Name, "Surname":result[a].Surname});
+            }
+            return res.status(200).json({UnauthenticatedUsers});
+        }
+    });
+}
+
+module.exports.authenticate = (req, res, next) => {
+    UserModel.update({  ID : req.body.UserID},{Authenticate: true},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'User authenticated'});
+               
+    });
+}
