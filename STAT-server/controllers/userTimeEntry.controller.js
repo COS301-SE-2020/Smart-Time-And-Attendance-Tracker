@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const timeEntryModel = require("../models/timeEntry.model");
 const UserTimeEntryModel = mongoose.model("UserTimeEntry");
 const TimeEntryModel = mongoose.model("TimeEntry");
 
@@ -6,7 +7,8 @@ module.exports.addTimeEntry = (req, res) => {
     var timeEntry = new TimeEntryModel();
     timeEntry.Date = req.body.Date;
     timeEntry.TaskID = req.body.TaskID;
-    timeEntry.Duration = req.body.Duration;
+    timeEntry.StartTime = req.body.StartTime;
+    timeEntry.EndTime = req.body.EndTime;
     timeEntry.Description = req.body.Description;
     timeEntry.Device = req.body.Device;
     timeEntry.save((error, timeEntryDoc) => {

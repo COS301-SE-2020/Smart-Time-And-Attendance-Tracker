@@ -72,7 +72,6 @@ module.exports.register = (req, res, next) => {
                 }
                 else{
                     var user = new UserModel();
-                    user.ID = user._id;
                     user.Name = req.body.name;
                     user.Surname = req.body.surname;
                     user.Email = req.body.email.toLowerCase();
@@ -101,7 +100,7 @@ module.exports.register = (req, res, next) => {
     
 
 module.exports.getName = (req, res, next) => {
-    UserModel.findOne({ ID: req.ID},(err, result) => {
+    UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
@@ -118,7 +117,7 @@ module.exports.getName = (req, res, next) => {
 
 
 module.exports.getRoles = (req, res, next) => {
-    UserModel.findOne({ ID: req.ID},(err, result) => {
+    UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
@@ -187,7 +186,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
         {
             UnauthenticatedUsers=[];
             for(var a=0; a<result.length; a++){
-                UnauthenticatedUsers.push({"ID":result[a].ID, "Email":result[a].Email, "Name":result[a].Name, "Surname":result[a].Surname});
+                UnauthenticatedUsers.push({"ID":result[a]._id, "Email":result[a].Email, "Name":result[a].Name, "Surname":result[a].Surname});
             }
             return res.status(200).json({UnauthenticatedUsers});
         }
@@ -195,7 +194,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
 }
 
 module.exports.authenticate = (req, res, next) => {
-    UserModel.update({  ID : req.body.UserID},{Authenticate: true},(err, result) => {
+    UserModel.update({ _id: req.body.UserID},{Authenticate: true},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)

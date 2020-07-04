@@ -5,10 +5,13 @@ const TimeEntrySchema = mongoose.Schema({
     type: String,
     required : "Task required."
   },
-  Duration: { 
-   // type: String,
-   type: Number,
-    required: "Duration required."
+  StartTime: {
+    type: Number,
+    required: "Start time required."
+  },
+  EndTime: {
+    type: Number,
+    required: "End time required."
   },
   Date: { 
     type: Date,
