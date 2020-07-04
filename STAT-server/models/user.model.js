@@ -29,7 +29,8 @@ var UserSchema = new mongoose.Schema({
         unique: true
     },
     Role:{
-        type: Array
+        type: Array,
+        required : "Role required.",
     },
     Authenticate:{
         type: Boolean,  

@@ -182,7 +182,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
-            return res.status(404).json({ message: 'No unauthenticated user found' }); 
+            return res.status(404).json({ message: 'No unauthenticated users found' }); 
         else
         {
             UnauthenticatedUsers=[];
@@ -191,5 +191,17 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
             }
             return res.status(200).json({UnauthenticatedUsers});
         }
+    });
+}
+
+module.exports.authenticate = (req, res, next) => {
+    UserModel.update({  ID : req.body.UserID},{Authenticate: true},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'User authenticated'});
+               
     });
 }
