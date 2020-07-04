@@ -6,7 +6,8 @@ const TimeEntrySchema = mongoose.Schema({
     required : "Task required."
   },
   Duration: { 
-    type: String,
+   // type: String,
+   type: Number,
     required: "Duration required."
   },
   Date: { 

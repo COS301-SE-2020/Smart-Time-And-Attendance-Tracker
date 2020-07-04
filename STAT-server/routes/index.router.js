@@ -17,5 +17,5 @@ router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 router.get("/role/getRole", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, role.getRole);
 router.post("/role/addRole",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, role.add);
 
-router.post("/userTimeEntry/addTimeEntry", jwtHelper.verifyJWTtoken, userTimeEntry.addTimeEntry);
+router.post("/userTimeEntry/addTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.addTimeEntry);
 module.exports = router;

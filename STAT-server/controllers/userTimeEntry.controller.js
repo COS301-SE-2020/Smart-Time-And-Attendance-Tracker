@@ -24,11 +24,11 @@ module.exports.addTimeEntry = (req, res) => {
                     userTimeEntry.TimeEntry = [timeEntryDoc];
                     userTimeEntry.save((err, doc) => {
                     if(!err)
-                        return res.status(404).json({ message: 'Time recorded successfully.', "Time Entry ID": timeEntryDoc._id });
+                        return res.status(200).json({ message: 'Time recorded successfully', "Time Entry ID": timeEntryDoc._id });
                     else 
                     {
                         if (err.code == 11000)
-                            res.status(409).send({message: 'User already exists'});
+                            res.status(409).send({message: 'Time record already exists'});
                         else
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                         }
@@ -38,7 +38,7 @@ module.exports.addTimeEntry = (req, res) => {
                     result.TimeEntry.push(timeEntryDoc);
                     result.save((err, doc) => {
                         if(!err)
-                            return res.status(404).json({ message: 'Time recorded successfully.', "Time Entry ID": timeEntryDoc._id });
+                            return res.status(200).json({ message: 'Time recorded successfully', "Time Entry ID": timeEntryDoc._id });
                         else
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                     });
@@ -48,7 +48,7 @@ module.exports.addTimeEntry = (req, res) => {
         else 
         {
             if (error.code == 11000)
-                res.status(409).send({message: 'Time record already exists.'});
+                res.status(409).send({message: 'Time record already exists'});
             else
                 return res.status(500).send({message: 'Internal Server Error: ' + error});
         }
@@ -57,7 +57,7 @@ module.exports.addTimeEntry = (req, res) => {
 }
        
 module.exports.updateTimeEntry = (req, res) => {  
-    return res.status(200).send({message: 'Updating entry!'});
+    return res.status(200).send({message: 'Time record updated'});
 }
 
 
