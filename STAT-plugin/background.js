@@ -26,23 +26,16 @@ function setCookie(cname, cvalue, exdays) {
 var tabId_re = /tabId=([0-9]+)/;
 var match = tabId_re.exec(window.location.hash);
 
-var pauseTimer = document.getElementById("btn");
-var startTimer = document.getElementById("btn1");
-var resetTimer = document.getElementById("reset");
-var saveTime = document.getElementById("save");
 var History = {};
-
-
 chrome.browserAction.setBadgeText({ 'text': '?'});
 chrome.browserAction.setBadgeBackgroundColor({ 'color': "#777" });
 
-setInterval(showTime, 1000);
+//setInterval(showTime, 1000);
 setInterval(UpdateBadges, 1000);
 
 chrome.tabs.onUpdated.addListener(HandleUpdate);
 chrome.tabs.onRemoved.addListener(HandleRemove);
 chrome.tabs.onReplaced.addListener(HandleReplace);
-
 
 function Update(t, tabId, url) {
     if (!url) {
@@ -65,22 +58,25 @@ function Update(t, tabId, url) {
     while (History[tabId].length > history_limit) {
         History[tabId].pop();
     }
-    
+    setCookie("historyTime"+url, now);
     chrome.browserAction.setBadgeText({ 'tabId': tabId, 'text': '0:00'});
     chrome.browserAction.setPopup({ 'tabId': tabId, 'popup': "popup.html#tabId=" + tabId});
 }
 
 function HandleUpdate(tabId, changeInfo, tab) {
+    console.log(changeInfo);
+    console.log(tab);
+    console.log("update " + tabId );
     Update(new Date(), tabId, changeInfo.url);
   }
   
-  function HandleRemove(tabId, removeInfo) {
+  function HandleRemove(tabId, removeInfo) {    //working
     save();
-    alert("removed time  " + getCookie("historyTime"+url));
     delete History[tabId];
   }
   
   function HandleReplace(addedTabId, removedTabId) {
+      console.log("replace");
     var t = new Date();
     delete History[removedTabId];
     chrome.tabs.get(addedTabId, function(tab) {
@@ -90,104 +86,26 @@ function HandleUpdate(tabId, changeInfo, tab) {
 
 
   function UpdateBadges() {
-      var now = new Date();
-    for (tabId in History) {
-      var description, url = History[tabId][0][1];
-      if(History[tabId][0][0] != -1)
-      {
-        //alert("cc " + getCookie("historyTime"+url));
-        description = addTimes([FormatDuration(now - History[tabId][0][0]), getCookie("historyTime"+url)]); 
-      }
-      else
-        description = getCookie("historyTime"+url);
-      chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
-    }
-}
-
-
-function showTime() {
     var now = new Date();
-    var url = chrome.extension.getBackgroundPage().History[match[1]][0][1];
-    var desc = document.getElementById("desc");
-    desc.innerHTML = url + ": ";
-    if(chrome.extension.getBackgroundPage().History[match[1]][0][0] != -1)
-    {
-      var curr = chrome.extension.getBackgroundPage().History[match[1]][0][0];
-      //alert(FormatDuration(now - curr));
-  
-      var cookieTime = getCookie("historyTime"+url);
-      //alert("cookieTime "+ cookieTime);
-      
-      desc.innerHTML += addTimes([FormatDuration(now - curr), cookieTime]);
+    for (tabId in History) {
+        var description = FormatDuration(now - History[tabId][0][0]);
+        chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
     }
-    else
-      desc.innerHTML += getCookie("historyTime"+url);
+    
 }
 
-saveTime.onclick = save;
-  
-  function save() {
+function save() {
     var now  = new Date();
-    var curr = chrome.extension.getBackgroundPage().History[match[1]][0][0];
     var url = chrome.extension.getBackgroundPage().History[match[1]][0][1];
-    var cookieTime = getCookie("historyTime"+url);
-  
-    var saveTime =  addTimes([FormatDuration(now - curr), cookieTime]);
-    var saveUrl = url;
-  
+    //var cookieTime = getCookie("historyTime"+url);
+    var cookieTime = chrome.extension.getBackgroundPage().History[match[1]][0][0];
+    var saveTime = FormatDuration(cookieTime - now);
+    //var saveTime =  addTimes([FormatDuration(now - curr), cookieTime]);
+    console.log("send api   =>   " + "url:" + url + "+time: " + saveTime)
     chrome.extension.getBackgroundPage().History[match[1]][0][0] = now;
-    var url = chrome.extension.getBackgroundPage().History[match[1]][0][1];
-    setCookie("historyTime"+url, "0:0:0", 1);
   }
   
 
-  function char_count(str, letter) 
-  {
-   var letter_Count = 0;
-   for (var position = 0; position < str.length; position++) 
-   {
-      if (str.charAt(position) == letter) 
-        {
-        letter_Count += 1;
-        }
-    }
-    return letter_Count;
-  }
-  
-  function addTimes(times = []) {
-  
-    const z = (n) => (n < 10 ? '0' : '') + n;
-    for(var i=0; i<times.length; i++) {
-  
-      if(char_count(times[i],":") == 0)
-      {
-        times[i] = "0:0:"+times[i];
-      }
-      else if(char_count(times[i],":") == 1)
-      {
-        times[i] = "0:"+times[i];
-      }
-      else if(char_count(times[i],":") == 2)
-      {}
-      //alert("time " + (i+1) + " : " + times[i]);
-    }
-    let hour = 0
-    let minute = 0
-    let second = 0
-    for (const time of times) {
-        const splited = time.split(':');
-        hour += parseInt(splited[0]);
-        minute += parseInt(splited[1])
-        second += parseInt(splited[2])
-    }
-    const seconds = second % 60
-    const minutes = parseInt(minute % 60) + parseInt(second / 60)
-    const hours = hour + parseInt(minute / 60)
-  
-    return z(hours) + ':' + z(minutes) + ':' + z(seconds)
-  }
-
-  
   function FormatDuration(d) {
     if (d < 0) {
       return "?";
