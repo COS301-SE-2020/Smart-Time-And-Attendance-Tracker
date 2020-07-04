@@ -4,7 +4,6 @@ const UserTimeEntryModel = mongoose.model("UserTimeEntry");
 const TimeEntryModel = mongoose.model("TimeEntry");
 
 module.exports.addTimeEntry = (req, res) => {  
-    console.log(req.body);
     var timeEntry = new TimeEntryModel();
     timeEntry.Date = req.body.Date;
     timeEntry.TaskID = req.body.TaskID;
