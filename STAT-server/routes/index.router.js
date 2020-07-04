@@ -18,4 +18,6 @@ router.get("/role/getRole", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated
 router.post("/role/addRole",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, role.add);
 
 router.post("/userTimeEntry/addTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.addTimeEntry);
+
+router.get("/user/getUnauthenticatedUsers", user.getUnauthenticatedUsers);
 module.exports = router;
