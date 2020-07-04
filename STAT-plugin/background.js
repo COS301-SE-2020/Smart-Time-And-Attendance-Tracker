@@ -72,13 +72,13 @@ function HandleUpdate(tabId, changeInfo, tab) {
   
   function HandleRemove(tabId, removeInfo) {    //working
     save();
-    delete History[tabId];
+    delete chrome.extension.getBackgroundPage().History[tabId];
   }
   
   function HandleReplace(addedTabId, removedTabId) {
       console.log("replace");
     var t = new Date();
-    delete History[removedTabId];
+    delete chrome.extension.getBackgroundPage().History[removedTabId];
     chrome.tabs.get(addedTabId, function(tab) {
       Update(t, addedTabId, tab.url);
     });
