@@ -18,6 +18,9 @@ export class MainComponent implements OnInit {
   dataAnalyst : boolean;
   general : boolean;
 
+  // active tab
+  active : string;
+
   constructor(public service : AccountManagementService) { }
 
   ngOnInit(): void {
@@ -28,23 +31,22 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     })
 
-    this.dataAnalyst = false;
+    this.active = 'today';
   }
 
   // set active tab after component initialisation
   ngAfterViewInit(): void {
-    const navItem = document.getElementById('default');
+    const navItem = document.getElementById('today');
     navItem.classList.add('active');
   }
 
   // set new active tab after click
-  setActive(id: number) {
+  setActive(tabName : string) {
     const currActive = document.getElementsByClassName('active')[0];
-    console.log(currActive);
     currActive.classList.remove('active');
-    const navItem = document.getElementsByTagName('li')[id+1];
-    const link = navItem.getElementsByTagName('a')[0];
+    const link = document.getElementById(tabName);
     link.classList.add('active');
+    this.active = tabName;
   }
 
 }
