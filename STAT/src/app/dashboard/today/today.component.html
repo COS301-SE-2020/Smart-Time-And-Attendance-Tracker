@@ -2,60 +2,84 @@
   <h1>Today</h1>
 </div>
 
-<div class="col-8 column float-left">
+<div class="col-7 column float-left">
   <section id="manual-tracking">
     <h2>Manual Tracking</h2>
-    <mat-form-field appearance="standard">
-      <mat-label>Project</mat-label>
-      <mat-select>
-        <mat-option>None</mat-option>
-        <mat-option>None</mat-option>
-        <mat-option>None</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="standard">
-      <mat-label>Task</mat-label>
-      <mat-select>
-        <mat-option>None</mat-option>
-        <mat-option>None</mat-option>
-        <mat-option>None</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <form id="manual-tracking-form" [formGroup]="manualTrackingForm" method="post">
+      <mat-form-field appearance="standard" class="col-10">
+        <mat-label>Project</mat-label>
+        <mat-select>
+          <mat-option value="">None</mat-option>
+          <mat-option value="">None</mat-option>
+          <mat-option value="">None</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="col-10">
+        <mat-label>Task</mat-label>
+        <mat-select>
+          <mat-option value="">None</mat-option>
+          <mat-option value="">None</mat-option>
+          <mat-option value="">None</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="col-10">
+        <mat-label>Monetary value</mat-label>
+        <input matInput type="text" placeholder="0.00" name="monetary-value">
+      </mat-form-field>
+      <div class="mt-3">
+        <button mat-raised-button>Start tracking</button>
+      </div>
+    </form>
   </section>
-  <mat-divider></mat-divider>
+  <mat-divider class="section-divider"></mat-divider>
   <section id="currently-tracking">
     <h2>Currently Tracking</h2>
     <mat-card>
       <mat-card-title>Browser - Firefox</mat-card-title>
       <mat-card-subtitle>www.clickup.com</mat-card-subtitle>
       <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>00:13:31</mat-card-footer>
+      <mat-card-footer>
+        <span>July 05, 2020 | 08:59</span>
+        <span class="float-right">00:13:31</span>
+      </mat-card-footer>
     </mat-card>
     <mat-card>
       <mat-card-title>Browser - Google Chrome</mat-card-title>
       <mat-card-subtitle>www.instagram.com</mat-card-subtitle>
       <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>24:08:46</mat-card-footer>
+      <mat-card-footer>
+        <span>July 05, 2020 | 19:23</span>
+        <span class="float-right">24:08:46</span>
+      </mat-card-footer>
     </mat-card>
     <mat-card>
       <mat-card-title>Email client - Outlook</mat-card-title>
       <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>00:01:53</mat-card-footer>
+      <mat-card-footer>
+        <span>July 05, 2020 | 18:56</span>
+        <span class="float-right">00:01:53</span>
+      </mat-card-footer>
     </mat-card>
   </section>
 </div>
 <mat-divider [vertical]="true"></mat-divider>
-<div id="tracking-history" class="col-4 column">
+<div id="tracking-history" class="col-5 column">
   <h2>Tracking History</h2>
   <mat-card>
       <mat-card-title>Browser - Brave</mat-card-title>
       <mat-card-subtitle>www.facebook.com</mat-card-subtitle>
       <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>00:28:17</mat-card-footer>
+      <mat-card-footer>
+        <span>July 03, 2020 | 15:54</span>
+        <span class="float-right">00:28:17</span>
+      </mat-card-footer>
   </mat-card>
   <mat-card>
       <mat-card-title>Card Scanner</mat-card-title>
       <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>08:36:02</mat-card-footer>
+      <mat-card-footer>
+        <span>July 02, 2020 | 18:45</span>
+        <span class="float-right">08:36:02</span>
+      </mat-card-footer>
   </mat-card>
 </div>
