@@ -8,7 +8,7 @@
             <a class="nav-item nav-link" [routerLink]="['features']">Features</a>
             <a class="nav-item nav-link" [routerLink]="['desktop']">STAT Desktop</a>
             <a class="nav-item nav-link" [routerLink]="['sign-up']">Sign Up</a>
-        </div>      
+        </div>
     </div>
     <button *ngIf="!isLoggedIn" mat-raised-button color="primary" [routerLink]="['sign-in']">Sign In</button>
     <button *ngIf="isLoggedIn" mat-raised-button color="primary" (click)="open(mymodal)">Sign Out</button>
