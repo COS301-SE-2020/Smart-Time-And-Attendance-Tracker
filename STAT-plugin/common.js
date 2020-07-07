@@ -43,3 +43,44 @@ function login(url,startTime, endTime) {
 } 
 
 
+function AddTimeEntry(url,startTime, endTime) {
+    console.log("startTime " + startTime + "   endTime " + endTime);
+    var http = new XMLHttpRequest();
+    var url = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
+    var text = '{ "Description": "'+ url + '",'
+        + '"StartTime": "'+ startTime + '",' 
+        + '"EndTime": "'+ endTime + '",' 
+        + '"TaskID": "abcd1234",' 
+        + '"Device": "Browser",' 
+        + '"Date": "'+ new Date() + '"' 
+        + '}';
+
+    http.open('POST', url, true);
+
+    http.setRequestHeader('Content-type', 'application/json');
+    http.setRequestHeader("authorization", "token "+token);
+    console.log("OPENED  " + http.readyState);  // readyState will be 1
+    http.onreadystatechange = function() {
+        console.log("http.readyState " + http.readyState);
+        console.log("http.status " + http.status);
+        if(http.readyState == 4 && http.status == 200) {
+            alert(http.responseText);
+        }
+        else if(http.readyState == 4 && http.status == 500) {
+            alert(http.responseText);
+        }
+        else if(http.readyState == 4 && http.status == 200) {
+            alert(http.responseText);
+        }
+    }
+
+    http.onprogress = function () {
+        console.log('LOADING', http.readyState); // readyState will be 3
+    };
+    
+    http.onload = function () {
+        console.log('DONE', http.readyState); // readyState will be 4
+    };
+
+    http.send(text);
+}
