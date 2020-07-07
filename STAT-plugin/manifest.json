@@ -7,7 +7,8 @@
   "author": "Team Visionary",
   "permissions": [
         "storage",
-        "tabs"
+        "tabs",
+        "http://localhost"
     ],
   "icons": {
    "16": "images/clock.png"
@@ -22,5 +23,6 @@
       "background.js"
       ],
     "persistent": true
-  }
+  },
+  "content_security_policy": "script-src 'self' localhost:3000; object-src 'self'"
 }
