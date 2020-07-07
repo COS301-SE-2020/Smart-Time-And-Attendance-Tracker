@@ -3,3 +3,11 @@
     outline: none;
     background-color: transparent;
 }
+
+nav {
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 5;
+}

@@ -9,6 +9,8 @@ export class TodayComponent implements OnInit {
 
   constructor() { }
 
+  panelOpenState = false;
+
   ngOnInit(): void {
   }
 
