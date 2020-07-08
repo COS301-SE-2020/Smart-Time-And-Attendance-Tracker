@@ -34,6 +34,14 @@ export class AccountManagementService {
       headers: headers
     });
   }
+  //get name
+  public getName(values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.get('http://localhost:3000/api/user/getName', {
+      headers: headers
+    });
+  }
    
   // edit profile
 
