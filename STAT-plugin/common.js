@@ -49,3 +49,7 @@ function AddTimeEntry(url,startTime, endTime) {
     }
     http.send(text);
 }
+
+function isString(str) {
+    return typeof str == "string";
+}

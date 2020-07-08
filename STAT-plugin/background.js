@@ -11,6 +11,11 @@ setInterval(UpdateBadges, 1000);
 chrome.tabs.onUpdated.addListener(HandleUpdate);
 chrome.tabs.onRemoved.addListener(HandleRemove);
 chrome.tabs.onReplaced.addListener(HandleReplace);
+var stopTimer = document.getElementById("stop");
+var startTimer = document.getElementById("start");
+
+stopTimer.style.display = "block";
+startTimer.style.display = "none";
 
 function Update(t, tabId, url) {
     if (!url) {
@@ -64,29 +69,19 @@ function HandleUpdate(tabId, changeInfo, tab) {
     var now = new Date();
     for (tabId in History) {
       var description = ""; 
-      if(History[tabId][0][0] != -1) {
+      //if(History[tabId][0][0] != -1) {
+      if(isString(History[tabId][0][0]) == false) {
           description = FormatDuration(now - History[tabId][0][0]);
           
       }
       else {
-        description = "0:00";
+        description = History[tabId][0][0];
       }
       chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
     }
     
 }
 
-function save() {
-    var now  = new Date();
-    var url = chrome.extension.getBackgroundPage().History[match[1]][0][1];
-    //var cookieTime = getCookie("historyTime"+url);
-    var cookieTime = chrome.extension.getBackgroundPage().History[match[1]][0][0];
-    var saveTime = FormatDuration(cookieTime - now);
-    //var saveTime =  addTimes([FormatDuration(now - curr), cookieTime]);
-    console.log("send api   =>   " + "url:" + url + "+time: " + saveTime)
-    chrome.extension.getBackgroundPage().History[match[1]][0][0] = now;
-  }
-  
 
   function updateTimeEntryPeriodically()
   {
