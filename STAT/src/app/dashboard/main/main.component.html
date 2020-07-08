@@ -1,7 +1,7 @@
 <body>
 <div id="wrapper" class="wrapper">
-  
-    <div class="main_body">      
+
+    <div class="main_body">
       <div class="sidebar_menu bg-dark">
             <div class="inner__sidebar_menu">
               <ul>
@@ -24,7 +24,7 @@
                       <mat-icon>today</mat-icon>
                     </span>
                     <span class="list">Schedule</span>
-                    
+
                   </a>
                 </li>
                 <li>
@@ -60,7 +60,7 @@
                     </a>
                 </li>
                 <li>
-                  <a id="profile" (click)="setActive('profile')">
+                  <a id="organisation" (click)="setActive('organisation')">
                     <span class="icon">
                       <mat-icon>supervisor_account</mat-icon>
                     </span>
@@ -68,7 +68,7 @@
                   </a>
                 </li>
               </ul>
-  
+
               <div id="hamburger" class="hamburger">
                 <div class="inner_hamburger">
                     <span class="arrow">
@@ -76,16 +76,17 @@
                       <mat-icon class="right">chevron_right</mat-icon>
                     </span>
                 </div>
-            </div>  
-            </div>     
+            </div>
+            </div>
         </div>
-    
+
         <!-- dashboard -->
         <div class="container">
           <app-today *ngIf="active=='today'"></app-today>
+          <app-organisation *ngIf="active=='organisation'"></app-organisation>
         </div>
 
     </div>
   </div>
-  
+
 </body>

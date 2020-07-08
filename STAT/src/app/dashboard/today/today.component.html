@@ -1,12 +1,7 @@
-<div class="top">
-  <h1>Tracking</h1>
-</div>
-
-<div class="col-7 column float-left">
-  <section id="manual-tracking">
+<div class="row">
+  <section id="manual-tracking" class="col-7 float-left">
     <h2>What have you been working on?</h2>
     <form id="manual-tracking-form" method="post">
-
       <mat-form-field appearance="standard" class="col-10">
         <mat-label>Description</mat-label>
         <input matInput type="text" placeholder="Research" name="description">
@@ -49,64 +44,16 @@
         <mat-label>End time</mat-label>
         <input matInput type="time" placeholder="0.00" name="monetary-value">
       </mat-form-field>
-      
+
       <button id="addEntry" mat-mini-fab>
         <mat-icon>add</mat-icon>
       </button>
     </form>
   </section>
 
-  <!-- currently tracking -->
-  <mat-divider class="section-divider"></mat-divider>
-  <section id="currently-tracking">
-    <h2>Currently Tracking</h2>
-    <div class="scroll">
-    <mat-card>
-      <button mat-mini-fab class="stop-tracking" ><mat-icon>stop</mat-icon></button>
-      <mat-card-title>Browser - Firefox</mat-card-title>
-      <mat-card-subtitle>www.clickup.com</mat-card-subtitle>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>
-        <span>July 05, 2020 | 08:59</span>
-        <span class="float-right">00:13:31</span>
-        <br>
-        <span class="pro">Project Name</span>
-        <span class="tag">Task Name</span>
-      </mat-card-footer>
-    </mat-card>
-    <mat-card>
-      <button mat-mini-fab class="stop-tracking" ><mat-icon>stop</mat-icon></button>
-      <mat-card-title>Browser - Google Chrome</mat-card-title>
-      <mat-card-subtitle>www.instagram.com</mat-card-subtitle>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>
-        <span>July 05, 2020 | 19:23</span>
-        <span class="float-right">24:08:46</span>
-        <br>
-        <span class="pro">Project Name</span>
-        <span class="tag tag-1">Task Name</span>
-      </mat-card-footer>
-    </mat-card>
-    <mat-card>
-      <button mat-mini-fab class="stop-tracking" ><mat-icon>stop</mat-icon></button>
-      <mat-card-title>Email client - Outlook</mat-card-title>
-      <mat-divider [inset]="true"></mat-divider>
-      <mat-card-footer>
-        <span>July 05, 2020 | 18:56</span>
-        <span class="float-right">00:01:53</span>
-        <br>
-        <span class="pro">Project Name</span>
-        <span class="tag tag-2">Task Name</span>
-      </mat-card-footer>
-    </mat-card>
-    </div>
-  </section>
-</div>
-<mat-divider [vertical]="true"></mat-divider>
+  <!--<mat-divider [vertical]="true"></mat-divider>-->
 
-<!-- automatic tracking -->
-<div class="col-5 column">
-  <section id="auto-tracking">
+  <section id="auto-tracking" class="col-5">
   <mat-card>
       <mat-card-title>Let's start tracking</mat-card-title>
       <mat-card-subtitle>Tell us what you're working on</mat-card-subtitle>
@@ -116,7 +63,7 @@
           <mat-label>Description</mat-label>
           <input matInput type="text" placeholder="Research" name="description">
         </mat-form-field>
-  
+
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Project</mat-label>
           <mat-select>
@@ -125,7 +72,7 @@
             <mat-option value="">None</mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Task</mat-label>
           <mat-select>
@@ -135,22 +82,84 @@
           </mat-select>
         </mat-form-field>
 
-      <button mat-mini-fab class="start-tracking" ><mat-icon>play_arrow</mat-icon></button>
-
+      <button mat-mini-fab class="start-tracking"><mat-icon>play_arrow</mat-icon></button>
       </mat-card-footer>
-      
-  </mat-card>
+    </mat-card>
   </section>
-  <mat-divider class="section-divider"></mat-divider>
+</div>
+<mat-divider class="row-divider"></mat-divider>
 
-  <section id="history">
-    <!-- history -->
-    <h2>History</h2>
-    <h3>June 29, 2020 - July 05, 2020</h3>
+<div class="row">
+  <section id="currently-tracking" class="col-7 float-left">
+    <h2>Currently Tracking</h2>
     <div class="scroll">
-
+      <mat-card>
+        <button mat-mini-fab class="stop-tracking"><mat-icon>stop</mat-icon></button>
+        <mat-card-title>Browser - Firefox</mat-card-title>
+        <mat-card-subtitle>www.clickup.com</mat-card-subtitle>
+        <mat-card-content>
+          <div>
+            <span class="pro">Project Name</span>
+          </div>
+          <br>
+          <div>
+            <span class="tag">Task Name</span>
+          </div>
+        </mat-card-content>
+        <br>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-card-footer>
+          <span>July 05, 2020 | 08:59</span>
+          <span class="float-right">00:13:31</span>
+        </mat-card-footer>
+      </mat-card>
+      <mat-card>
+        <button mat-mini-fab class="stop-tracking"><mat-icon>stop</mat-icon></button>
+        <mat-card-title>Browser - Google Chrome</mat-card-title>
+        <mat-card-subtitle>www.instagram.com</mat-card-subtitle>
+        <mat-card-content>
+          <div>
+            <span class="pro">Project Name</span>
+          </div>
+          <br>
+          <div>
+            <span class="tag">Task Name</span>
+          </div>
+        </mat-card-content>
+        <br>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-card-footer>
+          <span>July 05, 2020 | 19:23</span>
+          <span class="float-right">24:08:46</span>
+        </mat-card-footer>
+      </mat-card>
+      <mat-card>
+        <button mat-mini-fab class="stop-tracking"><mat-icon>stop</mat-icon></button>
+        <mat-card-title>Email client - Outlook</mat-card-title>
+        <mat-card-content>
+          <div>
+            <span class="pro">Project Name</span>
+          </div>
+          <br>
+          <div>
+            <span class="tag">Task Name</span>
+          </div>
+        </mat-card-content>
+        <br>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-card-footer>
+          <span>July 05, 2020 | 18:56</span>
+          <span class="float-right">00:01:53</span>
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  </section>
+  <section id="history" class="col-5">
+    <h2>This Week</h2>
+    <!--<h3>June 29, 2020 - July 05, 2020</h3>-->
+    <div class="scroll">
+      <div id="accordion-padding"></div>
       <mat-accordion>
-
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -225,7 +234,7 @@
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <!--<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Last week
@@ -235,11 +244,8 @@
           <ul class="entries">
             <li>Research <span class="float-right">03:28:17</span></li>
           </ul>
-        </mat-expansion-panel>
-
+        </mat-expansion-panel>-->
       </mat-accordion>
-
     </div>
   </section>
 </div>
-

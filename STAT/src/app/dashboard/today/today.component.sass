@@ -1,6 +1,44 @@
 *
   font-size: 1em
 
+#accordion-padding
+  height: 1em
+
+#addEntry
+  background-color: #7846eb
+
+#auto-tracking mat-card
+  margin-bottom: 0
+  margin-top: 0
+  padding-bottom: 0.8em
+
+  mat-divider
+    margin-top: 0.5em
+    margin-bottom: -0.5em
+
+button
+  font-size: 1.5em
+
+.column
+  display: inline-block
+  padding: 2em
+  margin-bottom: 2em
+
+div.col-5.column
+  margin-bottom: 0
+
+.float-left
+  float: left
+
+.entries
+  padding-left: 0.3em
+  list-style-type: none
+
+.entries li
+  margin-bottom: 0.8em
+  padding-bottom: 0.3em
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.12)
+
 h1
   font-size: 2.5em
   font-weight: bolder
@@ -11,21 +49,27 @@ h2
 h3
   font-size: 1.25em
 
-.column
-  display: inline-block
-  padding: 2em
-  margin-bottom: 2em
+#history h3
+  color: #808080
+  font-style: italic
 
-.float-left
-  float: left
+#history .scroll
+  margin-left: 0
+  margin-bottom: 0
+  padding-bottom: 0.5em
+  height: 65vh
 
 mat-card
+  background-color: white
   margin-bottom: 1em
   margin-top: 1em
   margin-right: 1em
   padding: 1.5em
   padding-bottom: 2.25em
   background-color: rgba(240, 240, 240, 0.2)
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+
+mat-expansion-panel
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
 
 mat-card-footer
@@ -41,53 +85,30 @@ mat-divider
   margin-bottom: 1.5em
   margin-top: 1.5em
 
-section
-  padding: 1.5em
-
-.section-divider
-  margin-bottom: 3em
-  margin-top: 3em
-
-button
-  font-size: 1.5em
-
-.stop-tracking
-  color: white
-  background-color: #ff2885
-  vertical-align: middle
+.numEntries
   float: right
-  left: 2em
-
-.start-tracking
-  color: white
-  background-color: #28ccbf
-  vertical-align: middle
-  float: right
-  left: 2em
-  top: -1.6em
-
-#addEntry
-  background-color: #7846eb
-
-.tag
-  padding: 0.2em 0.5em
-  border-radius: 0.8em
-  color: #28ccbf
-  background-color: #28ccbf30
-  font-size: 0.8em
-  float: left
-
-.tag-1
-  color: #366ceb
-  background-color: #366ceb30
-
-.tag-2
-  color: #ff2885
-  background-color: #ff288530
+  margin-right: 1em
 
 .pro
   margin-right: 0.2em
   float: left
+
+.pro-name
+  color: #808080
+
+.row
+  padding: 2em
+
+  >
+    section
+      padding: 2em
+
+section
+  align-items: stretch
+  display: flex
+  flex-direction: column
+  height: 100%
+  padding: 1.5em
 
 .scroll
   overflow-x: hidden
@@ -103,7 +124,6 @@ button
 .scroll::-webkit-scrollbar-track::hover
   cursor: pointer
 
-
 .scroll::-webkit-scrollbar-thumb
   border-radius: 0.5em
   background-color: #cccccc
@@ -112,40 +132,37 @@ button
   border-radius: 0.5em
   background-color: #eeeeee
 
-#auto-tracking mat-card
-  margin-bottom: 0
-  margin-top: 0
-  padding-bottom: 0.8em
-
-  mat-divider
-    margin-top: 0.5em
-    margin-bottom: -0.5em
-
-div.col-5.column
-  margin-bottom: 0
-
-.numEntries
+.start-tracking
+  color: white
+  background-color: #28ccbf
+  vertical-align: middle
   float: right
-  margin-right: 1em
+  left: 2em
+  top: -1.6em
 
-#history .scroll
-  margin-left: 0
-  margin-bottom: 0
-  padding-bottom: 0.5em
-  height: 57vh
+.section-divider
+  margin-bottom: 3em
+  margin-top: 3em
 
-#history h3
-  color: #808080
-  font-style: italic
-  
-.entries
-  padding-left: 0.3em
-  list-style-type: none
+.stop-tracking
+  color: white
+  background-color: #ff2885
+  vertical-align: middle
+  float: right
+  left: 2em
 
-.entries li 
-  margin-bottom: 0.8em
-  padding-bottom: 0.3em
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.12)
+.tag
+  background-color: #28ccbf30
+  padding: 0.2em 0.5em
+  border-radius: 0.8em
+  color: #28ccbf
+  font-size: 0.8em
+  float: left
 
-.pro-name
-  color: #808080
+.tag-1
+  color: #366ceb
+  background-color: #366ceb30
+
+.tag-2
+  color: #ff2885
+  background-color: #ff288530

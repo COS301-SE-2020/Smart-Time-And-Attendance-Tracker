@@ -6,10 +6,11 @@ import { MainComponent } from './main/main.component';
 import { MaterialComponentsModule } from '../material-components/material-components.module';
 import { MatIconModule } from '@angular/material/icon';
 import { TodayComponent } from './today/today.component';
+import { OrganisationComponent } from './organisation/organisation.component';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
