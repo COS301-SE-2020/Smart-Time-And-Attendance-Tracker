@@ -8,7 +8,8 @@
   "permissions": [
         "storage",
         "tabs",
-        "http://localhost"
+        "http://localhost",
+        "https://localhost"
     ],
   "icons": {
    "16": "images/clock.png"
@@ -20,7 +21,8 @@
   },
   "background": {
     "scripts": [
-      "background.js"
+      "background.js",
+      "common.js"
       ],
     "persistent": true
   },
