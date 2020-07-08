@@ -58,7 +58,7 @@ function Update(t, tabId, url) {
     while (History[tabId].length > history_limit) {
         History[tabId].pop();
     }
-    setCookie("historyTime"+url, now);
+    
     chrome.browserAction.setBadgeText({ 'tabId': tabId, 'text': '0:00'});
     chrome.browserAction.setPopup({ 'tabId': tabId, 'popup': "popup.html#tabId=" + tabId});
 }
@@ -106,6 +106,21 @@ function save() {
   }
   
 
+  function updateTimeEntryPeriodically()
+  {
+      var now  = new Date();
+      console.log("TABS: ");
+      for(tabID in chrome.extension.getBackgroundPage().History) {
+          console.log("tab ID " + tabID);
+          var url = chrome.extension.getBackgroundPage().History[tabID][0][1];
+          url = url.split("://")[1];
+          url = url.split("/")[0];
+          console.log("Saving data  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
+          AddTimeEntry(url, chrome.extension.getBackgroundPage().History[tabID][0][0], now);    
+      }
+  }
+  
+  setInterval(updateTimeEntryPeriodically, 60*1000); //calling function every minute (60 seconds)
   function FormatDuration(d) {
     if (d < 0) {
       return "?";

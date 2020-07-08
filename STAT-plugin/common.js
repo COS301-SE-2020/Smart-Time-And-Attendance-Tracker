@@ -49,19 +49,3 @@ function AddTimeEntry(url,startTime, endTime) {
     }
     http.send(text);
 }
-
-function updateTimeEntryPeriodically()
-{
-    var now  = new Date();
-    console.log("TABS: ");
-    for(tabID in chrome.extension.getBackgroundPage().History) {
-        console.log("tab ID " + tabID);
-        var url = chrome.extension.getBackgroundPage().History[tabID][0][1];
-        url = url.split("://")[1];
-        url = url.split("/")[0];
-        console.log("Saving data  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
-        AddTimeEntry(url, chrome.extension.getBackgroundPage().History[tabID][0][0], now);    
-    }
-}
-
-setInterval(updateTimeEntryPeriodically, 60*1000); //calling function every minute (60 seconds)
