@@ -59,28 +59,13 @@ function AddTimeEntry(url,startTime, endTime) {
 
     http.setRequestHeader('Content-type', 'application/json');
     http.setRequestHeader("authorization", "token "+token);
-    console.log("OPENED  " + http.readyState);  // readyState will be 1
     http.onreadystatechange = function() {
-        console.log("http.readyState " + http.readyState);
-        console.log("http.status " + http.status);
         if(http.readyState == 4 && http.status == 200) {
-            alert(http.responseText);
+            console.log(http.responseText);
         }
         else if(http.readyState == 4 && http.status == 500) {
-            alert(http.responseText);
-        }
-        else if(http.readyState == 4 && http.status == 200) {
-            alert(http.responseText);
+            console.log(http.responseText);
         }
     }
-
-    http.onprogress = function () {
-        console.log('LOADING', http.readyState); // readyState will be 3
-    };
-    
-    http.onload = function () {
-        console.log('DONE', http.readyState); // readyState will be 4
-    };
-
     http.send(text);
 }
