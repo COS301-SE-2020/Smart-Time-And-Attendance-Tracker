@@ -1,5 +1,7 @@
 login();
 const token = "";
+const name = "";
+const surname = "";
 
 function login() {
     var http = new XMLHttpRequest();
@@ -10,6 +12,7 @@ function login() {
         if(http.readyState == 4 && http.status == 200) {
             var data = JSON.parse(http.responseText);
             token = data.token;
+            // get user name and surname using token and store in maybe a cookie
         }
         else {
             console.log(http.responseText);     //error => should not track time if user not logined

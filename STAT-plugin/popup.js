@@ -2,7 +2,9 @@ function showTime() {
     var currentID =0;
     var now = new Date();
     var desc = document.getElementById("desc");
+    var name = document.getElementById("name");
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        name = "Mock user";// get user's name and surname from the cookie (if we using a cookie) and display that
         currentID = tabs[0].id;
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
         url = url.split("://")[1];
