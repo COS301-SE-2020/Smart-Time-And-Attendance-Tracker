@@ -27,13 +27,17 @@ stopTimer.onclick = function(){
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
         url = url.split("://")[1];
         url = url.split("/")[0];
-        desc.innerHTML = url + ": ";
-        desc.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
-        console.log("Stoped timer. Saving data  " + chrome.extension.getBackgroundPage().History[currentID][0][0]);
-        AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
-        chrome.extension.getBackgroundPage().History[currentID][0][0] = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
-        startTimer.style.display = "block";
-        stopTimer.style.display = "none";
+        console.log("Stopeed tracking " + url);
+        var success = AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
+        if(success) {
+            chrome.extension.getBackgroundPage().History[currentID][0][0] = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+            startTimer.style.display = "block";
+            stopTimer.style.display = "none";
+        }
+        else {
+            //error occured
+        }
+        
     });   
 }
 
@@ -44,9 +48,7 @@ startTimer.onclick = function(){
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
         url = url.split("://")[1];
         url = url.split("/")[0];
-        desc.innerHTML = url + ": ";
-        desc.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
-        console.log("Started tracking again  " + url);
+        console.log("Started tracking " + url);
         chrome.extension.getBackgroundPage().History[currentID][0][0] = now;
         stopTimer.style.display = "block";
         startTimer.style.display = "none";
