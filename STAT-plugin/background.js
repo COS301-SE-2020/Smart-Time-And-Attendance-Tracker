@@ -1,28 +1,3 @@
-function getCookie(cname) {
-    //alert(cname.includes("historyTime"));
-    if(document.cookie.includes(cname) == false && cname.includes("historyTime"))
-      return "0:0:0";
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
-}
-  
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
 var tabId_re = /tabId=([0-9]+)/;
 var match = tabId_re.exec(window.location.hash);
 
@@ -88,8 +63,15 @@ function HandleUpdate(tabId, changeInfo, tab) {
   function UpdateBadges() {
     var now = new Date();
     for (tabId in History) {
-        var description = FormatDuration(now - History[tabId][0][0]);
-        chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
+      var description = ""; 
+      if(History[tabId][0][0] != -1) {
+          description = FormatDuration(now - History[tabId][0][0]);
+          
+      }
+      else {
+        description = "0:00";
+      }
+      chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
     }
     
 }
