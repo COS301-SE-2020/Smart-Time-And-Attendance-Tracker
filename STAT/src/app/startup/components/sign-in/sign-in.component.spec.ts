@@ -272,7 +272,6 @@ describe('signIn()', () => {
     expect(localStorage.getItem('roles')).toBe("General Team Member");
     expect(localStorage.getItem('name')).toBe("Suzie");
     expect(localStorage.getItem('surname')).toBe("Smith");
-    console.log(localStorage.getItem('surname'));
     expect(router.navigate).toHaveBeenCalledWith(['main']);
   }));
 
