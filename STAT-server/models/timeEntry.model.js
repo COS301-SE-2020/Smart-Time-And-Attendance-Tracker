@@ -13,8 +13,12 @@ const TimeEntrySchema = mongoose.Schema({
     type: Number,
     required: "End time required."
   },
+  Duration: {
+    type: Number,
+    required: "Duration required."
+  },
   Date: { 
-    type: Date,
+    type: String,
     required: "Date required."
   },
   Description: { 
