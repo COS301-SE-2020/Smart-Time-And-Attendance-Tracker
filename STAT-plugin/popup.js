@@ -28,7 +28,7 @@ stopTimer.onclick = function(){
         desc.innerHTML = url + ": ";
         desc.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
         console.log("Stoped timer. Saving data  " + chrome.extension.getBackgroundPage().History[currentID][0][0]);
-        AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0].getTime(), now.getTime());
+        AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
         chrome.extension.getBackgroundPage().History[currentID][0][0] = -1;
         startTimer.style.display = "block";
         stopTimer.style.display = "none";
@@ -36,19 +36,8 @@ stopTimer.onclick = function(){
     });   
 }
 
-function updateTimeEntryPeriodically()
-{
-    console.log("TABS: ");
-    for(tabID in chrome.extension.getBackgroundPage().History) {
-        console.log("tab ID " + tabID);
-        var url = chrome.extension.getBackgroundPage().History[tabID][0][1];
-        url = url.split("://")[1];
-        url = url.split("/")[0];
-        console.log("Saving data  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
-        AddTimeEntry(url, chrome.extension.getBackgroundPage().History[tabID][0][0].getTime(), (new Date()).getTime());    
-    }
-}
+
 
 setInterval(showTime, 1000);    //calling function every second
-setInterval(updateTimeEntryPeriodically, 60*1000); //calling function every minute (60 seconds)
+
 
