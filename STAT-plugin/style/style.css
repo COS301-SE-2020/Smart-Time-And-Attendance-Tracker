@@ -1,0 +1,18 @@
+* {
+  font-size: 1em;
+}
+
+.btn {
+  font-size: 0.9em;
+  padding: 0.95em;
+  width: 5em;
+}
+
+.jumbotron {
+  background-color: rgba(0,0,0,0);
+}
+
+.row {
+  margin: 0.25em;
+  padding: 1.5em;
+}
