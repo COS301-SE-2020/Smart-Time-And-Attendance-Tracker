@@ -30,7 +30,9 @@ stopTimer.onclick = function(){
         url = url.split("://")[1];
         url = url.split("/")[0];
         console.log("Stopeed tracking " + url);
-        var success = AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
+        AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
+        var success = getStatus();
+        console.log("success " + success);
         if(success) {
             chrome.extension.getBackgroundPage().History[currentID][0][0] = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
             startTimer.style.display = "block";
