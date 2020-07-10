@@ -1,7 +1,5 @@
 # Smart-Time-And-Attendance-Tracker
 
-[![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2020/Smart-Time-And-Attendance-Tracker)](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/issues)
-
 ### Project Description
 STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
 
