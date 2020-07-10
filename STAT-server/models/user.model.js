@@ -40,7 +40,7 @@ UserSchema.methods.verifyPassword = function(password){
 };
 
 UserSchema.methods.generateJWT = function() {
-    return jwt.sign({id: this._id, authenticate: this.Authenticate, roles: this.Role},
+    return jwt.sign({id: this._id}, //,authenticate: this.Authenticate, roles: this.Role},
         process.env.JWT_SECRET,
         {
             expiresIn: process.env.JWT_EXP

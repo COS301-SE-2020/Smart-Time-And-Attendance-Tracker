@@ -6,7 +6,7 @@ var UserTimeEntrySchema = new mongoose.Schema({
         required : "ID required.",
         unique: true
     },
-    TimeEntry: [
+    TimeEntries: [
         { 
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'TimeEntry' 

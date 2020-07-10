@@ -105,13 +105,9 @@ module.exports.getName = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
-        
         else
-        {
-            //var name = result.Name;
-           // var surname = result.Surname;
             return res.status(200).json({name : result.Name, surname : result.Surname});
-        }
+        
     });
 }
 
