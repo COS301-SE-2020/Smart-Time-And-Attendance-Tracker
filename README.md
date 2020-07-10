@@ -25,13 +25,13 @@ This is how the branches will be laid out
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
 - Discord: https://discord.gg/teMKux
 - Microsoft Teams: https://teams.microsoft.com/l/team/19%3aefca1c4844c14661859786c02d55c48b%40thread.tacv2/conversations?groupId=1a1bcfe4-fd5a-4647-8363-e219880bbfb2&tenantId=ddfa59c8-38d0-49a3-822e-1d3bcb5bf85b
-
+```
 ### GitHub Badges
-*Versions*
-![npm](https://img.shields.io/npm/v/npm?style=for-the-badge) 
-*Continuous Integration*
-![CI](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/CI/badge.svg)
-
+###### *Versions*
+- ![npm](https://img.shields.io/npm/v/npm) 
+###### *Continuous Integration*
+- ![CI](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/CI/badge.svg)
+```
 ### Profile Descriptions
 
 **Vianka Naidoo**\
