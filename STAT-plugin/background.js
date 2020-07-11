@@ -5,7 +5,6 @@ var History = {};
 chrome.browserAction.setBadgeText({ 'text': '?'});
 chrome.browserAction.setBadgeBackgroundColor({ 'color': "#777" });
 
-//setInterval(showTime, 1000);
 setInterval(UpdateBadges, 1000);
 
 chrome.tabs.onUpdated.addListener(HandleUpdate);
@@ -21,8 +20,10 @@ function Update(t, tabId, url) {
     if (!url) {
         return;
     }
+    console.log("url " + url);
     if (tabId in History) {
         if (url == History[tabId][0][1]) {
+         
             return;
         }
     }
@@ -44,10 +45,8 @@ function Update(t, tabId, url) {
 }
 
 function HandleUpdate(tabId, changeInfo, tab) {
-    //console.log(changeInfo);
-    //console.log(tab);
-    //console.log("update " + tabId );
     Update(new Date(), tabId, changeInfo.url);
+    
   }
   
   function HandleRemove(tabId, removeInfo) {    //working
@@ -69,7 +68,6 @@ function HandleUpdate(tabId, changeInfo, tab) {
     var now = new Date();
     for (tabId in History) {
       var description = ""; 
-      //if(History[tabId][0][0] != -1) {
       if(isString(History[tabId][0][0]) == false) {
           description = FormatDuration(now - History[tabId][0][0]);
           
@@ -78,6 +76,7 @@ function HandleUpdate(tabId, changeInfo, tab) {
         description = History[tabId][0][0];
       }
       chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
+      
     }
     
 }
@@ -111,3 +110,23 @@ function HandleUpdate(tabId, changeInfo, tab) {
   }
 
   
+  
+  function pause(){
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      currentID = tabs[0].id;
+      for(tabID in chrome.extension.getBackgroundPage().History) {
+        console.log("tab ID " + tabID);
+        if(tabID != currentID && isString(History[tabID][0][0]) == false) {    //pause timer
+          var now = new Date();
+          console.log("pausing  " + FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]));
+          chrome.extension.getBackgroundPage().History[tabID][0][0] = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
+        }
+        else{ //active tabe
+            
+        }
+      }
+    });
+  }
+  setInterval(pause, 5000);
+//  setInterval(pause, 5000);
+
