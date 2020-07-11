@@ -81,21 +81,20 @@ function HandleUpdate(tabId, changeInfo, tab) {
 }
 
 
-  function updateTimeEntryPeriodically()
+  function cacheDurationPeriodically()
   {
       var now  = new Date();
       console.log("TABS: ");
       for(tabID in chrome.extension.getBackgroundPage().History) {
           console.log("tab ID " + tabID);
-          var url = chrome.extension.getBackgroundPage().History[tabID][0][1];
-          url = url.split("://")[1];
-          url = url.split("/")[0];
-          console.log("Saving data  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
-          AddTimeEntry(url, chrome.extension.getBackgroundPage().History[tabID][0][0], now);    
+          var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
+          duration = addTimes([duration, getCookie("historyTime"+tabID)]);
+          console.log("Saving data  " + duration);
+          setCookie("historyTime"+tabID, duration, 1);
       }
   }
   
-  setInterval(updateTimeEntryPeriodically, 60*1000); //calling function every minute (60 seconds)
+  setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
 
     
   function pause(){
