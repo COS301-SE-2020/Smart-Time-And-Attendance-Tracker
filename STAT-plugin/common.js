@@ -5,24 +5,26 @@ var surname = "";
 var status=false; 
 
 function login() {
-    var http = new XMLHttpRequest();
-    var url = 'http://localhost:3000/api/user/login';
-    http.open('POST', url, true);
-    http.setRequestHeader('Content-type', 'application/json');
-    http.onreadystatechange = function() {
-        if(http.readyState == 4 && http.status == 200) {
-            var data = JSON.parse(http.responseText);
-            token = data.token;
-            // get user name and surname using token and store in maybe a cookie
-            return true;
+    if(token == ""){
+        var http = new XMLHttpRequest();
+        var url = 'http://localhost:3000/api/user/login';
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function() {
+            if(http.readyState == 4 && http.status == 200) {
+                var data = JSON.parse(http.responseText);
+                token = data.token;
+                // get user name and surname using token and store in maybe a cookie
+                return true;
+            }
+            else {
+                console.log(http.responseText);     //error => should not track time if user not logined
+                return false;
+            }
         }
-        else {
-            console.log(http.responseText);     //error => should not track time if user not logined
-            return false;
-        }
+        var text = '{ "email":"tester1@gmail.com" , "password":"Abcd@1234" }';
+        http.send(text);
     }
-    var text = '{ "email":"tester1@gmail.com" , "password":"Abcd@1234" }';
-    http.send(text);
 } 
 
 
@@ -38,10 +40,12 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
         + '}';
 
     http.open('POST', apiURL, true);
-
+    if(token == "")
+        login();
     http.setRequestHeader('Content-type', 'application/json');
     http.setRequestHeader("authorization", "token "+token);
     http.onreadystatechange = function() {
+        console.log(http.readyState + " " + http.status);
         if(http.readyState == 4 && http.status == 200) {
             const obj = JSON.parse(http.responseText);
             chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
