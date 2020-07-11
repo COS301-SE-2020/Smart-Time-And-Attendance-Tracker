@@ -120,6 +120,7 @@ function HandleUpdate(tabId, changeInfo, tab) {
           var now = new Date();
           console.log("pausing  " + FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]));
           chrome.extension.getBackgroundPage().History[tabID][0][0] = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
+          setCookie("historyTime"+History[tabID][0][1], FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]), 1); 
         }
         else{ //active tabe
             
