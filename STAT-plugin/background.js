@@ -117,23 +117,25 @@ function HandleUpdate(tabId, changeInfo, tab) {
       currentID = tabs[0].id;
       console.log("currentID " + currentID);
       for(tabID in chrome.extension.getBackgroundPage().History) {
+        var now = new Date();
         console.log("tab ID " + tabID + "  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
         if(tabID != currentID){ //non-active tab
-          var now = new Date();
           if(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) == false) {    //pause timer
             console.log("currentID " + currentID);
             var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
             console.log("pausing  " +duration  + "  " + isString(duration));
             chrome.extension.getBackgroundPage().History[tabID][0][0] = duration;
-            //setCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1], duration, 1); 
+            setCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1], duration, 1); 
           }
           else{ //already paused
-            console.log("currentID " + currentID);
-            chrome.extension.getBackgroundPage().History[tabID][0][0] = now;
+           
           }
         }
         else{ //active tab
-            
+          if(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) && getCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1])) {    //pause timer
+            console.log("string? " + isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) + "   " + getCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1]));
+            chrome.extension.getBackgroundPage().History[tabID][0][0] = now;
+          }
         }
         console.log(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]));
       }
