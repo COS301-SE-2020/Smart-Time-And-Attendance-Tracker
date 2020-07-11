@@ -10,12 +10,20 @@ function showTime() {
         url = url.split("://")[1];
         url = url.split("/")[0];
         desc.innerHTML = url + ": ";
+        var description="";
+   //   description = 
         if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
         { 
-            desc.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
+            //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
+            description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+            desc.innerHTML += addTimes([description, getCookie("historyTime"+currentID)]);
+
         }
         else
+        {
             desc.innerHTML += chrome.extension.getBackgroundPage().History[currentID][0][0]+ "\n";
+            description = FormatDuration(chrome.extension.getBackgroundPage().History[currentID][0][0]);
+        }
     });    
 }
 
@@ -30,11 +38,12 @@ stopTimer.onclick = function(){
         url = url.split("://")[1];
         url = url.split("/")[0];
         console.log("Stopeed tracking " + url);
-        AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
-        var success = getStatus();
+        //AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
+        var success = true;//getStatus();
         console.log("success " + success);
         if(success) {
-            chrome.extension.getBackgroundPage().History[currentID][0][0] = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+            var description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+            chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
             startTimer.style.display = "block";
             stopTimer.style.display = "none";
         }

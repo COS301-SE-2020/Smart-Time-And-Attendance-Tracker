@@ -92,3 +92,62 @@ function getCookie(cname) {
     var expires = "expires="+d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
+
+  function FormatDuration(d) {
+    if (d < 0) {
+      return "?";
+    }
+    var divisor = d < 3600000 ? [60000, 1000] : [3600000, 60000];
+    function pad(x) {
+      return x < 10 ? "0" + x : x;
+    }
+    return Math.floor(d / divisor[0]) + ":" + pad(Math.floor((d % divisor[0]) / divisor[1]));
+  }
+  
+function char_count(str, letter) 
+{
+ var letter_Count = 0;
+ for (var position = 0; position < str.length; position++) 
+ {
+    if (str.charAt(position) == letter) 
+      {
+      letter_Count += 1;
+      }
+  }
+  return letter_Count;
+}
+
+function addTimes(times = []) {
+
+    const z = (n) => (n < 10 ? '0' : '') + n;
+    for(var i=0; i<times.length; i++) {
+  
+      if(char_count(times[i],":") == 0)
+      {
+        times[i] = "0:0:"+times[i];
+      }
+      else if(char_count(times[i],":") == 1)
+      {
+        times[i] = "0:"+times[i];
+      }
+      else if(char_count(times[i],":") == 2)
+      {}
+      //alert("time " + (i+1) + " : " + times[i]);
+    }
+    let hour = 0
+    let minute = 0
+    let second = 0
+    for (const time of times) {
+        const splited = time.split(':');
+        hour += parseInt(splited[0]);
+        minute += parseInt(splited[1])
+        second += parseInt(splited[2])
+    }
+    const seconds = second % 60
+    const minutes = parseInt(minute % 60) + parseInt(second / 60)
+    const hours = hour + parseInt(minute / 60)
+  
+    return z(hours) + ':' + z(minutes) + ':' + z(seconds)
+  }
+
+
