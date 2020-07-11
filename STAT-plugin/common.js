@@ -10,7 +10,6 @@ function login() {
     http.open('POST', url, true);
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange = function() {
-        console.log(http.status);
         if(http.readyState == 4 && http.status == 200) {
             var data = JSON.parse(http.responseText);
             token = data.token;
@@ -27,7 +26,7 @@ function login() {
 } 
 
 
-function AddTimeEntry(url,startTime, endTime) {
+function AddTimeEntry(url,startTime, endTime,currentID ) {
     var http = new XMLHttpRequest();
     var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
     var text = '{ "Description": "'+ url + '",'
@@ -44,6 +43,9 @@ function AddTimeEntry(url,startTime, endTime) {
     http.setRequestHeader("authorization", "token "+token);
     http.onreadystatechange = function() {
         if(http.readyState == 4 && http.status == 200) {
+            const obj = JSON.parse(http.responseText);
+            chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
+            chrome.extension.getBackgroundPage().History[currentID][0][0] = startTime;
             status = true;
             return status;
         }
@@ -65,3 +67,4 @@ function getStatus() {
 function isString(str) {
     return typeof str == "string";
 }
+

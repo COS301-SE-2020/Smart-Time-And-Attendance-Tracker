@@ -29,8 +29,8 @@ function Update(t, tabId, url) {
     else {
         History[tabId] = [];
     }
-    History[tabId].unshift([t, url]);
-    
+    History[tabId].unshift(["0:00", url, ""]);
+    AddTimeEntry(url, t, t, tabId);
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
         history_limit = 23;
@@ -44,9 +44,9 @@ function Update(t, tabId, url) {
 }
 
 function HandleUpdate(tabId, changeInfo, tab) {
-    console.log(changeInfo);
-    console.log(tab);
-    console.log("update " + tabId );
+    //console.log(changeInfo);
+    //console.log(tab);
+    //console.log("update " + tabId );
     Update(new Date(), tabId, changeInfo.url);
   }
   
@@ -98,6 +98,7 @@ function HandleUpdate(tabId, changeInfo, tab) {
   }
   
   setInterval(updateTimeEntryPeriodically, 60*1000); //calling function every minute (60 seconds)
+
   function FormatDuration(d) {
     if (d < 0) {
       return "?";
@@ -108,3 +109,5 @@ function HandleUpdate(tabId, changeInfo, tab) {
     }
     return Math.floor(d / divisor[0]) + ":" + pad(Math.floor((d % divisor[0]) / divisor[1]));
   }
+
+  
