@@ -27,6 +27,12 @@ var UserSchema = new mongoose.Schema({
         type: Array,
         required : "Role required.",
     },
+    Team:[
+        { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Team' 
+        }
+    ],
     Authenticate:{
         type: Boolean,  
         required : "Authentication required."

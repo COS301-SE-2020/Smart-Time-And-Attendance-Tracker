@@ -1,10 +1,6 @@
 const mongoose = require("mongoose")
 
-var TaskSchema = new mongoose.Schema({
-    ProjectID:{
-        type: String,
-        required : "Required"
-    },    
+var TaskSchema = new mongoose.Schema({    
     TaskName:{
         type: String,
         required : "Required"
