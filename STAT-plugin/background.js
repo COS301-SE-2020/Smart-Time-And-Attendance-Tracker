@@ -21,23 +21,23 @@ function Update(t, tabId, url) {
         return;
     }
     console.log("url " + url);
-    if (tabId in History) {
-        if (url == History[tabId][0][1]) {
+    if (tabId in chrome.extension.getBackgroundPage().History) {
+        if (url == chrome.extension.getBackgroundPage().History[tabId][0][1]) {
          
             return;
         }
     }
     else {
-        History[tabId] = [];
+      chrome.extension.getBackgroundPage().History[tabId] = [];
     }
-    History[tabId].unshift(["0:00", url, ""]);
+    chrome.extension.getBackgroundPage().History[tabId].unshift(["0:00", url, ""]);
     AddTimeEntry(url, t, t, tabId);
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
         history_limit = 23;
     }
-    while (History[tabId].length > history_limit) {
-        History[tabId].pop();
+    while (chrome.extension.getBackgroundPage().History[tabId].length > history_limit) {
+      chrome.extension.getBackgroundPage().History[tabId].pop();
     }
     
     chrome.browserAction.setBadgeText({ 'tabId': tabId, 'text': '0:00'});
@@ -66,14 +66,15 @@ function HandleUpdate(tabId, changeInfo, tab) {
 
   function UpdateBadges() {
     var now = new Date();
-    for (tabId in History) {
+    pause();
+    for (tabId in chrome.extension.getBackgroundPage().History) {
       var description = ""; 
-      if(isString(History[tabId][0][0]) == false) {
-          description = FormatDuration(now - History[tabId][0][0]);
+      if(isString(chrome.extension.getBackgroundPage().History[tabId][0][0]) == false) {
+          description = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabId][0][0]);
           
       }
       else {
-        description = History[tabId][0][0];
+        description = chrome.extension.getBackgroundPage().History[tabId][0][0];
       }
       chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
       
@@ -112,22 +113,32 @@ function HandleUpdate(tabId, changeInfo, tab) {
   
   
   function pause(){
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    chrome.tabs.query({ active: true }, function (tabs) {
       currentID = tabs[0].id;
+      console.log("currentID " + currentID);
       for(tabID in chrome.extension.getBackgroundPage().History) {
-        console.log("tab ID " + tabID);
-        if(tabID != currentID && isString(History[tabID][0][0]) == false) {    //pause timer
+        console.log("tab ID " + tabID + "  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
+        if(tabID != currentID){ //non-active tab
           var now = new Date();
-          console.log("pausing  " + FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]));
-          chrome.extension.getBackgroundPage().History[tabID][0][0] = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
-          setCookie("historyTime"+History[tabID][0][1], FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]), 1); 
+          if(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) == false) {    //pause timer
+            console.log("currentID " + currentID);
+            var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
+            console.log("pausing  " +duration  + "  " + isString(duration));
+            chrome.extension.getBackgroundPage().History[tabID][0][0] = duration;
+            //setCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1], duration, 1); 
+          }
+          else{ //already paused
+            console.log("currentID " + currentID);
+            chrome.extension.getBackgroundPage().History[tabID][0][0] = now;
+          }
         }
-        else{ //active tabe
+        else{ //active tab
             
         }
+        console.log(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]));
       }
     });
   }
-  setInterval(pause, 5000);
+  setInterval(pause, 1000);
 //  setInterval(pause, 5000);
 
