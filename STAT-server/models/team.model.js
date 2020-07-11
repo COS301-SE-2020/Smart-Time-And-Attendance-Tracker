@@ -14,7 +14,10 @@ var TeamSchema = new mongoose.Schema({
     TeamMembers:[
         { 
             type: mongoose.Schema.Types.ObjectId, 
-            ref: 'User' 
+            ref: 'User',
+            Role: {
+                type: String
+            }
         }
     ],
 });
