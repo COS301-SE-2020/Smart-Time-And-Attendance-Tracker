@@ -83,9 +83,9 @@ function HandleUpdate(tabId, changeInfo, tab) {
 
   function cacheDurationPeriodically()
   {
-      var now  = new Date();
       console.log("TABS: ");
       for(tabID in chrome.extension.getBackgroundPage().History) {
+          var now  = new Date();
           console.log("tab ID " + tabID);
           var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
           duration = addTimes([duration, getCookie("historyTime"+tabID)]);
