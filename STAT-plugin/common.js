@@ -2,6 +2,7 @@
 if (document.cookie.indexOf('namde') > -1 && document.cookie.indexOf('token') > -1) {
        //cookie exists - hide form
        document.getElementById("loginForm").style.display = "none";
+       document.getElementById("popup").style.display = "block";
        document.getElementById("userName").innerHTML=getCookie("name");
        ///call tracking function to start
        setInterval(showTime, 1000);
@@ -12,6 +13,7 @@ else{  ///hide everything except the login form
 
        document.getElementById("start").style.display = "none";
        document.getElementById("stop").style.display  ="none";
+       document.getElementById("popup").style.display = "none";
 }
 
 
@@ -38,6 +40,7 @@ userLogin.onclick = function(){
                 setCookie("name", data.name, 1);
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("loginForm").style.display = "none";
+                document.getElementById("popup").style.display = "block";
                 ///show start and stop buttons
                  setInterval(showTime, 1000);
                 ////start tracking

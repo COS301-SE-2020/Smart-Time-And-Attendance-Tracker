@@ -1,31 +1,25 @@
 <html>
   <head>
       <title>STAT timer</title>   
+      <title>STAT timer</title>
+      <link rel="stylesheet" href="style\bootstrap-4.5.0\dist\css\bootstrap.css">
+      <link rel="stylesheet" href="style\style.css">
+  </head>
     </head>
   <body>
-    <h2 id="userName"></h2>
+<!--    <h2 id="userName"></h2>
 
     <h2 id="name"></h2>
     <h3 id="desc"></h3>
     <button type="button" id="stop">Stop timer</button> 
     <button type="button" id="start">Start timer</button>
-
+  -->
     <form id="loginForm">
       <input type="text" id="email" placeholder="Email" required><br><br>
       <input type="password" id="password" placeholder="Password" required><br><br>
       <input type="button" id="login" value="login" style="background-color: #353A40;">
     </form>
 
-    <script src="background.js"></script>
-    <script src="popup.js"></script>
-    <script src="common.js"></script>
-</body>
-
-      <title>STAT timer</title>
-      <link rel="stylesheet" href="style\bootstrap-4.5.0\dist\css\bootstrap.css">
-      <link rel="stylesheet" href="style\style.css">
-  </head>
-  <body>
     <!--<div class="card">
       <div class="card-body">
         <h5 class="card-title">Name Surname</h5>
@@ -35,8 +29,8 @@
         </p>
       </div>
     </div>-->
-    <div class="jumbotron">
-      <h1 class="display-4-modified">Name Surname</h1>
+    <div class="jumbotron" id="popup">
+      <h1 class="display-4-modified" id="userName">Name Surname</h1>
       <p class="lead">email123@mail.com</p>
       <hr class="my-4">
       <div class="flex-column row">
@@ -57,17 +51,19 @@
             </select>
           </div>
           <div>
-            <button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button">Start</button>
-            <button hidden type="button" name="button">Stop</button>
+            <button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
+            <button hidden type="button" name="button" id="stop">Stop</button>
           </div>
         </form>
       </div>
       <hr class="my-4">
       <div>
-        <p class="float-right lead">08:26:44</p>
+        <p class="float-right lead" id="desc">08:26:44</p>
       </div>
     </div>
-    <script type="text/javascript" src="background.js">
-    </script>
+    <script src="background.js"></script>
+    <script src="popup.js"></script>
+    <script src="common.js"></script>
+    
   </body>
 </html>

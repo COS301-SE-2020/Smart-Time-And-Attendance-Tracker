@@ -9,9 +9,8 @@ function showTime() {
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
         url = url.split("://")[1];
         url = url.split("/")[0];
-        desc.innerHTML = url + ": ";
+        //desc.innerHTML = url + ": ";
         var description="";
-   //   description = 
         if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
         { 
             //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
