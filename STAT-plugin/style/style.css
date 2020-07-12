@@ -16,3 +16,9 @@
   margin: 0.25em;
   padding: 1.5em;
 }
+
+.display-4-modified {
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
