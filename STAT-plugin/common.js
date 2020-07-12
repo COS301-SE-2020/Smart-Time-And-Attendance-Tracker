@@ -1,9 +1,67 @@
-login();
+///////check if name and token exist - if not keep showing form -if they do, hide form and move on
+if (document.cookie.indexOf('namde') > -1 && document.cookie.indexOf('token') > -1) {
+       //cookie exists - hide form
+       document.getElementById("loginForm").style.display = "none";
+       document.getElementById("userName").innerHTML=getCookie("name");
+       ///call tracking function to start
+       setInterval(showTime, 1000);
+       ////show starts and stop
+       displayButton();
+}
+else{  ///hide everything except the login form
+
+       document.getElementById("start").style.display = "none";
+       document.getElementById("stop").style.display  ="none";
+}
+
+
+
 var token = "";
 var name = "";
 var surname = "";
 var status=false; 
+var userLogin = document.getElementById("login");
 
+var userName="";
+
+userLogin.onclick = function(){
+        var http = new XMLHttpRequest();
+        var url = 'http://localhost:3000/api/user/login';
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function()
+        {
+            if(http.readyState == 4 && http.status == 200) {
+                var data = JSON.parse(http.responseText);
+                ////set name and token into cookies
+                setCookie("token", data.token, 1);
+                setCookie("name", data.name, 1);
+                document.getElementById("userName").innerHTML=data.name;
+                document.getElementById("loginForm").style.display = "none";
+                ///show start and stop buttons
+                 setInterval(showTime, 1000);
+                ////start tracking
+                ////show starts and stop
+                 displayButton();
+            }
+            else {
+                   var data = JSON.parse(http.responseText);
+                   document.getElementById("userName").innerHTML=data.message;
+                   console.log(data);
+            }
+        }
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        console.log(password);
+        console.log(email);
+        var userData = '{ "email": "'+ email + '",' + '"password": "'+ password + '"' +'}';
+        console.log(userData);
+      // var userData = JSON.stringify({ "email":email, "password":password});
+        http.send(userData);
+}
+
+
+/*
 function login() {
     if(token == ""){
         var http = new XMLHttpRequest();
@@ -26,7 +84,7 @@ function login() {
         http.send(text);
     }
 } 
-
+*/
 
 function AddTimeEntry(url,startTime, endTime,currentID ) {
     var http = new XMLHttpRequest();

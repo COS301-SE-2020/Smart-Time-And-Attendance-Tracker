@@ -1,5 +1,5 @@
 function showTime() {
-    var currentID =0;
+    var currentID =0; //
     var now = new Date();
     var desc = document.getElementById("desc");
     var name = document.getElementById("name");
@@ -68,7 +68,7 @@ startTimer.onclick = function(){
     });   
 }
 
-setInterval(showTime, 1000);    //calling function every second
+//setInterval(showTime, 1000);    //calling function every second
 
 function displayButton() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -85,4 +85,4 @@ function displayButton() {
         }
     }); 
 }
-displayButton();
+//displayButton();
