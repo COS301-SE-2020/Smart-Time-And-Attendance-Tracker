@@ -72,7 +72,7 @@ function HandleUpdate(tabId, changeInfo, tab) {
     for (tabId in chrome.extension.getBackgroundPage().History) {
       var description = ""; 
       description = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabId][0][0]);
-      description = addTimes([description, getCookie("historyTime"+currentID)]);
+      description = addTimes([description, getCookie("historyTime"+tabId)]);
       description = description.slice(0, -3);
       chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
       

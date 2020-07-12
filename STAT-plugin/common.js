@@ -1,25 +1,3 @@
-///////check if name and token exist - if not keep showing form -if they do, hide form and move on
-if (document.cookie.indexOf('namde') > -1 && document.cookie.indexOf('token') > -1) {
-       //cookie exists - hide form
-       document.getElementById("loginForm").style.display = "none";
-       document.getElementById("popup").style.display = "block";
-       document.getElementById("userName").innerHTML=getCookie("name");
-       document.getElementById("userEmail").innerHTML=getCookie("email");
-       document.getElementById("otherMessages").innerHTML= "";
-       ///call tracking function to start
-       setInterval(showTime, 1000);
-       ////show starts and stop
-       displayButton();
-}
-else{  ///hide everything except the login form
-      document.getElementById("otherMessages").innerHTML= "Login to start tracking";
-       document.getElementById("start").style.display = "none";
-       document.getElementById("stop").style.display  ="none";
-       document.getElementById("popup").style.display = "none";
-}
-
-
-
 var token = "";
 var name = "";
 var surname = "";
@@ -27,7 +5,28 @@ var status=false;
 var userLogin = document.getElementById("login");
 
 var userName="";
+    ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
+    if (document.cookie.indexOf('name') > -1 && document.cookie.indexOf('token') > -1) {
+      //cookie exists - hide form
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("popup").style.display = "block";
+      document.getElementById("userName").innerHTML=getCookie("name");
+      document.getElementById("userEmail").innerHTML=getCookie("email");
+      document.getElementById("otherMessages").innerHTML= "";
+      document.getElementById("start").style.display  ="block";
+      document.getElementById("stop").style.display = "block";
+      document.getElementById("stop").style.visibility = "visible";
 
+      ///call tracking function to start
+      ////show starts and stop
+      displayButton();
+  }
+  else{  ///hide everything except the login form
+      document.getElementById("otherMessages").innerHTML= "Login to start tracking";
+      document.getElementById("start").style.display = "none";
+      document.getElementById("stop").style.display  ="none";
+      document.getElementById("popup").style.display = "none";
+  }
 userLogin.onclick = function(){
         var http = new XMLHttpRequest();
         var url = 'http://localhost:3000/api/user/login';

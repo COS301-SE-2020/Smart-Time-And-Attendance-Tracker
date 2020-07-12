@@ -38,27 +38,36 @@
       <p class="lead" id="userEmail">email123@mail.com</p>
       <hr class="my-4">
       <div class="flex-column row">
-        <form class="" action="" method="post">
-          <div class="form-group">
-            <!--<label for="project">Project</label>
-            <select class="form-control" id="project">
-              <option>None</option>
-              <option>None</option>
-              <option>None</option>
-            </select>
-          -->
-            <label for="task">Task</label>
-            <select class="form-control" id="task">
-              <option>None</option>
-              <option>None</option>
-              <option>None</option>
-            </select>
-          </div>
-          <div>
-            <button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
-            <button hidden type="button" name="button" id="stop">Stop</button>
-          </div>
-        </form>
+        <div id="select_task_form">
+          <form class="" action="" method="post">
+            <div class="form-group form-group-modified">
+              <!--<label for="project">Project</label>
+              <select class="form-control" id="project">
+                <option>None</option>
+                <option>None</option>
+                <option>None</option>
+              </select>
+            -->
+              <label for="task">Task</label>
+              <select class="form-control" id="tasks">
+                <option>None</option>
+                <option>None</option>
+                <option>None</option>
+              </select>
+            </div>
+            
+            <div>
+              <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="select_task">Select Task</button>
+            </div>
+          </form>
+        </div>
+        <div id="selected_task">
+          <p class="lead" id="task">NAN</p>
+        </div>
+        <div>
+          <button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
+          <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="stop">Stop</button>
+        </div>
       </div>
       <hr class="my-4">
       <div>

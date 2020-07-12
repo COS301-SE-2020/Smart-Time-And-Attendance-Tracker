@@ -15,19 +15,28 @@ function showTime() {
         { 
             //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
             description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
-            desc.innerHTML += addTimes([description, getCookie("historyTime"+currentID)]);
+            desc.innerHTML = addTimes([description, getCookie("historyTime"+currentID)]);
 
         }
         else
         {
-            desc.innerHTML += chrome.extension.getBackgroundPage().History[currentID][0][0]+ "\n";
+            desc.innerHTML = chrome.extension.getBackgroundPage().History[currentID][0][0]+ "\n";
             description = FormatDuration(chrome.extension.getBackgroundPage().History[currentID][0][0]);
         }
     });    
 }
+var SelectTask = document.getElementById("select_task");
 
 var stopTimer = document.getElementById("stop");
 var startTimer = document.getElementById("start");
+setInterval(showTime, 1000);
+
+SelectTask.onclick = function() {
+    var task = "abc";
+    document.getElementById("select_task_form").style.display="none";
+    document.getElementById("selected_task").style.display="block";
+    document.getElementById("task").innerHTML = ("Task : " + task);
+}
 
 stopTimer.onclick = function(){
     var now  = new Date();
