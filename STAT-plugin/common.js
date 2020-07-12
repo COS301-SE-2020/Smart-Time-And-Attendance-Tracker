@@ -1,14 +1,20 @@
 ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
-if (document.cookie.indexOf('namde') > -1 && document.cookie.indexOf('token') > -1) {
+if (document.cookie.indexOf('name') > -1 && document.cookie.indexOf('token') > -1) {
        //cookie exists - hide form
        document.getElementById("loginForm").style.display = "none";
        document.getElementById("userName").innerHTML=getCookie("name");
+       document.getElementById("userEmail").innerHTML=getCookie("email");
+       document.getElementById("otherMessages").innerHTML= "";
        ///call tracking function to start
+        displayButton();
        setInterval(showTime, 1000);
        ////show starts and stop
-       displayButton();
+      
 }
 else{  ///hide everything except the login form
+       
+      document.getElementById("otherMessages").innerHTML= "Login to start tracking";
+
 
        document.getElementById("start").style.display = "none";
        document.getElementById("stop").style.display  ="none";
@@ -36,13 +42,20 @@ userLogin.onclick = function(){
                 ////set name and token into cookies
                 setCookie("token", data.token, 1);
                 setCookie("name", data.name, 1);
+                setCookie("email", data.email, 1);
+
+                console.log(data);
+
                 document.getElementById("userName").innerHTML=data.name;
+                 document.getElementById("userEmail").innerHTML=data.email;
                 document.getElementById("loginForm").style.display = "none";
+                document.getElementById("otherMessages").innerHTML= "";
                 ///show start and stop buttons
+                 displayButton();
                  setInterval(showTime, 1000);
                 ////start tracking
                 ////show starts and stop
-                 displayButton();
+                 
             }
             else {
                    var data = JSON.parse(http.responseText);

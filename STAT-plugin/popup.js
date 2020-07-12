@@ -1,5 +1,5 @@
 function showTime() {
-    var currentID =0; //
+    var currentID =0;
     var now = new Date();
     var desc = document.getElementById("desc");
     var name = document.getElementById("name");
