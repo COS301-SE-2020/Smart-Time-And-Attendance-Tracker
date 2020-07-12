@@ -93,7 +93,7 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
         + '"StartTime": "'+ startTime.getTime() + '",' 
         + '"EndTime": "'+ endTime.getTime() + '",' 
         + '"TaskID": "abcd1234",' 
-        + '"Device": "Google Chrome Browser",' 
+        + '"Device": "Browser",' 
         + '"Date": "'+ new Date() + '"' 
         + '}';
 
