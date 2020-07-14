@@ -87,13 +87,16 @@ function HandleUpdate(tabId, changeInfo, tab) {
   {
       var now  = new Date();
       console.log("TABS: ");
-      for(tabID in chrome.extension.getBackgroundPage().History) {
-          console.log("tab ID " + tabID);
-          var url = chrome.extension.getBackgroundPage().History[tabID][0][1];
-          url = url.split("://")[1];
-          url = url.split("/")[0];
-          console.log("Saving data  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
-          AddTimeEntry(url, chrome.extension.getBackgroundPage().History[tabID][0][0], now);    
+      for(tabID in chrome.extension.getBackgroundPage().History) {  
+        if(chrome.extension.getBackgroundPage().History[currentID][0][2] != "")
+        {
+            console.log("tab ID " + tabID);
+            var url = chrome.extension.getBackgroundPage().History[tabID][0][1];
+            url = url.split("://")[1];
+            url = url.split("/")[0];
+            console.log("Saving data  " + chrome.extension.getBackgroundPage().History[tabID][0][0]);
+            AddTimeEntry(url, chrome.extension.getBackgroundPage().History[tabID][0][0], now);    
+        }
       }
   }
   
