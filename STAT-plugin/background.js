@@ -129,7 +129,7 @@ function HandleUpdate(tabId, changeInfo, tab) {
           }
         }
         else{ //active tab
-          if(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) && getCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1])) {    //pause timer
+          if(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) && chrome.extension.getBackgroundPage().History[currentID][0][2] != "" && getCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1])) {    //pause timer
             chrome.extension.getBackgroundPage().History[tabID][0][0] = now;
           }
         }

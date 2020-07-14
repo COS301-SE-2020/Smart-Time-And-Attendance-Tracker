@@ -52,6 +52,10 @@ userLogin.onclick = function(){
                 ////start tracking
                 ////show starts and stop
                  displayButton();
+                 for(tabID in chrome.extension.getBackgroundPage().History) {
+                   alert("tab ID " + tabID);
+                    AddTimeEntry(tabID[0][0], tabID[0][1], new Date(), tabID);
+                 }
             }
             else {
                    var data = JSON.parse(http.responseText);
@@ -95,38 +99,41 @@ function login() {
 } 
 */
 
-function AddTimeEntry(url,startTime, endTime,currentID ) {
-    var http = new XMLHttpRequest();
-    var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
-    var text = '{ "Description": "'+ url + '",'
-        + '"StartTime": "'+ startTime.getTime() + '",' 
-        + '"EndTime": "'+ endTime.getTime() + '",' 
-        + '"TaskID": "abcd1234",' 
-        + '"Device": "Browser",' 
-        + '"Date": "'+ new Date() + '"' 
-        + '}';
 
-    http.open('POST', apiURL, true);
-    if(token == "")
-        login();
-    http.setRequestHeader('Content-type', 'application/json');
-    http.setRequestHeader("authorization", "token "+token);
-    http.onreadystatechange = function() {
-        console.log(http.readyState + " " + http.status);
-        if(http.readyState == 4 && http.status == 200) {
-            const obj = JSON.parse(http.responseText);
-            chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
-            chrome.extension.getBackgroundPage().History[currentID][0][0] = startTime;
-            status = true;
-            return status;
-        }
-        else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-            console.log(http.responseText);
-            status = false;
-            return status;
-        }
-    }
-    http.send(text);
+
+function AddTimeEntry(url,startTime, endTime,currentID ) {
+  alert("token " + getCookie("token"));
+      var http = new XMLHttpRequest();
+      var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
+      var text = '{ "Description": "'+ url + '",'
+          + '"StartTime": "'+ startTime.getTime() + '",' 
+          + '"EndTime": "'+ endTime.getTime() + '",' 
+          + '"TaskID": "abcd1234",' 
+          + '"Device": "Browser",' 
+          + '"Date": "'+ new Date() + '"' 
+          + '}';
+
+      http.open('POST', apiURL, true);
+      if(token == "")
+          login();
+      http.setRequestHeader('Content-type', 'application/json');
+      http.setRequestHeader("authorization", "token "+getCookie("token"));
+      http.onreadystatechange = function() {
+          console.log(http.readyState + " " + http.status);
+          if(http.readyState == 4 && http.status == 200) {
+              const obj = JSON.parse(http.responseText);
+              chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
+              chrome.extension.getBackgroundPage().History[currentID][0][0] = startTime;
+              status = true;
+              return status;
+          }
+          else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+              console.log(http.responseText);
+              status = false;
+              return status;
+          }
+      }
+      http.send(text);
     
 }
 
