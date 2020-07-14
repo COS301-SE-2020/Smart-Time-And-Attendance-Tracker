@@ -13,7 +13,7 @@ const TimeEntrySchema = mongoose.Schema({
     type: Number,
     required: "End time required."
   },
-  Duration: {
+  ActiveTime: {
     type: Number,
     required: "Duration required."
   },

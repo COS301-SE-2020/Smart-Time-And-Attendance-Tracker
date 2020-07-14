@@ -1,21 +1,31 @@
 const mongoose = require("mongoose")
 
-var ProjectSchema = new mongoose.Schema({
-    OrganisationID:{
-        type: Number,
-        required : "Required"
-    },
-    ClientName:{
-        type: String,
-        required : "Required"
-    }, 
-    ProjectTitle:{
+var ProjectSchema = new mongoose.Schema({ 
+    ProjectName:{
         type: String,
         required : "Required"
     },
-    TotlaTime:{
-        type: Number,
+    TimeSpent:{
+        type: Number
+        //required : "Required"
+    },
+    DueDate:{
+        type: Date,
         required : "Required"
+    },
+    Tasks: [
+        { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Task' 
+        }
+    ],
+    Teams: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Team' 
+    },
+    Completed:{
+        type: Boolean,  
+        required : "Required."
     }
 });
 

@@ -12,7 +12,7 @@ module.exports.addTimeEntry = (req, res) => {
     timeEntry.EndTime = req.body.EndTime;
     timeEntry.Description = req.body.Description;
     timeEntry.Device = req.body.Device;
-    timeEntry.Duration = timeEntry.EndTime-timeEntry.StartTime;
+    timeEntry.ActiveTime = timeEntry.EndTime-timeEntry.StartTime;
     timeEntry.save((error, timeEntryDoc) => {
         if(!error)
         {

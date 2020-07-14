@@ -2,17 +2,24 @@ const mongoose = require("mongoose")
 
 var TeamSchema = new mongoose.Schema({
     ProjectID:{
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project', 
         required : "Required"
     },    
     TeamLeader:{
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', 
         required : "Required"
     },
-    TeamMembers:{
-        type: Array,
-        required : "Required"
-    }
+    TeamMembers:[
+        { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'User',
+            Role: {
+                type: String
+            }
+        }
+    ],
 });
 
 mongoose.model("Team", TeamSchema);
