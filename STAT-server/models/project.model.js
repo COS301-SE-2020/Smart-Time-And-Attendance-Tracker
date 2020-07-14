@@ -19,7 +19,7 @@ var ProjectSchema = new mongoose.Schema({
             ref: 'Task' 
         }
     ],
-    Teams: {
+    Team: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Team' 
     },
