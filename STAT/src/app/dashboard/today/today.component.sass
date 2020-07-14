@@ -1,9 +1,6 @@
 *
   font-size: 1em
 
-#accordion-padding
-  height: 1em
-
 #addEntry
   background-color: #7846eb
 
@@ -45,6 +42,7 @@ h1
 
 h2
   font-size: 1.8em
+  color: #4c585b
 
 h3
   font-size: 1.25em
@@ -66,24 +64,29 @@ mat-card
   margin-right: 1em
   padding: 1.5em
   padding-bottom: 2.25em
-  background-color: rgba(240, 240, 240, 0.2)
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
-
-mat-expansion-panel
+  border-radius: 1em
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
 
 mat-card-footer
-  color: #808080
+  color: #f2f3f7
   margin: 0.05em
-  padding-bottom: 0.5em
   padding-top: 0.5em
+  font-size: 0.9em
 
 mat-card-title
-  font-size: 1.25em
+  font-size: 1.1em
+
+mat-card-subtitle
+  font-size: 0.9em
+  color: #f2f3f750
+
+mat-card-content
+  font-size: 0.9em
 
 mat-divider
   margin-bottom: 1.5em
-  margin-top: 1.5em
+  margin-top: 1em
+  border-top-color: #f2f3f750
 
 .numEntries
   float: right
@@ -91,13 +94,13 @@ mat-divider
 
 .pro
   margin-right: 0.2em
-  float: left
 
 .pro-name
-  color: #808080
+  color: #fff
 
 .row
   padding: 2em
+  padding-top: 0
 
   >
     section
@@ -113,12 +116,12 @@ section
 .scroll
   overflow-x: hidden
   overflow-y: scroll
-  padding: 0 1.5em 0 0.8em
-  height: 65vh
+  padding: 0 1.5em 0.2em 0.8em
+  height: 68vh
 
 .scroll::-webkit-scrollbar
   border-radius: 0.5em
-  background-color: #eeeeee
+  background-color: #ffffff
   width: 0.5em
 
 .scroll::-webkit-scrollbar-track::hover
@@ -126,19 +129,23 @@ section
 
 .scroll::-webkit-scrollbar-thumb
   border-radius: 0.5em
-  background-color: #cccccc
+  background-color: #4c585b70
 
 .scroll::-webkit-scrollbar-track
   border-radius: 0.5em
-  background-color: #eeeeee
+  background-color: #ffffff
 
 .start-tracking
   color: white
-  background-color: #28ccbf
-  vertical-align: middle
-  float: right
-  left: 2em
-  top: -1.6em
+  background-color: #00c8ff
+  font-size: 0.7em
+  text-align: center
+  margin-left: 0.5em
+  vertical-align: top
+
+  &:focus
+    border: none !important
+    outline: none
 
 .section-divider
   margin-bottom: 3em
@@ -147,17 +154,23 @@ section
 .stop-tracking
   color: white
   background-color: #ff2885
-  vertical-align: middle
   float: right
   left: 2em
+  top: 2em
+  vertical-align: top
 
 .tag
-  background-color: #28ccbf30
+  background-color: #f2f3f750
   padding: 0.2em 0.5em
   border-radius: 0.8em
-  color: #28ccbf
+  color: #f2f3f7
   font-size: 0.8em
+  height: 1.8em
   float: left
+
+#history .tag
+  background-color: #00c8ff40
+  color: #00c8ff
 
 .tag-1
   color: #366ceb
@@ -166,3 +179,83 @@ section
 .tag-2
   color: #ff2885
   background-color: #ff288530
+
+#currently-tracking mat-card:nth-child(odd)
+    background: #366ceb
+    color: #fff
+
+#currently-tracking mat-card:nth-child(even)
+    background: #7846eb
+    color: #fff
+
+#currently-tracking 
+  padding-right: 0
+
+  mat-card-subtitle
+    color: #f2f3f7
+
+#auto-tracking 
+  mat-card-title
+    color: #4c585b
+
+  mat-card-subtitle
+    color: #4c585b80
+
+  mat-card
+    padding-bottom: 0
+
+.modal-title
+  margin-bottom: 0
+
+.modal-header 
+  button:focus, button:active, button
+    border: none !important
+    outline: none
+    background-color: transparent !important
+
+.modal-footer 
+  padding-left: 16px
+
+  #toggle
+    padding-right: 5em
+
+  button
+    font-size: 1em
+    margin-left: 0.5em
+
+#history
+  .info
+    text-align: center
+    color: #4c585b90
+
+    #activity 
+      b
+        color: #7846eb
+        font-size: 1.4em
+
+    #entries       
+      b
+        color: #ff2885
+        font-size: 1.4em
+
+    #tasks       
+      b
+        color: #366ceb
+        font-size: 1.4em
+
+  .scroll
+    height: 53vh
+
+  small
+    font-size: smaller
+    color: #4c585b90
+
+  .date
+    margin-right: 0.8em
+    font-weight: bold
+    color: #4c585b
+
+mat-card
+  width: 140%
+
+

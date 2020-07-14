@@ -13,25 +13,41 @@ body
   width: 100%
   height: 100%
 
+.wrapper
+  background-color: #f2f3f7
+
 .main_body
   .sidebar_menu
     position: fixed
     left: 0
     top: 4.75em
     width: 15em
-    height: 100%
+    height: 120%
     transition: all 0.3s linear
+    color: black
+    background-color: #fff
+    border-bottom-right-radius: 3em !important
 
     .inner__sidebar_menu
       position: relative
 
+    // ul li
+    //  background: rgb(120,70,235)
+    //  background: linear-gradient(0deg, rgba(120,70,235,1) 16%, rgba(40,204,191,1) 100%)
+
+    #stat
+      background: #fff
+
     ul li a
-      color: #fff
-      font-size: 1em
+      color: #4c585b
+      font-size: 0.8em
+      text-transform: uppercase
       padding: 1em 1.5em
+      margin-left: 1em
       display: block
       white-space: nowrap
-      border-left: 0.3em solid #333
+      background-color: white
+      border-radius:  3em 0em 0em 3em 
 
       .icon
         margin-right: 0.5em
@@ -42,23 +58,24 @@ body
         display: inline-block
 
       &:hover
-        background: #222
-        color: #fff
+        color: #7846eb
         cursor: pointer
-        border-left: 0.3em solid #fff
 
       &.active
-        background: rgba(255, 255, 255, 0.3)
-        color: #fff
-        border-left: 0.3em solid #fff
+        color: #000
+        background: #f2f3f7        
+        border-radius:  3em -10em -10em 3em 
+        
+      &.active .icon
+        color: #7846eb
 
     .hamburger
       position: absolute
-      top: 0px
+      top: 3px
       right: -25px
       width: 50px
       height: 50px
-      background: #fff
+      background: #f2f3f7
       border-radius: 50%
       cursor: pointer
 
@@ -72,12 +89,15 @@ body
       width: 40px
       border-radius: 50%
       height: 40px
-      background: #333
+      background: #fff
 
     .hamburger
       .arrow
-        color: #fff
+        color: #4c585b
         font-size: 20px
+        vertical-align: top
+        text-align: center
+        padding-top: 10%
 
     .right
       display: none
@@ -133,9 +153,9 @@ body
 
 
 h1
-  color: #fff
   padding-top: 0.5em
   padding-left: 1em
+  color: #4c585b
 
 #addEntry
   float: right

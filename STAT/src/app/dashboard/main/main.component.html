@@ -2,10 +2,10 @@
 <div id="wrapper" class="wrapper">
 
     <div class="main_body">
-      <div class="sidebar_menu bg-dark">
-            <div class="inner__sidebar_menu">
+      <div class="sidebar_menu">
+            <div class="inner__sidebar_menu bg-white">
               <ul>
-                <li>
+                <li id="stat">
                   <h1>STAT</h1>
                 </li>
               </ul>
@@ -19,7 +19,7 @@
                   </a>
                 </li>
                 <li>
-                  <a id="schedule" (click)="setActive('schedule')">
+                  <a id="schedule" (click)="setActive('schedule')" class="prev">
                     <span class="icon">
                       <mat-icon>today</mat-icon>
                     </span>
@@ -56,7 +56,7 @@
                         <span class="icon">
                           <mat-icon>devices</mat-icon>
                         </span>
-                        <span class="list">IOT</span>
+                        <span class="list">IOT Devices</span>
                     </a>
                 </li>
                 <li>
@@ -83,6 +83,7 @@
         <!-- dashboard -->
         <div class="container">
           <app-today *ngIf="active=='today'"></app-today>
+          <app-projects *ngIf="active=='projects'"></app-projects>
           <app-organisation *ngIf="active=='organisation'"></app-organisation>
         </div>
 
