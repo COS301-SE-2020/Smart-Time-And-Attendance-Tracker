@@ -6,6 +6,10 @@ router.get("/", (req, res)=>{
     res.send("Project controller");
 });
 
+module.exports.addTask = (req, res) => {
+
+
+}
 
 router.post("/add", (req, res) => {
     var project = new ProjectModel();

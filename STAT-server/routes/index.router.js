@@ -5,6 +5,7 @@ const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
+const project = require('../controllers/project.controller');
 
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
@@ -26,5 +27,6 @@ router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.i
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 
+router.post("/project/addTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.addTask);
 
 module.exports = router;
