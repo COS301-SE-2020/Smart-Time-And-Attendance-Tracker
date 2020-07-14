@@ -21,7 +21,7 @@ module.exports.assignProject = (req, res, next) => {
            
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ message: 'Team updated successfully', "TeamID": result._id });
+                    return res.status(200).json({ message: 'Project assigned to team successfully', "TeamID": result._id });
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
             });
@@ -45,7 +45,7 @@ module.exports.addTeamMember = (req, res, next) => {
             result.TeamMembers.push( { _id: req.body.userID, Role: req.body.userRole } )
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ message: 'Team updated successfully', "TeamID": result._id });
+                    return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
             });
