@@ -6,6 +6,29 @@ const TeamModel = mongoose.model("teams");
 //     res.send("Team controller");
 // });
 
+module.exports.assignProject = (req, res, next) => {
+    TeamModel.findOne({_id : req.body.teamID}, function(err, result) {
+        if(err) 
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result)
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else {
+            result.ProjectID = req.body.projectID;
+           
+            result.save((err, doc) => {
+                if(!err)
+                    return res.status(200).json({ message: 'Team updated successfully', "TeamID": result._id });
+                else
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            });
+        }
+    });
+}
+
 module.exports.addTeamMember = (req, res, next) => {
     console.log("aa")
     TeamModel.findOne({_id : (req.body.teamID)}, function(err, result) {
