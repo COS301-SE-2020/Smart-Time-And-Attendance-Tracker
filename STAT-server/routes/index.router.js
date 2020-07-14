@@ -4,6 +4,7 @@ const router = express.Router();
 const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
+const team = require('../controllers/team.controller');
 
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
@@ -21,5 +22,9 @@ router.post("/userTimeEntry/addTimeEntry", jwtHelper.verifyJWTtoken,userHelper.i
 router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getDailyTimeEntries);
 
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
-router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
+
+router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
+router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
+
+
 module.exports = router;

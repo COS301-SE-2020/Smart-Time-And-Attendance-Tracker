@@ -1,11 +1,35 @@
-const express = require("express");
-const router = express.Router();
+//const express = require("express");
+//const router = express.Router();
 const mongoose = require("mongoose");
-const TeamModel = mongoose.model("Team");
-router.get("/", (req, res)=>{
-    res.send("Team controller");
-});
+const TeamModel = mongoose.model("teams");
+// router.get("/", (req, res)=>{
+//     res.send("Team controller");
+// });
 
+module.exports.addTeamMember = (req, res, next) => {
+    console.log("aa")
+    TeamModel.findOne({_id : (req.body.teamID)}, function(err, result) {
+        if(err) 
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result)
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else {
+            console.log(result);
+            result.TeamMembers.push( { _id: req.body.userID, Role: req.body.userRole } )
+            result.save((err, doc) => {
+                if(!err)
+                    return res.status(200).json({ message: 'Team updated successfully', "TeamID": result._id });
+                else
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            });
+        }
+    });
+}
+/*
 router.post("/add", (req, res) => {
     var team = new TeamModel();
     team.ID = db.Team.find().Count()+1;
@@ -40,3 +64,4 @@ router.post("/update", (req, res) => {
 });
 
 module.exports = router;
+*/

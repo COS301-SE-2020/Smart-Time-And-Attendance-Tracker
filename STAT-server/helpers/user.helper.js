@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const UserModel = mongoose.model("User");
 
+module.exports.isTeamLeader = (req, res, next) => {
+    next();
+}
+
 module.exports.isSecurityAdmin = (req, res, next) => {
 
     UserModel.findOne({ _id: req.ID},(err, result) => {
