@@ -85,15 +85,30 @@ function HandleUpdate(tabId, changeInfo, tab) {
   {
       console.log("TABS: ");
       for(tabID in chrome.extension.getBackgroundPage().History) {
-          var now  = new Date();
-          console.log("tab ID " + tabID);
-          var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
-          duration = addTimes([duration, getCookie("historyTime"+tabID)]);
-          console.log("Saving data  " + duration);
-          setCookie("historyTime"+tabID, duration, 1);
+        if(chrome.extension.getBackgroundPage().History[currentID][0][2] != "")
+        {
+            var now  = new Date();
+            console.log("tab ID " + tabID);
+            var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
+            duration = addTimes([duration, getCookie("historyTime"+tabID)]);
+            console.log("Saving data  " + duration);
+            setCookie("historyTime"+tabID, duration, 1);
       }
+    }
   }
+/*
+  after next wednesday (in 2 weeks)
+  1 year training
+  weekly session 
+  6 months to 1 year project
+  150 people in company
+  */
   
+  
+
+
+
+
   setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
 
     

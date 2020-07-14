@@ -54,6 +54,7 @@ stopTimer.onclick = function(){
             chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
             startTimer.style.display = "block";
             stopTimer.style.display = "none";
+            chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
         }
         else {
             //error occured
@@ -67,6 +68,7 @@ startTimer.onclick = function(){
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
+        AddTimeEntry(url, now, now, currentID);
         url = url.split("://")[1];
         url = url.split("/")[0];
         console.log("Started tracking " + url);
