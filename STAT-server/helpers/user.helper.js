@@ -23,6 +23,23 @@ module.exports.isSecurityAdmin = (req, res, next) => {
         return res.status(403).json({ message: "Access denied"});*/
     
 }
+module.exports.isTeamLead = (req, res, next) => {
+
+    UserModel.findOne({ _id: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            if(result.Role.includes(1))
+                next();
+            else
+                return res.status(403).json({ message: "Access denied"});
+        }
+    });  
+}
 
 module.exports.isAuthenticated = (req, res, next) => {
 

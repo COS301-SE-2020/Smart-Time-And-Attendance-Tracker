@@ -22,4 +22,5 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
+router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 module.exports = router;
