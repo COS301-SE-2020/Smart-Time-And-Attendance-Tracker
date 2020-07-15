@@ -200,3 +200,13 @@ module.exports.authenticate = (req, res, next) => {
                
     });
 }
+
+module.exports.remove = (req, res, next) => {
+    UserModel.remove({ _id: req.body.UserID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else
+            return res.status(200).json({message: 'User removed'});
+               
+    });
+}
