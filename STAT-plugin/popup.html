@@ -5,73 +5,47 @@
       <link rel="stylesheet" href="style\bootstrap-4.5.0\dist\css\bootstrap.css">
       <link rel="stylesheet" href="style\style.css">
   </head>
-    </head>
   <body>
-<!--    <h2 id="userName"></h2>
-    <h3 id="otherMessages"></h3>
-    <h2 id="userName"></h2>
-    <h3 id="userEmail"></h3>
-
-    <h2 id="name"></h2>
-    <h3 id="desc"></h3>
-    <button type="button" id="stop">Stop timer</button> 
-    <button type="button" id="start">Start timer</button>
-  -->
-    <form id="loginForm">
-      <input type="text" id="email" placeholder="Email" required><br><br>
-      <input type="password" id="password" placeholder="Password" required><br><br>
-      <input type="button" id="login" value="login" style="background-color: #353A40;">
-    </form>
-
-    <!--<div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Name Surname</h5>
-        <p class="card-subtitle">email@gmail.com</p>
-        <p class="card-text">
-          <button class="btn btn-primary" type="button" name="button">Start</button>
-        </p>
+    <div class="jumbotron jumbotron-fluid" id="loginForm">
+      <div class="container">
+        <h1 class="display-4-modified">Login</h1>
+        <hr class="my-4">
+        <h3 class="text-danger h6" id="errorMessage"></h3>
+        <hr class="my-4">
+        <form class="form-group form-group-modified" action="" method="post">
+          <input type="email" class="form-control loginInput" id="email" placeholder="Email" required><br>
+          <input type="password"  class="form-control loginInput" id="password" placeholder="Password" required><br>
+          <button class="py-1 btn btn-dark btn-md float-right" type="button" name="login" id="login">Login</button>
+        </form>
       </div>
-    </div>-->
-    <p id="otherMessages"class="lead"></p>
+    </div>
     <div class="jumbotron" id="popup">
       <h1 class="display-4-modified" id="userName">Name Surname</h1>
       <p class="lead" id="userEmail">email123@mail.com</p>
       <hr class="my-4">
-      <div class="flex-column row">
+      <div class="flex-column row"></div>
         <div id="select_task_form">
-          <form class="" action="" method="post">
-            <div class="form-group form-group-modified">
-              <!--<label for="project">Project</label>
-              <select class="form-control" id="project">
-                <option>None</option>
-                <option>None</option>
-                <option>None</option>
-              </select>
-            -->
-              <label for="task">Task</label>
-              <select class="form-control" id="tasks">
-                <option>None</option>
-                <option>None</option>
-                <option>None</option>
-              </select>
-            </div>
-            
-            <div>
-              <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="select_task">Select Task</button>
-            </div>
-          </form>
-        </div>
-        <div id="selected_task">
-          <p class="lead" id="task">NAN</p>
-        </div>
-        <div>
-          <button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
-          <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="stop">Stop</button>
-        </div>
+          <form class="form-group form-group-modified" action="" method="post">
+            <label for="task">Task</label>
+            <select class="form-control" id="tasks">
+              <option>None</option>
+              <option>None</option>
+              <option>None</option>
+            </select>
+            <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="select_task">Select Task</button>
+        </form>
       </div>
-      <hr class="my-4">
+      <div id="selected_task">
+        <p class="lead" id="task">NAN</p>
+      </div>
       <div>
-        <p class="float-right lead" id="desc">08:26:44</p>
+        <button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
+        <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="stop">Stop</button>
+      </div>
+    </div>
+  <hr class="my-4">
+  <div>
+    <p class="float-right lead" id="desc"></p>
       </div>
     </div>
     <script src="background.js"></script>

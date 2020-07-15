@@ -12,7 +12,7 @@ var userName="";
       document.getElementById("popup").style.display = "block";
       document.getElementById("userName").innerHTML=getCookie("name");
       document.getElementById("userEmail").innerHTML=getCookie("email");
-      document.getElementById("otherMessages").innerHTML= "";
+      document.getElementById("errorMessage").innerHTML= "";
       document.getElementById("start").style.display  ="block";
       document.getElementById("stop").style.display = "block";
       document.getElementById("stop").style.visibility = "visible";
@@ -22,7 +22,7 @@ var userName="";
       displayButton();
   }
   else{  ///hide everything except the login form
-      document.getElementById("otherMessages").innerHTML= "Login to start tracking";
+      document.getElementById("errorMessage").innerHTML= "Login to start tracking";
       document.getElementById("start").style.display = "none";
       document.getElementById("stop").style.display  ="none";
       document.getElementById("popup").style.display = "none";
@@ -38,15 +38,16 @@ userLogin.onclick = function(){
                 var data = JSON.parse(http.responseText);
                 ////set name and token into cookies
                 setCookie("token", data.token, 1);
-                setCookie("name", data.name, 1);
-                setCookie("email", data.email, 1);
+                setCookie("name", "data.name", 1);
+                setCookie("email", "data.email", 1);
                 console.log(data);
+                getTasks();
 
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.email;
                 document.getElementById("loginForm").style.display = "none";
                 document.getElementById("popup").style.display = "block";
-                document.getElementById("otherMessages").innerHTML= "";
+                document.getElementById("errorMessage").innerHTML= "";
                 ///show start and stop buttons
                  setInterval(showTime, 1000);
                 ////start tracking
@@ -59,7 +60,7 @@ userLogin.onclick = function(){
             }
             else {
                    var data = JSON.parse(http.responseText);
-                   document.getElementById("userName").innerHTML=data.message;
+                   document.getElementById("errorMessage").innerHTML=data.message;
                    console.log(data);
             }
         }
@@ -98,10 +99,33 @@ function login() {
     }
 } 
 */
+getTasks();
+function getTasks() {
+  //alert("ax");
+  
+  var http = new XMLHttpRequest();
+  var apiURL = 'http://localhost:3000/api/user/getTasks';
 
+  var text = '{ "token": "'+ getCookie("token") + '"' + '}';
+  http.open('POST', apiURL, true);
+
+  http.setRequestHeader('Content-type', 'application/json');
+  http.setRequestHeader("authorization", "token "+getCookie("token"));
+  http.onreadystatechange = function() {
+      if(http.readyState == 4 && http.status == 200) {
+          const obj = JSON.parse(http.responseText);
+          alert(obj.tasks[0].ID);
+      }
+      else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+          console.log(http.responseText);
+      }
+  }
+  http.send(text);
+}
 
 
 function AddTimeEntry(url,startTime, endTime,currentID ) {
+  getTasks();
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
       var text = '{ "Description": "'+ url + '",'
@@ -109,6 +133,7 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
           + '"EndTime": "'+ endTime.getTime() + '",' 
           + '"TaskID": "abcd1234",' 
           + '"Device": "Browser",' 
+          + '"ActiveTime": 0,' 
           + '"Date": "'+ new Date() + '"' 
           + '}';
 

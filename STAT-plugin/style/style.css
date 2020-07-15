@@ -8,6 +8,9 @@
   width: 5em;
 }
 
+.loginInput {
+  width: 12em;
+}
 
 #select_task {
   font-size: 0.9em;
