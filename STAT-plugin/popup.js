@@ -40,11 +40,10 @@ SelectTask.onclick = function() {
         document.getElementById("task_error").innerHTML = "Invalid Task Selected.";
     }
     else{
-        var task =  tasksDropdown.options[ tasksDropdown.selectedIndex ].innerHTML;
-        var project =  tasksDropdown.options[ tasksDropdown.selectedIndex ].name;
-        document.getElementById("select_task_form").style.display="none";
-        document.getElementById("selected_task").style.display="block";
-        document.getElementById("task").innerHTML = ("Project : " + project + "\nTask : " + task);
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+            currentID = tabs[0].id;
+            UpdateTask(currentID, tasksDropdown);
+        });
     }
     
 }
