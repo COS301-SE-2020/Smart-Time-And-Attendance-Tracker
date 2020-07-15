@@ -1,31 +1,71 @@
-const express = require("express");
-const router = express.Router();
+
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
-router.get("/", (req, res)=>{
-    res.send("Project controller");
-});
 
 module.exports.addTask = (req, res) => {
 
 
 }
 
-router.post("/add", (req, res) => {
-    var project = new ProjectModel();
-    project.ID = db.Project.find().Count()+1;
-    project.OrganisationID = req.body.organisationID;
-    project.ClientName = req.body.clientName;
-    project.ProjectTitle = req.body.projectTitle;
-    project.TotlaTime = 0;
-    project.save((err, doc) => {
-        if(!err){
-            res.send("Created Project");
-        }
-        else{
-            res.send("Error Occured");
-        }
-    })
-});
+module.exports.complete = (req, res) => {
+    ProjectModel.update({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'Project not found' }); 
+        else
+            return res.status(200).json({message: 'Project marked as completed'});
+                
+    });
+}
+module.exports.uncomplete = (req, res) => {
+    ProjectModel.update({ _id: req.body.ProjectID},{Completed: false},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'Project not found' }); 
+        else
+            return res.status(200).json({message: 'Project marked as uncompleted'});
+                
+    });
+}
 
-module.exports = router;
+module.exports.update = (req, res) => {
+    if(req.body.ProjectName)
+    {
+        ProjectModel.update({ _id: req.body.ProjectID},{ProjectName: req.body.ProjectName},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Project not found' }); 
+            else
+                return res.status(200).json({message: 'Project name updated'});
+                    
+        });
+    }
+    if(req.body.TimeSpent)
+    {
+        ProjectModel.update({ _id: req.body.ProjectID},{TimeSpent: req.body.TimeSpent},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Project not found' }); 
+            else
+                return res.status(200).json({message: 'Project time updated'});
+                    
+        });
+    }
+    if(req.body.DueDate)
+    {
+        ProjectModel.update({ _id: req.body.ProjectID},{DueDate: req.body.DueDate},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Project not found' }); 
+            else
+                return res.status(200).json({message: 'Project due date updated'});
+                    
+        });
+    }
+}
+

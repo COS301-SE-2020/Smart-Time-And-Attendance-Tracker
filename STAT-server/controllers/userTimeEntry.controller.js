@@ -74,13 +74,13 @@ module.exports.getDailyTimeEntries = (req, res) => {
         else
         {
             var date = req.query.date;
-            UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
+           /* UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
                 if (err) 
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
                 else if (!result)
                     return res.status(404).json({ message: 'User not found' }); 
                 else
-                {
+                {*/
                     var TimeEntries=[];
                     var times = result.TimeEntries.length
                     for(var a=0; a<times; a++)
@@ -105,8 +105,8 @@ module.exports.getDailyTimeEntries = (req, res) => {
                             }
                         });
                     }
-                }
-            });
+               /* }
+            });*/
         }
     });
 }
