@@ -6,7 +6,7 @@ describe('Unit tests:', () => {
   describe('AccountManagementService', () => {
     let service: AccountManagementService;
     let HttpMock: HttpTestingController;
-
+    let ROOT_URL = "http://localhost:3000/api/";
     beforeEach(async() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
@@ -34,7 +34,7 @@ describe('Unit tests:', () => {
           }
         );
 
-        const req2 = HttpMock.expectOne('http://localhost:3000/api/user/register');
+        const req2 = HttpMock.expectOne(ROOT_URL+'user/register');
         expect(req2.request.method).toEqual('POST');
         req2.flush(res);
       });
@@ -48,7 +48,7 @@ describe('Unit tests:', () => {
             expect(err).toBe(res);
           });
 
-        const req2 = HttpMock.expectOne('http://localhost:3000/api/user/register');
+        const req2 = HttpMock.expectOne(ROOT_URL+'user/register');
         expect(req2.request.method).toEqual('POST');
         req2.flush(res);
       });
@@ -64,7 +64,7 @@ describe('Unit tests:', () => {
         }
       );
 
-      const req2 = HttpMock.expectOne('http://localhost:3000/api/user/login');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/login');
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
     });
@@ -78,7 +78,7 @@ describe('Unit tests:', () => {
           expect(err).toBe(res);
         });
 
-      const req2 = HttpMock.expectOne('http://localhost:3000/api/user/login');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/login');
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
     });
@@ -96,7 +96,7 @@ describe('Unit tests:', () => {
         }
       );
 
-      const req2 = HttpMock.expectOne('http://localhost:3000/api/user/getRoles');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getRoles');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -109,7 +109,7 @@ describe('Unit tests:', () => {
           expect(err).toBe(res);
         });
 
-      const req2 = HttpMock.expectOne('http://localhost:3000/api/user/getRoles');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getRoles');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -124,7 +124,7 @@ describe('Unit tests:', () => {
         }
       );
 
-      const req2 = HttpMock.expectOne('http://localhost:3000/api/user/getName');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getName');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -137,7 +137,7 @@ describe('Unit tests:', () => {
           expect(err).toBe(res);
         });
 
-      const req2 = HttpMock.expectOne('http://localhost:3000/api/user/getName');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getName');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });

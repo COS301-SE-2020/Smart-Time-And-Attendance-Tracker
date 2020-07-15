@@ -6,15 +6,25 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 
 export class AccountManagementService {
- 
-  constructor(public http: HttpClient) { }
 
+  private ROOT_URL = "http://localhost:3000/api/";
+
+  constructor(public http: HttpClient) { }
+  //check if authenticated
+  public isAuthenticated(values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+
+    return this.http.post(this.ROOT_URL+'user/isAuthenticated', {
+      headers: headers
+    });
+  }
   // sign up
   public signUp(values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
 
-    return this.http.post('http://localhost:3000/api/user/register', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'user/register', JSON.stringify(values), {
       headers: headers
     });
   }
@@ -22,7 +32,7 @@ export class AccountManagementService {
   public signIn(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/api/user/login', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'user/login', JSON.stringify(values), {
       headers: headers
     });
   }
@@ -30,7 +40,7 @@ export class AccountManagementService {
   public getRoles(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.get('http://localhost:3000/api/user/getRoles', {
+    return this.http.get(this.ROOT_URL+'user/getRoles', {
       headers: headers
     });
   }
@@ -38,7 +48,7 @@ export class AccountManagementService {
   public getName(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.get('http://localhost:3000/api/user/getName', {
+    return this.http.get(this.ROOT_URL+'user/getName', {
       headers: headers
     });
   }
@@ -46,7 +56,7 @@ export class AccountManagementService {
   public authenticate(values,userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.post('http://localhost:3000/api/user/authenticateUser',JSON.stringify(userID), {
+    return this.http.post(this.ROOT_URL+'user/authenticateUser',JSON.stringify(userID), {
       headers: headers
     });
   }
@@ -54,7 +64,7 @@ export class AccountManagementService {
   public reject(values, userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.post('http://localhost:3000/api/user/rejectUser', JSON.stringify(userID),{
+    return this.http.post(this.ROOT_URL+ 'user/rejectUser', JSON.stringify(userID),{
       headers: headers
     });
   }
@@ -62,7 +72,15 @@ export class AccountManagementService {
   public getUnathenticatedUsers(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.get('http://localhost:3000/api/user/getUnauthenticatedUsers', {
+    return this.http.get(this.ROOT_URL+ 'user/getUnauthenticatedUsers', {
+      headers: headers
+    });
+  }
+  //Get all  users (security admin)
+  public getAllUsers(values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.get(this.ROOT_URL+ 'user/geAllUsers', {
       headers: headers
     });
   }
