@@ -14,9 +14,7 @@ export class MainComponent implements OnInit {
     {value: '2', name: 'Project 2'}
   ];
 
-  admin : boolean;
-  dataAnalyst : boolean;
-  general : boolean;
+  roles : string
 
   // active tab
   active : string;
@@ -32,6 +30,8 @@ export class MainComponent implements OnInit {
     })
 
     this.active = 'today';
+
+    this.roles = localStorage.getItem('roles');
   }
 
   // set active tab after component initialisation

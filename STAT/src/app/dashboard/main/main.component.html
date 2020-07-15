@@ -43,7 +43,7 @@
                     <span class="list">Analysis</span>
                   </a>
                 </li>
-                <li>
+                <li *ngIf="roles.includes('Data Analyst')">
                     <a id="data" (click)="setActive('data')">
                         <span class="icon">
                           <mat-icon>timeline</mat-icon>
@@ -51,7 +51,7 @@
                         <span class="list">Data</span>
                     </a>
                 </li>
-                <li>
+                <li *ngIf="roles.includes('Data Analyst') || roles.includes('System Administrator')">
                     <a id="iot" (click)="setActive('iot')">
                         <span class="icon">
                           <mat-icon>devices</mat-icon>
@@ -59,7 +59,7 @@
                         <span class="list">IOT Devices</span>
                     </a>
                 </li>
-                <li>
+                <li *ngIf="roles.includes('Security Administrator')">
                   <a id="organisation" (click)="setActive('organisation')">
                     <span class="icon">
                       <mat-icon>supervisor_account</mat-icon>

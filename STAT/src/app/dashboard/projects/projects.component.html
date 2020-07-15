@@ -1,15 +1,16 @@
 <div class="row">
     <section class="col-8">
         <h2>Projects
-          <button mat-mini-fab
-                      class="start-tracking"
-                      id="addPro" 
-                      matTooltip="Add a project"
-                      matTooltipClass="action-tooltip"
-                      matTooltipPosition="right"
-                      (click)="open(addProjectModal)">
-                <mat-icon inline="true">add</mat-icon>
-              </button>
+          <button *ngIf="roles.includes('Team Leader')" 
+                  mat-mini-fab
+                  class="start-tracking"
+                  id="addPro" 
+                  matTooltip="Add a project"
+                  matTooltipClass="action-tooltip"
+                  matTooltipPosition="right"
+                  (click)="open(addProjectModal)">
+            <mat-icon inline="true">add</mat-icon>
+          </button>
         </h2>
         <div class="scroll">
             <div id="accordion-padding"></div>
@@ -22,14 +23,16 @@
                   <mat-panel-title>
                     Project Name
                   <span class="tag numTasks">3 tasks</span>
-                  <button mat-button class="pro-btn"
+                  <button *ngIf="roles.includes('Team Leader')" 
+                          mat-button class="pro-btn"
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
                           (click)="open(editProjectModal)">
                           <mat-icon inline="true">edit</mat-icon>
                   </button>
-                  <button mat-button class="pro-btn"
+                  <button *ngIf="roles.includes('Team Leader')" 
+                          mat-button class="pro-btn"
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
@@ -46,13 +49,15 @@
                 <!-- tasks -->
                 <ul class="tasks">
                   <li>Task 1
-                    <button mat-button class="pro-btn"
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-button class="pro-btn"
                             matTooltip="Edit"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="above">
                             <mat-icon inline="true">edit</mat-icon>
                     </button>
-                    <button mat-button class="pro-btn"
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-button class="pro-btn"
                             matTooltip="Delete"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="above">
@@ -64,7 +69,7 @@
                   <mat-divider></mat-divider>
                   <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li> 
                 </ul>
-                <span class="float-right"><button mat-button><mat-icon inline="true">add</mat-icon>New task</button></span>
+                <span *ngIf="roles.includes('Team Leader')" class="float-right"><button mat-button><mat-icon inline="true">add</mat-icon>New task</button></span>
 
                 <!-- team -->
                 <mat-action-row>
@@ -86,7 +91,8 @@
                     matTooltipPosition="below"
                     src="../../../assets/proPic2.jpg" 
                     class="profile-pic" alt="Profile Picture">
-                    <button mat-mini-fab
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-mini-fab
                             class="start-tracking addMember" 
                             matTooltip="Add team member"
                             matTooltipClass="pro-tooltip"

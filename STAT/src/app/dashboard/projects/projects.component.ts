@@ -11,14 +11,17 @@ export class ProjectsComponent implements OnInit {
 
   constructor(private modalService: NgbModal) { }
 
-  panelOpenState = false;
+  panelOpenState = false
   name = "John Doe"
+  roles : string
 
   // forms
   addProjectForm : FormGroup
   editProjectForm : FormGroup
 
   ngOnInit(): void {
+    this.roles = localStorage.getItem('roles');
+
     /**********
     FORM GROUPS
     ***********/
@@ -54,7 +57,7 @@ export class ProjectsComponent implements OnInit {
 
   // delete project
   deleteProject() {
-    
+
   }
 
   /****
