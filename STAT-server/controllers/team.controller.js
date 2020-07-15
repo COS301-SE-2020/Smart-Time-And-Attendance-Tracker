@@ -30,7 +30,6 @@ module.exports.assignProject = (req, res, next) => {
 }
 
 module.exports.addTeamMember = (req, res, next) => {
-    console.log("aa")
     TeamModel.findOne({_id : (req.body.teamID)}, function(err, result) {
         if(err) 
         {
@@ -52,6 +51,7 @@ module.exports.addTeamMember = (req, res, next) => {
         }
     });
 }
+
 /*
 router.post("/add", (req, res) => {
     var team = new TeamModel();
