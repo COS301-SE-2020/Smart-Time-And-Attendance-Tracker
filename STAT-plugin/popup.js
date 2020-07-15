@@ -26,6 +26,7 @@ function showTime() {
     });    
 }
 var SelectTask = document.getElementById("select_task");
+tasksDropdown = document.getElementById("tasks");
 
 var stopStartBtn = document.getElementById("start_stop");
 var pauseResumeBtn = document.getElementById("pause_resume");
@@ -34,11 +35,18 @@ var pauseResumeBtn = document.getElementById("pause_resume");
 setInterval(showTime, 1000);
 
 SelectTask.onclick = function() {
-    alert(SelectTask.name);
-    var task = "abc";
-    document.getElementById("select_task_form").style.display="none";
-    document.getElementById("selected_task").style.display="block";
-    document.getElementById("task").innerHTML = ("Task : " + task);
+    if(tasksDropdown.selectedIndex == -1)
+    {
+        document.getElementById("task_error").innerHTML = "Invalid Task Selected.";
+    }
+    else{
+        var task =  tasksDropdown.options[ tasksDropdown.selectedIndex ].innerHTML;
+        var project =  tasksDropdown.options[ tasksDropdown.selectedIndex ].name;
+        document.getElementById("select_task_form").style.display="none";
+        document.getElementById("selected_task").style.display="block";
+        document.getElementById("task").innerHTML = ("Project : " + project + "\nTask : " + task);
+    }
+    
 }
 
 stopStartBtn.onclick = function(){

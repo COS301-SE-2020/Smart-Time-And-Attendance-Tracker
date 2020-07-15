@@ -95,6 +95,7 @@ function getTasks() {
               var opt = document.createElement('option');
               opt.appendChild( document.createTextNode(obj.tasks[t].taskName) );
               opt.value = obj.tasks[t].ID;
+              opt.name = obj.tasks[t].projectName;
               tasksDropdown.appendChild(opt); 
             }
         }
