@@ -5,7 +5,9 @@
                       class="start-tracking"
                       id="addPro" 
                       matTooltip="Add a project"
-                      matTooltipPosition="right">
+                      matTooltipClass="action-tooltip"
+                      matTooltipPosition="right"
+                      (click)="open(addProjectModal)">
                 <mat-icon inline="true">add</mat-icon>
               </button>
         </h2>
@@ -23,13 +25,15 @@
                   <button mat-button class="pro-btn"
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
-                          matTooltipPosition="above">
+                          matTooltipPosition="above"
+                          (click)="open(editProjectModal)">
                           <mat-icon inline="true">edit</mat-icon>
                   </button>
                   <button mat-button class="pro-btn"
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
-                          matTooltipPosition="above">
+                          matTooltipPosition="above"
+                          (click)="open(deleteProjectModal)">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
                   </mat-panel-title>
@@ -279,3 +283,107 @@
 
     </section>
 </div>
+
+
+<!-- ADD PROJECT *******************************-->
+
+<ng-template #addProjectModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Add a project
+        <br><h4>Please enter the project details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="addProjectForm">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Project Name</mat-label>
+          <input matInput formControlName="name" placeholder="My Project" name = "name" required>
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="date" placeholder="My Project" name = "date" required>
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); addProject(addProjectForm.value)">Create Project</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- EDIT PROJECT *******************************-->
+
+<ng-template #editProjectModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit project
+        <br><h4>Please enter the new project details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="editProjectForm">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Project Name</mat-label>
+          <input matInput formControlName="name" placeholder="My Project" name = "name" required>
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="date" placeholder="My Project" name = "date" required>
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)">Save Changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- DELETE PROJECT *******************************-->
+
+<ng-template #deleteProjectModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Delete project
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      Are you sure you want to delete this project?
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject()">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->

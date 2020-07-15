@@ -255,6 +255,38 @@ section
     font-weight: bold
     color: #4c585b
 
+  .edit-btn
+    color: #4c585b90
+    text-transform: uppercase
+    font-size: 0.8em
+    line-height: normal
+    min-width: fit-content
+    margin-left: 0.6em
+    padding: 0.3em
+    border: 1px dashed #4c585b90
+    border-radius: 10em
+    visibility: hidden
+
+    mat-icon
+      font-size: 1.2em !important
+      vertical-align: top !important
+
+  li:hover 
+    .edit-btn
+      visibility: visible
+
+::ng-deep .entry-tooltip
+  background-color: #4c585b90
+  padding: 0.2em 0.3em
+
+::ng-deep .action-tooltip
+  background-color: #4c585b90
+  padding: 0.2em 0.3em
+
+  mat-icon
+    font-size: 1.2em !important
+    vertical-align: top !important
+
 mat-card
   width: 140%
 

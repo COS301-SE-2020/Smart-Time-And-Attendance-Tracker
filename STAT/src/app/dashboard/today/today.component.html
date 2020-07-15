@@ -6,6 +6,7 @@
       <button mat-mini-fab (click)="open(trackingModal)" 
             class="start-tracking" 
             matTooltip="Add a tracking entry"
+            matTooltipClass="action-tooltip"
             matTooltipPosition="right">
         <mat-icon inline="true">add</mat-icon>
       </button>
@@ -94,7 +95,14 @@
             <span class="tag numEntries">3</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Coding <span class="float-right">06:20:20</span></li>
+            <li>Coding
+              <button mat-button class="edit-btn"
+                      matTooltip="Edit"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="right">
+                      <mat-icon inline="true">edit</mat-icon>
+              </button>
+              <span class="float-right">06:20:20</span></li>
             <li>Browser - Firefox <span class="float-right">01:09:21</span></li>
             <li>Tutorials <span class="float-right">00:30:55</span></li>
           </ul>

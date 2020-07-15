@@ -139,6 +139,9 @@ mat-divider
   min-width: fit-content
   margin-left: 1.5em
 
+  &:focus
+    outline: none
+
   mat-icon
     font-size: 1.2em !important
     vertical-align: top !important
@@ -172,8 +175,12 @@ mat-divider
 
 ::ng-deep .pro-tooltip
   background-color: #4c585b90
-  padding: 0.2em 0.3em
-  margin-bottom: 0
+  padding: 0.3em
+  margin-bottom: 0.5em !important
+
+::ng-deep .action-tooltip
+  background-color: #4c585b90
+  padding: 0.3em
 
 .profile-pic
   width: 40px
@@ -193,6 +200,10 @@ mat-divider
   text-align: center
   margin-left: 0.3em !important
   vertical-align: top
+
+  &:focus
+    border: none !important
+    outline: none
 
 #addPro
   font-size: 0.7em
@@ -229,5 +240,31 @@ mat-accordion .tasks
   .tag-ns
     background-color: #ff288540
     color: #ff2885
+
+// ******************************************************************************************
+
+// MODAL ************************************************************************************
+
+.modal-title
+  margin-bottom: 0
+
+.modal-header 
+  button:focus, button:active, button
+    border: none !important
+    outline: none
+    background-color: transparent !important
+
+  mat-icon 
+    font-size: 1.5em
+
+.modal-footer 
+  padding-left: 16px
+
+  #toggle
+    padding-right: 5em
+
+  button
+    font-size: 1em
+    margin-left: 0.5em
 
 // ******************************************************************************************
