@@ -27,42 +27,71 @@ function showTime() {
 }
 var SelectTask = document.getElementById("select_task");
 
-var stopTimer = document.getElementById("stop");
-var startTimer = document.getElementById("start");
+var stopStartBtn = document.getElementById("start_stop");
+var pauseResumeBtn = document.getElementById("pause_resume");
+
+//var startTimer = document.getElementById("start");
 setInterval(showTime, 1000);
 
 SelectTask.onclick = function() {
+    alert(SelectTask.name);
     var task = "abc";
     document.getElementById("select_task_form").style.display="none";
     document.getElementById("selected_task").style.display="block";
     document.getElementById("task").innerHTML = ("Task : " + task);
 }
 
-stopTimer.onclick = function(){
-    var now  = new Date();
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        currentID = tabs[0].id;
-        var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
-        url = url.split("://")[1];
-        url = url.split("/")[0];
-        console.log("Stopeed tracking " + url);
-        //AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
-        var success = true;//getStatus();
-        console.log("success " + success);
-        if(success) {
-            var description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
-            chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
-            startTimer.style.display = "block";
-            stopTimer.style.display = "none";
-            chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
-        }
-        else {
-            //error occured
-        }
-        
-    });   
+stopStartBtn.onclick = function(){
+    //alert(stopStartBtn.name + "  " + stopStartBtn.value + "  " + stopStartBtn.innerHTML);
+    //if(stopStartBtn.name == "stop")
+    if(getCookie("stop") == "false")
+    {
+        var now  = new Date();
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+            currentID = tabs[0].id;
+            var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
+            url = url.split("://")[1];
+            url = url.split("/")[0];
+            console.log("Stopeed tracking " + url);
+            //AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
+            var success = true;//getStatus();
+            console.log("success " + success);
+            if(success) {
+                var description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+                chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
+                //startTimer.style.display = "block";
+                //stopTimer.style.display = "none";
+                setCookie("stop", "true", 1); 
+                stopStartBtn.name = "start";
+                stopStartBtn.innerHTML = "Start";
+                chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
+            }
+            else {
+                //error occured
+            }
+            
+        });   
+    }
+    else{
+        var now  = new Date();
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+            currentID = tabs[0].id;
+            var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
+            AddTimeEntry(url, now, now, currentID);
+            url = url.split("://")[1];
+            url = url.split("/")[0];
+            console.log("Started tracking " + url);
+            chrome.extension.getBackgroundPage().History[currentID][0][0] = now;
+            //stopTimer.style.display = "block";
+            //startTimer.style.display = "none";
+            setCookie("stop", "false", 1); 
+            stopStartBtn.name = "stop";
+            stopStartBtn.innerHTML = "Stop";
+        });   
+    }
 }
 
+/*
 startTimer.onclick = function(){
     var now  = new Date();
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -77,22 +106,28 @@ startTimer.onclick = function(){
         startTimer.style.display = "none";
     });   
 }
-
+*/
 //setInterval(showTime, 1000);    //calling function every second
 
 function displayButton() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
-        if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
+    //alert(stopStartBtn.name + "  " + stopStartBtn.value + "  " + stopStartBtn.innerHTML);
+
+        if(getCookie("stop") == "false")
         { 
-            stopTimer.style.display = "block";
-            startTimer.style.display = "none";
+            stopStartBtn.name = "stop";
+            stopStartBtn.innerHTML = "Stop";
+            //stopTimer.style.display = "block";
+            //startTimer.style.display = "none";
         }
         else
         {
-            startTimer.style.display = "block";
-            stopTimer.style.display = "none";
+            stopStartBtn.name = "start";
+            stopStartBtn.innerHTML = "Start";
+            //startTimer.style.display = "block";
+            //stopTimer.style.display = "none";
         }
     }); 
 }
-//displayButton();
+displayButton();

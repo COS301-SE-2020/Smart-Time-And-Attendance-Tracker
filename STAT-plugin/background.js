@@ -112,7 +112,7 @@ function HandleUpdate(tabId, changeInfo, tab) {
 
   setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
 
-    
+  var stopStartBtn = document.getElementById("start_stop");
   function pause(){
     chrome.tabs.query({ active: true }, function (tabs) {
       currentID = tabs[0].id;
@@ -130,7 +130,8 @@ function HandleUpdate(tabId, changeInfo, tab) {
           }
         }
         else{ //active tab
-          if(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) && chrome.extension.getBackgroundPage().History[currentID][0][2] != "" && getCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1])) {    //pause timer
+          //alert(getCookie("stop"));
+          if(isString(chrome.extension.getBackgroundPage().History[tabID][0][0]) && getCookie("stop") == "false" && chrome.extension.getBackgroundPage().History[currentID][0][2] != "" && getCookie("historyTime"+chrome.extension.getBackgroundPage().History[tabID][0][1])) {    //pause timer
             chrome.extension.getBackgroundPage().History[tabID][0][0] = now;
           }
         }

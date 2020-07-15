@@ -42,7 +42,7 @@ userLogin.onclick = function(){
                 setCookie("email", "data.email", 1);
                 console.log(data);
                 getTasks();
-
+                setCookie("stop", "false", 1); 
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.email;
                 document.getElementById("loginForm").style.display = "none";
