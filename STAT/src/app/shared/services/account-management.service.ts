@@ -42,7 +42,30 @@ export class AccountManagementService {
       headers: headers
     });
   }
-   
+  //Authenticate user (security admin)
+  public authenticate(values,userID){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.post('http://localhost:3000/api/user/authenticateUser',JSON.stringify(userID), {
+      headers: headers
+    });
+  }
+  //Reject user (security admin)
+  public reject(values, userID){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.post('http://localhost:3000/api/user/rejectUser', JSON.stringify(userID),{
+      headers: headers
+    });
+  }
+  //Get all unauthenticated users (security admin)
+  public getUnathenticatedUsers(values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.get('http://localhost:3000/api/user/getUnauthenticatedUsers', {
+      headers: headers
+    });
+  }
   // edit profile
 
   // edit settings
