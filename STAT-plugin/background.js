@@ -32,6 +32,7 @@ function Update(t, tabId, url) {
     }
     chrome.extension.getBackgroundPage().History[tabId].unshift(["0:00", url, ""]);
     AddTimeEntry(url, t, t, tabId);
+    //alert(chrome.extension.getBackgroundPage().History[tabId][0][2]);
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
         history_limit = 23;

@@ -102,7 +102,6 @@ function login() {
 
 
 function AddTimeEntry(url,startTime, endTime,currentID ) {
-  alert("token " + getCookie("token"));
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
       var text = '{ "Description": "'+ url + '",'
@@ -114,12 +113,11 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
           + '}';
 
       http.open('POST', apiURL, true);
-      if(token == "")
-          login();
+
       http.setRequestHeader('Content-type', 'application/json');
       http.setRequestHeader("authorization", "token "+getCookie("token"));
+
       http.onreadystatechange = function() {
-          console.log(http.readyState + " " + http.status);
           if(http.readyState == 4 && http.status == 200) {
               const obj = JSON.parse(http.responseText);
               chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
@@ -134,7 +132,6 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
           }
       }
       http.send(text);
-    
 }
 
 function getStatus() {
