@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
 const RoleHelper =require('../helpers/role.helper');
+const TeamHelper =require('../helpers/team.helper');
 
 //const request = require('request');
 
@@ -208,5 +209,36 @@ module.exports.remove = (req, res, next) => {
         else
             return res.status(200).json({message: 'User removed'});
                
+    });
+}
+const TeamHelper =require('../helpers/project.helper');
+
+module.exports.getTasks = (req, res, next) => {
+    UserModel.findOne({ _id: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            
+            getTasksOfTeam.getTasksOfTeam(result.Team[0],(err,val)=>
+                 {
+                     if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                    else if(val == false) 
+                        return res.status(404).json({ message: 'Role not found' });
+                    else 
+                    {
+                        rolesOfUser.push(val);
+                        if(rolesOfUser.length == result.Role.length)
+                        {
+                            return res.status(200).json({roles : rolesOfUser});
+                        }
+                    }
+                });
+        }
     });
 }
