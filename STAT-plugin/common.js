@@ -74,53 +74,36 @@ userLogin.onclick = function(){
         http.send(userData);
 }
 
-
-/*
-function login() {
-    if(token == ""){
-        var http = new XMLHttpRequest();
-        var url = 'http://localhost:3000/api/user/login';
-        http.open('POST', url, true);
-        http.setRequestHeader('Content-type', 'application/json');
-        http.onreadystatechange = function() {
-            if(http.readyState == 4 && http.status == 200) {
-                var data = JSON.parse(http.responseText);
-                token = data.token;
-                // get user name and surname using token and store in maybe a cookie
-                return true;
-            }
-            else {
-                console.log(http.responseText);     //error => should not track time if user not logined
-                return false;
-            }
-        }
-        var text = '{ "email":"tester1@gmail.com" , "password":"Abcd@1234" }';
-        http.send(text);
-    }
-} 
-*/
 getTasks();
 function getTasks() {
-  //alert("ax");
-  
-  var http = new XMLHttpRequest();
-  var apiURL = 'http://localhost:3000/api/user/getTasks';
+  tasksDropdown = document.getElementById("tasks");
+  if(tasksDropdown.childElementCount == 0)
+  {
+    var http = new XMLHttpRequest();
+    var apiURL = 'http://localhost:3000/api/user/getTasks';
 
-  var text = '{ "token": "'+ getCookie("token") + '"' + '}';
-  http.open('POST', apiURL, true);
+    var text = '{ "token": "'+ getCookie("token") + '"' + '}';
+    http.open('POST', apiURL, true);
 
-  http.setRequestHeader('Content-type', 'application/json');
-  http.setRequestHeader("authorization", "token "+getCookie("token"));
-  http.onreadystatechange = function() {
-      if(http.readyState == 4 && http.status == 200) {
-          const obj = JSON.parse(http.responseText);
-          alert(obj.tasks[0].ID);
-      }
-      else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-          console.log(http.responseText);
-      }
+    http.setRequestHeader('Content-type', 'application/json');
+    http.setRequestHeader("authorization", "token "+getCookie("token"));
+    http.onreadystatechange = function() {
+        if(http.readyState == 4 && http.status == 200) {
+            const obj = JSON.parse(http.responseText);
+            for( t in obj.tasks)
+            {
+              var opt = document.createElement('option');
+              opt.appendChild( document.createTextNode(obj.tasks[t].taskName) );
+              opt.value = obj.tasks[t].ID;
+              tasksDropdown.appendChild(opt); 
+            }
+        }
+        else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+            console.log(http.responseText);
+        }
+    }
+    http.send(text);
   }
-  http.send(text);
 }
 
 
