@@ -61,8 +61,8 @@ section
   font-weight: normal !important
 
 mat-divider
-  margin-bottom: 1.5em
-  margin-top: 1.5em
+  margin-bottom: 1em
+  margin-top: 1em
   border-top-color: #4c585b30
 
 #tasks .tasks
@@ -122,23 +122,58 @@ mat-divider
 
 // PROJECTS *********************************************************************************
 
+.numTasks
+  margin-right: 1em !important
+
 .due-date
   padding-right: 1em
   color: #4c585b90
   font-size: 0.9em
 
-.float-right button
+.tasks button, .float-right button, .pro-btn
   padding: 0
   color: #4c585b90
   text-transform: uppercase
   font-size: 0.8em
+  line-height: normal
+  min-width: fit-content
+  margin-left: 1.5em
 
   mat-icon
     font-size: 1.2em !important
     vertical-align: top !important
 
+.pro-btn
+  margin-left: 0
+  margin-right: 0.5em
+  padding: 0.2em 0.3em
+  border: 1px dashed #4c585b90
+  border-radius: 10em
+
+.tasks 
+  .pro-btn
+    font-size: 0.8em
+    padding: 0.3em
+    margin-left: 0
+    margin-right: 0.6em
+
+  li button:nth-child(1)
+    margin-left: 0.8em
+
+.tasks button, .pro-btn
+  visibility: hidden
+  
+.tasks li:hover, mat-expansion-panel-header:hover
+  button
+    visibility: visible
+
   &:hover
     background-color: rgab(0,0,0,0) !important
+
+::ng-deep .pro-tooltip
+  background-color: #4c585b90
+  padding: 0.2em 0.3em
+  margin-bottom: 0
 
 .profile-pic
   width: 40px

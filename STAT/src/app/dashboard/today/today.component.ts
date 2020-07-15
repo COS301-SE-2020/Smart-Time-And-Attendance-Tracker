@@ -12,7 +12,7 @@ export class TodayComponent implements OnInit {
 
   panelOpenState = false;
   closeResult: string;
-  autoTracking = false;
+  autoTracking = true;
 
   ngOnInit(): void {
   }

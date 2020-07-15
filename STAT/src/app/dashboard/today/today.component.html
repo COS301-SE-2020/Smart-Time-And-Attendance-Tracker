@@ -2,7 +2,14 @@
 
   <!-- CURRENTLY TRACKING -->
   <section id="currently-tracking" class="col-6 float-left">
-    <h2>Currently Tracking</h2>
+    <h2>Currently Tracking
+      <button mat-mini-fab (click)="open(trackingModal)" 
+            class="start-tracking" 
+            matTooltip="Add a tracking entry"
+            matTooltipPosition="right">
+        <mat-icon inline="true">add</mat-icon>
+      </button>
+    </h2>
     <div>
       <!-- ENTRIES -->
       <ngb-carousel [showNavigationArrows]="false" interval="0">
@@ -74,14 +81,7 @@
       </div>
     </div>
 
-    <h2>This Week
-      <button mat-mini-fab (click)="open(manualModal)" 
-            class="start-tracking" 
-            matTooltip="Add a tracking entry"
-            matTooltipPosition="right">
-        <mat-icon inline="true">add</mat-icon>
-      </button>
-    </h2>
+    <h2>This Week</h2>
 
     <div class="scroll">
       <mat-accordion>
@@ -173,7 +173,7 @@
 </div>
 
 <!-- MANUAL TRACKING -->
-<ng-template #manualModal let-modal id="manual-tracking">
+<ng-template #trackingModal let-modal id="tracking-form">
   <div class="modal-content">
     <div class="modal-header">
       <h2 *ngIf="autoTracking==false" class="modal-title">Create an entry
@@ -265,7 +265,7 @@
 
     <div class="modal-footer">
       <div id="toggle" class="float-left">
-       <mat-slide-toggle (click)="modalForm()">Automatic tracking</mat-slide-toggle>
+       <mat-slide-toggle checked="checked" (click)="modalForm()">Automatic tracking</mat-slide-toggle>
       </div>
       <button *ngIf="autoTracking==false" mat-raised-button color="primary" (click)="modal.close('Save click')">Create an Entry</button>
       <button *ngIf="autoTracking==true" mat-raised-button color="primary" (click)="modal.close('Save click')">Start Tracking</button>

@@ -20,16 +20,41 @@
                   <mat-panel-title>
                     Project Name
                   <span class="tag numTasks">3 tasks</span>
+                  <button mat-button class="pro-btn"
+                          matTooltip="Edit"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above">
+                          <mat-icon inline="true">edit</mat-icon>
+                  </button>
+                  <button mat-button class="pro-btn"
+                          matTooltip="Delete"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above">
+                          <mat-icon inline="true">delete</mat-icon>
+                  </button>
                   </mat-panel-title>
-                <span class="due-date float-right">Due July 21, 2020</span>                
-
+                  
+                <span class="due-date float-right">Due July 21, 2020</span>      
                 </mat-expansion-panel-header>
-
+                
                 <mat-divider></mat-divider><br>
 
                 <!-- tasks -->
                 <ul class="tasks">
-                  <li>Task 1 <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
+                  <li>Task 1
+                    <button mat-button class="pro-btn"
+                            matTooltip="Edit"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="above">
+                            <mat-icon inline="true">edit</mat-icon>
+                    </button>
+                    <button mat-button class="pro-btn"
+                            matTooltip="Delete"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="above">
+                            <mat-icon inline="true">delete</mat-icon>
+                    </button>
+                     <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
                   <mat-divider></mat-divider>
                   <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
                   <mat-divider></mat-divider>
@@ -40,20 +65,27 @@
                 <!-- team -->
                 <mat-action-row>
                   <img
-                    matTooltip={{name}} matTooltipPosition="below"
+                    matTooltip={{name}} 
+                    matTooltipClass="pro-tooltip"
+                    matTooltipPosition="below"
                     src="../../../assets/profilePicDefault.jpg" 
                     class="profile-pic" alt="Profile Picture">
                   <img
-                    matTooltip="Zac Efron" matTooltipPosition="below"
+                    matTooltip="Zac Efron" 
+                    matTooltipClass="pro-tooltip"
+                    matTooltipPosition="below"
                     src="../../../assets/proPic1.jpg" 
                     class="profile-pic" alt="Profile Picture">
                   <img
-                    matTooltip="Henry Cavill" matTooltipPosition="below"
+                    matTooltip="Henry Cavill" 
+                    matTooltipClass="pro-tooltip"
+                    matTooltipPosition="below"
                     src="../../../assets/proPic2.jpg" 
                     class="profile-pic" alt="Profile Picture">
                     <button mat-mini-fab
                             class="start-tracking addMember" 
                             matTooltip="Add team member"
+                            matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
                       <mat-icon inline="true">add</mat-icon>
                     </button>
@@ -72,7 +104,7 @@
 
               </mat-expansion-panel-header>
 
-              <mat-divider></mat-divider><br>
+              <mat-divider></mat-divider>
 
               <!-- tasks -->
               <ul class="tasks">
