@@ -25,9 +25,10 @@ var TaskSchema = new mongoose.Schema({
         type: Number
        // required : "Required"
     },
-    Completed:{
-        type: Boolean,
-        required : "Required"
+    Status:{
+        type: String,
+        enum : ['NOT STARTED', 'IN PROGRESS', 'COMPLETED'], 
+        default: 'NOT STARTED' 
     }
 });
 
