@@ -83,26 +83,20 @@ function getTasks() {
     var apiURL = 'http://localhost:3000/api/user/getTasks';
 
     var text = '{ "token": "'+ getCookie("token") + '"' + '}';
-    http.open('GET', apiURL, true);
+    http.open('POST', apiURL, true);
 
     http.setRequestHeader('Content-type', 'application/json');
     http.setRequestHeader("authorization", "token "+getCookie("token"));
     http.onreadystatechange = function() {
         if(http.readyState == 4 && http.status == 200) {
             const obj = JSON.parse(http.responseText);
-            for( p in obj.projects)
+            for( t in obj.tasks)
             {
-              for( t in obj.projects[p].tasks)
-              {
-                if(obj.projects[p].tasks[t].taskStatus != "COMPLETED")
-                {
-                  var opt = document.createElement('option');
-                  opt.appendChild( document.createTextNode( obj.projects[p].tasks[t].taskName) );
-                  opt.value = obj.projects[p].tasks[t].ID;
-                  opt.name = obj.projects[p].ProjectName;
-                  tasksDropdown.appendChild(opt); 
-                }
-              }
+              var opt = document.createElement('option');
+              opt.appendChild( document.createTextNode(obj.tasks[t].taskName) );
+              opt.value = obj.tasks[t].ID;
+              opt.name = obj.tasks[t].projectName;
+              tasksDropdown.appendChild(opt); 
             }
         }
         else if(http.readyState == 4 && http.status != 200) {  //error in recording time
