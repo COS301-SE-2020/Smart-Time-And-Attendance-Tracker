@@ -12,8 +12,10 @@ var TeamSchema = new mongoose.Schema({
     },
     TeamMembers:[
         { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'User',
+            _id : {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: 'User'
+            },
             Role: {
                 type: String
             }
@@ -21,4 +23,4 @@ var TeamSchema = new mongoose.Schema({
     ],
 });
 
-mongoose.model("Team", TeamSchema);
+mongoose.model("teams", TeamSchema);

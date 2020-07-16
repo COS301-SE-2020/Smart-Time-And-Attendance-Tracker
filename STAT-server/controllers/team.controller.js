@@ -1,5 +1,61 @@
 
 const mongoose = require("mongoose");
+const TeamModel = mongoose.model("teams");
+
+
+module.exports.assignProject = (req, res, next) => {
+    TeamModel.findOne({_id : req.body.teamID}, function(err, result) {
+        if(err) 
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result)
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else {
+            result.ProjectID = req.body.projectID;
+           
+            result.save((err, doc) => {
+                if(!err)
+                    return res.status(200).json({ message: 'Project assigned to team successfully', "TeamID": result._id });
+                else
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            });
+        }
+    });
+}
+
+module.exports.addTeamMember = (req, res, next) => {
+    TeamModel.findOne({_id : (req.body.teamID)}, function(err, result) {
+        if(err) 
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result)
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else {
+            result.TeamMembers.push( { _id: req.body.userID, Role: req.body.userRole } )
+            result.save((err, doc) => {
+                if(!err)
+                {
+                    req.TeamID = result._id;
+                    next();
+                    //return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
+                }
+                else
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            });
+        }
+    });
+}
+/*
+router.post("/add", (req, res) => {
+
+
+const mongoose = require("mongoose");
 const TeamModel = mongoose.model("Team");
 
 
@@ -10,7 +66,7 @@ module.exports.add = (req, res, next) => {
     for(var i=0; i< req.body.teamMembers.length; i++)
         teamMembers.push(req.body.teamMembers[i]);
     team.TeamMembers = teamMembers;
-    console.log( req.body.teamMembers.length);*/
+    console.log( req.body.teamMembers.length);
     team.save((err, doc) => {
         if(!err){
             return res.status(200).json({ TeamID : doc._id, message: 'Team Created' });
@@ -36,4 +92,4 @@ module.exports.add = (req, res, next) => {
     })
 });
 
-module.exports = router;*/
+*/
