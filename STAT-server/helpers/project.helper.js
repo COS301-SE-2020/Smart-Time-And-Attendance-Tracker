@@ -7,24 +7,33 @@ module.exports.getTasks = (id, done)=>{
         if(err) 
             done(err);
         else if (!result)
-            done(null,false);
+            done("Project not found.",false);
         else if(result)
         {
-            var values = [];
-            for(task in result.Tasks) 
+            var values = [], task=0, text="";
+            for(task =0; task<result.Tasks.length; task++) 
             {
                 TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
                     if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + error});
+                        done(err);
                     else if(val == false) 
-                        return res.status(404).json({ message: 'Role not found' });
+                        done(err,false);
                     else 
                     {
-                        values.push(val);                        
+                        values.push(val); 
+                        if(values.length == result.Tasks.length)
+                        {
+                            text = {
+                                'ID': result._id,
+                                'projectName': result.ProjectName,
+                                'tasks': values
+                            }
+                            done(null, text);
+                        }                       
                     }
                 });
             }
-            done(null, values);
+            
         }
            
         

@@ -7,6 +7,7 @@ const UserModel = mongoose.model("User");
 const RoleHelper =require('../helpers/role.helper');
 const TeamHelper =require('../helpers/team.helper');
 
+console.log("user controller");
 //const request = require('request');
 
 module.exports.login = (req, res, next) => {
@@ -114,6 +115,7 @@ module.exports.getName = (req, res, next) => {
 
 
 module.exports.getRoles = (req, res, next) => {
+    console.log("fd");
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
@@ -211,34 +213,35 @@ module.exports.remove = (req, res, next) => {
                
     });
 }
-const TeamHelper =require('../helpers/project.helper');
 
 module.exports.getTasks = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         
         else
         {
-            
-            getTasksOfTeam.getTasksOfTeam(result.Team[0],(err,val)=>
+            var projectsOfUser = [];
+            for(i=0; i<result.Team.length; i++)
+            {
+                TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
                  {
-                     if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + error});
-
-                    else if(val == false) 
-                        return res.status(404).json({ message: 'Role not found' });
+                    if(val == false) 
+                        return res.status(404).json({ message: err });
+                    else if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
                     else 
                     {
-                        rolesOfUser.push(val);
-                        if(rolesOfUser.length == result.Role.length)
+                        projectsOfUser.push(val);
+                        if(projectsOfUser.length == result.Team.length)
                         {
-                            return res.status(200).json({roles : rolesOfUser});
+                            return res.status(200).json({projects : projectsOfUser});
                         }
                     }
                 });
+            }
         }
     });
 }

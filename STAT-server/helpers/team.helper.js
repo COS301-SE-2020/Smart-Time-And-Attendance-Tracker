@@ -7,14 +7,14 @@ module.exports.getTasksOfTeam = (id, done)=>{
         if(err) 
             done(err);
         else if (!result)
-            done(null,false);
+            done("Team not found.",false);
         else if(result)
         {
             ProjectHelper.getTasks(result.ProjectID,(err,val)=> {
                 if(err)
-                    return res.status(500).send({message: 'Internal Server Error: ' + error});
+                    done(err);
                 else if(val == false) 
-                    return res.status(404).json({ message: 'Role not found' });
+                    done(err,false);
                 else 
                 {
                     done(null, val);

@@ -12,6 +12,7 @@ router.post("/user/register", user.register);
 router.post("/user/login", user.login);
 router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
+
 router.get("/user/getTasks",jwtHelper.verifyJWTtoken, user.getTasks);
 //router.get("/user/authenticateUser",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, user.authenticate);
 
@@ -25,3 +26,4 @@ router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.i
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 module.exports = router;
+console.log("router");
