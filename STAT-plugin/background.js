@@ -10,11 +10,11 @@ setInterval(UpdateBadges, 1000);
 chrome.tabs.onUpdated.addListener(HandleUpdate);
 chrome.tabs.onRemoved.addListener(HandleRemove);
 chrome.tabs.onReplaced.addListener(HandleReplace);
-var stopTimer = document.getElementById("stop");
+/*var stopTimer = document.getElementById("stop");
 var startTimer = document.getElementById("start");
 
 stopTimer.style.display = "block";
-startTimer.style.display = "none";
+startTimer.style.display = "none";*/
 
 function Update(t, tabId, url) {
     if (!url) {

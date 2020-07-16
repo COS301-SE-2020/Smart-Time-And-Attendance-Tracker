@@ -13,9 +13,9 @@ var userName="";
       document.getElementById("userName").innerHTML=getCookie("name");
       document.getElementById("userEmail").innerHTML=getCookie("email");
       document.getElementById("errorMessage").innerHTML= "";
-      document.getElementById("start").style.display  ="block";
-      document.getElementById("stop").style.display = "block";
-      document.getElementById("stop").style.visibility = "visible";
+      //document.getElementById("start").style.display  ="block";
+      //document.getElementById("stop").style.display = "block";
+      //document.getElementById("stop").style.visibility = "visible";
 
       ///call tracking function to start
       ////show starts and stop
@@ -23,11 +23,12 @@ var userName="";
   }
   else{  ///hide everything except the login form
       document.getElementById("errorMessage").innerHTML= "Login to start tracking";
-      document.getElementById("start").style.display = "none";
-      document.getElementById("stop").style.display  ="none";
+      //document.getElementById("start").style.display = "none";
+      //document.getElementById("stop").style.display  ="none";
       document.getElementById("popup").style.display = "none";
   }
 userLogin.onclick = function(){
+        console.log("sdvdsdfsdf");
         var http = new XMLHttpRequest();
         var url = 'http://localhost:3000/api/user/login';
         http.open('POST', url, true);
@@ -37,6 +38,7 @@ userLogin.onclick = function(){
             if(http.readyState == 4 && http.status == 200) {
                 var data = JSON.parse(http.responseText);
                 ////set name and token into cookies
+                console.log(data);
                 setCookie("token", data.token, 1);
                 setCookie("name", "data.name", 1);
                 setCookie("email", "data.email", 1);
@@ -73,6 +75,39 @@ userLogin.onclick = function(){
       // var userData = JSON.stringify({ "email":email, "password":password});
         http.send(userData);
 }
+
+/////get name and email
+function getUserName(){
+        var http = new XMLHttpRequest();
+        var url = 'http://localhost:3000/api/user/getName';
+        http.open('GET', url, true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function()
+        {
+            if(http.readyState == 4 && http.status == 200) {
+                var data = JSON.parse(http.responseText);
+                console.log(data);
+                setCookie("token", data.token, 1);
+                setCookie("name", "data.name", 1);
+                setCookie("email", "data.surname", 1);
+                console.log(data);
+                document.getElementById("userName").innerHTML=data.name;
+                document.getElementById("userEmail").innerHTML=data.surname;
+            }
+            else {
+                   var data = JSON.parse(http.responseText);
+                   document.getElementById("errorMessage").innerHTML=data.message;
+                   console.log(data);
+            }
+        }
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var userData = '{ "email": "'+ email + '",' + '"password": "'+ password + '"' +'}';
+        console.log(userData);
+      // var userData = JSON.stringify({ "email":email, "password":password});
+        http.send(userData);
+}
+
 
 getTasks();
 function getTasks() {
