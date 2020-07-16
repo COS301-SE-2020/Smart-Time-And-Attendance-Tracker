@@ -1,30 +1,26 @@
-const express = require("express");
-const router = express.Router();
+
 const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
-router.get("/", (req, res)=>{
-    res.send("Task controller");
-});
 
+/*
+  DESCRPTION
+*/
 
-router.post("/add", (req, res) => {
+module.exports.add = (req, res, next) => {
     var task = new TaskModel();
-    task.ID = db.Task.find().Count()+1;
-    task.ProjectID = req.body.projectID;
-    task.ClientName = req.body.clientName;
+    console.log(req.body);
     task.TaskName = req.body.taskName;
-    task.StartTime = req.body.startTime;
-    task.TimeSpent = req.body.timeSpent;
-    task.ExpectedCost = req.body.expectedCost;
-    task.MonetaryValue = req.body.monetaryValue;    
+    task.DueDate = req.body.dueDate;
+    task.StartDate = req.body.startDate;
+    task.TimeSpent = 0;
+    task.MonetaryValue = 0;
     task.save((err, doc) => {
         if(!err){
-            res.send("Created Task");
+            req.TaskID = doc._id;
+            next();
         }
         else{
-            res.send("Error Occured");
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
     })
-});
-
-module.exports = router;
+}

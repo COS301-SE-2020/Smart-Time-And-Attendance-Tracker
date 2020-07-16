@@ -9,8 +9,13 @@ var ProjectSchema = new mongoose.Schema({
         type: Number
         //required : "Required"
     },
+    StartDate:
+    {
+        type: String,
+        required : "Required"
+    },
     DueDate:{
-        type: Date,
+        type: String,
         required : "Required"
     },
     Tasks: [
@@ -24,8 +29,7 @@ var ProjectSchema = new mongoose.Schema({
         ref: 'Team' 
     },
     Completed:{
-        type: Boolean,  
-        required : "Required."
+        type: Boolean
     }
 });
 
