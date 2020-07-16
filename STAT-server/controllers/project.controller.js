@@ -1,13 +1,6 @@
-const express = require("express");
-const router = express.Router();
+
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
-
-
-const passport = require("passport");
-const bodyParser = require("body-parser");
-
-
 
 /**
  * receives project details
@@ -36,11 +29,46 @@ module.exports.add = (req, res, next) => {
 
     project.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ message: 'Created Project' });
+            return res.status(200).json({ ProjectID : _id, message: 'Project Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
     })
+}
+
+module.exports.addTask = (req, res, next) => {
+        ProjectModel.findOne({UserID : req.ID}, function(err, result) {
+        if(err) 
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result)
+        {
+            var userTimeEntry = new UserTimeEntryModel();
+            userTimeEntry.UserID = req.ID;
+            userTimeEntry.TimeEntries = [timeEntryDoc];
+            userTimeEntry.save((err, doc) => {
+            if(!err)
+                return res.status(200).json({ message: 'Time recorded successfully', "TimeEntryID": timeEntryDoc._id });
+            else 
+            {
+                if (err.code == 11000)
+                    res.status(409).send({message: 'Time record already exists'});
+                else
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                }
+            });
+        }
+        else {
+            result.TimeEntries.push(timeEntryDoc);
+            result.save((err, doc) => {
+                if(!err)
+                    return res.status(200).json({ message: 'Time recorded successfully', "TimeEntryID": timeEntryDoc._id });
+                else
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            });
+        }
+    });
 }
 

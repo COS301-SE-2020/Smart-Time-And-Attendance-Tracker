@@ -1,19 +1,6 @@
-const express = require("express");
-const router = express.Router();
+
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("Team");
-
-
-const passport = require("passport");
-const bodyParser = require("body-parser");
-
-
-
-router.get("/", (req, res)=>{
-    res.send("Team controller");
-});
-
-
 
 
 module.exports.add = (req, res, next) => {
@@ -27,7 +14,7 @@ module.exports.add = (req, res, next) => {
     console.log( req.body.teamMembers.length);
     team.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ message: 'Created Team' });
+            return res.status(200).json({ TeamID : _id, message: 'Team Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});
