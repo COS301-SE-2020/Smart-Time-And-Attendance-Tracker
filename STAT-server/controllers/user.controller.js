@@ -202,7 +202,7 @@ module.exports.authenticate = (req, res, next) => {
 }
 
 module.exports.addTeam = (req, res, next) => {
-    UserModel.findOne({_id : req.ID}, function(err, result) {
+    UserModel.findOne({_id : req.body.userID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
