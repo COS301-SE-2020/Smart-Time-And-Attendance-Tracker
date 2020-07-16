@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
 
+const ProjectHelper =  require('../helpers/project.helper');
 
 module.exports.assignProject = (req, res, next) => {
     TeamModel.findOne({_id : req.body.teamID}, function(err, result) {
@@ -11,16 +12,28 @@ module.exports.assignProject = (req, res, next) => {
         }
         else if (!result)
         {
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(404).send({message: 'Team not found'});
         }
         else {
             result.ProjectID = req.body.projectID;
            
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ message: 'Project assigned to team successfully', "TeamID": result._id });
-                else
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                {
+                    ProjectHelper.addTeam(result.Role[i],(err,val)=>
+                    {
+                        if(err)
+                           return res.status(500).send({message: 'Internal Server Error: ' + err});
+   
+                       else if(val == false) 
+                           return res.status(404).json({ message: 'Project not found' });
+                       else 
+                       {
+                        return res.status(200).json({ message: 'Project successfully assigned to team', TeamID: result._id });
+                       }
+                   });
+               }  
+
             });
         }
     });
@@ -34,7 +47,7 @@ module.exports.addTeamMember = (req, res, next) => {
         }
         else if (!result)
         {
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(404).send({message: 'Team not found'});
         }
         else {
             result.TeamMembers.push( { _id: req.body.userID, Role: req.body.userRole } )

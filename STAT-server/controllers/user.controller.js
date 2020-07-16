@@ -12,7 +12,7 @@ module.exports.login = (req, res, next) => {
     passport.authenticate('local', (err,user,info)=>{
         //error from passport
         if(err)
-            return res.status(500).json({message: 'Internal Server Error: ' + error});
+            return res.status(500).json({message: 'Internal Server Error: ' + err});
         //registered user
         else if(user) 
         {
@@ -41,7 +41,7 @@ module.exports.register = (req, res, next) => {
     }
     else{
             UserModel.findOne({ Email: req.body.email }, function(err, cons) { //check email duplicates
-                if (err) return res.status(500).send({message: 'Internal Server Error: ' + error});
+                if (err) return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                 if (cons){
                     return res.status(409).send({message: 'User already exists'});
@@ -62,7 +62,7 @@ module.exports.register = (req, res, next) => {
                             if (err.code == 11000)
                                 res.status(409).send({message: 'User already exists'});
                             else
-                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+                                return res.status(500).send({message: 'Internal Server Error: ' + err});
                         }
                     });
     
@@ -76,7 +76,7 @@ module.exports.register = (req, res, next) => {
 module.exports.getName = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         else
@@ -89,7 +89,7 @@ module.exports.getName = (req, res, next) => {
 module.exports.getRoles = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         
@@ -148,7 +148,7 @@ module.exports.getRoles = (req, res, next) => {
 module.exports.getUnauthenticatedUsers = (req, res, next) => {
     UserModel.find({  Authenticate : false},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'No unauthenticated users found' }); 
         else
@@ -167,7 +167,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
 module.exports.getAllUsers = (req, res, next) => {
     UserModel.find({  Authenticate : true},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'No users found' }); 
         else
