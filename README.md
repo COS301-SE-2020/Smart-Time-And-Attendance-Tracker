@@ -30,6 +30,8 @@ This is how the branches will be laid out
 ### GitHub Badges
 **Versions**\
 ![npm](https://img.shields.io/npm/v/npm)\
+**Languages\
+https://img.shields.io/badge/language-javascript-yellow.svg
 **Continuous Integration**\
 ![CI](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/CI/badge.svg)
 
