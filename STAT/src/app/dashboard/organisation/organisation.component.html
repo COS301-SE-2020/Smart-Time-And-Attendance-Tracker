@@ -1,40 +1,82 @@
 <div class="row">
-  <section id="requests">
+  <section id="organisation-header" class="col-6">
     <h2>Authorisation Requests</h2>
-    <mat-card class="request">
-      <mat-card-title>Name Surname</mat-card-title>
-      <mat-card-subtitle>email@gmail.com</mat-card-subtitle>
-      <form class="authentication-form" method="post">
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-card-footer>
-          <button mat-raised-button type="button" name="authorise">Authorise</button>
-          <button mat-raised-button type="button" name="reject">Reject</button>
-        </mat-card-footer>
-      </form>
-    </mat-card>
-    <mat-card class="request">
-      <mat-card-title>Name Surname</mat-card-title>
-      <mat-card-subtitle>email@gmail.com</mat-card-subtitle>
-      <form class="" action="index.html" method="post">
-        <input type="hidden" name="userid" value="1">
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-card-footer>
-          <button mat-raised-button type="button" name="authorise">Authorise</button>
-          <button mat-raised-button type="button" name="reject">Reject</button>
-        </mat-card-footer>
-      </form>
-    </mat-card>
-    <mat-card class="request">
-      <mat-card-title>Name Surname</mat-card-title>
-      <mat-card-subtitle>email@gmail.com</mat-card-subtitle>
-      <form class="" action="index.html" method="post">
-        <input type="hidden" name="userid" value="1">
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-card-footer>
-          <button mat-raised-button type="button" name="authorise">Authorise</button>
-          <button mat-raised-button type="button" name="reject">Reject</button>
-        </mat-card-footer>
-      </form>
-    </mat-card>
+    <div class="info row mb-2 mt-4 p-0">
+      <div id="total-requests" class="col-auto">
+        <b>182</b><br>REQUESTS
+      </div>
+      <div id="total-members" class="col-auto">
+        <b>746</b><br>MEMBERS
+      </div>
+      <div class="px-3 p-1">
+        <button mat-mini-fab id="sort-menu" [matMenuTriggerFor]="menu"><mat-icon>sort</mat-icon></button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Alphabetically</button>
+          <button mat-menu-item>Date (oldest first)</button>
+          <button mat-menu-item>Date (newest first)</button>
+        </mat-menu>
+      </div>
+    </div>
+    <div id="requests" class="pr-3 row scroll">
+      <mat-card class="request">
+        <mat-card-title>Jay Farsee</mat-card-title>
+        <mat-card-subtitle>jafar@yahoo.co.uk</mat-card-subtitle>
+        <form class="authentication-form" method="post">
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-card-footer class="px-3">
+            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
+            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
+          </mat-card-footer>
+        </form>
+      </mat-card>
+      <mat-card class="request">
+        <mat-card-title>Cruella DeVille</mat-card-title>
+        <mat-card-subtitle>cDevil@gmail.com</mat-card-subtitle>
+        <form class="" action="index.html" method="post">
+          <input type="hidden" name="userid" value="1">
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-card-footer class="px-3">
+            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
+            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
+          </mat-card-footer>
+        </form>
+      </mat-card>
+      <mat-card class="request">
+        <mat-card-title>Corporate Laymar</mat-card-title>
+        <mat-card-subtitle>lame@boringcompany.co</mat-card-subtitle>
+        <form class="" action="index.html" method="post">
+          <input type="hidden" name="userid" value="1">
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-card-footer class="px-3">
+            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
+            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
+          </mat-card-footer>
+        </form>
+      </mat-card>
+      <mat-card class="request">
+        <mat-card-title>Dorethy Miller</mat-card-title>
+        <mat-card-subtitle>doremi@abcghana.com</mat-card-subtitle>
+        <form class="" action="index.html" method="post">
+          <input type="hidden" name="userid" value="1">
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-card-footer class="px-3">
+            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
+            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
+          </mat-card-footer>
+        </form>
+      </mat-card>
+      <mat-card class="request">
+        <mat-card-title>Jeremy Dumont</mat-card-title>
+        <mat-card-subtitle>jdv@sundaymorningnews.co.za</mat-card-subtitle>
+        <form class="" action="index.html" method="post">
+          <input type="hidden" name="userid" value="1">
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-card-footer class="px-3">
+            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
+            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
+          </mat-card-footer>
+        </form>
+      </mat-card>
+    </div>
   </section>
 </div>
