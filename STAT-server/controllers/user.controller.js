@@ -238,7 +238,7 @@ module.exports.getTasks = (req, res, next) => {
                 TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
                  {
                     if(val == false) 
-                        return res.status(404).json({ message: err });
+                        return res.status(404).json({ message:  'No tasks found' });
                     else if(err)
                         return res.status(500).send({message: 'Internal Server Error: ' + err});
                     else 
