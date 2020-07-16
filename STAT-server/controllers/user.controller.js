@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
@@ -223,4 +222,35 @@ module.exports.isAuthenticated = (req, res, next) => {
         
     });
   
+}
+module.exports.getTasks = (req, res, next) => {
+    UserModel.findOne({ _id: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            var projectsOfUser = [];
+            for(i=0; i<result.Team.length; i++)
+            {
+                TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
+                 {
+                    if(val == false) 
+                        return res.status(404).json({ message: err });
+                    else if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else 
+                    {
+                        projectsOfUser.push(val);
+                        if(projectsOfUser.length == result.Team.length)
+                        {
+                            return res.status(200).json({projects : projectsOfUser});
+                        }
+                    }
+                });
+            }
+        }
+    });
 }
