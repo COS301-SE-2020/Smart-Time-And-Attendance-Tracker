@@ -8,7 +8,7 @@ const ProjectModel = mongoose.model("Project");
  * - 
  */
 module.exports.add = (req, res, next) => {
-    console.log("Hello");
+   
     var project = new ProjectModel();
     project.ProjectName = req.body.projectName;
     project.TimeSpent = 0;
@@ -40,7 +40,7 @@ module.exports.add = (req, res, next) => {
 }
 
 module.exports.addTask = (req, res, next) => {
-    console.log("Hello");
+
         ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
         {
@@ -48,7 +48,7 @@ module.exports.addTask = (req, res, next) => {
         }
         else if (!result)
         {
-           return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(404).send({message: "Project not found"});
         }
         else {
             result.Tasks.push(req.TaskID);
@@ -62,3 +62,19 @@ module.exports.addTask = (req, res, next) => {
     });
 }
 
+module.exports.complete = (req, res, next) => {
+
+    ProjectModel.updateOne({_id : req.body.projectID}, {Completed: true},function(err, result) {
+    if(err) 
+    {
+        return res.status(500).send({message: 'Internal Server Error: ' + err});
+    }
+    else if (!result)
+    {
+       return res.status(404).send({message: "Project not found"});
+    }
+    else 
+        return res.status(200).json({ ProjectID: req.body.projectID, message: 'Project marked as completed' });
+          
+});
+}

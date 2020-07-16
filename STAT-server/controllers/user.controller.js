@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
 const RoleHelper =require('../helpers/role.helper');
-
+const TeamHelper =require('../helpers/team.helper');
 //const request = require('request');
 
 module.exports.login = (req, res, next) => {
@@ -203,14 +203,14 @@ module.exports.addTeam = (req, res, next) => {
         }
         else if (!result)
         {
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(404).send({message: 'User not found'});
         }
         else {
             result.Team.push(req.TeamID)
             result.save((err, doc) => {
                 if(!err)
                 {
-                    return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
+                    return res.status(200).json({ TeamID: result._id, message: 'User successfully added to team' });
                 }
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -248,6 +248,8 @@ module.exports.isAuthenticated = (req, res, next) => {
   
 }
 module.exports.getTasks = (req, res, next) => {
+    let error = false;
+    let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -256,25 +258,30 @@ module.exports.getTasks = (req, res, next) => {
         
         else
         {
-            var projectsOfUser = [];
             for(i=0; i<result.Team.length; i++)
             {
                 TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
                  {
-                    if(val == false) 
-                        return res.status(404).json({ message:  'No tasks found' });
-                    else if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + err});
-                    else 
+                    if(err)
                     {
+                        error = true;
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    }
+                    else if(val)
+                    {
+                        
                         projectsOfUser.push(val);
-                        if(projectsOfUser.length == result.Team.length)
+                        if(i == result.Team.length)
                         {
-                            return res.status(200).json({projects : projectsOfUser});
+                            if(projectsOfUser.length > 0)
+                                return res.status(200).json({Projects : projectsOfUser});
+                            else    
+                                return res.status(404).json({ message:  'No tasks found' });
                         }
                     }
                 });
             }
+            
         }
     });
 }

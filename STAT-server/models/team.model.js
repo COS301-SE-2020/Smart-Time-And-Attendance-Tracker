@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 var TeamSchema = new mongoose.Schema({
-    Projects:{
+    ProjectID:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
     },    
