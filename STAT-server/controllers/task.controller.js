@@ -2,29 +2,36 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
+
+
+const passport = require("passport");
+const bodyParser = require("body-parser");
+
 router.get("/", (req, res)=>{
     res.send("Task controller");
 });
 
 
-router.post("/add", (req, res) => {
+
+
+/*
+  DESCRPTION
+*/
+
+
+module.exports.add = (req, res, next) => {
     var task = new TaskModel();
-    task.ID = db.Task.find().Count()+1;
-    task.ProjectID = req.body.projectID;
-    task.ClientName = req.body.clientName;
     task.TaskName = req.body.taskName;
-    task.StartTime = req.body.startTime;
+    task.DueDate = req.body.dueDate;
     task.TimeSpent = req.body.timeSpent;
-    task.ExpectedCost = req.body.expectedCost;
+    task.StartDate = req.body.startDate;
     task.MonetaryValue = req.body.monetaryValue;    
     task.save((err, doc) => {
         if(!err){
-            res.send("Created Task");
+            return res.status(200).send({message: 'Created Task'});
         }
         else{
-            res.send("Error Occured");
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
     })
-});
-
-module.exports = router;
+}
