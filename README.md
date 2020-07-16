@@ -31,10 +31,10 @@ This is how the branches will be laid out
 **Versions**\
 ![npm](https://img.shields.io/npm/v/npm)\
 **Languages**\
-![javascript](https://img.shields.io/badge/javascript-%2022.4%25-yellow.svg)\
-![typescript](https://img.shields.io/badge/typescript-%2035.3%25-blue.svg)\
-![html](https://img.shields.io/badge/html-%2025.0%25-red.svg)\
-![CSS](https://img.shields.io/badge/html-%2025.0%25-purple.svg)\
+![javascript](https://img.shields.io/badge/javascript-%2022.4%25-yellow.svg) 
+![typescript](https://img.shields.io/badge/typescript-%2035.3%25-blue.svg) 
+![html](https://img.shields.io/badge/html-%2025.0%25-red.svg) 
+![css](https://img.shields.io/badge/css-%2025.0%25-purple.svg)\
 **Continuous Integration**\
 ![CI](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/CI/badge.svg)
 
