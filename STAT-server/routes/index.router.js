@@ -52,7 +52,5 @@ router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdm
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 
-router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLead, team.add);
-
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 module.exports = router;
