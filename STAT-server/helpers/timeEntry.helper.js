@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const TimeEntryModel = mongoose.model("TimeEntry");
 
-module.exports.getTImeEntry = (id, done)=>{
+module.exports.getTimeEntry = (id, done)=>{
     TimeEntryModel.findOne({ _id: id},(err, result) => {
         if(err) 
             done(err);
@@ -12,5 +12,4 @@ module.exports.getTImeEntry = (id, done)=>{
         
     });
 }
-
 

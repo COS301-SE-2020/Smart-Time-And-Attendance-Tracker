@@ -126,7 +126,7 @@ module.exports.getRoles = (req, res, next) => {
                  RoleHelper.getRole(result.Role[i],(err,val)=>
                  {
                      if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + error});
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                     else if(val == false) 
                         return res.status(404).json({ message: 'Role not found' });
@@ -185,7 +185,7 @@ module.exports.getAllUsers = (req, res, next) => {
 //Request body - ID of user to authenticate
 //Returns - Succes or error message
 module.exports.authenticate = (req, res, next) => {
-    UserModel.update({ _id: req.body.UserID},{Authenticate: true},(err, result) => {
+    UserModel.updateOne({ _id: req.body.UserID},{Authenticate: true},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -200,7 +200,7 @@ module.exports.authenticate = (req, res, next) => {
 //Request body - ID of user to remove/reject
 //Returns - Succes or error message
 module.exports.remove = (req, res, next) => {
-    UserModel.remove({ _id: req.body.UserID},(err, result) => {
+    UserModel.removeOne({ _id: req.body.UserID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
