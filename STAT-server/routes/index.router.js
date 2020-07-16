@@ -37,15 +37,22 @@ router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, team.add);
 
-router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
-router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
-router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
-
 
 ////projects
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add);
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
 router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.complete);
 
+router.post("/project/uncomplete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.uncomplete);
+router.post("/project/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.update);
+router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add);
 
+
+router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
+router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
+router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
+
+router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLead, team.add);
+
+router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 module.exports = router;

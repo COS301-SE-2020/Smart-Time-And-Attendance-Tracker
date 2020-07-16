@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
 
+const ProjectHelper =  require('../helpers/project.helper');
 
 module.exports.assignProject = (req, res, next) => {
     
@@ -19,9 +20,21 @@ module.exports.assignProject = (req, res, next) => {
            
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ "TeamID": result._id, message: 'Project successfully assigned to team ' });
-                else
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                {
+                    ProjectHelper.addTeam(result.Role[i],(err,val)=>
+                    {
+                        if(err)
+                           return res.status(500).send({message: 'Internal Server Error: ' + err});
+   
+                       else if(val == false) 
+                           return res.status(404).json({ message: 'Project not found' });
+                       else 
+                       {
+                        return res.status(200).json({TeamID: result._id , message: 'Project successfully assigned to team'});
+                       }
+                   });
+               }  
+
             });
         }
     });
@@ -35,7 +48,7 @@ module.exports.addTeamMember = (req, res, next) => {
         }
         else if (!result)
         {
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(404).send({message: 'Team not found'});
         }
         else {
             result.TeamMembers.push( { _id: req.body.userID, Role: req.body.userRole } )

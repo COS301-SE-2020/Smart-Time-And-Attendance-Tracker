@@ -189,7 +189,6 @@ module.exports.getDailyTimeEntries = (req, res) => {
                     });
                 }
             }
-
     });
 }
 
