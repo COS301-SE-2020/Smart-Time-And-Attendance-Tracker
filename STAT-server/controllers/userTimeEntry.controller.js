@@ -18,6 +18,12 @@ module.exports.addTimeEntry = (req, res) => {
         timeEntry.ActiveTime = req.body.ActiveTime;
     else
         timeEntry.ActiveTime = 0;
+
+    if(req.body.MonetaryValue)
+        timeEntry.MonetaryValue = req.body.EndTMonetaryValueime;
+    else
+        timeEntry.MonetaryValue = 0;
+
     timeEntry.save((error, timeEntryDoc) => {
         if(!error)
         {
@@ -111,6 +117,15 @@ module.exports.updateTimeEntry = (req, res) => {
         if(req.body.Date)
         {
             TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{Date: req.body.Date},(err, result) => {
+                if (err) 
+                    error= err;
+                else if (!result)
+                    resultReturn = false;      
+            });
+        }
+        if(req.body.MonetaryValue)
+        {
+            TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{MonetaryValue: req.body.MonetaryValue},(err, result) => {
                 if (err) 
                     error= err;
                 else if (!result)
