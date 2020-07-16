@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +89,17 @@ export class AccountManagementService {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
     return this.http.get(this.ROOT_URL+ 'user/getTasks', {
+      headers: headers
+    });
+  }
+  //Get time entries for the day
+  public getTimeEntries(date, token){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+          let parameters = new HttpParams();
+          parameters = parameters.append('date', date);
+    return this.http.get(this.ROOT_URL+ 'userTimeEntry/getDailyTimeEntries',{ 
+      params: parameters,
       headers: headers
     });
   }
