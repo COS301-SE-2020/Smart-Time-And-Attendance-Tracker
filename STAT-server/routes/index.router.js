@@ -33,8 +33,8 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
 
 
-router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
-router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
+//router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
+//router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
@@ -44,8 +44,10 @@ router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdm
 ////projects
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLead, project.add);
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLead, task.add, project.addTask);
+router.delete("/project/deleteProject",  project.deleteProject);
 
+router.delete("/task/deleteTask",  task.deleteTask);
 
-router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLead, team.add);
+//router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLead, team.add);
 
 module.exports = router;

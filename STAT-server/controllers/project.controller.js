@@ -62,3 +62,33 @@ module.exports.addTask = (req, res, next) => {
     });
 }
 
+
+
+
+module.exports.deleteProject = (req, res) => {  
+    console.log(req.query.projectID);
+    ProjectModel.findOne({_id : req.query.projectID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'Project doesnt exist' }); 
+        else
+        {
+              
+            ProjectModel.deleteOne({_id: req.query.projectID},(err,val)=>{
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + error});
+                        else if (!val) 
+                            return res.status(404).json({ message: 'Project not found' });
+                        else 
+                        {
+                            return res.status(200).json({ message: 'Project deleted successfully'});
+                        }
+                    });
+                
+            }
+
+    });
+}
+
+
