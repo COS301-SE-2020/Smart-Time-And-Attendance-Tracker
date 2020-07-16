@@ -1,13 +1,10 @@
-
 const mongoose = require("mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
 const RoleHelper =require('../helpers/role.helper');
-const TeamHelper =require('../helpers/team.helper');
 
-console.log("user controller");
 //const request = require('request');
 
 module.exports.login = (req, res, next) => {
@@ -34,26 +31,6 @@ module.exports.login = (req, res, next) => {
 
 }
 
-/*module.exports.isSecurityAdmin = (req, res, next) => {
-    if(req.Roles.includes(3)) 
-        next();
-    else
-        return res.status(403).json({ message: "Access denied"});
-    
-}*/
-/*module.exports.authenticate = (req, res, next) => {
-    UserModel.findOne({ ID: req.ID},(err, result) => {
-        if (err) 
-            return res.status(500).send({message: 'Internal Server Error'});
-        else if (!result)
-            return res.status(404).json({ message: 'User record not found' });
-        else{
-
-        }
-    });
-    
-}*/
-
 module.exports.register = (req, res, next) => {
     if(!( req.body.name &&  req.body.surname && req.body.email && req.body.password && req.body.passwordConf)) 
     {
@@ -63,9 +40,6 @@ module.exports.register = (req, res, next) => {
         return res.status(400).send({message: "Passwords do not match"});
     }
     else{
-        //UserModel.countDocuments({}, function(err, totalCount) { //get id
-            //var  currentID = totalCount+1;
-
             UserModel.findOne({ Email: req.body.email }, function(err, cons) { //check email duplicates
                 if (err) return res.status(500).send({message: 'Internal Server Error: ' + error});
 
@@ -94,9 +68,7 @@ module.exports.register = (req, res, next) => {
     
                 }
     
-            })
-            
-      // });
+            });
     }
 }
     
@@ -115,7 +87,6 @@ module.exports.getName = (req, res, next) => {
 
 
 module.exports.getRoles = (req, res, next) => {
-    console.log("fd");
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
@@ -154,7 +125,7 @@ module.exports.getRoles = (req, res, next) => {
                  RoleHelper.getRole(result.Role[i],(err,val)=>
                  {
                      if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + error});
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                     else if(val == false) 
                         return res.status(404).json({ message: 'Role not found' });
@@ -174,7 +145,6 @@ module.exports.getRoles = (req, res, next) => {
 }
 
 
-
 module.exports.getUnauthenticatedUsers = (req, res, next) => {
     UserModel.find({  Authenticate : false},(err, result) => {
         if (err) 
@@ -185,17 +155,38 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
         {
             UnauthenticatedUsers=[];
             for(var a=0; a<result.length; a++){
-                UnauthenticatedUsers.push({"ID":result[a]._id, "Email":result[a].Email, "Name":result[a].Name, "Surname":result[a].Surname});
+                UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
             return res.status(200).json({UnauthenticatedUsers});
         }
     });
 }
-
-module.exports.authenticate = (req, res, next) => {
-    UserModel.update({ _id: req.body.UserID},{Authenticate: true},(err, result) => {
+//Only a security admin can make this request
+//Parameters - None
+//Returns - Array with all authernticated users objects
+module.exports.getAllUsers = (req, res, next) => {
+    UserModel.find({  Authenticate : true},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'No users found' }); 
+        else
+        {
+            Users=[];
+            for(var a=0; a<result.length; a++){
+                Users.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
+            }
+            return res.status(200).json({Users});
+        }
+    });
+}
+//Only a security admin can make this request
+//Request body - ID of user to authenticate
+//Returns - Succes or error message
+module.exports.authenticate = (req, res, next) => {
+    UserModel.updateOne({ _id: req.body.UserID},{Authenticate: true},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' }); 
         else
@@ -204,16 +195,34 @@ module.exports.authenticate = (req, res, next) => {
     });
 }
 
+//Only a security admin can make this request
+//Request body - ID of user to remove/reject
+//Returns - Succes or error message
 module.exports.remove = (req, res, next) => {
-    UserModel.remove({ _id: req.body.UserID},(err, result) => {
+    UserModel.removeOne({ _id: req.body.UserID},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
         else
             return res.status(200).json({message: 'User removed'});
                
     });
 }
-
+//Checks if the user is authenticated
+//Returns - Value of Authenticated attribute
+module.exports.isAuthenticated = (req, res, next) => {
+    UserModel.findOne({ _id: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        else
+            return res.status(200).json({ authenticated: result.Authenticate});
+        
+    });
+  
+}
 module.exports.getTasks = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
