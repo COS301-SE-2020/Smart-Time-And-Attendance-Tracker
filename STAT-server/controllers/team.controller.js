@@ -30,7 +30,6 @@ module.exports.assignProject = (req, res, next) => {
 }
 
 module.exports.addTeamMember = (req, res, next) => {
-    console.log("aa")
     TeamModel.findOne({_id : (req.body.teamID)}, function(err, result) {
         if(err) 
         {
@@ -41,11 +40,14 @@ module.exports.addTeamMember = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else {
-            console.log(result);
             result.TeamMembers.push( { _id: req.body.userID, Role: req.body.userRole } )
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
+                {
+                    req.TeamID = result._id;
+                    next();
+                    //return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
+                }
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
             });

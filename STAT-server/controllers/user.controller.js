@@ -200,3 +200,28 @@ module.exports.authenticate = (req, res, next) => {
                
     });
 }
+
+module.exports.addTeam = (req, res, next) => {
+    UserModel.findOne({_id : req.ID}, function(err, result) {
+        if(err) 
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result)
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else {
+            result.Team.push(req.TeamID)
+            result.save((err, doc) => {
+                if(!err)
+                {
+                    return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
+                }
+                else
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            });
+        }
+    });
+}
+
