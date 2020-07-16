@@ -54,7 +54,7 @@ userLogin.onclick = function(){
                 ////show starts and stop
                  displayButton();
                  for(tabID in chrome.extension.getBackgroundPage().History) {
-                   alert("tab ID " + tabID);
+                  // alert("tab ID " + tabID);
                     AddTimeEntry(tabID[0][0], tabID[0][1], new Date(), tabID);
                  }
             }
@@ -76,7 +76,7 @@ userLogin.onclick = function(){
 
 getTasks();
 function getTasks() {
-  alert(tasksDropdown.childElementCount);
+ // alert(tasksDropdown.childElementCount);
   tasksDropdown = document.getElementById("tasks"); 
   if(tasksDropdown.childElementCount == 0)
   {
@@ -85,13 +85,13 @@ function getTasks() {
 
     var text = '{ "token": "'+ getCookie("token") + '"' + '}';
     http.open('GET', apiURL, true);
-    alert(apiURL);
+   // alert(apiURL);
     http.setRequestHeader('Content-type', 'application/json');
     http.setRequestHeader("authorization", "token "+getCookie("token"));
     http.onreadystatechange = function() {
-      alert(http.readyState + " " + http.status);
+      //alert(http.readyState + " " + http.status);
         if(http.readyState == 4 && http.status == 200) {
-          alert(http.responseText);
+         // alert(http.responseText);
             const obj = JSON.parse(http.responseText);
             if(http.readyState == 4 && http.status == 200) {
               setCookie("tasks", http.responseText, 1);

@@ -134,7 +134,7 @@ startTimer.onclick = function(){
 //setInterval(showTime, 1000);    //calling function every second
 
 function displayButton() {
-    alert(getCookie("tasks"));
+    //alert(getCookie("tasks"));
     if((getCookie("tasks")!=-1 || getCookie("tasks") != ""))
         displayOptions(getCookie("tasks"));
     else
