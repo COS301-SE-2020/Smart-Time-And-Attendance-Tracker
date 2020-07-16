@@ -3,8 +3,8 @@
   <!-- CURRENTLY TRACKING -->
   <section id="currently-tracking" class="col-6 float-left">
     <h2>Currently Tracking
-      <button mat-mini-fab (click)="open(trackingModal)" 
-            class="start-tracking" 
+      <button mat-mini-fab (click)="open(trackingModal)"
+            class="start-tracking"
             matTooltip="Add a tracking entry"
             matTooltipClass="action-tooltip"
             matTooltipPosition="right">
@@ -23,7 +23,7 @@
               <mat-divider [inset]="true"></mat-divider>
               <mat-card-footer>
                 <span>July 05, 2020 | 08:59</span>
-                <span class="float-right">00:13:31</span>
+                <span class="float-right">13h 31m</span>
                 <br>
                 <span class="float-left pro">Project Name</span>
                 <span class="float-left tag">Task Name</span>
@@ -36,7 +36,7 @@
               <mat-divider [inset]="true"></mat-divider>
               <mat-card-footer>
                 <span>July 05, 2020 | 19:23</span>
-                <span class="float-right">24:08:46</span>
+                <span class="float-right">24h 08m</span>
                 <br>
                 <span class="float-left pro">Project Name</span>
                 <span class="float-left tag">Task Name</span>
@@ -54,7 +54,7 @@
               <mat-divider [inset]="true"></mat-divider>
               <mat-card-footer>
                 <span>July 05, 2020 | 18:56</span>
-                <span class="float-right">00:01:53</span>
+                <span class="float-right">1m</span>
                 <br>
                 <span class="float-left pro">Project Name</span>
                 <span class="float-left tag">Task Name</span>
@@ -63,8 +63,8 @@
           </div>
         </ng-template>
       </ngb-carousel>
-      
-      
+
+
     </div>
   </section>
 
@@ -102,9 +102,9 @@
                       matTooltipPosition="right">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
-              <span class="float-right">06:20:20</span></li>
-            <li>Browser - Firefox <span class="float-right">01:09:21</span></li>
-            <li>Tutorials <span class="float-right">00:30:55</span></li>
+              <span class="float-right">6h 20m</span></li>
+            <li>Browser - Firefox <span class="float-right">1h 9m</span></li>
+            <li>Tutorials <span class="float-right">30m</span></li>
           </ul>
         </mat-expansion-panel>
 
@@ -117,9 +117,9 @@
             <span class="tag numEntries">3</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Coding <span class="float-right">06:20:20</span></li>
-            <li>Browser - Firefox <span class="float-right">01:09:21</span></li>
-            <li>Tutorials <span class="float-right">00:30:55</span></li>
+            <li>Coding <span class="float-right">6h 20m</span></li>
+            <li>Browser - Firefox <span class="float-right">1h 9m</span></li>
+            <li>Tutorials <span class="float-right">30h 55m</span></li>
           </ul>
         </mat-expansion-panel>
 
@@ -132,7 +132,7 @@
             <span class="tag numEntries">1</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">06:20:20</span></li>
+            <li>Research <span class="float-right">6h 20m</span></li>
           </ul>
         </mat-expansion-panel>
 
@@ -145,7 +145,7 @@
             <span class="tag numEntries">5</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">03:28:17</span></li>
+            <li>Research <span class="float-right">3h 28m</span></li>
           </ul>
         </mat-expansion-panel>
 
@@ -158,7 +158,7 @@
             <span class="tag numEntries">7</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">03:28:17</span></li>
+            <li>Research <span class="float-right">3h 28m</span></li>
           </ul>
         </mat-expansion-panel>
 
@@ -171,10 +171,10 @@
             <span class="tag numEntries">3</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">03:28:17</span></li>
+            <li>Research <span class="float-right">3h 28m</span></li>
           </ul>
         </mat-expansion-panel>
-        
+
       </mat-accordion>
     </div>
   </section>
@@ -203,7 +203,7 @@
           <mat-label>Description</mat-label>
           <input matInput type="text" placeholder="Research" name="description">
         </mat-form-field>
-    
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
           <mat-select>
@@ -212,7 +212,7 @@
             <mat-option value="">None</mat-option>
           </mat-select>
         </mat-form-field>
-    
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select>
@@ -221,36 +221,36 @@
             <mat-option value="">None</mat-option>
           </mat-select>
         </mat-form-field>
-    
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Monetary value</mat-label>
           <input matInput type="text" placeholder="0.00" name="monetary-value">
         </mat-form-field>
-    
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Date</mat-label>
           <input matInput type="date" placeholder="0.00" name="monetary-value">
         </mat-form-field>
-    
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Start time</mat-label>
           <input matInput type="time" placeholder="0.00" name="monetary-value">
         </mat-form-field>
-    
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>End time</mat-label>
           <input matInput type="time" placeholder="0.00" name="monetary-value">
         </mat-form-field>
       </form>
       <!-- END ***************************************************************** -->
-   
+
       <!-- MANUAL TRACKING FORM ************************************************ -->
       <form *ngIf="autoTracking==true" id="auto-tracking-form" method="post">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
           <input matInput type="text" placeholder="Research" name="description">
         </mat-form-field>
-  
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
           <mat-select>
@@ -259,7 +259,7 @@
             <mat-option value="">None</mat-option>
           </mat-select>
         </mat-form-field>
-  
+
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select>
@@ -279,7 +279,6 @@
       <button *ngIf="autoTracking==true" mat-raised-button color="primary" (click)="modal.close('Save click')">Start Tracking</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
-  
-  </div> 
+
+  </div>
 </ng-template>
-  

@@ -29,7 +29,7 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     })
 
-    this.active = 'today';
+    this.active = 'organisation';
 
     this.roles = localStorage.getItem('roles');
   }
