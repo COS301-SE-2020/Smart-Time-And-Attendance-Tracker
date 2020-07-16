@@ -138,7 +138,6 @@ export class SignUpComponent implements OnInit {
     this.service.signUp(form).subscribe(data => {
       localStorage.setItem('token', data['token']);
       localStorage.setItem('loggedIn', 'true');
-      this.headerService.isUserLoggedIn.next(true);
 
       this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
@@ -148,6 +147,7 @@ export class SignUpComponent implements OnInit {
     
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
+        this.headerService.isUserLoggedIn.next(true);
         this.router.navigate(['main']);
       });
     },
@@ -163,8 +163,6 @@ export class SignUpComponent implements OnInit {
       localStorage.setItem('token', data['token']);
       localStorage.setItem('loggedIn', 'true');
 
-      this.headerService.isUserLoggedIn.next(true);
-
       this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
@@ -173,6 +171,7 @@ export class SignUpComponent implements OnInit {
 
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
+        this.headerService.isUserLoggedIn.next(true);
         this.router.navigate(['main']);
         });
     },

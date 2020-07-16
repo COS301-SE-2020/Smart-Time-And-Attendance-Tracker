@@ -80,7 +80,15 @@ export class AccountManagementService {
   public getAllUsers(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.get(this.ROOT_URL+ 'user/geAllUsers', {
+    return this.http.get(this.ROOT_URL+ 'user/getAllUsers', {
+      headers: headers
+    });
+  }
+  //Get user's projects and tasks
+  public getProjectsAndTasks(values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+    return this.http.get(this.ROOT_URL+ 'user/getTasks', {
       headers: headers
     });
   }

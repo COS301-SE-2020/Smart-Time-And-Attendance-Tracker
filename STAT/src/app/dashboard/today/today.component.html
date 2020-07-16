@@ -198,16 +198,16 @@
     <div class="modal-body">
 
       <!-- MANUAL TRACKING FORM ************************************************ -->
-      <form *ngIf="autoTracking==false" id="manual-tracking-form" method="post">
+      <form [formGroup]="manualTrackingForm" *ngIf="autoTracking==false" id="manual-tracking-form" (ngSubmit)="addManualEntry(manualTrackingForm.value)">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
-          <input matInput type="text" placeholder="Research" name="description">
+          <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select>
-            <mat-option value="">None</mat-option>
+          <mat-select required>
+            <mat-option value="1">Project</mat-option>
             <mat-option value="">None</mat-option>
             <mat-option value="">None</mat-option>
           </mat-select>
@@ -215,7 +215,7 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
-          <mat-select>
+          <mat-select matSelect formControlName="TaskID" required>
             <mat-option value="">None</mat-option>
             <mat-option value="">None</mat-option>
             <mat-option value="">None</mat-option>
@@ -224,31 +224,31 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Monetary value</mat-label>
-          <input matInput type="text" placeholder="0.00" name="monetary-value">
+          <input matInput  formControlName="MonetaryValue" type="text" placeholder="0.00" name="monetary-value">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Date</mat-label>
-          <input matInput type="date" placeholder="0.00" name="monetary-value">
+          <input matInput formControlName="Date" type="date" placeholder="0.00" name="monetary-value" required>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Start time</mat-label>
-          <input matInput type="time" placeholder="0.00" name="monetary-value">
+          <input matInput formControlName="StartTime" type="time" placeholder="0.00" name="monetary-value" required>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>End time</mat-label>
-          <input matInput type="time" placeholder="0.00" name="monetary-value">
+          <input matInput formControlName="EndTime" type="time" placeholder="0.00" name="monetary-value" required>
         </mat-form-field>
       </form>
       <!-- END ***************************************************************** -->
    
-      <!-- MANUAL TRACKING FORM ************************************************ -->
-      <form *ngIf="autoTracking==true" id="auto-tracking-form" method="post">
+      <!-- AUTOMATIC TRACKING FORM ************************************************ -->
+      <form [formGroup]="automaticTrackingForm" *ngIf="autoTracking==true" id="auto-tracking-form" method="post">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
-          <input matInput type="text" placeholder="Research" name="description">
+          <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
         </mat-form-field>
   
         <mat-form-field appearance="standard" class="col-6">
@@ -262,7 +262,7 @@
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
-          <mat-select>
+          <mat-select matInput formControlName="TaskID" required>
             <mat-option value="">None</mat-option>
             <mat-option value="">None</mat-option>
             <mat-option value="">None</mat-option>
@@ -275,8 +275,8 @@
       <div id="toggle" class="float-left">
        <mat-slide-toggle checked="checked" (click)="modalForm()">Automatic tracking</mat-slide-toggle>
       </div>
-      <button *ngIf="autoTracking==false" mat-raised-button color="primary" (click)="modal.close('Save click')">Create an Entry</button>
-      <button *ngIf="autoTracking==true" mat-raised-button color="primary" (click)="modal.close('Save click')">Start Tracking</button>
+      <button *ngIf="autoTracking==false" mat-raised-button color="primary" (click)="addManualEntry(manualTrackingForm.value)" (click)="modal.close('Save click')" type = "submit">Create an Entry</button>
+      <button *ngIf="autoTracking==true" mat-raised-button color="primary" (click)="addAutomaticEntry(automaticTrackingForm.value)" (click)="modal.close('Save click')">Start Tracking</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
   

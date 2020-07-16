@@ -14,8 +14,7 @@ export class MainComponent implements OnInit {
     {value: '2', name: 'Project 2'}
   ];
 
-  roles : string
-
+  roles = localStorage.getItem('roles');
   // active tab
   active : string;
 
@@ -27,11 +26,10 @@ export class MainComponent implements OnInit {
 
     hamburger.addEventListener('click', () => {
       wrapper.classList.toggle('open')
-    })
+    });
 
     this.active = 'today';
 
-    this.roles = localStorage.getItem('roles');
   }
 
   // set active tab after component initialisation
