@@ -38,33 +38,20 @@ module.exports.add = (req, res, next) => {
 }
 
 module.exports.addTask = (req, res, next) => {
-        ProjectModel.findOne({UserID : req.ID}, function(err, result) {
+        ProjectModel.findOne({_id : req.body.ProjectID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else if (!result)
         {
-            var userTimeEntry = new UserTimeEntryModel();
-            userTimeEntry.UserID = req.ID;
-            userTimeEntry.TimeEntries = [timeEntryDoc];
-            userTimeEntry.save((err, doc) => {
-            if(!err)
-                return res.status(200).json({ message: 'Time recorded successfully', "TimeEntryID": timeEntryDoc._id });
-            else 
-            {
-                if (err.code == 11000)
-                    res.status(409).send({message: 'Time record already exists'});
-                else
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-                }
-            });
+           return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else {
-            result.TimeEntries.push(timeEntryDoc);
+            result.Tasks.push(req.TaskID);
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ message: 'Time recorded successfully', "TimeEntryID": timeEntryDoc._id });
+                    return res.status(200).json({ message: 'Task created and updated Project', "TaskID": req.TaskID });
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
             });
