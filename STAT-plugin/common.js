@@ -40,8 +40,8 @@ userLogin.onclick = function(){
                 ////set name and token into cookies
                 console.log(data);
                 setCookie("token", data.token, 1);
-                setCookie("name", "data.name", 1);
-                setCookie("email", "data.email", 1);
+                setCookie("name", data.name, 1);
+                setCookie("email", data.email, 1);
                 console.log(data);
                 getTasks();
                 setCookie("stop", "false", 1); 
@@ -50,6 +50,8 @@ userLogin.onclick = function(){
                 document.getElementById("loginForm").style.display = "none";
                 document.getElementById("popup").style.display = "block";
                 document.getElementById("errorMessage").innerHTML= "";
+                /////look for name 
+                getUserName();
                 ///show start and stop buttons
                  setInterval(showTime, 1000);
                 ////start tracking
@@ -75,37 +77,34 @@ userLogin.onclick = function(){
       // var userData = JSON.stringify({ "email":email, "password":password});
         http.send(userData);
 }
-
+//getUserName();
 /////get name and email
 function getUserName(){
         var http = new XMLHttpRequest();
         var url = 'http://localhost:3000/api/user/getName';
         http.open('GET', url, true);
-        http.setRequestHeader('Content-type', 'application/json');
+        http.setRequestHeader('Authorization', `Bearer ${getCookie("token")}` );
         http.onreadystatechange = function()
         {
             if(http.readyState == 4 && http.status == 200) {
                 var data = JSON.parse(http.responseText);
                 console.log(data);
                 setCookie("token", data.token, 1);
-                setCookie("name", "data.name", 1);
-                setCookie("email", "data.surname", 1);
+                setCookie("name", data.name, 1);
+                setCookie("email", data.surname, 1);
                 console.log(data);
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.surname;
             }
             else {
                    var data = JSON.parse(http.responseText);
+                   document.getElementById("errorMessage").style.display="block";
                    document.getElementById("errorMessage").innerHTML=data.message;
+                   
                    console.log(data);
             }
         }
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
-        var userData = '{ "email": "'+ email + '",' + '"password": "'+ password + '"' +'}';
-        console.log(userData);
-      // var userData = JSON.stringify({ "email":email, "password":password});
-        http.send(userData);
+        http.send();
 }
 
 
