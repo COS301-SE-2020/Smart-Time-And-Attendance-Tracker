@@ -77,7 +77,7 @@ userLogin.onclick = function(){
 getTasks();
 function getTasks() {
   alert(tasksDropdown.childElementCount);
-  tasksDropdown = document.getElementById("tasks");
+  tasksDropdown = document.getElementById("tasks"); 
   if(tasksDropdown.childElementCount == 0)
   {
     var http = new XMLHttpRequest();
@@ -93,14 +93,11 @@ function getTasks() {
         if(http.readyState == 4 && http.status == 200) {
           alert(http.responseText);
             const obj = JSON.parse(http.responseText);
-            for( t in obj.tasks)
-            {
-              var opt = document.createElement('option');
-              opt.appendChild( document.createTextNode(obj.tasks[t].taskName) );
-              opt.value = obj.tasks[t].ID;
-              opt.name = obj.tasks[t].projectName;
-              tasksDropdown.appendChild(opt); 
-            }
+            if(http.readyState == 4 && http.status == 200) {
+              setCookie("tasks", http.responseText, 1);
+              getCookie("tasks");
+              displayOptions(http.responseText)
+          }
         }
         else if(http.readyState == 4 && http.status != 200) {  //error in recording time
             console.log(http.responseText);
@@ -109,6 +106,37 @@ function getTasks() {
     }
     http.send(text);
   }
+}
+
+function UpdateTask(currentID, tasksDropdown) {
+  var taskID =  tasksDropdown.options[ tasksDropdown.selectedIndex ].value;
+  var TimeEntryID = chrome.extension.getBackgroundPage().History[currentID][0][2];
+  var http = new XMLHttpRequest();
+  var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
+  var text = '{ "TimeEntryID": "'+ TimeEntryID + '",'
+      + '"TaskID": "'+ taskID + '",' 
+      + '"Request": "update task"' 
+      + '}';
+
+  http.open('POST', apiURL, true);
+  http.setRequestHeader('Content-type', 'application/json');
+  http.setRequestHeader("authorization", "token "+getCookie("token"));
+  
+  http.onreadystatechange = function() {
+      if(http.readyState == 4 && http.status == 200) {
+        var task =  tasksDropdown.options[ tasksDropdown.selectedIndex ].innerHTML;
+        var project =  tasksDropdown.options[ tasksDropdown.selectedIndex ].name;
+        document.getElementById("select_task_form").style.display="none";
+        document.getElementById("selected_task").style.display="block";
+        document.getElementById("task").innerHTML = ("Project : " + project + "\nTask : " + task);
+        setCookie("tasks", ("Project : " + project + "\nTask : " + task));
+      }
+      else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+          console.log(http.responseText);
+          document.getElementById("task_error").innerHTML = http.responseText.message;
+      }
+  }
+  http.send(text);
 }
 
 

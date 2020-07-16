@@ -53,6 +53,7 @@ function HandleUpdate(tabId, changeInfo, tab) {
   function HandleRemove(tabId, removeInfo) {    //working
     save();
     setCookie("historyTime"+tabId, "", 1);
+    setCookie("tasks", "", 1);
     delete chrome.extension.getBackgroundPage().History[tabId];
   }
   

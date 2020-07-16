@@ -40,15 +40,31 @@ SelectTask.onclick = function() {
         document.getElementById("task_error").innerHTML = "Invalid Task Selected.";
     }
     else{
-        var task =  tasksDropdown.options[ tasksDropdown.selectedIndex ].innerHTML;
-        var project =  tasksDropdown.options[ tasksDropdown.selectedIndex ].name;
-        document.getElementById("select_task_form").style.display="none";
-        document.getElementById("selected_task").style.display="block";
-        document.getElementById("task").innerHTML = ("Project : " + project + "\nTask : " + task);
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+            currentID = tabs[0].id;
+            UpdateTask(currentID, tasksDropdown);
+        })
     }
     
 }
-
+    
+function displayOptions(data) {
+    const obj = JSON.parse(data);
+    for( p in obj.projects)
+              {
+                for( t in obj.projects[p].tasks)
+                {
+                  if(obj.projects[p].tasks[t].taskStatus != "COMPLETED")
+                  {
+                    var opt = document.createElement('option');
+                    opt.appendChild( document.createTextNode( obj.projects[p].tasks[t].taskName) );
+                    opt.value = obj.projects[p].tasks[t].ID;
+                    opt.name = obj.projects[p].projectName;
+                    tasksDropdown.appendChild(opt); 
+                  }
+                }
+              }
+}
 stopStartBtn.onclick = function(){
     //alert(stopStartBtn.name + "  " + stopStartBtn.value + "  " + stopStartBtn.innerHTML);
     //if(stopStartBtn.name == "stop")
@@ -118,6 +134,17 @@ startTimer.onclick = function(){
 //setInterval(showTime, 1000);    //calling function every second
 
 function displayButton() {
+    alert(getCookie("tasks"));
+    if((getCookie("tasks")!=-1 || getCookie("tasks") != ""))
+        displayOptions(getCookie("tasks"));
+    else
+    {
+        if(getCookie("tasks").includes("\n"))
+            document.getElementById("task").innerHTML = getCookie("tasks");
+        else
+            getTasks();
+    }
+       
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
     //alert(stopStartBtn.name + "  " + stopStartBtn.value + "  " + stopStartBtn.innerHTML);
@@ -139,3 +166,22 @@ function displayButton() {
     }); 
 }
 displayButton();
+
+
+function getCookie(cname) {
+    //alert(cname.includes("historyTime"));
+    if(document.cookie.includes(cname) == false && cname.includes("historyTime"))
+      return "0:0:0";
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
