@@ -76,6 +76,7 @@ userLogin.onclick = function(){
 
 getTasks();
 function getTasks() {
+  alert(tasksDropdown.childElementCount);
   tasksDropdown = document.getElementById("tasks");
   if(tasksDropdown.childElementCount == 0)
   {
@@ -83,12 +84,14 @@ function getTasks() {
     var apiURL = 'http://localhost:3000/api/user/getTasks';
 
     var text = '{ "token": "'+ getCookie("token") + '"' + '}';
-    http.open('POST', apiURL, true);
-
+    http.open('GET', apiURL, true);
+    alert(apiURL);
     http.setRequestHeader('Content-type', 'application/json');
     http.setRequestHeader("authorization", "token "+getCookie("token"));
     http.onreadystatechange = function() {
+      alert(http.readyState + " " + http.status);
         if(http.readyState == 4 && http.status == 200) {
+          alert(http.responseText);
             const obj = JSON.parse(http.responseText);
             for( t in obj.tasks)
             {
@@ -101,6 +104,7 @@ function getTasks() {
         }
         else if(http.readyState == 4 && http.status != 200) {  //error in recording time
             console.log(http.responseText);
+            document.getElementById("task_error").innerHTML = http.responseText;
         }
     }
     http.send(text);
