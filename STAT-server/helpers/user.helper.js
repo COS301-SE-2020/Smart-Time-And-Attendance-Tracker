@@ -33,7 +33,7 @@ module.exports.isTeamLead = (req, res, next) => {
         
         else
         {
-            if(result.Role.includes(1))
+            if(result.Role.includes(4))
                 next();
             else
                 return res.status(403).json({ message: "Access denied"});

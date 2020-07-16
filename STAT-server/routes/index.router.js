@@ -30,10 +30,10 @@ router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdm
 
 
 ////projects
-router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, project.add);
-router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, task.add, project.addTask);
+router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLead, project.add);
+router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLead, task.add, project.addTask);
 
 
-router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, team.add);
+router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLead, team.add);
 
 module.exports = router;

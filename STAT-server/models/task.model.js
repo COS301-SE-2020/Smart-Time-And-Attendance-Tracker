@@ -6,11 +6,11 @@ var TaskSchema = new mongoose.Schema({
         required : "Required"
     },
     StartDate:{
-        type: Date,
+        type: String,
         required : "Required"
     },
     DueDate:{
-        type: Date,
+        type: String,
         required : "Required"
     },
     TimeSpent:{

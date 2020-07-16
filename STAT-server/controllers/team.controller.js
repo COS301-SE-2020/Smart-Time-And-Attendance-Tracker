@@ -5,16 +5,15 @@ const TeamModel = mongoose.model("Team");
 
 module.exports.add = (req, res, next) => {
     var team = new TeamModel();
-    team.ProjectID = req.body.projectID;
-    team.TeamLeader = req.body.teamLeader;
-    var teamMembers = [];
+    team.TeamLeader = req.ID;
+    /*var teamMembers = [];
     for(var i=0; i< req.body.teamMembers.length; i++)
         teamMembers.push(req.body.teamMembers[i]);
     team.TeamMembers = teamMembers;
-    console.log( req.body.teamMembers.length);
+    console.log( req.body.teamMembers.length);*/
     team.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ TeamID : _id, message: 'Team Created' });
+            return res.status(200).json({ TeamID : doc._id, message: 'Team Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});

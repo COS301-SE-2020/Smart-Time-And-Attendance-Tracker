@@ -8,14 +8,16 @@ const ProjectModel = mongoose.model("Project");
  * - 
  */
 module.exports.add = (req, res, next) => {
-    console.log(req.body.Teams.length);
+    console.log("Hello");
     var project = new ProjectModel();
-    project.ProjectName = req.body.ProjectName;
-    project.TimeSpent = req.body.TimeSpent;
-    project.DueDate = req.body.DueDate;
-    project.Completed = req.body.Completed;
-    teams=[];
+    project.ProjectName = req.body.projectName;
+    project.TimeSpent = 0;
+    project.DueDate = req.body.dueDate;
+    project.StartDate = req.body.startDate;
+    project.Completed = false;
+    /*teams=[];
     tasks=[];
+
     for(var i=0; i< req.body.Teams.length; i++){
         teams.push(req.body.Teams[i]);
         console.log(req.body.Teams[i]);
@@ -25,11 +27,11 @@ module.exports.add = (req, res, next) => {
     for(var i=0; i< req.body.Tasks.length; i++){
         tasks.push(req.body.Tasks[i]);
     }
-    project.Tasks = tasks;
+    project.Tasks = tasks;*/
 
     project.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ ProjectID : _id, message: 'Project Created' });
+            return res.status(200).json({ ProjectID : doc._id, message: 'Project Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -38,7 +40,8 @@ module.exports.add = (req, res, next) => {
 }
 
 module.exports.addTask = (req, res, next) => {
-        ProjectModel.findOne({_id : req.body.ProjectID}, function(err, result) {
+    console.log("Hello");
+        ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -51,7 +54,7 @@ module.exports.addTask = (req, res, next) => {
             result.Tasks.push(req.TaskID);
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ message: 'Task created and updated Project', "TaskID": req.TaskID });
+                    return res.status(200).json({ TaskID: req.TaskID, message: 'Task created and added to project' });
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
             });
