@@ -17,6 +17,7 @@ $color-pink: #FF2885
 $color-grey: #4C585B
 $color-black: #232323
 $color-white: #FFFFFF
+$color-gold: #C5AE86
 $transparent: rgba(0, 0, 0, 0)
 
 $head-font: Righteous
@@ -58,10 +59,12 @@ a:hover
 
 a.mat-raised-button
   background-color: $color-white
+  color: $color-grey !important
   font-weight: bold
   margin: 0.5em
   right: 0em
   width: 6em
+  float: right
 
 // -------------------------------------------------------------------------------------------- B ----------
 
@@ -131,6 +134,7 @@ div
   margin: 0em
   padding: 0.5em
   text-align: left
+  width: 48%
 
   // >
     // img
@@ -140,14 +144,13 @@ div
     //   width: 30%
 
 #feature-cards
-  align-content: center
   display: flex
   flex-direction: row
   flex-wrap: wrap
   justify-content: center
-  margin: 0em auto
+  margin: 0 auto
   margin-bottom: 1.5em
-  max-width: 100%
+  width: 100%
   text-align: center
 
 #features
@@ -156,28 +159,83 @@ div
     background-color: $color-white
     border-radius: 2px
     display: inline-block
-    margin: 1.5em
+    margin: 1em 0
     padding: 1.5em
     padding: 1.5em
 
+    &:nth-child(even)
+      margin-left: 1.5em
+
+    &:nth-child(odd)
+      margin-left: 0
+
+    mat-card-content
+      font-size: 0.9em
+      
+
 footer
-  align-content: center
-  background-color: #222222
-  color: white
+  background-color: $color-white
+  color: $color-grey
   display: flex
-  flex-direction: column
-  height: auto
-  justify-content: center
+  height: 6em
   max-width: 100%
   text-align: center
   width: 100%
+  padding: 0
+  margin: 0 !important
 
   button
     margin: 1em
 
-#footer-logo
-  margin: 0em auto
-  width: 100%
+
+  #footer-logo
+    img 
+      height: 6em
+      width: auto
+      filter: invert(0.7)
+  
+  div
+    margin: 0
+    display: flex
+    align-items: center
+    justify-content: center
+    text-align: center
+
+  p
+    text-align: center
+
+    b
+      letter-spacing: 0.5em
+
+  .teamLinks
+    font-size: 2em
+
+    a
+      color: $color-white
+      transition: all 0.3s ease-in
+
+  #email
+    background-color: $color-gold
+    color: $color-white
+    transition: all 0.3s ease-in
+
+    &:hover
+      background-color: $color-white
+
+      a
+        color: $color-gold
+
+  #github
+    background-color: $color-grey
+    color: $color-white
+    transition: all 0.3s ease-in
+
+    &:hover
+      background-color: $color-white
+
+      a
+        color: $color-gold
+
 
 // -------------------------------------------------------------------------------------------- I ----------
 
@@ -307,7 +365,7 @@ section
   padding: 2.5em
   text-align: left
   right: 2em
-  width: 70%
+  width: 80%
 
   >
     h2
@@ -326,15 +384,88 @@ section
   margin: 0em auto
   top: 0em
 
+.social-icons
+    margin: 0 auto
+    padding: 0.5em
+    width: fit-content
+    
+
+    li
+      display: inline-block !important
+      list-style: none
+      margin: 0 0.5em
+      width: fit-content
+
+    a 
+      border-radius: 50%
+      text-decoration: none
+      color: $color-white
+      font-size: 1.5em
+      width: fit-content
+      text-align: center
+      transition: all 0.2s ease-in
+      display: inline-block
+
+    a:visited
+      color: $color-white
+
 // -------------------------------------------------------------------------------------------- T ----------
 
 .team-member
-  border-bottom: 1px solid white
-  text-align: center
+  text-align: center !important
+  display: inline-block
+  width: 20%
+  min-height: 50vh
+  font-size: 0.8em
+  justify-content: center
 
-  >
-    h2
-      text-align: left
+  p 
+    text-align: center
 
-    p
-      text-align: center
+  .avatar 
+    border-radius: 50%
+    padding: 1.5em
+    width: 80%
+    height: 80%
+    margin: 0 auto 1em auto
+
+  .badge
+    float: right !important
+    background-color: $color-black
+    text-transform: uppercase
+
+  &:nth-child(1)
+    .avatar
+      background-color: $color-lightblue
+
+    .social-icons a:hover
+      color: $color-lightblue
+
+  &:nth-child(2)
+    .avatar
+      background-color: $color-purple
+
+    .social-icons a:hover
+      color: $color-purple
+
+  &:nth-child(3)
+    .avatar
+      background-color: #28ccbf
+
+    .social-icons a:hover
+      color: #28ccbf
+
+  &:nth-child(4)
+    .avatar
+      background-color: $color-pink
+
+    .social-icons a:hover
+      color: $color-pink
+
+  &:nth-child(5)
+    .avatar
+      background-color: $color-blue
+
+    .social-icons a:hover
+      color: $color-blue
+
