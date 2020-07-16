@@ -28,6 +28,9 @@ const TimeEntrySchema = mongoose.Schema({
   Device: { 
     type: String,
     required: "Device required."
+  },
+  MonetaryValue: { 
+    type: Number
   }
 });
 
