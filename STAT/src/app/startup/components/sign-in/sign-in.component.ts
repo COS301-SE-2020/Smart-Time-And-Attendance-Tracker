@@ -148,12 +148,14 @@ export class SignInComponent implements OnInit {
       this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
-      this.router.navigate(['main']);
-      },
-      error => {
-        localStorage.setItem('loggedIn', 'false'); 
-        this.signInError = error.error.message;
       });
+      this.service.getName(localStorage.getItem('token')).subscribe(res => {
+        //console.log(res['roles']);
+        localStorage.setItem('name', res['name']);
+        localStorage.setItem('surname', res['surname']);
+        this.router.navigate(['main']);
+        });
+
     },
     error => {
       //console.log(error.error.message);  
@@ -174,12 +176,13 @@ export class SignInComponent implements OnInit {
      // console.log(res['roles']);
 
       localStorage.setItem('roles', res['roles']);
-      this.router.navigate(['main']);
-      },
-      error => {
-        localStorage.setItem('loggedIn', 'false'); 
-        this.signInError = error.error.message;
-      })
+      });
+      this.service.getName(localStorage.getItem('token')).subscribe(res => {
+        //console.log(res['roles']);
+        localStorage.setItem('name', res['name']);
+        localStorage.setItem('surname', res['surname']);
+        this.router.navigate(['main']);
+        });
     },
     error => {
 
