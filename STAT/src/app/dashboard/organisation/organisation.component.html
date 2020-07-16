@@ -18,22 +18,12 @@
       </div>
     </div>
     <div id="requests" class="pr-3 row scroll">
-      <mat-card class="request">
-        <mat-card-title>Jay Farsee</mat-card-title>
-        <mat-card-subtitle>jafar@yahoo.co.uk</mat-card-subtitle>
-        <form class="authentication-form" method="post">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Cruella DeVille</mat-card-title>
-        <mat-card-subtitle>cDevil@gmail.com</mat-card-subtitle>
+      <mat-spinner *ngIf="!requests" class="req-spinner"></mat-spinner>
+      <mat-card *ngFor="let r of requests" class="request">
+        <mat-card-title>{{r.name}} {{r.surname}}</mat-card-title>
+        <mat-card-subtitle>{{r.email}}</mat-card-subtitle>
         <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
+          <input type="hidden" name="userid" value="{{r.ID}}">
           <mat-divider [inset]="true"></mat-divider>
           <mat-card-footer class="px-3">
             <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
@@ -41,42 +31,7 @@
           </mat-card-footer>
         </form>
       </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Corporate Laymar</mat-card-title>
-        <mat-card-subtitle>lame@boringcompany.co</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Dorethy Miller</mat-card-title>
-        <mat-card-subtitle>doremi@abcghana.com</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Jeremy Dumont</mat-card-title>
-        <mat-card-subtitle>jdv@sundaymorningnews.co.za</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
+
     </div>
   </section>
 </div>

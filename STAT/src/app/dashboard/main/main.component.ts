@@ -14,11 +14,14 @@ export class MainComponent implements OnInit {
     {value: '2', name: 'Project 2'}
   ];
 
-  roles = localStorage.getItem('roles');
+  roles : string
   // active tab
   active : string;
 
-  constructor(public service : AccountManagementService) { }
+  constructor(public service : AccountManagementService) {
+    this.roles = localStorage.getItem('roles');
+
+   }
 
   ngOnInit(): void {
     const hamburger = document.getElementById('hamburger');
@@ -28,7 +31,7 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     });
 
-    this.active = 'organisation';
+    this.active = 'today';
 
   }
 

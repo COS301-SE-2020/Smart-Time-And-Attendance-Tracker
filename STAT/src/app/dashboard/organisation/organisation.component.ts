@@ -12,7 +12,10 @@ export class OrganisationComponent implements OnInit {
 
   panelOpenState = false;
 
+  requests : any
+
   ngOnInit(): void {
+    this.requests = this.getAllUnauthenticatedUsers()
   }
 
 authenticateUser(id)
@@ -42,7 +45,8 @@ rejectUser(id)
 getAllUnauthenticatedUsers()
 {
   this.service.getUnathenticatedUsers(localStorage.getItem('token')).subscribe((data) => {
-    console.log(data);
+    console.log(data['UnauthenticatedUsers']);
+    this.requests = data['UnauthenticatedUsers'];
   },
   error => {
     console.log(error);
