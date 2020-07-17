@@ -1,4 +1,4 @@
-name: app
+name: build
 on:
   push:
     branches: [ master, app-develop, app-feature-testing ]
@@ -6,7 +6,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  build-test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     defaults:
@@ -20,4 +20,5 @@ jobs:
       with:
         node-version: 12.x
     - run: npm install
+    - run: npm install -g @angular/cli
     - run: npm start
