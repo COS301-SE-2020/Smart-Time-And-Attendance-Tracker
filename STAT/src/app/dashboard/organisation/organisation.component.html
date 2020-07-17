@@ -9,27 +9,52 @@
         <b>746</b><br>MEMBERS
       </div>
       <div class="px-3 p-1">
-        <button mat-mini-fab id="sort-menu" [matMenuTriggerFor]="menu"><mat-icon>sort</mat-icon></button>
+        <button mat-mini-fab id="sort-menu" 
+                matTooltip="Sort"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="right"
+                [matMenuTriggerFor]="menu">
+          <mat-icon>sort</mat-icon>
+        </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>Alphabetically</button>
-          <button mat-menu-item>Date (oldest first)</button>
-          <button mat-menu-item>Date (newest first)</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('a')">Alphabetically</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('o')">Date (oldest first)</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">Date (newest first)</button>
         </mat-menu>
       </div>
     </div>
     <div id="requests" class="pr-3 row scroll">
       <mat-spinner *ngIf="!requests" class="req-spinner"></mat-spinner>
       <mat-card *ngFor="let r of requests" class="request">
+
+          <!-- details -->
         <mat-card-title>{{r.name}} {{r.surname}}</mat-card-title>
         <mat-card-subtitle>{{r.email}}</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="{{r.ID}}">
+        
+        <!--<form class="" action="index.html" method="post">
+          <input type="hidden" name="userid" value="{{r.ID}}">-->
           <mat-divider [inset]="true"></mat-divider>
           <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
+
+            <!-- accept -->
+            <button mat-mini-fab class="accept-request"
+                    matTooltip="Accept"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="authenticateUser(r.ID)">
+              <mat-icon inline="true">check</mat-icon>
+            </button>
+
+            <!-- reject -->
+            <button mat-mini-fab class="reject-request"
+                    matTooltip="Reject"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="rejectUser(r.ID)">
+              <mat-icon inline="true">close</mat-icon>
+            </button>
           </mat-card-footer>
-        </form>
+        <!--</form>-->
       </mat-card>
 
     </div>
