@@ -20,5 +20,4 @@ jobs:
       with:
         node-version: 12.x
     - run: npm install
-    - run: npm install -g @angular/cli
-    - run: ng test
+    - run: npm run test-headless
