@@ -29,14 +29,16 @@ This is how the branches will be laid out
 
 ### GitHub Badges
 **Versions**\
-![npm](https://img.shields.io/npm/v/npm)\
+![npm](https://img.shields.io/npm/v/npm) 
+![node](https://img.shields.io/badge/node-%3E%3D%2012.11.1-brightgreen)\
 **Languages**\
-![typescript](https://img.shields.io/badge/typescript-%2035.3%25-blue.svg)
-![javascript](https://img.shields.io/badge/javascript-%2022.4%25-yellow.svg)
-![html](https://img.shields.io/badge/html-%2025.0%25-red.svg)
+![typescript](https://img.shields.io/badge/typescript-%2035.3%25-blue.svg) 
+![javascript](https://img.shields.io/badge/javascript-%2022.4%25-yellow.svg) 
+![html](https://img.shields.io/badge/html-%2025.0%25-red.svg) 
 ![css](https://img.shields.io/badge/css-%2025.0%25-purple.svg)\
 **Testing**\
-![Angular](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/Angular/badge.svg)
+![build](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/build/badge.svg) 
+![angular](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/Angular/badge.svg)
 
 
 ### Profile Descriptions
