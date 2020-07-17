@@ -145,6 +145,8 @@ module.exports.updateTimeEntry = (req, res) => {
 //Parameters - Date string
 // Returns - Array of time entry objects
 module.exports.getDailyTimeEntries = (req, res) => {  
+    var count = 0;
+    var count2 = 0;
     UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -152,53 +154,46 @@ module.exports.getDailyTimeEntries = (req, res) => {
             return res.status(404).json({ message: 'User not found' }); 
         else
         {
-                var date = req.query.date;
-                var timeEntries=[];
-                var times = result.TimeEntries.length
-                if(times == 0)
-                    return res.status(404).json({ message: 'No time entries for the given user were found' });
-                else
+            var date = req.query.date;
+            var timeEntries=[];
+            var times = result.TimeEntries.length
+            if(times == 0)
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            else
+            {
+                for(var a=0; a<times; a++)
                 {
-                    for(var a=0; a<times; a++)
-                    {
-                        console.log("ID" +  result.TimeEntries[a])
-                        TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>
-                        {
-                            if(err)
-                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+                    TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>
+                    {   
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + error});
 
-                            else if(val)
+                        else if(val)
+                        {
+                            if(date == val.Date)
                             {
-                                console.log(val.Date);
-                                console.log(date == val.Date);
-                                console.log("a" +a);
-                                if(date == val.Date)
+                                count = count+1;
+
+                                TaskHelper.getName(val.TaskID,(err,result)=>
                                 {
-                                    TaskHelper.getName(val.TaskID,(err,result)=>
+                                    count2 = count2 +1;
+                                    if(err)
+                                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                    else if(result)
                                     {
-                                        if(err)
-                                            return res.status(500).send({message: 'Internal Server Error: ' + err});
-                                        else if(result)
-                                        {
-                                            timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: result, description: val.Description});
-                                            console.log("l"+timeEntries.length);
-                                            console.log("ll" + times);
-                                            console.log("a" +a);
-                                            
-                                            if(a == times)
-                                            {
-                                                console.log("hellooo");
-                                                return res.status(200).json({timeEntries}); 
-                                            }
-                                        }
-                                    });
-                                }
-                
+                                        timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: result, description: val.Description});
+                                        if(count == count2)
+                                            return res.status(200).json({timeEntries}); 
+                                        
+                                    }
+                                });
                             }
-                        });
-                    }
+            
+                        }
+                    });
                 }
             }
+        }
     });
 }
 
@@ -232,11 +227,10 @@ module.exports.deleteTimeEntry = (req, res) => {
                         if(errs)
                             return res.status(500).send({message: 'Internal Server Error: ' + errs});
                         else if (!vals) 
-                            return res.status(404).json({ message: 'Time entry not found --' });
+                            return res.status(404).json({ message: 'Time entry not found' });
                         else 
-                        {
                             return res.status(200).json({ message: 'Time entry deleted' });
-                        }
+        
 
                         
                     })
