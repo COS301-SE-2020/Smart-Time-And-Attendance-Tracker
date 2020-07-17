@@ -62,8 +62,6 @@ export class AccountManagementService {
   }
   //Reject user (security admin)
   public reject(token, userID){
-    console.log(token);
-    console.log(JSON.stringify(userID));
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID),{
