@@ -147,6 +147,7 @@ module.exports.updateTimeEntry = (req, res) => {
 module.exports.getDailyTimeEntries = (req, res) => {  
     var count = 0;
     var count2 = 0;
+    var count3 = 0;
     UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -163,8 +164,11 @@ module.exports.getDailyTimeEntries = (req, res) => {
             {
                 for(var a=0; a<times; a++)
                 {
+        
                     TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>
                     {   
+                        count3= count3+1; 
+                        
                         if(err)
                             return res.status(500).send({message: 'Internal Server Error: ' + error});
 
@@ -189,7 +193,10 @@ module.exports.getDailyTimeEntries = (req, res) => {
                                 });
                             }
             
-                        }
+                        };
+                        if(count3 == times && count == 0)
+                            return res.status(404).json({ message: 'No time entries for the given day were found' });
+                    
                     });
                 }
             }
@@ -197,6 +204,49 @@ module.exports.getDailyTimeEntries = (req, res) => {
     });
 }
 
+module.exports.hasEntriesForDate = (req, res, next) => {  
+    var count = 0;
+    UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+        {
+            var date = req.query.date;
+            var times = result.TimeEntries.length
+            if(times == 0)
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            else
+            {
+                for(var a=0; a<times; a++)
+                {
+        
+                    TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>
+                    {  
+                        count= count+1; 
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                        else if(val)
+                        {
+                            if(date == val.Date)
+                            {
+                                next(result);
+                            }
+            
+                        };
+                        console.log("a"+ a);
+                        console.log("c" + count3);
+                            if(count3== times)
+                                return res.status(404).json({ message: 'No time entries for the given day were found' })
+                       
+                    });
+                }
+            }
+        }
+    });
+}
 
 /* This function receives user ID, jwtTOKEN and a time entry ID
    it authenthenticates ID and the token from the index.router and 
