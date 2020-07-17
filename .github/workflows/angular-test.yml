@@ -1,0 +1,18 @@
+name: Angular
+on:
+  push:
+    branches: [ master, app-develop, app-feature-testing ]
+
+jobs:
+  app-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: STAT
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - run: npm install
+            npm run test-headless
