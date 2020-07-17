@@ -30,6 +30,11 @@ var ProjectSchema = new mongoose.Schema({
     },
     Completed:{
         type: Boolean
+    },
+    HourlyRate:
+    {
+        type: Number,
+        required : "Required"
     }
 });
 

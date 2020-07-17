@@ -8,16 +8,20 @@ module.exports.addTimeEntry = (req, res) => {
     timeEntry.Date = req.body.Date;
     timeEntry.TaskID = req.body.TaskID;
     timeEntry.StartTime = req.body.StartTime;
-    if(req.body.EndTime)
-        timeEntry.EndTime = req.body.EndTime;
-    else
-        timeEntry.EndTime = 0;
-    timeEntry.Description = req.body.Description;
-    timeEntry.Device = req.body.Device;
     if(req.body.ActiveTime)
         timeEntry.ActiveTime = req.body.ActiveTime;
     else
         timeEntry.ActiveTime = 0;
+    if(req.body.EndTime)
+    {
+        timeEntry.EndTime = req.body.EndTime;
+        if(timeEntry.ActiveTime == 0)
+            timeEntry.ActiveTime = req.body.EndTime - req.body.StartTime;
+    }
+    else
+        timeEntry.EndTime = 0;
+    timeEntry.Description = req.body.Description;
+    timeEntry.Device = req.body.Device;
 
     if(req.body.MonetaryValue)
         timeEntry.MonetaryValue = req.body.EndTMonetaryValueime;

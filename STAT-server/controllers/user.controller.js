@@ -71,7 +71,19 @@ module.exports.register = (req, res, next) => {
             });
     }
 }
-    
+
+module.exports.changePass = (req, res, next) => {
+    UserModel.updateOne({ _id: req.ID},{Password: req.body.pass},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'Password changed'});
+               
+    });
+   
+}   
 
 module.exports.getName = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {

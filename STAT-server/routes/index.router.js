@@ -18,7 +18,7 @@ router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 router.get("/user/isAuthenticated",jwtHelper.verifyJWTtoken, user.isAuthenticated);
 router.get("/user/getTasks",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getTasks);
-//router.get("/user/authenticateUser",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, user.authenticate);
+router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
 
 router.get("/role/getRole", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, role.getRole);
 router.post("/role/addRole",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, role.add);
@@ -45,7 +45,6 @@ router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLea
 
 router.post("/project/uncomplete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.uncomplete);
 router.post("/project/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.update);
-router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add);
 
 
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);

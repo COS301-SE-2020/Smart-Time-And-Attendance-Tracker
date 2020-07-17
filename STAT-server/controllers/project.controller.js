@@ -79,6 +79,7 @@ module.exports.add = (req, res, next) => {
     project.DueDate = req.body.dueDate;
     project.StartDate = req.body.startDate;
     project.Completed = false;
+    project.HourlyRate = req.body.hourlyRate;
     /*teams=[];
     tasks=[];
 
