@@ -38,7 +38,8 @@ This is how the branches will be laid out
 ![css](https://img.shields.io/badge/css-%2025.0%25-purple.svg)\
 **Testing**\
 ![build](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/build/badge.svg) 
-![angular](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular/badge.svg)
+![angular](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular/badge.svg) 
+[![codecov](https://codecov.io/gh/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/branch/master/graph/badge.svg)](https://codecov.io/gh/COS301-SE-2020/Smart-Time-And-Attendance-Tracker)
 
 
 ### Profile Descriptions
