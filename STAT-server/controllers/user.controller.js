@@ -176,7 +176,7 @@ module.exports.getAllUsers = (req, res, next) => {
             for(var a=0; a<result.length; a++){
                 users.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
-            return res.status(200).json({Users});
+            return res.status(200).json({users});
         }
     });
 }
