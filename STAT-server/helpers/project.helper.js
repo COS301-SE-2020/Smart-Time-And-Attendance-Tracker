@@ -39,8 +39,8 @@ module.exports.getTasks = (id, done)=>{
                         {
                             text = {
                                 'ID': result._id,
-                                'ProjectName': result.ProjectName,
-                                'Tasks': values
+                                'projectName': result.ProjectName,
+                                'tasks': values
                             }
                             done(null, text);
                         }                       

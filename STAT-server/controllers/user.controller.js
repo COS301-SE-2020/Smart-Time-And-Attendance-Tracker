@@ -163,7 +163,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
 }
 //Only a security admin can make this request
 //Parameters - None
-//Returns - Array with all authernticated users objects
+//Returns - Array with all authenticated users objects
 module.exports.getAllUsers = (req, res, next) => {
     UserModel.find({  Authenticate : true},(err, result) => {
         if (err) 
@@ -172,9 +172,9 @@ module.exports.getAllUsers = (req, res, next) => {
             return res.status(404).json({ message: 'No users found' }); 
         else
         {
-            Users=[];
+            users=[];
             for(var a=0; a<result.length; a++){
-                Users.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
+                users.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
             return res.status(200).json({Users});
         }
@@ -223,7 +223,6 @@ module.exports.addTeam = (req, res, next) => {
 //Request body - ID of user to remove/reject
 //Returns - Succes or error message
 module.exports.remove = (req, res, next) => {
-    console.log(req.body.UserID);
     UserModel.deleteOne({ _id: req.body.UserID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
