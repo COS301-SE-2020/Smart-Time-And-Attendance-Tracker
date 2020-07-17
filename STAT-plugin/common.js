@@ -60,6 +60,8 @@ userLogin.onclick = function(){
                  for(tabID in chrome.extension.getBackgroundPage().History) {
                    alert("tab ID " + tabID);
                     AddTimeEntry(tabID[0][0], tabID[0][1], new Date(), tabID);
+                    chrome.extension.getBackgroundPage().History[tabID][0][0] = new Date();
+
                  }
             }
             else {
@@ -143,7 +145,7 @@ function getTasks() {
 
 
 function AddTimeEntry(url,startTime, endTime,currentID ) {
-  getTasks();
+  //getTasks();
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
       var text = '{ "Description": "'+ url + '",'
@@ -164,12 +166,16 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
           if(http.readyState == 4 && http.status == 200) {
               const obj = JSON.parse(http.responseText);
               chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
-              chrome.extension.getBackgroundPage().History[currentID][0][0] = startTime;
+              chrome.extension.getBackgroundPage().History[currentID][0][0] = new Date();
+              setCookie("historyTime"+currentID, "00:00", 1);
+              alert(obj.TimeEntryID);
               status = true;
               return status;
           }
           else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-              console.log(http.responseText);
+              chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
+              chrome.extension.getBackgroundPage().History[currentID][0][0] = new Date();
+              
               status = false;
               return status;
           }

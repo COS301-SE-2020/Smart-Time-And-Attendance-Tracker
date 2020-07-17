@@ -10,8 +10,8 @@ setInterval(UpdateBadges, 1000);
 chrome.tabs.onUpdated.addListener(HandleUpdate);
 chrome.tabs.onRemoved.addListener(HandleRemove);
 chrome.tabs.onReplaced.addListener(HandleReplace);
-/*var stopTimer = document.getElementById("stop");
-var startTimer = document.getElementById("start");
+var stopStartBtn = document.getElementById("start_stop");
+/*var startTimer = document.getElementById("start");
 
 stopTimer.style.display = "block";
 startTimer.style.display = "none";*/
@@ -32,7 +32,12 @@ function Update(t, tabId, url) {
     }
     chrome.extension.getBackgroundPage().History[tabId].unshift(["0:00", url, ""]);
     AddTimeEntry(url, t, t, tabId);
-    //alert(chrome.extension.getBackgroundPage().History[tabId][0][2]);
+    alert(chrome.extension.getBackgroundPage().History[tabId][0][2]);
+    chrome.extension.getBackgroundPage().History[tabId][0][0] = now;
+    setCookie("stop", "false", 1); 
+    stopStartBtn.name = "stop";
+    stopStartBtn.innerHTML = "Stop";
+
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
         history_limit = 23;

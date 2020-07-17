@@ -11,6 +11,7 @@ function showTime() {
         url = url.split("/")[0];
         //desc.innerHTML = url + ": ";
         var description="";
+        alert(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]))
         if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
         { 
             //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
@@ -20,6 +21,7 @@ function showTime() {
         }
         else
         {
+            alert(chrome.extension.getBackgroundPage().History[currentID][0][0])
             desc.innerHTML = chrome.extension.getBackgroundPage().History[currentID][0][0]+ "\n";
             description = FormatDuration(chrome.extension.getBackgroundPage().History[currentID][0][0]);
         }
@@ -61,22 +63,14 @@ stopStartBtn.onclick = function(){
             url = url.split("/")[0];
             console.log("Stopeed tracking " + url);
             //AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
-            var success = true;//getStatus();
-            console.log("success " + success);
-            if(success) {
-                var description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
-                chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
-                //startTimer.style.display = "block";
-                //stopTimer.style.display = "none";
-                setCookie("stop", "true", 1); 
-                stopStartBtn.name = "start";
-                stopStartBtn.innerHTML = "Start";
-                chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
-            }
-            else {
-                //error occured
-            }
-            
+            var description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+            chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
+            //startTimer.style.display = "block";
+            //stopTimer.style.display = "none";
+            setCookie("stop", "true", 1); 
+            stopStartBtn.name = "start";
+            stopStartBtn.innerHTML = "Start";
+            chrome.extension.getBackgroundPage().History[currentID][0][2] = "";            
         });   
     }
     else{
