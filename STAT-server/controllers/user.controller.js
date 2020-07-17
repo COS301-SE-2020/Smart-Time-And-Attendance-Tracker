@@ -250,6 +250,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 module.exports.getTasks = (req, res, next) => {
     let error = false;
     let projectsOfUser = [];
+    console.log(req.ID);
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -258,6 +259,8 @@ module.exports.getTasks = (req, res, next) => {
         
         else
         {
+            if(!result.Team.length)
+                return res.status(404).json({ message: 'User is not assigned to a team' });
             for(i=0; i<result.Team.length; i++)
             {
                 TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
@@ -274,7 +277,7 @@ module.exports.getTasks = (req, res, next) => {
                         if(i == result.Team.length)
                         {
                             if(projectsOfUser.length > 0)
-                                return res.status(200).json({Projects : projectsOfUser});
+                                return res.status(200).json({projects : projectsOfUser});
                             else    
                                 return res.status(404).json({ message:  'No tasks found' });
                         }

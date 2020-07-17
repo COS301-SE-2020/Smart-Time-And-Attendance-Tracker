@@ -41,7 +41,7 @@ module.exports.assignProject = (req, res, next) => {
 }
 
 module.exports.addTeamMember = (req, res, next) => {
-    TeamModel.findOne({_id : (req.body.teamID)}, function(err, result) {
+    TeamModel.findOne({_id : (req.body.TeamID)}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -51,7 +51,7 @@ module.exports.addTeamMember = (req, res, next) => {
             return res.status(404).send({message: 'Team not found'});
         }
         else {
-            result.TeamMembers.push( { _id: req.body.userID, Role: req.body.userRole } )
+            result.TeamMembers.push( { _id: req.body.UserID, Role: req.body.UserRole } )
             result.save((err, doc) => {
                 if(!err)
                 {

@@ -149,44 +149,54 @@ module.exports.getDailyTimeEntries = (req, res) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
-            return res.status(404).json({ message: 'No time entries for the given user were found' }); 
+            return res.status(404).json({ message: 'User not found' }); 
         else
         {
                 var date = req.query.date;
-                var TimeEntries=[];
+                var timeEntries=[];
                 var times = result.TimeEntries.length
-                for(var a=0; a<times; a++)
+                if(times == 0)
+                    return res.status(404).json({ message: 'No time entries for the given user were found' });
+                else
                 {
-                    TimeEntryModel.findOne({_id: result.TimeEntries[a]._id},(err,val)=>
+                    for(var a=0; a<times; a++)
                     {
-                        if(err)
-                            return res.status(500).send({message: 'Internal Server Error: ' + error});
-
-                        else if (!val) 
-                            return res.status(404).json({ message: 'Time entry not found' });
-                        else 
+                        console.log("ID" +  result.TimeEntries[a])
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>
                         {
-                            if(date == val.Date)
+                            if(err)
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                            else if(val)
                             {
-                                TaskHelper.getName(val.TaskID,(err,result)=>
+                                console.log(val.Date);
+                                console.log(date == val.Date);
+                                console.log("a" +a);
+                                if(date == val.Date)
                                 {
-                                    if(err)
-                                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                    TaskHelper.getName(val.TaskID,(err,result)=>
+                                    {
+                                        if(err)
+                                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                        else if(result)
+                                        {
+                                            timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: result, description: val.Description});
+                                            console.log("l"+timeEntries.length);
+                                            console.log("ll" + times);
+                                            console.log("a" +a);
+                                            
+                                            if(a == times)
+                                            {
+                                                console.log("hellooo");
+                                                return res.status(200).json({timeEntries}); 
+                                            }
+                                        }
+                                    });
+                                }
                 
-                                    else if(result == false) 
-                                        return res.status(404).json({ message: 'Task not found' });
-                                    else 
-                                        TimeEntries.push({"TimeEntryID": val.ID,"Date":val.Date, "StartTime":val.StartTime, "EndTime":val.EndTime, "Duration":val.Duration, "Task": result, "Project":"TBA", "Description": val.Description});
-                                    
-                                });
                             }
-                    
-                            if(TimeEntries.length == 0)
-                                return res.status(404).json({ message: 'No time entries found for date given' }); 
-                            else if(TimeEntries.length == times)
-                                return res.status(200).json({TimeEntries}); 
-                        }
-                    });
+                        });
+                    }
                 }
             }
     });
