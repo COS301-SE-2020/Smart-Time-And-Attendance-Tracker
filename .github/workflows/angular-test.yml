@@ -15,7 +15,7 @@ jobs:
       with:
         node-version: 12.x
     - run: npm install
-    - run: npm run test-headless
+            npm run test-headless
     - name: coverage badges
       uses:  emibcn/clover-coverage-badges-action@v1
       with:
