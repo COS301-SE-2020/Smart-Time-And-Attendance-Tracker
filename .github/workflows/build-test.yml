@@ -19,6 +19,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - run: npm install
-    - run: npm install -g @angular/cli
-    - run: npm start
+    - run: npm install -g yarn
+    - run: yarn install
+    - run: yarn build
