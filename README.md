@@ -35,8 +35,8 @@ This is how the branches will be laid out
 ![typescript](https://img.shields.io/badge/typescript-%2035.3%25-blue.svg) 
 ![html](https://img.shields.io/badge/html-%2025.0%25-red.svg) 
 ![css](https://img.shields.io/badge/css-%2025.0%25-purple.svg)\
-**Continuous Integration**\
-![CI](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/CI/badge.svg)
+**Testing**\
+![Angular testing](https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/Angular%20testing/badge.svg)
 
 
 ### Profile Descriptions
