@@ -12,6 +12,22 @@
   width: 12em;
 }
 
+#popupPage {
+  display: none;
+}
+
+#login {
+  display: none;
+}
+
+#select_task_form {
+  display:none;
+}
+
+#selected_task {
+  display: none;
+}
+
 #select_task {
   font-size: 0.9em;
   padding: 0.95em;

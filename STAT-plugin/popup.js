@@ -135,33 +135,41 @@ startTimer.onclick = function(){
 
 function displayButton() {
     //alert(getCookie("tasks"));
-    if((getCookie("tasks")!=-1 || getCookie("tasks") != ""))
-        displayOptions(getCookie("tasks"));
-    else
-    {
-        if(getCookie("tasks").includes("\n"))
-            document.getElementById("task").innerHTML = getCookie("tasks");
-        else
-            getTasks();
-    }
        
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
     //alert(stopStartBtn.name + "  " + stopStartBtn.value + "  " + stopStartBtn.innerHTML);
-
-        if(getCookie("stop") == "false")
-        { 
-            stopStartBtn.name = "stop";
-            stopStartBtn.innerHTML = "Stop";
-            //stopTimer.style.display = "block";
-            //startTimer.style.display = "none";
+    alert(document.cookie.indexOf("token"));
+        if(document.cookie.indexOf("token") > -1)
+        {
+            if(getCookie("stop") == "false")
+            { 
+                stopStartBtn.name = "stop";
+                stopStartBtn.innerHTML = "Stop";
+                //stopTimer.style.display = "block";
+                //startTimer.style.display = "none";
+            }
+            else
+            {
+                stopStartBtn.name = "start";
+                stopStartBtn.innerHTML = "Start";
+                //startTimer.style.display = "block";
+                //stopTimer.style.display = "none";
+            }
+            if((getCookie("tasks")!=-1 || getCookie("tasks") != ""))
+                displayOptions(getCookie("tasks"));
+            else
+            {
+                if(getCookie("tasks").includes("\n"))
+                    document.getElementById("task").innerHTML = getCookie("tasks");
+                else
+                    getTasks();
+            }
         }
         else
         {
-            stopStartBtn.name = "start";
-            stopStartBtn.innerHTML = "Start";
-            //startTimer.style.display = "block";
-            //stopTimer.style.display = "none";
+            alert(document.getElementById("popupPage").style.display);
+            document.getElementById("popupPage").style.display = "block";
         }
     }); 
 }

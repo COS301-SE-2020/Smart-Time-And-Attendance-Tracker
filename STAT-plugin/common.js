@@ -9,7 +9,7 @@ var userName="";
     if (document.cookie.indexOf('name') > -1 && document.cookie.indexOf('token') > -1) {
       //cookie exists - hide form
       document.getElementById("loginForm").style.display = "none";
-      document.getElementById("popup").style.display = "block";
+      document.getElementById("popupPage").style.display = "block";
       document.getElementById("userName").innerHTML=getCookie("name");
       document.getElementById("userEmail").innerHTML=getCookie("email");
       document.getElementById("errorMessage").innerHTML= "";
@@ -22,10 +22,11 @@ var userName="";
       displayButton();
   }
   else{  ///hide everything except the login form
+    alert( document.getElementById("popupPage").style.display);
       document.getElementById("errorMessage").innerHTML= "Login to start tracking";
-      document.getElementById("start").style.display = "none";
-      document.getElementById("stop").style.display  ="none";
-      document.getElementById("popup").style.display = "none";
+      document.getElementById("start").style.display = "block";
+      document.getElementById("stop").style.display  ="block";
+      document.getElementById("popupPage").style.display = "block";
   }
 userLogin.onclick = function(){
         var http = new XMLHttpRequest();
@@ -46,7 +47,7 @@ userLogin.onclick = function(){
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.email;
                 document.getElementById("loginForm").style.display = "none";
-                document.getElementById("popup").style.display = "block";
+                document.getElementById("popupPage").style.display = "block";
                 document.getElementById("errorMessage").innerHTML= "";
                 ///show start and stop buttons
                  setInterval(showTime, 1000);
