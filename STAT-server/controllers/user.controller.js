@@ -196,7 +196,7 @@ module.exports.authenticate = (req, res, next) => {
 }
 
 module.exports.addTeam = (req, res, next) => {
-    UserModel.findOne({_id : req.body.userID}, function(err, result) {
+    UserModel.findOne({_id : req.body.UserID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -223,7 +223,8 @@ module.exports.addTeam = (req, res, next) => {
 //Request body - ID of user to remove/reject
 //Returns - Succes or error message
 module.exports.remove = (req, res, next) => {
-    UserModel.removeOne({ _id: req.body.UserID},(err, result) => {
+    console.log(req.body.UserID);
+    UserModel.deleteOne({ _id: req.body.UserID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
