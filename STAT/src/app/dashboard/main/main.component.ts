@@ -14,12 +14,11 @@ export class MainComponent implements OnInit {
     {value: '2', name: 'Project 2'}
   ];
 
-  roles : string
+  roles =  localStorage.getItem('roles');
   // active tab
   active : string;
 
   constructor(public service : AccountManagementService) {
-    this.roles = localStorage.getItem('roles');
 
    }
 

@@ -22,7 +22,7 @@ export class OrganisationComponent implements OnInit {
   authenticateUser(id)
   {
     let req = {"UserID": id};
-    this.service.authenticate(req, localStorage.getItem('token')).subscribe((data) => {
+    this.service.authenticate(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
     },
     error => {
@@ -35,7 +35,7 @@ export class OrganisationComponent implements OnInit {
   rejectUser(id)
   {
     let req = {"UserID": id};
-    this.service.reject(req, localStorage.getItem('token')).subscribe((data) => {
+    this.service.reject( localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
     },
     error => {

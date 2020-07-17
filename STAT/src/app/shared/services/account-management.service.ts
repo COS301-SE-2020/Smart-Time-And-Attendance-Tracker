@@ -53,41 +53,43 @@ export class AccountManagementService {
     });
   }
   //Authenticate user (security admin)
-  public authenticate(values,userID){
+  public authenticate(token,userID){
     const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.post(this.ROOT_URL+'user/authenticateUser',JSON.stringify(userID), {
       headers: headers
     });
   }
   //Reject user (security admin)
-  public reject(values, userID){
+  public reject(token, userID){
+    console.log(token);
+    console.log(JSON.stringify(userID));
     const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.post(this.ROOT_URL+ 'user/rejectUser', JSON.stringify(userID),{
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID),{
       headers: headers
     });
   }
   //Get all unauthenticated users (security admin)
-  public getUnathenticatedUsers(values){
+  public getUnathenticatedUsers(token){
     const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.get(this.ROOT_URL+ 'user/getUnauthenticatedUsers', {
       headers: headers
     });
   }
   //Get all  users (security admin)
-  public getAllUsers(values){
+  public getAllUsers(token){
     const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.get(this.ROOT_URL+ 'user/getAllUsers', {
       headers: headers
     });
   }
   //Get user's projects and tasks
-  public getProjectsAndTasks(values){
+  public getProjectsAndTasks(token){
     const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.get(this.ROOT_URL+ 'user/getTasks', {
       headers: headers
     });
