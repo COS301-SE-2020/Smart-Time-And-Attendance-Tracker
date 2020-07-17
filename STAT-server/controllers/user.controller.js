@@ -250,7 +250,6 @@ module.exports.isAuthenticated = (req, res, next) => {
 module.exports.getTasks = (req, res, next) => {
     let error = false;
     let projectsOfUser = [];
-    console.log(req.ID);
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});

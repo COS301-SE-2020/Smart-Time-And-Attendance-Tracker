@@ -24,7 +24,6 @@ module.exports.getTasks = (id, done)=>{
         else if(result)
         {
             var values = [], task=0, text="";
-            console.log(result.Tasks.length);
             for(task; task<result.Tasks.length; task++) 
             {
                 TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
