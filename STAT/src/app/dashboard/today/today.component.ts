@@ -19,12 +19,19 @@ export class TodayComponent implements OnInit {
   manualTrackingForm : FormGroup
   automaticTrackingForm: FormGroup
 
-  tasks : any
-  
+  projects : []
+  tasks : { ID : any, taskName : string }[]
+  mProjectSelected : any
+  aProjectSelected : any
+  mTaskSelected : any
+  aTaskSelected : any
+  aTasksDisabled : boolean = true
+  mTasksDisabled : boolean = true
 
   ngOnInit(): void { 
     this.manualTrackingForm = new FormGroup({
       Description : new FormControl(''),
+      Project : new FormControl(''),
       TaskID : new FormControl('', [Validators.required]),
       MonetaryValue : new FormControl('', [Validators.required]),
       Date : new FormControl('', [Validators.required]),
@@ -34,10 +41,12 @@ export class TodayComponent implements OnInit {
 
     this.automaticTrackingForm = new FormGroup({
       Description : new FormControl(''),
+      Project : new FormControl('', [Validators.required]),
       TaskID : new FormControl('', [Validators.required]),
     });
 
-    this.getTasks()
+    this.tasks = [ { "ID" : 0, "taskName" : "None" }];
+    this.getProAndTasks()
   }
 
   // modal
@@ -84,7 +93,7 @@ export class TodayComponent implements OnInit {
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
         console.log(data);
         this.service.EntryID = data['TimeEntryID'];
-        this.getTasks();
+        this.getProAndTasks();
         
       },
       error => {
@@ -110,16 +119,39 @@ export class TodayComponent implements OnInit {
     }); 
   }
 
-  // get tasks
-  getTasks()
+  // get projects and tasks
+  getProAndTasks()
   {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
+      this.projects = data['projects']
+      console.log(this.projects)
     },
     error => {
       console.log(error);
     
     }); 
+  }
+
+  // get tasks
+  getTasks(projectID : any, form : string) {
+    if (form == 'a') {
+      if (this.aProjectSelected == null)
+      this.tasks = [ { "ID" : 0, "taskName" : "None" }];
+      else {
+        this.aTasksDisabled = false;
+        this.tasks = this.projects.find((p : any) => p.ID == projectID)['tasks'];
+      }
+    } else {
+      if (this.mProjectSelected == null)
+      this.tasks = [ { "ID" : 0, "taskName" : "None" }];
+      else {
+        this.mTasksDisabled = false;
+        this.tasks = this.projects.find((p : any) => p.ID == projectID)['tasks'];
+      }
+    }
+    
+    return this.tasks;
   }
 
   // get tracking entries

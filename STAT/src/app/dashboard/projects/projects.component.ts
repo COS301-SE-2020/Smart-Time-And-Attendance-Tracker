@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({
   selector: 'app-projects',
@@ -9,11 +10,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, public amService : AccountManagementService) { }
 
   panelOpenState = false
   name = "John Doe"
   roles : string
+  projects : []
 
   // forms
   addProjectForm : FormGroup
@@ -37,6 +39,8 @@ export class ProjectsComponent implements OnInit {
       name : new FormControl('', [Validators.required]),
       date : new FormControl('', [Validators.required])
     });
+
+    this.getProAndTasks()
   }
 
   
@@ -44,6 +48,20 @@ export class ProjectsComponent implements OnInit {
   /********
   API CALLS
   *********/
+
+  // get projects and tasks
+  getProAndTasks()
+  {
+    this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+      this.projects = data['projects']
+      console.log(this.projects)
+    },
+    error => {
+      console.log(error);
+    
+    }); 
+  }
 
   // add project
   addProject(form : NgForm) {

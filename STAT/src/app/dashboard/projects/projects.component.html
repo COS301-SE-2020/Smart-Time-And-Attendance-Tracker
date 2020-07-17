@@ -18,11 +18,11 @@
             <mat-accordion>
 
             <!-- PROJECT **************************** -->
-              <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel *ngFor="let p of projects" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    Project Name
-                  <span class="tag numTasks">3 tasks</span>
+                    {{p.projectName}}
+                  <span class="tag numTasks">{{p.tasks.length}} tasks</span>
                   <button *ngIf="roles.includes('Team Leader')" 
                           mat-button class="pro-btn"
                           matTooltip="Edit"
@@ -48,7 +48,7 @@
 
                 <!-- tasks -->
                 <ul class="tasks">
-                  <li>Task 1
+                  <li *ngFor="let t of p.tasks">{{t.taskName}}
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
                             matTooltip="Edit"
@@ -63,11 +63,9 @@
                             matTooltipPosition="above">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
-                     <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-                  <mat-divider></mat-divider>
-                  <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-                  <mat-divider></mat-divider>
-                  <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li> 
+                     <span class="float-right">July 13, 2020</span> <span class="float-right tag" [ngClass]="{'tag-ns': t.taskStatus == 'Not Started'}">{{t.taskStatus}}</span>
+                    <mat-divider></mat-divider>       
+                  </li>
                 </ul>
                 <span *ngIf="roles.includes('Team Leader')" class="float-right"><button mat-button><mat-icon inline="true">add</mat-icon>New task</button></span>
 
@@ -107,10 +105,10 @@
             <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Project Name
+                  Capstone Project
                 <span class="tag numTasks">3 tasks</span>
                 </mat-panel-title>
-              <span class="due-date float-right">Due July 21, 2020</span>                
+              <span class="due-date float-right">Due October 21, 2020</span>                
 
               </mat-expansion-panel-header>
 
@@ -118,11 +116,11 @@
 
               <!-- tasks -->
               <ul class="tasks">
-                <li>Task 1 <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
+                <li>API Calls <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
                 <mat-divider></mat-divider>
-                <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
+                <li>UI Design <span class="float-right">July 18, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
                 <mat-divider></mat-divider>
-                <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
+                <li>Unit Testing <span class="float-right">July 20, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
               </ul>
 
               <!-- team -->
@@ -143,57 +141,11 @@
             </mat-expansion-panel>
           <!-- END PROJECT **************************************** -->
 
-          <!-- PROJECT **************************** -->
-          <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Project Name
-              <span class="tag numTasks">3 tasks</span>
-              </mat-panel-title>
-            <span class="due-date float-right">Due July 21, 2020</span>                
-
-            </mat-expansion-panel-header>
-
-            <mat-divider></mat-divider><br>
-
-            <!-- tasks -->
-            <ul class="tasks">
-              <li>Task 1 <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-              <mat-divider></mat-divider>
-              <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-              <mat-divider></mat-divider>
-              <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
-            </ul>
-
-            <!-- team -->
-            <mat-action-row>
-              <img
-                matTooltip={{name}} matTooltipPosition="below"
-                src="../../../assets/profilePicDefault.jpg" 
-                class="profile-pic" alt="Profile Picture">
-              <img
-                matTooltip="Zac Efron" matTooltipPosition="below"
-                src="../../../assets/proPic1.jpg" 
-                class="profile-pic" alt="Profile Picture">
-              <img
-                matTooltip="Henry Cavill" matTooltipPosition="below"
-                src="../../../assets/proPic2.jpg" 
-                class="profile-pic" alt="Profile Picture">
-                <button mat-mini-fab
-                        class="start-tracking addMember" 
-                        matTooltip="Add team member"
-                        matTooltipPosition="below">
-                  <mat-icon inline="true">add</mat-icon>
-                </button>
-            </mat-action-row>
-          </mat-expansion-panel>
-        <!-- END PROJECT **************************************** -->
-
         <!-- PROJECT **************************** -->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Project Name
+              IMY App
             <span class="tag numTasks">3 tasks</span>
             </mat-panel-title>
           <span class="due-date float-right">Due July 21, 2020</span>                
@@ -204,11 +156,11 @@
 
           <!-- tasks -->
           <ul class="tasks">
-            <li>Task 1 <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
+            <li>UI Design <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
             <mat-divider></mat-divider>
-            <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
+            <li>Prototype <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
             <mat-divider></mat-divider>
-            <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
+            <li>Report <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
           </ul>
 
           <!-- team -->
@@ -234,6 +186,52 @@
           </mat-action-row>
         </mat-expansion-panel>
       <!-- END PROJECT **************************************** -->
+
+      <!-- PROJECT **************************** -->
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Fix My Life
+          <span class="tag numTasks">3 tasks</span>
+          </mat-panel-title>
+        <span class="due-date float-right">Due August 26, 2020</span>                
+
+        </mat-expansion-panel-header>
+
+        <mat-divider></mat-divider><br>
+
+        <!-- tasks -->
+        <ul class="tasks">
+          <li>Eat Nuggets <span class="float-right">July 17, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
+          <mat-divider></mat-divider>
+          <li>Get Abs <span class="float-right">July 25, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
+          <mat-divider></mat-divider>
+          <li>Cure My Depression <span class="float-right">August 20, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
+        </ul>
+
+        <!-- team -->
+        <mat-action-row>
+          <img
+            matTooltip={{name}} matTooltipPosition="below"
+            src="../../../assets/profilePicDefault.jpg" 
+            class="profile-pic" alt="Profile Picture">
+          <img
+            matTooltip="Zac Efron" matTooltipPosition="below"
+            src="../../../assets/proPic1.jpg" 
+            class="profile-pic" alt="Profile Picture">
+          <img
+            matTooltip="Henry Cavill" matTooltipPosition="below"
+            src="../../../assets/proPic2.jpg" 
+            class="profile-pic" alt="Profile Picture">
+            <button mat-mini-fab
+                    class="start-tracking addMember" 
+                    matTooltip="Add team member"
+                    matTooltipPosition="below">
+              <mat-icon inline="true">add</mat-icon>
+            </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    <!-- END PROJECT **************************************** -->
 
             </mat-accordion>
         </div>

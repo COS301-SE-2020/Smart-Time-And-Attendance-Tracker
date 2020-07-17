@@ -206,19 +206,15 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select required>
-            <mat-option value="1">Project</mat-option>
-            <mat-option value="">None</mat-option>
-            <mat-option value="">None</mat-option>
+          <mat-select [(value)]="mProjectSelected" formControlName="Project">
+            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'm')">{{p.projectName}}</mat-option>
           </mat-select>
         </mat-form-field>
-    
+  
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
-          <mat-select matSelect formControlName="TaskID" required>
-            <mat-option value="">None</mat-option>
-            <mat-option value="">None</mat-option>
-            <mat-option value="">None</mat-option>
+          <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected" formControlName="TaskID">
+          <mat-option *ngFor="let t of tasks" [value]="t.ID">{{t.taskName}}</mat-option>
           </mat-select>
         </mat-form-field>
     
@@ -253,19 +249,15 @@
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select>
-            <mat-option value="">None</mat-option>
-            <mat-option value="">None</mat-option>
-            <mat-option value="">None</mat-option>
+          <mat-select [(value)]="aProjectSelected" formControlName="Project">
+            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a')">{{p.projectName}}</mat-option>
           </mat-select>
         </mat-form-field>
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
-          <mat-select matInput formControlName="TaskID" required>
-            <mat-option value="">None</mat-option>
-            <mat-option value="">None</mat-option>
-            <mat-option value="">None</mat-option>
+          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="TaskID">
+          <mat-option *ngFor="let t of tasks" [value]="t.ID">{{t.taskName}}</mat-option>
           </mat-select>
         </mat-form-field>
       </form>
@@ -275,11 +267,18 @@
       <div id="toggle" class="float-left">
        <mat-slide-toggle checked="checked" (click)="modalForm()">Automatic tracking</mat-slide-toggle>
       </div>
-      <button *ngIf="autoTracking==false" mat-raised-button color="primary" (click)="addManualEntry(manualTrackingForm.value)" (click)="modal.close('Save click')" type = "submit">Create an Entry</button>
-      <button *ngIf="autoTracking==true" mat-raised-button color="primary" (click)="addAutomaticEntry(automaticTrackingForm.value)" (click)="modal.close('Save click')">Start Tracking</button>
+      <button *ngIf="autoTracking==false" 
+              mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value)" 
+              [disabled]="manualTrackingForm.invalid">Create an Entry
+      </button>
+      <button *ngIf="autoTracking==true" 
+              mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addAutomaticEntry(automaticTrackingForm.value)"
+              [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
-  
+
   </div> 
 </ng-template>
   
