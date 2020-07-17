@@ -278,7 +278,7 @@ module.exports.getTasks = (req, res, next) => {
                             if(projectsOfUser.length > 0)
                                 return res.status(200).json({projects : projectsOfUser});
                             else    
-                                return res.status(404).json({ message:  'No tasks found' });
+                                return res.status(404).json({ message:  'No projects found' });
                         }
                     }
                 });

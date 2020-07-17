@@ -39,6 +39,7 @@ module.exports.getTasks = (id, done)=>{
                             text = {
                                 'ID': result._id,
                                 'projectName': result.ProjectName,
+                                "dueDate": result.DueDate,
                                 'tasks': values
                             }
                             done(null, text);
