@@ -14,9 +14,11 @@ export class OrganisationComponent implements OnInit {
   panelOpenState = false;
 
   requests : []
+  members : []
 
   ngOnInit(): void {
     this.getAllUnauthenticatedUsers('n')
+    this.getMembers()
   }
 
   authenticateUser(id)
@@ -74,5 +76,14 @@ export class OrganisationComponent implements OnInit {
         this.requests.reverse()
         break;
     }
+  }
+
+  getMembers() {
+    this.service.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
+      this.members = data['Users'];
+    },
+    error => {
+      console.log(error);
+    }); 
   }
 }

@@ -2,11 +2,17 @@
   <section id="organisation-header" class="col-6">
     <h2>Authorisation Requests</h2>
     <div class="info row mb-2 mt-4 p-0">
-      <div id="total-requests" class="col-auto">
-        <b>182</b><br>REQUESTS
+      <div *ngIf="requests && requests?.length == 1" id="total-requests" class="col-auto">
+        <b>1</b><br>REQUEST
       </div>
-      <div id="total-members" class="col-auto">
-        <b>746</b><br>MEMBERS
+      <div *ngIf="requests && (requests.length == 0 || requests.length > 1)" id="total-requests" class="col-auto">
+        <b>{{requests.length}}</b><br>REQUESTS
+      </div>
+      <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
+        <b>1</b><br>MEMBER
+      </div>
+      <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
+        <b>{{members.length}}</b><br>MEMBERS
       </div>
       <div class="px-3 p-1">
         <button mat-mini-fab id="sort-menu" 
@@ -31,8 +37,6 @@
         <mat-card-title>{{r.name}} {{r.surname}}</mat-card-title>
         <mat-card-subtitle>{{r.email}}</mat-card-subtitle>
         
-        <!--<form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="{{r.ID}}">-->
           <mat-divider [inset]="true"></mat-divider>
           <mat-card-footer class="px-3">
 
@@ -54,7 +58,6 @@
               <mat-icon inline="true">close</mat-icon>
             </button>
           </mat-card-footer>
-        <!--</form>-->
       </mat-card>
 
     </div>

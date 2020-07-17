@@ -9,6 +9,8 @@ export class AccountManagementService {
 
   private ROOT_URL = "http://localhost:3000/api/";
 
+  public roles = localStorage.getItem('roles');
+
   constructor(public http: HttpClient) { }
   //check if authenticated
   public isAuthenticated(values) {

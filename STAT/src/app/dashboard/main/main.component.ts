@@ -14,15 +14,17 @@ export class MainComponent implements OnInit {
     {value: '2', name: 'Project 2'}
   ];
 
-  roles =  localStorage.getItem('roles');
+  roles : any
   // active tab
   active : string;
 
   constructor(public service : AccountManagementService) {
-
-   }
+    this.roles =  this.service.roles
+  }
 
   ngOnInit(): void {
+    console.log(this.roles)
+
     const hamburger = document.getElementById('hamburger');
     const wrapper = document.getElementById('wrapper');
 
@@ -31,7 +33,6 @@ export class MainComponent implements OnInit {
     });
 
     this.active = 'today';
-
   }
 
   // set active tab after component initialisation

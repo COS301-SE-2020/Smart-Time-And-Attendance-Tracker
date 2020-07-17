@@ -36,6 +36,8 @@ export class TodayComponent implements OnInit {
       Description : new FormControl(''),
       TaskID : new FormControl('', [Validators.required]),
     });
+
+    this.getTasks()
   }
 
   // modal
@@ -61,7 +63,7 @@ export class TodayComponent implements OnInit {
     this.autoTracking = !this.autoTracking
   }
 
-  //Add an automatic time entry from form
+  //Add a manual time entry from form
   addManualEntry(form : NgForm)
   {
     
