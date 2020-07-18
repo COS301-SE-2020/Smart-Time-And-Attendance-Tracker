@@ -43,7 +43,7 @@ module.exports.addTeamMember = (req, res, next) => {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
-            return res.status(404).send({message: 'Team not found});
+            return res.status(404).send({message: 'Team not found'});
         else {
             result.TeamMembers.push( { _id: req.body.UserID, Role: req.body.UserRole } )
             result.save((err, doc) => {
@@ -62,7 +62,7 @@ module.exports.addTeamMember = (req, res, next) => {
 }
 
 
-/*
+
 
 
 module.exports.add = (req, res, next) => {
@@ -71,7 +71,7 @@ module.exports.add = (req, res, next) => {
     /*var teamMembers = [];
     for(var i=0; i< req.body.teamMembers.length; i++)
         teamMembers.push(req.body.teamMembers[i]);
-    team.TeamMembers = teamMembers;
+    team.TeamMembers = teamMembers;*/
     console.log( req.body.teamMembers.length);
     team.save((err, doc) => {
         if(!err){

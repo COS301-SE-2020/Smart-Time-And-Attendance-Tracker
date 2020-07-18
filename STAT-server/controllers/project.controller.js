@@ -2,10 +2,6 @@
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 
-module.exports.addTask = (req, res) => {
-
-
-}
 
 module.exports.complete = (req, res) => {
     ProjectModel.update({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
@@ -100,7 +96,7 @@ module.exports.add = (req, res, next) => {
 
     project.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ ProjectID : doc._id, message: 'Project Created' });
+            return res.status(200).json({ projectID : doc._id, message: 'Project Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -110,7 +106,7 @@ module.exports.add = (req, res, next) => {
 
 module.exports.addTask = (req, res, next) => {
 
-        ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
+        ProjectModel.findOne({_id : req.body.ProjectID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -123,7 +119,7 @@ module.exports.addTask = (req, res, next) => {
             result.Tasks.push(req.TaskID);
             result.save((err, doc) => {
                 if(!err)
-                    return res.status(200).json({ TaskID: req.TaskID, message: 'Task created and added to project' });
+                    return res.status(200).json({ taskID: req.TaskID, message: 'Task created and added to project' });
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
             });
@@ -134,13 +130,13 @@ module.exports.addTask = (req, res, next) => {
 
 module.exports.complete = (req, res, next) => {
 
-    ProjectModel.updateOne({_id : req.body.projectID, Completed: true},function(err, result) {
+    ProjectModel.updateOne({_id : req.body.ProjectID, Completed: true},function(err, result) {
     if(err) 
         return res.status(500).send({message: 'Internal Server Error: ' + err});
     else if (!result)
        return res.status(404).send({message: "Project not found"});
     else 
-        return res.status(200).json({ ProjectID: req.body.projectID, message: 'Project marked as completed' });
+        return res.status(200).json({ projectID: req.body.ProjectID, message: 'Project marked as completed' });
           
 });
 }

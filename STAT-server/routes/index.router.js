@@ -8,10 +8,6 @@ const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
 
-const project = require('../controllers/project.controller');
-const task = require('../controllers/task.controller');
-const team = require('../controllers/team.controller');
-
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
 
@@ -40,7 +36,6 @@ router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, team.add);
 
-
 ////projects
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add);
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
@@ -48,7 +43,6 @@ router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLea
 
 router.post("/project/uncomplete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.uncomplete);
 router.post("/project/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.update);
-
 
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);

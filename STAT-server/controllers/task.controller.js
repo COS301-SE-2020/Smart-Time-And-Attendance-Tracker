@@ -4,7 +4,7 @@ const TaskModel = mongoose.model("Task");
 
 module.exports.startTask = (req, res, next) => {
   
-    TaskModel.updateOne({ _id: req.body.TaskID},{Status: 'In Progress'},(err, result) => {
+    TaskModel.updateOne({ _id: req.body.taskID},{Status: 'In Progress'},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
@@ -87,7 +87,7 @@ module.exports.update = (req, res) => {
   DESCRPTION
 */
 
-/*module.exports.add = (req, res, next) => {
+module.exports.add = (req, res, next) => {
     var task = new TaskModel();
     console.log(req.body);
     task.TaskName = req.body.taskName;
@@ -106,6 +106,4 @@ module.exports.update = (req, res) => {
     });
 }
 
-module.exports = router;
-*/
 

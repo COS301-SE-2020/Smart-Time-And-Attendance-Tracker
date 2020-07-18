@@ -13,6 +13,18 @@ module.exports.addTeam = (id, done)=>{
         
     });
 }
+
+module.exports.hourlyRate = (id, done)=>{
+    ProjectModel.find({_id: id},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+           done(null, result.HourlyRate);
+        
+    });
+}
 const TaskHelper =require('../helpers/task.helper');
 
 module.exports.getTasks = (id, done)=>{
@@ -40,7 +52,9 @@ module.exports.getTasks = (id, done)=>{
                                 'ID': result._id,
                                 'projectName': result.ProjectName,
                                 "dueDate": result.DueDate,
+                                "hourlyRate": result.HourlyRate,
                                 'tasks': values
+
                             }
                             done(null, text);
                         }                       

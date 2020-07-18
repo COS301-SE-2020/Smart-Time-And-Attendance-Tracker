@@ -112,28 +112,6 @@ module.exports.getRoles = (req, res, next) => {
             for(i=0; i<result.Role.length; i++)
             {
                 
-                /*request({
-                    method: 'POST',
-                    url: 'http://127.0.0.1:3000' + '/api/role/getRole',
-                    body: {
-                        ID:  result.Role[i]
-                    },
-                    json: true
-                }, (error, response, body) => {
-                    if (error) {
-                        console.error(error)
-                        return
-                    }
-                    else if(response.statusCode == 200)
-                    {
-                        rolesOfUser.push(response.body.role);
-                        if(rolesOfUser.length == result.Role.length)
-                        {
-                            return res.status(200).json({ status: true, roles : rolesOfUser, authenticate: req.Authenticate});
-                        }
-                    }
-                });
-                const RoleModel = mongoose.model("Role");*/
                  RoleHelper.getRole(result.Role[i],(err,val)=>
                  {
                      if(err)
