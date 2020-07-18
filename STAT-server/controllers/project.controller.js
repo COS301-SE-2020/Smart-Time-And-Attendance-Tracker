@@ -160,7 +160,6 @@ module.exports.deleteProject = (req, res) => {
 }
 
 
-
 module.exports.complete = (req, res, next) => {
 
     ProjectModel.updateOne({_id : req.body.ProjectID, Completed: true},function(err, result) {

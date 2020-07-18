@@ -248,7 +248,7 @@ module.exports.getTasks = (req, res, next) => {
         
         else
         {
-            if(!result.Team.length)
+            if(result.Team.length == 0)
                 return res.status(404).json({ message: 'User is not assigned to a team' });
             for(i=0; i<result.Team.length; i++)
             {
@@ -268,6 +268,14 @@ module.exports.getTasks = (req, res, next) => {
                             if(projectsOfUser.length > 0)
                                 return res.status(200).json({projects : projectsOfUser});
                             else    
+                                return res.status(404).json({ message:  'No projects found' });
+                        }
+                    }
+                    else
+                    {
+                        if(i == result.Team.length)
+                        {
+                            if(projectsOfUser.length == 0)
                                 return res.status(404).json({ message:  'No projects found' });
                         }
                     }

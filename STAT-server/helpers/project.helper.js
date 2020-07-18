@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
-
+const TaskHelper =require('../helpers/task.helper');
 
 module.exports.addTeam = (id, done)=>{
     ProjectModel.update({_id: id},(err, result) => {
@@ -25,14 +25,16 @@ module.exports.hourlyRate = (id, done)=>{
         
     });
 }
-const TaskHelper =require('../helpers/task.helper');
 
 module.exports.getTasks = (id, done)=>{
     ProjectModel.findOne({ _id: id},{ Completed: false},(err, result) => {
         if(err) 
             done(err);
         else if (!result)
+        {
+            console.log("hello");
             done(null,false);
+        }
         else if(result)
         {
             var values = [], task=0, text="";
