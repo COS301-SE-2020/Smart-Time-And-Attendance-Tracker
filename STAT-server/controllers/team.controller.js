@@ -18,7 +18,7 @@ module.exports.assignProject = (req, res, next) => {
             result.save((err, doc) => {
                 if(!err)
                 {
-                    ProjectHelper.addTeam(result.Role[i],(err,val)=>
+                    ProjectHelper.addTeam(req.body.teamID,(err,val)=>
                     {
                         if(err)
                            return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -27,7 +27,7 @@ module.exports.assignProject = (req, res, next) => {
                            return res.status(404).json({ message: 'Project not found' });
                        else 
                        {
-                        return res.status(200).json({TeamID: result._id , message: 'Project successfully assigned to team'});
+                        return res.status(200).json({teamID: result._id , message: 'Project successfully assigned to team'});
                        }
                    });
                }  
@@ -71,11 +71,12 @@ module.exports.add = (req, res, next) => {
     /*var teamMembers = [];
     for(var i=0; i< req.body.teamMembers.length; i++)
         teamMembers.push(req.body.teamMembers[i]);
-    team.TeamMembers = teamMembers;*/
-    console.log( req.body.teamMembers.length);
+    team.TeamMembers = teamMembers;
+    console.log( req.body.teamMembers.length);*/
+    team.TeamMembers.push({ _id : team.TeamLeader, Role: "Team Leader"});
     team.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ TeamID : doc._id, message: 'Team Created' });
+            return res.status(200).json({ teamID : doc._id, message: 'Team Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});
