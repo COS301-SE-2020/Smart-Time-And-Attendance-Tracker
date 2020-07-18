@@ -28,15 +28,15 @@ module.exports.uncomplete = (req, res) => {
 }
 
 module.exports.update = (req, res) => {
+    var updated = false;
+    var error;
     if(req.body.projectName)
     {
         ProjectModel.update({ _id: req.body.projectID},{ProjectName: req.body.projectName},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project name updated'});
+                error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
@@ -44,11 +44,9 @@ module.exports.update = (req, res) => {
     {
         ProjectModel.update({ _id: req.body.projectID},{TimeSpent: req.body.timeSpent},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project time updated'});
+                error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
@@ -56,11 +54,9 @@ module.exports.update = (req, res) => {
     {
         ProjectModel.update({ _id: req.body.projectID},{DueDate: req.body.dueDate},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project due date updated'});
+                error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
@@ -68,16 +64,20 @@ module.exports.update = (req, res) => {
     {
         ProjectModel.update({ _id: req.body.projectID},{HourlyRate: req.body.hourlyRate},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project hourly rate updated'});
+                error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
-
+    if(err)
+        return res.status(500).send({message: 'Internal Server Error: ' + error});
+    else if(updated)
+        return res.status(200).json({message: 'Project successfully updated'});
+    else
+        return res.status(404).json({message: 'Project not found'}); 
 }
+
 /**
  * receives project details
  * - ensure person adding is a authenticated user

@@ -32,54 +32,54 @@ module.exports.completeTask = (req, res, next) => {
 
 
 module.exports.update = (req, res) => {
-    if(req.body.TaskName)
+    var error;
+    var updated = false;
+    if(req.body.taskName)
     {
-        TaskModel.update({ _id: req.body.TaskName},{TaskName: req.body.TaskName},(err, result) => {
+        TaskModel.update({ _id: req.body.taskID},{TaskName: req.body.taskName},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task name updated'});
+                error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
-    if(req.body.TimeSpent)
+    if(req.body.timeSpent)
     {
-        TaskModel.update({ _id: req.body.ProjectID},{TimeSpent: req.body.TimeSpent},(err, result) => {
+        TaskModel.update({ _id: req.body.taskID},{TimeSpent: req.body.timeSpent},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task time updated'});
+                error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
-    if(req.body.DueDate)
+    if(req.body.dueDate)
     {
-        TaskModel.update({ _id: req.body.ProjectID},{DueDate: req.body.DueDate},(err, result) => {
+        TaskModel.update({ _id: req.body.taskID},{DueDate: req.body.dueDate},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task due date updated'});
+                error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
-    if(req.body.MonetaryValue)
+    if(req.body.monetaryValue)
     {
-        TaskModel.update({ _id: req.body.ProjectID},{MonetaryValue: req.body.MonetaryValue},(err, result) => {
+        TaskModel.update({ _id: req.body.taskID},{MonetaryValue: req.body.monetaryValue},(err, result) => {
             if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task monetary value updated'});
+             error = err;
+            else if(result)
+                updated = true;
                     
         });
     }
+    if(err)
+        return res.status(500).send({message: 'Internal Server Error: ' + error});
+    else if(updated)
+        return res.status(200).json({message: 'Task successfully updated'});
+    else
+        return res.status(404).json({message: 'Task not found'}); 
 }
 
 
