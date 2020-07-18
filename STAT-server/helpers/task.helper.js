@@ -46,7 +46,8 @@ module.exports.getTaskName = (id, done)=>{
             var text = {
                 'ID': result._id,
                 'taskName': result.TaskName,
-                'taskStatus': result.Status
+                'taskStatus': result.Status,
+                'dueDate': result.DueDate
             }
             done(null, text);
         }        

@@ -22,7 +22,7 @@ module.exports.isSecurityAdmin = (req, res, next) => {
 }
 
 //checks to see if user has a role of "Team Leader"
-module.exports.isTeamLead = (req, res, next) => {
+module.exports.isTeamLeader = (req, res, next) => {
 
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 

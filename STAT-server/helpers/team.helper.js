@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const TeamModel = mongoose.model("Team");
+const TeamModel = mongoose.model("teams");
 const ProjectHelper =require('../helpers/project.helper');
 
 module.exports.getTasksOfTeam = (id, done)=>{
@@ -7,19 +7,19 @@ module.exports.getTasksOfTeam = (id, done)=>{
         if(err) 
             done(err);
         else if (!result)
-            done("Team not found.",false);
+            done(null,false);
+        else if (!result.ProjectID)
+            done(null,false);
         else if(result)
         {
             ProjectHelper.getTasks(result.ProjectID,(err,val)=> {
                 if(err)
                     done(err);
                 else if(val == false) 
-                    done(err,false);
-                else 
-                {
-                    done(null, val);
-                    
-                }
+                    done(null,false);
+                else
+                    done(null, val);   
+            
             });
         }
            

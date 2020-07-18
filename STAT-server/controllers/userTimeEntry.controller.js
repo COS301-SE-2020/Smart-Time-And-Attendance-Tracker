@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const TaskHelper = require("../helpers/task.helper");
+const ProjectHelper = require("../helpers/project.helper");
 const UserTimeEntryModel = mongoose.model("UserTimeEntry");
 const TimeEntryModel = mongoose.model("TimeEntry");
 
@@ -8,21 +9,24 @@ module.exports.addTimeEntry = (req, res) => {
     timeEntry.Date = req.body.Date;
     timeEntry.TaskID = req.body.TaskID;
     timeEntry.StartTime = req.body.StartTime;
-    if(req.body.EndTime)
-        timeEntry.EndTime = req.body.EndTime;
-    else
-        timeEntry.EndTime = 0;
-    timeEntry.Description = req.body.Description;
-    timeEntry.Device = req.body.Device;
+
     if(req.body.ActiveTime)
         timeEntry.ActiveTime = req.body.ActiveTime;
     else
         timeEntry.ActiveTime = 0;
-
+    if(req.body.EndTime)
+        timeEntry.EndTime = req.body.EndTime;
+        /*if(timeEntry.ActiveTime == 0)
+            timeEntry.ActiveTime = req.body.EndTime - req.body.StartTime;*/
+    else
+        timeEntry.EndTime = 0;
     if(req.body.MonetaryValue)
-        timeEntry.MonetaryValue = req.body.EndTMonetaryValueime;
+            timeEntry.MonetaryValue = req.body.MonetaryValue;
     else
         timeEntry.MonetaryValue = 0;
+
+    timeEntry.Description = req.body.Description;
+    timeEntry.Device = req.body.Device;
 
     timeEntry.save((error, timeEntryDoc) => {
         if(!error)
@@ -39,7 +43,7 @@ module.exports.addTimeEntry = (req, res) => {
                     userTimeEntry.TimeEntries = [timeEntryDoc];
                     userTimeEntry.save((err, doc) => {
                     if(!err)
-                        return res.status(200).json({ TimeEntryID: timeEntryDoc._id,  message: 'Time recorded successfully' });
+                        return res.status(200).json({ timeEntryID: timeEntryDoc._id,  message: 'Time recorded successfully' });
                     else 
                     {
                         if (err.code == 11000)
@@ -53,13 +57,14 @@ module.exports.addTimeEntry = (req, res) => {
                     result.TimeEntries.push(timeEntryDoc);
                     result.save((err, doc) => {
                         if(!err)
-                            return res.status(200).json({ message: 'Time recorded successfully', "TimeEntryID": timeEntryDoc._id });
+                            return res.status(200).json({timeEntryID: timeEntryDoc._id, message: 'Time recorded successfully' });
                         else
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                     });
                 }
             });
         }
+
         else 
         {
             if (error.code == 11000)
@@ -67,8 +72,7 @@ module.exports.addTimeEntry = (req, res) => {
             else
                 return res.status(500).send({message: 'Internal Server Error: ' + error});
         }
-    });            
-
+    });     
 }
 //Update the time enty
 //Request body - Has values to update
@@ -104,6 +108,7 @@ module.exports.updateTimeEntry = (req, res) => {
                     resultReturn = false;              
             });
         }
+        //update monetary value too
         if(req.body.ActiveTime)
         {
             TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{ActiveTime: req.body.ActiveTime},(err, result) => {
@@ -123,15 +128,6 @@ module.exports.updateTimeEntry = (req, res) => {
                     resultReturn = false;      
             });
         }
-        if(req.body.MonetaryValue)
-        {
-            TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{MonetaryValue: req.body.MonetaryValue},(err, result) => {
-                if (err) 
-                    error= err;
-                else if (!result)
-                    resultReturn = false;      
-            });
-        }
         if(error)
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         if(!resultReturn)
@@ -145,51 +141,62 @@ module.exports.updateTimeEntry = (req, res) => {
 //Parameters - Date string
 // Returns - Array of time entry objects
 module.exports.getDailyTimeEntries = (req, res) => {  
+    var count = 0;
+    var count2 = 0;
+    var count3 = 0;
     UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
-            return res.status(404).json({ message: 'No time entries for the given user were found' }); 
+            return res.status(404).json({ message: 'User not found' }); 
         else
         {
-                var date = req.query.date;
-                var TimeEntries=[];
-                var times = result.TimeEntries.length
+            var date = req.query.date;
+            var timeEntries=[];
+            var times = result.TimeEntries.length
+            if(times == 0)
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            else
+            {
                 for(var a=0; a<times; a++)
                 {
-                    TimeEntryModel.findOne({_id: result.TimeEntries[a]._id},(err,val)=>
-                    {
+        
+                    TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>
+                    {   
+                        count3= count3+1; 
+                        
                         if(err)
                             return res.status(500).send({message: 'Internal Server Error: ' + error});
 
-                        else if (!val) 
-                            return res.status(404).json({ message: 'Time entry not found' });
-                        else 
+                        else if(val)
                         {
                             if(date == val.Date)
                             {
+                                count = count+1;
+
                                 TaskHelper.getName(val.TaskID,(err,result)=>
                                 {
+                                    count2 = count2 +1;
                                     if(err)
                                         return res.status(500).send({message: 'Internal Server Error: ' + err});
-                
-                                    else if(result == false) 
-                                        return res.status(404).json({ message: 'Task not found' });
-                                    else 
-                                        TimeEntries.push({"TimeEntryID": val.ID,"Date":val.Date, "StartTime":val.StartTime, "EndTime":val.EndTime, "Duration":val.Duration, "Task": result, "Project":"TBA", "Description": val.Description});
-                                    
+                                    else if(result)
+                                    {
+                                        timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: result, description: val.Description, monetaryValue:val.MonetaryValue});
+                                        if(count == count2)
+                                            return res.status(200).json({timeEntries}); 
+                                        
+                                    }
                                 });
                             }
+            
+                        };
+                        if(count3 == times && count == 0)
+                            return res.status(404).json({ message: 'No time entries for the given day were found' });
                     
-                            if(TimeEntries.length == 0)
-                                return res.status(404).json({ message: 'No time entries found for date given' }); 
-                            else if(TimeEntries.length == times)
-                                return res.status(200).json({TimeEntries}); 
-                        }
                     });
                 }
             }
-
+        }
     });
 }
 
@@ -223,11 +230,10 @@ module.exports.deleteTimeEntry = (req, res) => {
                         if(errs)
                             return res.status(500).send({message: 'Internal Server Error: ' + errs});
                         else if (!vals) 
-                            return res.status(404).json({ message: 'Time entry not found --' });
+                            return res.status(404).json({ message: 'Time entry not found' });
                         else 
-                        {
                             return res.status(200).json({ message: 'Time entry deleted' });
-                        }
+        
 
                         
                     })

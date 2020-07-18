@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
 const RoleHelper =require('../helpers/role.helper');
-
+const TeamHelper =require('../helpers/team.helper');
 //const request = require('request');
 
 module.exports.login = (req, res, next) => {
@@ -12,7 +12,7 @@ module.exports.login = (req, res, next) => {
     passport.authenticate('local', (err,user,info)=>{
         //error from passport
         if(err)
-            return res.status(500).json({message: 'Internal Server Error: ' + error});
+            return res.status(500).json({message: 'Internal Server Error: ' + err});
         //registered user
         else if(user) 
         {
@@ -41,7 +41,7 @@ module.exports.register = (req, res, next) => {
     }
     else{
             UserModel.findOne({ Email: req.body.email }, function(err, cons) { //check email duplicates
-                if (err) return res.status(500).send({message: 'Internal Server Error: ' + error});
+                if (err) return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                 if (cons){
                     return res.status(409).send({message: 'User already exists'});
@@ -62,7 +62,7 @@ module.exports.register = (req, res, next) => {
                             if (err.code == 11000)
                                 res.status(409).send({message: 'User already exists'});
                             else
-                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+                                return res.status(500).send({message: 'Internal Server Error: ' + err});
                         }
                     });
     
@@ -71,12 +71,24 @@ module.exports.register = (req, res, next) => {
             });
     }
 }
-    
+
+module.exports.changePass = (req, res, next) => {
+    UserModel.updateOne({ _id: req.ID},{Password: req.body.pass},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'Password changed'});
+               
+    });
+   
+}   
 
 module.exports.getName = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         else
@@ -89,7 +101,7 @@ module.exports.getName = (req, res, next) => {
 module.exports.getRoles = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         
@@ -100,28 +112,6 @@ module.exports.getRoles = (req, res, next) => {
             for(i=0; i<result.Role.length; i++)
             {
                 
-                /*request({
-                    method: 'POST',
-                    url: 'http://127.0.0.1:3000' + '/api/role/getRole',
-                    body: {
-                        ID:  result.Role[i]
-                    },
-                    json: true
-                }, (error, response, body) => {
-                    if (error) {
-                        console.error(error)
-                        return
-                    }
-                    else if(response.statusCode == 200)
-                    {
-                        rolesOfUser.push(response.body.role);
-                        if(rolesOfUser.length == result.Role.length)
-                        {
-                            return res.status(200).json({ status: true, roles : rolesOfUser, authenticate: req.Authenticate});
-                        }
-                    }
-                });
-                const RoleModel = mongoose.model("Role");*/
                  RoleHelper.getRole(result.Role[i],(err,val)=>
                  {
                      if(err)
@@ -148,7 +138,7 @@ module.exports.getRoles = (req, res, next) => {
 module.exports.getUnauthenticatedUsers = (req, res, next) => {
     UserModel.find({  Authenticate : false},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'No unauthenticated users found' }); 
         else
@@ -163,20 +153,20 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
 }
 //Only a security admin can make this request
 //Parameters - None
-//Returns - Array with all authernticated users objects
+//Returns - Array with all authenticated users objects
 module.exports.getAllUsers = (req, res, next) => {
     UserModel.find({  Authenticate : true},(err, result) => {
         if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'No users found' }); 
         else
         {
-            Users=[];
+            users=[];
             for(var a=0; a<result.length; a++){
-                Users.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
+                users.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
-            return res.status(200).json({Users});
+            return res.status(200).json({users});
         }
     });
 }
@@ -196,21 +186,21 @@ module.exports.authenticate = (req, res, next) => {
 }
 
 module.exports.addTeam = (req, res, next) => {
-    UserModel.findOne({_id : req.body.userID}, function(err, result) {
+    UserModel.findOne({_id : req.body.UserID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else if (!result)
         {
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(404).send({message: 'User not found'});
         }
         else {
             result.Team.push(req.TeamID)
             result.save((err, doc) => {
                 if(!err)
                 {
-                    return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
+                    return res.status(200).json({ TeamID: result._id, message: 'User successfully added to team' });
                 }
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -223,7 +213,7 @@ module.exports.addTeam = (req, res, next) => {
 //Request body - ID of user to remove/reject
 //Returns - Succes or error message
 module.exports.remove = (req, res, next) => {
-    UserModel.removeOne({ _id: req.body.UserID},(err, result) => {
+    UserModel.deleteOne({ _id: req.body.UserID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -248,6 +238,8 @@ module.exports.isAuthenticated = (req, res, next) => {
   
 }
 module.exports.getTasks = (req, res, next) => {
+    let error = false;
+    let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -256,25 +248,32 @@ module.exports.getTasks = (req, res, next) => {
         
         else
         {
-            var projectsOfUser = [];
+            if(!result.Team.length)
+                return res.status(404).json({ message: 'User is not assigned to a team' });
             for(i=0; i<result.Team.length; i++)
             {
                 TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
                  {
-                    if(val == false) 
-                        return res.status(404).json({ message:  'No tasks found' });
-                    else if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + err});
-                    else 
+                    if(err)
                     {
+                        error = true;
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    }
+                    else if(val)
+                    {
+                        
                         projectsOfUser.push(val);
-                        if(projectsOfUser.length == result.Team.length)
+                        if(i == result.Team.length)
                         {
-                            return res.status(200).json({projects : projectsOfUser});
+                            if(projectsOfUser.length > 0)
+                                return res.status(200).json({projects : projectsOfUser});
+                            else    
+                                return res.status(404).json({ message:  'No projects found' });
                         }
                     }
                 });
             }
+            
         }
     });
 }
