@@ -32,7 +32,7 @@
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(editProjectModal)">
+                          (click)="open(editProjectModal); popProjectForm(p)">
                           <mat-icon inline="true">edit</mat-icon>
                   </button>
                   <button *ngIf="roles.includes('Team Leader')" 
@@ -119,18 +119,18 @@
       <div class="info row">
 
         <!-- tasks -->
-        <div *ngIf="tasksNum == '-'" id="numTasks" class="col-4">
+        <div *ngIf="loading" id="numTasks" class="col-4">
           <b>-</b><br>TASKS
         </div>
-        <div *ngIf="tasks && tasks?.length == 1" id="numTasks" class="col-4">
+        <div *ngIf="tasksNum == 1" id="numTasks" class="col-4">
           <b>1</b><br>TASK
         </div>
-        <div *ngIf="tasks && (tasks.length == 0 || tasks.length > 1)" id="numTasks" class="col-4">
-          <b>{{tasks.length}}</b><br>TASKS
+        <div *ngIf="(tasksNum == 0 || tasksNum > 1)" id="numTasks" class="col-4">
+          <b>{{tasksNum}}</b><br>TASKS
         </div>
         
         <!-- due -->
-        <div *ngIf="tasksDue == '-'" id="numDue" class="col-4">
+        <div *ngIf="loading" id="numDue" class="col-4">
           <b>-</b><br>DUE
         </div>
         <div *ngIf="tasksDue == 1" id="numDue" class="col-4">
@@ -141,7 +141,7 @@
         </div>
 
         <!-- done -->
-        <div *ngIf="tasksDone == '-'" id="numDone" class="col-4">
+        <div *ngIf="loading" id="numDone" class="col-4">
           <b>-</b><br>DONE
         </div>
         <div *ngIf="tasksDone == 1" id="numDone" class="col-4">
@@ -154,7 +154,7 @@
 
       <h2>Upcoming Tasks</h2>
         <div id="tasks">
-          <mat-spinner *ngIf="!upcoming && !error" class="req-spinner"></mat-spinner>
+          <mat-spinner *ngIf="upcoming.length == 0 && !error" class="req-spinner"></mat-spinner>
           <i *ngIf="error == 'Not Found'">You have no upcoming tasks.</i>
           <ngb-carousel [showNavigationArrows]="false" interval="0">
             <ng-template ngbSlide *ngFor="let u of upcoming">
@@ -188,24 +188,26 @@
       <form [formGroup]="addProjectForm">
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project Name</mat-label>
-          <input matInput formControlName="projectName" placeholder="My Project" name = "projectName" required>
+          <input matInput formControlName="projectName" placeholder="My Project" name = "projectName">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Due Date</mat-label>
-          <input matInput type="date" formControlName="dueDate" placeholder="My Project" name = "dueDate" required>
+          <input matInput type="date" formControlName="dueDate" name = "dueDate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Hourly Rate</mat-label>
-          <input matInput formControlName="hourlyRate" placeholder="0.00" name = "hourlyRate" required>
+          <input matInput formControlName="hourlyRate" placeholder="0.00" name = "hourlyRate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); addProject(addProjectForm.value)">Create Project</button>
+      <button mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addProject(addProjectForm.value)"
+              [disabled]="addProjectForm.invalid">Create Project</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -228,27 +230,28 @@
     </div>
 
     <div class="modal-body">
-      <form [formGroup]="editProjectForm">
+      <form #editProjectForm="ngForm">
+        <input hidden name="projectID" type="text" [(ngModel)]="projectToEdit.projectID" [value]="projectToEdit.projectID">
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project Name</mat-label>
-          <input matInput formControlName="projectName" placeholder="My Project" name = "projectName" required>
+          <input matInput placeholder="My Project" name = "projectName" [(ngModel)]="projectToEdit.projectName" [value]="projectToEdit.projectName">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Due Date</mat-label>
-          <input matInput type="date" formControlName="dueDate" placeholder="My Project" name = "dueDate" required>
+          <input matInput type="date" placeholder="My Project" name = "dueDate" [(ngModel)]="projectToEdit.dueDate" [value]="projectToEdit.dueDate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Hourly Rate</mat-label>
-          <input matInput formControlName="hourlyRate" placeholder="0.00" name = "hourlyRate" required>
+          <input matInput placeholder="0.00" name = "hourlyRate" [(ngModel)]="projectToEdit.hourlyRate" [value]="projectToEdit.hourlyRate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)">Save Changes</button>
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)">Save Changes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 

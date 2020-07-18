@@ -18,19 +18,24 @@ export class ProjectsComponent implements OnInit {
   roles : string
   projects : Object[]
   tasks : Object[] = []
-  tasksNum : any = '-'
-  tasksDone : any = '-'
-  tasksDue : any = '-'
+  tasksNum : number
+  tasksDone : number
+  tasksDue : number
+  loading : boolean = true
   slides : number = 0
   upcoming : Object[] = []
 
   // forms
   addProjectForm : FormGroup
-  editProjectForm : FormGroup
+  //editProjectForm : FormGroup
+  projectToEdit : any
 
   error : string = null
 
   ngOnInit(): void {
+    // reset forms
+    this.resetProjectForm()
+
     this.roles = localStorage.getItem('roles');
 
     /**********
@@ -45,11 +50,11 @@ export class ProjectsComponent implements OnInit {
     });
 
     // edit project
-    this.editProjectForm = new FormGroup({
-      projectName : new FormControl('', [Validators.required]),
-      dueDate : new FormControl('', [Validators.required]),
-      hourlyRate : new FormControl('', [Validators.required])
-    });
+    //this.editProjectForm = new FormGroup({
+      //projectName : new FormControl('', [Validators.required]),
+      //dueDate : new FormControl('', [Validators.required]),
+      //hourlyRate : new FormControl('', [Validators.required])
+    //});
 
     this.getProAndTasks()
   }
@@ -66,7 +71,8 @@ export class ProjectsComponent implements OnInit {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.projects = data['projects']
-
+      this.getTasks()
+      this.error = 'none'
     },
     error => {
       console.log(error);
@@ -99,9 +105,10 @@ export class ProjectsComponent implements OnInit {
 
   // edit project (projectID must be added to body)
   editProject(form : NgForm) {
+    console.log(form)
     this.pmService.editProject(localStorage.getItem('token'),form).subscribe((data) => {
       console.log(data);
-
+      this.getProAndTasks()
     },
     error => {
       console.log(error);
@@ -112,12 +119,10 @@ export class ProjectsComponent implements OnInit {
   editTask(form : NgForm) {
     this.pmService.editTask(localStorage.getItem('token'),form).subscribe((data) => {
       console.log(data);
-
     },
     error => {
       console.log(error);
     });
-
   }
   // delete project
   deleteProject(projectID : String) {
@@ -198,11 +203,14 @@ export class ProjectsComponent implements OnInit {
     var startDate = new Date()
     var endDate = startDate.getDate()+6
     console.log(startDate + ' AND ' + endDate)
-    this.tasksNum = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+    this.tasksNum = this.tasks.length
 
     this.tasksDone = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
-    this.tasksDue = this.tasks.length - this.tasksDone
+    this.tasksDue = this.tasksNum - this.tasksDone
+
+    this.loading = false
     this.slides = Math.ceil(this.tasksDue / 4)
+
 
     // get upcoming tasks
     let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
@@ -221,6 +229,19 @@ export class ProjectsComponent implements OnInit {
       day:"2-digit"
     }
     return new Date(d).toLocaleDateString('en-US', options)
+  }
+
+  // reset forms
+  resetProjectForm() {
+    this.projectToEdit = {'projectID' : '', 'projectName' : '', 'dueDate' : '', 'hourlyRate' : 0}
+  }
+
+  // populate forms
+  popProjectForm(p : any) {
+    this.projectToEdit.projectID = p.ID
+    this.projectToEdit.projectName = p.projectName
+    this.projectToEdit.dueDate = new Date(p.dueDate).toISOString().substring(0,10)
+    this.projectToEdit.hourlyRate = p.hourlyRate
   }
 
   /****
