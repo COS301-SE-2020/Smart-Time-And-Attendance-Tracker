@@ -28,9 +28,9 @@ module.exports.uncomplete = (req, res) => {
 }
 
 module.exports.update = (req, res) => {
-    if(req.body.ProjectName)
+    if(req.body.projectName)
     {
-        ProjectModel.update({ _id: req.body.ProjectID},{ProjectName: req.body.ProjectName},(err, result) => {
+        ProjectModel.update({ _id: req.body.projectID},{ProjectName: req.body.projectName},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + error});
             else if (!result)
@@ -40,9 +40,9 @@ module.exports.update = (req, res) => {
                     
         });
     }
-    if(req.body.TimeSpent)
+    if(req.body.timeSpent)
     {
-        ProjectModel.update({ _id: req.body.ProjectID},{TimeSpent: req.body.TimeSpent},(err, result) => {
+        ProjectModel.update({ _id: req.body.projectID},{TimeSpent: req.body.timeSpent},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + error});
             else if (!result)
@@ -52,15 +52,27 @@ module.exports.update = (req, res) => {
                     
         });
     }
-    if(req.body.DueDate)
+    if(req.body.dueDate)
     {
-        ProjectModel.update({ _id: req.body.ProjectID},{DueDate: req.body.DueDate},(err, result) => {
+        ProjectModel.update({ _id: req.body.projectID},{DueDate: req.body.dueDate},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + error});
             else if (!result)
                 return res.status(404).json({ message: 'Project not found' }); 
             else
                 return res.status(200).json({message: 'Project due date updated'});
+                    
+        });
+    }
+    if(req.body.hourlyRate)
+    {
+        ProjectModel.update({ _id: req.body.projectID},{HourlyRate: req.body.hourlyRate},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Project not found' }); 
+            else
+                return res.status(200).json({message: 'Project hourly rate updated'});
                     
         });
     }

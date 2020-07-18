@@ -54,8 +54,8 @@ router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 
 
-router.post("/task/startTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.startTask);
-router.post("/task/completeTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
+router.post("/task/start",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.startTask);
+router.post("/task/complete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
 router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project.deleteTask, task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
