@@ -4,7 +4,7 @@ var TeamSchema = new mongoose.Schema({
     ProjectID:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project', 
-        required : "Required"
+        //required : "Required"     //will the project be assigned to the team when team is created?
     },    
     TeamLeader:{
         type: mongoose.Schema.Types.ObjectId,
@@ -13,8 +13,10 @@ var TeamSchema = new mongoose.Schema({
     },
     TeamMembers:[
         { 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'User',
+            _id : {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: 'User'
+            },
             Role: {
                 type: String
             }
@@ -22,4 +24,4 @@ var TeamSchema = new mongoose.Schema({
     ],
 });
 
-mongoose.model("Team", TeamSchema);
+mongoose.model("teams", TeamSchema);

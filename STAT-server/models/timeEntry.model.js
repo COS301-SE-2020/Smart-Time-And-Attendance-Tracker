@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const TimeEntrySchema = mongoose.Schema({
   TaskID: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Task',
     required : "Task required."
   },
   StartTime: {
@@ -28,6 +29,9 @@ const TimeEntrySchema = mongoose.Schema({
   Device: { 
     type: String,
     required: "Device required."
+  },
+  MonetaryValue: { 
+    type: Number
   }
 });
 
