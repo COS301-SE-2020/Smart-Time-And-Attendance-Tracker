@@ -2,6 +2,10 @@
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 
+module.exports.addTask = (req, res) => {
+
+
+}
 
 module.exports.complete = (req, res) => {
     ProjectModel.update({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
