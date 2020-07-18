@@ -1,7 +1,7 @@
 
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
-
+const TaskHelper = require("../helpers/task.helper");
 
 module.exports.complete = (req, res) => {
     ProjectModel.update({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
@@ -106,7 +106,7 @@ module.exports.add = (req, res, next) => {
 
 module.exports.addTask = (req, res, next) => {
 
-        ProjectModel.findOne({_id : req.body.ProjectID}, function(err, result) {
+        ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -130,28 +130,32 @@ module.exports.addTask = (req, res, next) => {
 
 
 module.exports.deleteProject = (req, res) => {  
-    console.log(req.query.projectID);
-    ProjectModel.findOne({_id : req.query.projectID},(err, result) => {
-        if (err) 
+    ProjectModel.findOne({_id: req.query.projectID},(err,val)=>{
+        if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
-            return res.status(404).json({ message: 'Project doesnt exist' }); 
-        else
+        else if (!val) 
+            return res.status(404).json({ message: 'Project not found' });
+        else 
         {
-              
-            ProjectModel.deleteOne({_id: req.query.projectID},(err,val)=>{
+            TaskHelper.deleteTask(val.Tasks,(err,result)=>
+            {
+                if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                else
+                {
+                    ProjectModel.deleteOne({_id: req.query.projectID},(err,val)=>{
                         if(err)
-                            return res.status(500).send({message: 'Internal Server Error: ' + error});
-                        else if (!val) 
-                            return res.status(404).json({ message: 'Project not found' });
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+    
                         else 
-                        {
-                            return res.status(200).json({ message: 'Project deleted successfully'});
-                        }
-                    });
+                            return res.status(200).json({ message: 'Project successfully deleted '});
+                    });   
+                    
+                }
+            });
                 
-            }
-
+        }    
+        
     });
 }
 

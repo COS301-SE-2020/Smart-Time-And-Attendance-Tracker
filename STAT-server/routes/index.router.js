@@ -41,7 +41,7 @@ router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, team
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add);
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
 router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.complete);
-router.delete("/project/deleteProject",  project.deleteProject);
+router.delete("/project", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.deleteProject);
 router.post("/project/uncomplete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.uncomplete);
 router.post("/project/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.update);
 
@@ -56,7 +56,7 @@ router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 
 router.post("/task/startTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.startTask);
 router.post("/task/completeTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
-router.delete("/task/deleteTask",  task.deleteTask);
+router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
 
