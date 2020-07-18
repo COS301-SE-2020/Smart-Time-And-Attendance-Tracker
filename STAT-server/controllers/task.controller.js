@@ -1,75 +1,111 @@
-const express = require("express");
-const router = express.Router();
+
 const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
 
 module.exports.startTask = (req, res, next) => {
-    TaskModel.findOne({_id : (req.body.taskID)}, function(err, result) {
-        if(err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+  
+    TaskModel.updateOne({ _id: req.body.TaskID},{Status: 'In Progress'},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else 
-        {
-            TaskModel.update({ _id: req.body.taskID},{Status: 'IN PROGRESS'},(err, result) => {
-                if (err) 
-                    return res.status(500).send({message: 'Internal Server Error: ' + error});
-                else if (!result)
-                    return res.status(404).send({message: 'Internal Server Error: ' + error});
-                else
-                    return res.status(200).json({message: 'Task status updated to "IN PROGRESS"'});
-                       
-            });
-        }
+           return res.status(404).send({message: 'Task not found'});
+        else
+            return res.status(200).json({message: 'Task status updated to "In Progress'});
+
     });
+
 }
 
 
 module.exports.completeTask = (req, res, next) => {
-    TaskModel.findOne({_id : (req.body.taskID)}, function(err, result) {
-        if(err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+   
+    TaskModel.update({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
+            return res.status(404).send({message: 'Task not found'});
+        else
+            return res.status(200).json({message: 'Task status updated to "COMPLETED"'});
+
+    });
+}
+
+
+module.exports.update = (req, res) => {
+    if(req.body.TaskName)
+    {
+        TaskModel.update({ _id: req.body.TaskName},{TaskName: req.body.TaskName},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Task not found' }); 
+            else
+                return res.status(200).json({message: 'Task name updated'});
+                    
+        });
+    }
+    if(req.body.TimeSpent)
+    {
+        TaskModel.update({ _id: req.body.ProjectID},{TimeSpent: req.body.TimeSpent},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Task not found' }); 
+            else
+                return res.status(200).json({message: 'Task time updated'});
+                    
+        });
+    }
+    if(req.body.DueDate)
+    {
+        TaskModel.update({ _id: req.body.ProjectID},{DueDate: req.body.DueDate},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Task not found' }); 
+            else
+                return res.status(200).json({message: 'Task due date updated'});
+                    
+        });
+    }
+    if(req.body.MonetaryValue)
+    {
+        TaskModel.update({ _id: req.body.ProjectID},{MonetaryValue: req.body.MonetaryValue},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + error});
+            else if (!result)
+                return res.status(404).json({ message: 'Task not found' }); 
+            else
+                return res.status(200).json({message: 'Task monetary value updated'});
+                    
+        });
+    }
+}
+
+
+/*
+  DESCRPTION
+*/
+
+/*module.exports.add = (req, res, next) => {
+    var task = new TaskModel();
+    console.log(req.body);
+    task.TaskName = req.body.taskName;
+    task.DueDate = req.body.dueDate;
+    task.StartDate = req.body.startDate;
+    task.TimeSpent = 0;
+    task.MonetaryValue = 0;
+    task.save((err, doc) => {
+        if(!err){
+            req.TaskID = doc._id;
+            next();
+        }
+        else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else 
-        {
-            TaskModel.update({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
-                if (err) 
-                    return res.status(500).send({message: 'Internal Server Error: ' + error});
-                else if (!result)
-                    return res.status(404).send({message: 'Internal Server Error: ' + error});
-                else
-                    return res.status(200).json({message: 'Task status updated to "COMPLETED"'});
-                       
-            });
         }
     });
 }
 
-/*router.get("/", (req, res)=>{
-    res.send("Task controller");
-});
-
-
-router.post("/add", (req, res) => {
-    var task = new TaskModel();
-    task.ID = db.Task.find().Count()+1;
-    task.ProjectID = req.body.projectID;
-    task.ClientName = req.body.clientName;
-    task.TaskName = req.body.taskName;
-    task.StartTime = req.body.startTime;
-    task.TimeSpent = req.body.timeSpent;
-    task.ExpectedCost = req.body.expectedCost;
-    task.MonetaryValue = req.body.monetaryValue;    
-    task.save((err, doc) => {
-        if(!err){
-            res.send("Created Task");
-        }
-        else{
-            res.send("Error Occured");
-        }
-    })
-});
-
 module.exports = router;
 */
+
