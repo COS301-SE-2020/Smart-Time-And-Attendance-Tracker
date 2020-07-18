@@ -239,6 +239,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 }
 module.exports.getTasks = (req, res, next) => {
     let error = false;
+    let count = 0;
     let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
@@ -254,6 +255,7 @@ module.exports.getTasks = (req, res, next) => {
             {
                 TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
                  {
+                     count = count + 1;
                     if(err)
                     {
                         error = true;
@@ -261,19 +263,16 @@ module.exports.getTasks = (req, res, next) => {
                     }
                     else if(val)
                     {
-                        
                         projectsOfUser.push(val);
-                        if(i == result.Team.length)
+                        if(count == result.Team.length)
                         {
                             if(projectsOfUser.length > 0)
                                 return res.status(200).json({projects : projectsOfUser});
-                            else    
-                                return res.status(404).json({ message:  'No projects found' });
                         }
                     }
                     else
                     {
-                        if(i == result.Team.length)
+                        if(count == result.Team.length)
                         {
                             if(projectsOfUser.length == 0)
                                 return res.status(404).json({ message:  'No projects found' });
