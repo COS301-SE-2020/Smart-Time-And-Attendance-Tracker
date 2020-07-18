@@ -28,56 +28,43 @@ module.exports.uncomplete = (req, res) => {
 }
 
 module.exports.update = (req, res) => {
-    if(req.body.projectName)
-    {
-        ProjectModel.update({ _id: req.body.projectID},{ProjectName: req.body.projectName},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project name updated'});
-                    
-        });
-    }
-    if(req.body.timeSpent)
-    {
-        ProjectModel.update({ _id: req.body.projectID},{TimeSpent: req.body.timeSpent},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project time updated'});
-                    
-        });
-    }
-    if(req.body.dueDate)
-    {
-        ProjectModel.update({ _id: req.body.projectID},{DueDate: req.body.dueDate},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project due date updated'});
-                    
-        });
-    }
-    if(req.body.hourlyRate)
-    {
-        ProjectModel.update({ _id: req.body.projectID},{HourlyRate: req.body.hourlyRate},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Project not found' }); 
-            else
-                return res.status(200).json({message: 'Project hourly rate updated'});
-                    
-        });
-    }
 
+    ProjectModel.findOne({ _id: req.body.projectID},(err, result) => {
+        if(err)
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if(!result)
+            return res.status(404).json({message: 'Project not found'});
+        else
+        {
+            if(req.body.hasOwnProperty('projectName'))
+                 result.ProjectName = req.body.projectName;
+
+            if(req.body.hasOwnProperty('timeSpent'))
+                result.TimeSpent =  req.body.timeSpent;
+
+            if(req.body.hasOwnProperty('dueDate'))
+                result.DueDate =  req.body.dueDate;
+
+            if(req.body.hasOwnProperty('hourlyRate'))
+                result.HourlyRate =  req.body.hourlyRate;
+
+            if(req.body.hasOwnProperty('startDate'))
+                result.StartDate =  req.body.startDate;
+
+        
+                ProjectModel.updateOne({ _id: req.body.projectID},{ProjectName: result.ProjectName,TimeSpent:result.TimeSpent,
+                DueDate : result.DueDate, HourlyRate: result.HourlyRate, StartDate: result.StartDate},(err, result) => {
+                    if (err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else
+                        return res.status(200).json({message: 'Project successfully updated'});
+                
+                });
+           
+        }
+    });
 }
+
 /**
  * receives project details
  * - ensure person adding is a authenticated user

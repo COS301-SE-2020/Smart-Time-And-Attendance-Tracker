@@ -32,54 +32,40 @@ module.exports.completeTask = (req, res, next) => {
 
 
 module.exports.update = (req, res) => {
-    if(req.body.TaskName)
-    {
-        TaskModel.update({ _id: req.body.TaskName},{TaskName: req.body.TaskName},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task name updated'});
-                    
-        });
-    }
-    if(req.body.TimeSpent)
-    {
-        TaskModel.update({ _id: req.body.ProjectID},{TimeSpent: req.body.TimeSpent},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task time updated'});
-                    
-        });
-    }
-    if(req.body.DueDate)
-    {
-        TaskModel.update({ _id: req.body.ProjectID},{DueDate: req.body.DueDate},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task due date updated'});
-                    
-        });
-    }
-    if(req.body.MonetaryValue)
-    {
-        TaskModel.update({ _id: req.body.ProjectID},{MonetaryValue: req.body.MonetaryValue},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + error});
-            else if (!result)
-                return res.status(404).json({ message: 'Task not found' }); 
-            else
-                return res.status(200).json({message: 'Task monetary value updated'});
-                    
-        });
-    }
+    TaskModel.findOne({ _id: req.body.taskID},(err, result) => {
+        if(err)
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if(!result)
+            return res.status(404).json({message: 'Project not found'});
+        else
+        {
+            if(req.body.hasOwnProperty('taskName'))
+                 result.TaskName = req.body.taskName;
+
+            if(req.body.hasOwnProperty('timeSpent'))
+                result.TimeSpent =  req.body.timeSpent;
+
+            if(req.body.hasOwnProperty('dueDate'))
+                result.DueDate =  req.body.dueDate;
+
+            if(req.body.hasOwnProperty('monetaryValue'))
+                result.MonetaryValue =  req.body.monetaryValue;
+
+            if(req.body.hasOwnProperty('startDate'))
+                result.StartDate =  req.body.startDate;
+
+        
+                TaskModel.updateOne({ _id: req.body.taskID},{TaskName: result.TaskName,TimeSpent:result.TimeSpent,
+                DueDate : result.DueDate, MonetaryValue: result.MonetaryValue, StartDate: result.StartDate},(err, result) => {
+                    if (err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else
+                        return res.status(200).json({message: 'Task successfully updated'});
+                
+                });
+           
+        }
+    });
 }
 
 
