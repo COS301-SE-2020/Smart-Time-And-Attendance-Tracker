@@ -17,14 +17,17 @@ export class ProjectsComponent implements OnInit {
   roles : string
   projects : Object[]
   tasks : Object[] = []
-  tasksDone : number = 0
-  tasksDue : number = 0
+  tasksNum : any = '-'
+  tasksDone : any = '-'
+  tasksDue : any = '-'
   slides : number = 0
   upcoming : Object[] = []
 
   // forms
   addProjectForm : FormGroup
   editProjectForm : FormGroup
+
+  error : string = null
 
   ngOnInit(): void {
     this.roles = localStorage.getItem('roles');
@@ -64,7 +67,7 @@ export class ProjectsComponent implements OnInit {
     },
     error => {
       console.log(error);
-    
+      this.error = error.statusText
     }); 
   }
 
@@ -96,13 +99,21 @@ export class ProjectsComponent implements OnInit {
       }
     }
 
-    console.log(this.tasks)
+    // sort tasks according to due date
     this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate)
     console.log(this.tasks)
+
+    // get week details
+    var startDate = new Date()
+    var endDate = startDate.getDate()+6
+    console.log(startDate + ' AND ' + endDate)
+    this.tasksNum = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+
     this.tasksDone = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
     this.tasksDue = this.tasks.length - this.tasksDone
     this.slides = Math.ceil(this.tasksDue / 4)
 
+    // get upcoming tasks
     let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
 
     while (tempTasks.length) {

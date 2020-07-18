@@ -13,7 +13,9 @@
           </button>
         </h2>
         <div class="scroll">
-            <mat-spinner *ngIf="!projects" class="req-spinner"></mat-spinner>
+            <mat-spinner *ngIf="!projects && !error" class="req-spinner"></mat-spinner>
+
+            <i *ngIf="error == 'Not Found'">You have no projects.</i>
 
             <div id="accordion-padding"></div>
 
@@ -117,6 +119,9 @@
       <div class="info row">
 
         <!-- tasks -->
+        <div *ngIf="tasksNum == '-'" id="numTasks" class="col-4">
+          <b>-</b><br>TASKS
+        </div>
         <div *ngIf="tasks && tasks?.length == 1" id="numTasks" class="col-4">
           <b>1</b><br>TASK
         </div>
@@ -125,6 +130,9 @@
         </div>
         
         <!-- due -->
+        <div *ngIf="tasksDue == '-'" id="numDue" class="col-4">
+          <b>-</b><br>DUE
+        </div>
         <div *ngIf="tasksDue == 1" id="numDue" class="col-4">
           <b>1</b><br>DUE
         </div>
@@ -133,6 +141,9 @@
         </div>
 
         <!-- done -->
+        <div *ngIf="tasksDone == '-'" id="numDone" class="col-4">
+          <b>-</b><br>DONE
+        </div>
         <div *ngIf="tasksDone == 1" id="numDone" class="col-4">
           <b>1</b><br>DONE
         </div>
@@ -143,6 +154,8 @@
 
       <h2>Upcoming Tasks</h2>
         <div id="tasks">
+          <mat-spinner *ngIf="!upcoming && !error" class="req-spinner"></mat-spinner>
+          <i *ngIf="error == 'Not Found'">You have no upcoming tasks.</i>
           <ngb-carousel [showNavigationArrows]="false" interval="0">
             <ng-template ngbSlide *ngFor="let u of upcoming">
               <div>

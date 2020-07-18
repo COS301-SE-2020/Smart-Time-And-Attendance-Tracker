@@ -3,6 +3,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
+
 @Component({
   selector: 'app-today',
   templateUrl: './today.component.html',
@@ -28,6 +29,9 @@ export class TodayComponent implements OnInit {
   aTasksDisabled : boolean = true
   mTasksDisabled : boolean = true
 
+  entries : Object[]
+  week : Object[]
+
   ngOnInit(): void { 
     this.manualTrackingForm = new FormGroup({
       Description : new FormControl(''),
@@ -47,6 +51,8 @@ export class TodayComponent implements OnInit {
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
     this.getProAndTasks()
+    this.getEntries('2020-07-13')
+    this.getWeekInfo()
   }
 
   // modal
@@ -156,8 +162,9 @@ export class TodayComponent implements OnInit {
 
   // get tracking entries
   getEntries(date : string) {
-    this.amService.getTimeEntries(date, localStorage.getItem('token')).subscribe((data) => {
+    this.amService.getTimeEntries(localStorage.getItem('token'), date).subscribe((data) => {
       console.log(data);
+      this.entries = data['entries']
     },
     error => {
       console.log(error);
@@ -183,6 +190,25 @@ export class TodayComponent implements OnInit {
       toReturn += (d)
 
     return toReturn
+  }
+
+  getWeekInfo() {
+    var startDate = new Date()
+    for (let i = 0; i < 6; i++) {
+      console.log(this.formatWeekDate(startDate))
+      startDate.setDate(startDate.getDate()-1)
+    }
+
+    //this.week['today'] = this.getEntries()
+  }
+
+  // get correct date format
+  formatWeekDate(d : Date) {
+    const options = {
+      month:"long",
+      day:"2-digit"
+    }
+    return new Date(d).toLocaleDateString('en-US', options)
   }
 
 }
