@@ -59,7 +59,7 @@
 
                 <!-- tasks -->
                 <ul class="tasks">
-                  <li *ngFor="let t of p.tasks">{{t.taskName}}
+                  <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
                             matTooltip="Edit"

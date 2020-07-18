@@ -75,6 +75,7 @@ export class ProjectsComponent implements OnInit {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.projects = data['projects']
+      this.projects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
       this.getTasks()
       this.error = 'none'
     },
@@ -206,7 +207,7 @@ export class ProjectsComponent implements OnInit {
     }
 
     // sort tasks according to due date
-    this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate)
+    this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName)
     console.log(this.tasks)
 
     // get week details
@@ -229,6 +230,11 @@ export class ProjectsComponent implements OnInit {
       this.upcoming.push(tempTasks.splice(0,4))
     }
     console.log(this.upcoming)
+  }
+
+  sortProTasks(tasks : any) {
+    tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName)
+    return tasks
   }
 
   // get correct date format
