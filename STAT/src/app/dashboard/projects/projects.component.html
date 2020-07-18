@@ -13,6 +13,8 @@
           </button>
         </h2>
         <div class="scroll">
+            <mat-spinner *ngIf="!projects" class="req-spinner"></mat-spinner>
+
             <div id="accordion-padding"></div>
 
             <mat-accordion>
@@ -41,7 +43,7 @@
                   </button>
                   </mat-panel-title>
                   
-                <span class="due-date float-right">Due July 21, 2020</span>      
+                <span class="due-date float-right">Due {{formatDate(p.dueDate)}}</span>      
                 </mat-expansion-panel-header>
                 
                 <mat-divider></mat-divider><br>
@@ -63,7 +65,12 @@
                             matTooltipPosition="above">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
-                     <span class="float-right">July 13, 2020</span> <span class="float-right tag" [ngClass]="{'tag-ns': t.taskStatus == 'Not Started'}">{{t.taskStatus}}</span>
+                     <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
+                     <span class="float-right tag" 
+                          [ngClass]="{'tag-ns': t.taskStatus == 'Not Started',
+                                      'tag-ip': t.taskStatus == 'In Progress',
+                                      'tag-c': t.taskStatus == 'Completed'}">{{t.taskStatus}}</span>
+
                     <mat-divider></mat-divider>       
                   </li>
                 </ul>
@@ -101,138 +108,6 @@
               </mat-expansion-panel>
             <!-- END PROJECT **************************************** -->
 
-            <!-- PROJECT **************************** -->
-            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Capstone Project
-                <span class="tag numTasks">3 tasks</span>
-                </mat-panel-title>
-              <span class="due-date float-right">Due October 21, 2020</span>                
-
-              </mat-expansion-panel-header>
-
-              <mat-divider></mat-divider>
-
-              <!-- tasks -->
-              <ul class="tasks">
-                <li>API Calls <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-                <mat-divider></mat-divider>
-                <li>UI Design <span class="float-right">July 18, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-                <mat-divider></mat-divider>
-                <li>Unit Testing <span class="float-right">July 20, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
-              </ul>
-
-              <!-- team -->
-              <mat-action-row>
-                <img
-                  matTooltip={{name}} matTooltipPosition="below"
-                  src="../../../assets/profilePicDefault.jpg" 
-                  class="profile-pic" alt="Profile Picture">
-                <img
-                  matTooltip="Zac Efron" matTooltipPosition="below"
-                  src="../../../assets/proPic1.jpg" 
-                  class="profile-pic" alt="Profile Picture">
-                <img
-                  matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="../../../assets/proPic2.jpg" 
-                  class="profile-pic" alt="Profile Picture">
-              </mat-action-row>
-            </mat-expansion-panel>
-          <!-- END PROJECT **************************************** -->
-
-        <!-- PROJECT **************************** -->
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              IMY App
-            <span class="tag numTasks">3 tasks</span>
-            </mat-panel-title>
-          <span class="due-date float-right">Due July 21, 2020</span>                
-
-          </mat-expansion-panel-header>
-
-          <mat-divider></mat-divider><br>
-
-          <!-- tasks -->
-          <ul class="tasks">
-            <li>UI Design <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-            <mat-divider></mat-divider>
-            <li>Prototype <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-            <mat-divider></mat-divider>
-            <li>Report <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
-          </ul>
-
-          <!-- team -->
-          <mat-action-row>
-            <img
-              matTooltip={{name}} matTooltipPosition="below"
-              src="../../../assets/profilePicDefault.jpg" 
-              class="profile-pic" alt="Profile Picture">
-            <img
-              matTooltip="Zac Efron" matTooltipPosition="below"
-              src="../../../assets/proPic1.jpg" 
-              class="profile-pic" alt="Profile Picture">
-            <img
-              matTooltip="Henry Cavill" matTooltipPosition="below"
-              src="../../../assets/proPic2.jpg" 
-              class="profile-pic" alt="Profile Picture">
-              <button mat-mini-fab
-                      class="start-tracking addMember" 
-                      matTooltip="Add team member"
-                      matTooltipPosition="below">
-                <mat-icon inline="true">add</mat-icon>
-              </button>
-          </mat-action-row>
-        </mat-expansion-panel>
-      <!-- END PROJECT **************************************** -->
-
-      <!-- PROJECT **************************** -->
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Fix My Life
-          <span class="tag numTasks">3 tasks</span>
-          </mat-panel-title>
-        <span class="due-date float-right">Due August 26, 2020</span>                
-
-        </mat-expansion-panel-header>
-
-        <mat-divider></mat-divider><br>
-
-        <!-- tasks -->
-        <ul class="tasks">
-          <li>Eat Nuggets <span class="float-right">July 17, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-          <mat-divider></mat-divider>
-          <li>Get Abs <span class="float-right">July 25, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-          <mat-divider></mat-divider>
-          <li>Cure My Depression <span class="float-right">August 20, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
-        </ul>
-
-        <!-- team -->
-        <mat-action-row>
-          <img
-            matTooltip={{name}} matTooltipPosition="below"
-            src="../../../assets/profilePicDefault.jpg" 
-            class="profile-pic" alt="Profile Picture">
-          <img
-            matTooltip="Zac Efron" matTooltipPosition="below"
-            src="../../../assets/proPic1.jpg" 
-            class="profile-pic" alt="Profile Picture">
-          <img
-            matTooltip="Henry Cavill" matTooltipPosition="below"
-            src="../../../assets/proPic2.jpg" 
-            class="profile-pic" alt="Profile Picture">
-            <button mat-mini-fab
-                    class="start-tracking addMember" 
-                    matTooltip="Add team member"
-                    matTooltipPosition="below">
-              <mat-icon inline="true">add</mat-icon>
-            </button>
-        </mat-action-row>
-      </mat-expansion-panel>
-    <!-- END PROJECT **************************************** -->
-
             </mat-accordion>
         </div>
     </section>
@@ -240,45 +115,39 @@
     <section class="col-4">
       <h2>This Week</h2>
       <div class="info row">
-        <div id="numTasks" class="col-4">
-          <b>17</b><br>TASKS
+
+        <!-- tasks -->
+        <div *ngIf="tasks && tasks?.length == 1" id="numTasks" class="col-4">
+          <b>1</b><br>TASK
         </div>
-        <div id="numPro" class="col-4">
-          <b>5</b><br>DONE
+        <div *ngIf="tasks && (tasks.length == 0 || tasks.length > 1)" id="numTasks" class="col-4">
+          <b>{{tasks.length}}</b><br>TASKS
         </div>
-        <div id="numTeams" class="col-4">
-          <b>12</b><br>DUE
+        
+        <!-- due -->
+        <div *ngIf="tasksDue == 1" id="numDue" class="col-4">
+          <b>1</b><br>DUE
+        </div>
+        <div *ngIf="tasksDue == 0 || tasksDue > 1" id="numDue" class="col-4">
+          <b>{{tasksDue}}</b><br>DUE
+        </div>
+
+        <!-- done -->
+        <div *ngIf="tasksDone == 1" id="numDone" class="col-4">
+          <b>1</b><br>DONE
+        </div>
+        <div *ngIf="tasksDone == 0 || tasksDone > 1" id="numDone" class="col-4">
+          <b>{{tasksDone}}</b><br>DONE
         </div>
       </div><br>
 
       <h2>Upcoming Tasks</h2>
         <div id="tasks">
           <ngb-carousel [showNavigationArrows]="false" interval="0">
-            <ng-template ngbSlide>
+            <ng-template ngbSlide *ngFor="let u of upcoming">
               <div>
                 <ul class="tasks">
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                </ul>
-              </div>
-            </ng-template>
-            <ng-template ngbSlide>
-              <div>
-                <ul class="tasks"> 
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                </ul>
-              </div>
-            </ng-template>
-            <ng-template ngbSlide>
-              <div>
-                <ul class="tasks"> 
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
+                  <li *ngFor="let t of u"><small>{{t.projectName}} <span class="float-right">{{formatDate(t.dueDate)}}</span> </small> <span>{{t.taskName}}</span></li>
                 </ul>
               </div>
             </ng-template>

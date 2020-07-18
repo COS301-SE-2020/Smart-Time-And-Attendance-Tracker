@@ -80,7 +80,7 @@ export class OrganisationComponent implements OnInit {
 
   getMembers() {
     this.service.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
-      this.members = data['Users'];
+      this.members = data['users'];
     },
     error => {
       console.log(error);
