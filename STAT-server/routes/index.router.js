@@ -32,6 +32,7 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
 
 
+
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, team.add);
@@ -40,9 +41,10 @@ router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, team
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add);
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
 router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.complete);
-
+router.delete("/project/deleteProject",  project.deleteProject);
 router.post("/project/uncomplete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.uncomplete);
 router.post("/project/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.update);
+
 
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
@@ -51,12 +53,11 @@ router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdm
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 
-router.post("/project/addTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.addTask);
 
 router.post("/task/startTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.startTask);
 router.post("/task/completeTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
-
-
+router.delete("/task/deleteTask",  task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
+
 
 module.exports = router;
