@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
+import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 
 @Component({
   selector: 'app-projects',
@@ -10,7 +11,7 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public amService : AccountManagementService) { }
+  constructor(private modalService: NgbModal, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
 
   panelOpenState = false
   name = "John Doe"
@@ -35,14 +36,16 @@ export class ProjectsComponent implements OnInit {
 
     // add project
     this.addProjectForm = new FormGroup({
-      name : new FormControl('', [Validators.required]),
-      date : new FormControl('', [Validators.required])
+      projectName : new FormControl('', [Validators.required]),
+      dueDate : new FormControl('', [Validators.required]),
+      hourlyRate : new FormControl('', [Validators.required])
     });
 
     // edit project
     this.editProjectForm = new FormGroup({
-      name : new FormControl('', [Validators.required]),
-      date : new FormControl('', [Validators.required])
+      projectName : new FormControl('', [Validators.required]),
+      dueDate : new FormControl('', [Validators.required]),
+      hourlyRate : new FormControl('', [Validators.required])
     });
 
     this.getProAndTasks()
@@ -60,7 +63,7 @@ export class ProjectsComponent implements OnInit {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.projects = data['projects']
-      this.getTasks()
+
     },
     error => {
       console.log(error);
@@ -70,19 +73,107 @@ export class ProjectsComponent implements OnInit {
 
   // add project
   addProject(form : NgForm) {
-    console.log(form)
+    console.log(form);
+    this.pmService.addProject(localStorage.getItem('token'),form).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    }); 
+  }
+  //add task
+  addTask(form : NgForm) {
+    console.log(form);
+    this.pmService.addTask(localStorage.getItem('token'),form).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    }); 
   }
 
-  // edit project
+  // edit project (projectID must be added to body)
   editProject(form : NgForm) {
+    this.pmService.editProject(localStorage.getItem('token'),form).subscribe((data) => {
+      console.log(data);
 
+    },
+    error => {
+      console.log(error);
+    });
   }
 
+  // edit task (taskID must be added to body)
+  editTask(form : NgForm) {
+    this.pmService.editTask(localStorage.getItem('token'),form).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    });
+
+  }
   // delete project
-  deleteProject() {
+  deleteProject(projectID : String) {
 
+    this.pmService.deleteProject(localStorage.getItem('token'),projectID).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    }); 
+  }
+  // delete task
+  deleteTask(taskID : String, projectID : String) {
+
+    this.pmService.deleteTask(localStorage.getItem('token'),taskID,projectID).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    }); 
   }
 
+  //mark project as completed
+  completeProject(projectID : String) {
+    let req ={"projectID": projectID}
+    this.pmService.completeProject(localStorage.getItem('token'),req).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    }); 
+  }
+
+  //mark task as started
+  startTask(taskID : String) {
+    let req ={"taskID": taskID}
+    this.pmService.startTask(localStorage.getItem('token'),req).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    }); 
+  }
+
+  //mark task as completed
+  completeTask(taskID : String) {
+    let req ={"taskID": taskID}
+    this.pmService.completeTask(localStorage.getItem('token'),req).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      console.log(error);
+    }); 
+  }
   //get tasks
   getTasks() {
     for (let i = 0; i < this.projects.length; i++) {
