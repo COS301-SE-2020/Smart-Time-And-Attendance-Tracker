@@ -4,6 +4,9 @@ const router = express.Router();
 const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
+const team = require('../controllers/team.controller');
+const task = require('../controllers/task.controller');
+const project = require('../controllers/project.controller');
 
 const project = require('../controllers/project.controller');
 const task = require('../controllers/task.controller');
@@ -52,5 +55,15 @@ router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdm
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 
+router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
+router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
+
+router.post("/project/addTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.addTask);
+
+router.post("/task/startTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.startTask);
+router.post("/task/completeTask",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
+
+
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
+
 module.exports = router;

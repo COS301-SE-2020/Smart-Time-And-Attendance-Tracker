@@ -1,7 +1,6 @@
 
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
-
 const ProjectHelper =  require('../helpers/project.helper');
 
 module.exports.assignProject = (req, res, next) => {
@@ -12,9 +11,7 @@ module.exports.assignProject = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else if (!result)
-        {
             return res.status(404).send({message: 'Team not found'});
-        }
         else {
             result.ProjectID = req.body.projectID;
            
@@ -41,15 +38,12 @@ module.exports.assignProject = (req, res, next) => {
 }
 
 module.exports.addTeamMember = (req, res, next) => {
+
     TeamModel.findOne({_id : (req.body.TeamID)}, function(err, result) {
         if(err) 
-        {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
         else if (!result)
-        {
-            return res.status(404).send({message: 'Team not found'});
-        }
+            return res.status(404).send({message: 'Team not found});
         else {
             result.TeamMembers.push( { _id: req.body.UserID, Role: req.body.UserRole } )
             result.save((err, doc) => {
@@ -59,6 +53,7 @@ module.exports.addTeamMember = (req, res, next) => {
                     next();
                     //return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });
                 }
+
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
             });
@@ -66,6 +61,8 @@ module.exports.addTeamMember = (req, res, next) => {
     });
 }
 
+
+/*
 
 
 module.exports.add = (req, res, next) => {
@@ -75,7 +72,7 @@ module.exports.add = (req, res, next) => {
     for(var i=0; i< req.body.teamMembers.length; i++)
         teamMembers.push(req.body.teamMembers[i]);
     team.TeamMembers = teamMembers;
-    console.log( req.body.teamMembers.length);*/
+    console.log( req.body.teamMembers.length);
     team.save((err, doc) => {
         if(!err){
             return res.status(200).json({ TeamID : doc._id, message: 'Team Created' });
@@ -101,4 +98,7 @@ module.exports.add = (req, res, next) => {
     })
 });
 
+
+module.exports = router;
 */
+

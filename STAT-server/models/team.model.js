@@ -3,7 +3,8 @@ const mongoose = require("mongoose")
 var TeamSchema = new mongoose.Schema({
     ProjectID:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project'
+        ref: 'Project', 
+        //required : "Required"     //will the project be assigned to the team when team is created?
     },    
     TeamLeader:{
         type: mongoose.Schema.Types.ObjectId,
