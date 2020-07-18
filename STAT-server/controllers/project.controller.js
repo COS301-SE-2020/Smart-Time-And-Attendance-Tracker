@@ -158,6 +158,19 @@ module.exports.deleteProject = (req, res) => {
         
     });
 }
+module.exports.deleteTask = (req, res, next) => {  
+    ProjectModel.updateOne({_id: req.query.projectID},{ $pull: { 'Tasks':   req.query.taskID}},(err,val)=>{
+        if(err)
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!val) 
+            return res.status(404).json({ message: 'Project not found' });
+        else 
+        {
+              next();  
+        }    
+        
+    });
+}
 
 
 module.exports.complete = (req, res, next) => {
