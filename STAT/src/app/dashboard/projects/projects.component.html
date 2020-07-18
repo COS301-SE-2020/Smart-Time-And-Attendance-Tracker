@@ -188,12 +188,17 @@
       <form [formGroup]="addProjectForm">
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project Name</mat-label>
-          <input matInput formControlName="name" placeholder="My Project" name = "name" required>
+          <input matInput formControlName="projectName" placeholder="My Project" name = "projectName" required>
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Due Date</mat-label>
-          <input matInput type="date" formControlName="date" placeholder="My Project" name = "date" required>
+          <input matInput type="date" formControlName="dueDate" placeholder="My Project" name = "dueDate" required>
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Hourly Rate</mat-label>
+          <input matInput formControlName="hourlyRate" placeholder="0.00" name = "hourlyRate" required>
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
@@ -226,12 +231,17 @@
       <form [formGroup]="editProjectForm">
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project Name</mat-label>
-          <input matInput formControlName="name" placeholder="My Project" name = "name" required>
+          <input matInput formControlName="projectName" placeholder="My Project" name = "projectName" required>
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Due Date</mat-label>
-          <input matInput type="date" formControlName="date" placeholder="My Project" name = "date" required>
+          <input matInput type="date" formControlName="dueDate" placeholder="My Project" name = "dueDate" required>
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Hourly Rate</mat-label>
+          <input matInput formControlName="hourlyRate" placeholder="0.00" name = "hourlyRate" required>
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
@@ -265,7 +275,7 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject()">Yes</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject('ID')">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
