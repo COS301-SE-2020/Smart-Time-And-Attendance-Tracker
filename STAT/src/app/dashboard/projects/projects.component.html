@@ -29,6 +29,13 @@
                   <span class="tag numTasks">{{p.tasks.length}} tasks</span>
                   <button *ngIf="roles.includes('Team Leader')" 
                           mat-button class="pro-btn"
+                          matTooltip="R{{p.hourlyRate}} per hour"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above">
+                          <mat-icon inline="true">payment</mat-icon>
+                  </button>
+                  <button *ngIf="roles.includes('Team Leader')" 
+                          mat-button class="pro-btn"
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
@@ -40,7 +47,7 @@
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(deleteProjectModal)">
+                          (click)="open(deleteProjectModal); pid = p.ID">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
                   </mat-panel-title>
@@ -57,14 +64,16 @@
                             mat-button class="pro-btn"
                             matTooltip="Edit"
                             matTooltipClass="pro-tooltip"
-                            matTooltipPosition="above">
+                            matTooltipPosition="above"
+                            (click)="open(editTaskModal); popTaskForm(t)">
                             <mat-icon inline="true">edit</mat-icon>
                     </button>
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
                             matTooltip="Delete"
                             matTooltipClass="pro-tooltip"
-                            matTooltipPosition="above">
+                            matTooltipPosition="above"
+                            (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
                      <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
@@ -76,7 +85,9 @@
                     <mat-divider></mat-divider>       
                   </li>
                 </ul>
-                <span *ngIf="roles.includes('Team Leader')" class="float-right"><button mat-button><mat-icon inline="true">add</mat-icon>New task</button></span>
+                <span *ngIf="roles.includes('Team Leader')" class="float-right">
+                  <button mat-button (click)="open(addTaskModal); pid = p.ID"><mat-icon inline="true">add</mat-icon>New task</button>
+                </span>
 
                 <!-- team -->
                 <mat-action-row>
@@ -278,7 +289,114 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject('ID')">Yes</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject(pid)">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- ADD TASK *******************************-->
+
+<ng-template #addTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Add a task
+        <br><h4>Please enter the task details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="addTaskForm">
+        <input hidden type="text" formControlName="projectID" name="projectID">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task Name</mat-label>
+          <input matInput formControlName="taskName" placeholder="My Task" name = "taskName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="dueDate" name = "dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addTask(addTaskForm.value)"
+              [disabled]="addTaskForm.invalid">Create Task</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- EDIT TASK *******************************-->
+
+<ng-template #editTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit task
+        <br><h4>Please enter the new task details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form #editTaskForm="ngForm">
+        <input hidden name="taskID" type="text" [(ngModel)]="taskToEdit.taskID" [value]="taskToEdit.taskID">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task Name</mat-label>
+          <input matInput placeholder="My Task" name = "taskName" [(ngModel)]="taskToEdit.taskName" [value]="taskToEdit.taskName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" placeholder="My Project" name = "dueDate" [(ngModel)]="taskToEdit.dueDate" [value]="taskToEdit.dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editTask(editTaskForm.value)">Save Changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- DELETE TASK *******************************-->
+
+<ng-template #deleteTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Delete task
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      Are you sure you want to delete this task?
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteTask(tid, pid)">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 

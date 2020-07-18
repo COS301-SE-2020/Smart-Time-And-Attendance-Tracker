@@ -27,14 +27,18 @@ export class ProjectsComponent implements OnInit {
 
   // forms
   addProjectForm : FormGroup
-  //editProjectForm : FormGroup
+  addTaskForm : FormGroup
+  pid : string
+  tid : string
   projectToEdit : any
+  taskToEdit : any
 
   error : string = null
 
   ngOnInit(): void {
     // reset forms
     this.resetProjectForm()
+    this.resetTaskForm()
 
     this.roles = localStorage.getItem('roles');
 
@@ -49,12 +53,12 @@ export class ProjectsComponent implements OnInit {
       hourlyRate : new FormControl('', [Validators.required])
     });
 
-    // edit project
-    //this.editProjectForm = new FormGroup({
-      //projectName : new FormControl('', [Validators.required]),
-      //dueDate : new FormControl('', [Validators.required]),
-      //hourlyRate : new FormControl('', [Validators.required])
-    //});
+    // add task
+    this.addTaskForm = new FormGroup({
+      taskName : new FormControl('', [Validators.required]),
+      dueDate : new FormControl('', [Validators.required]),
+      projectID : new FormControl('')
+    });
 
     this.getProAndTasks()
   }
@@ -85,7 +89,7 @@ export class ProjectsComponent implements OnInit {
     console.log(form);
     this.pmService.addProject(localStorage.getItem('token'),form).subscribe((data) => {
       console.log(data);
-
+      this.getProAndTasks()
     },
     error => {
       console.log(error);
@@ -93,10 +97,11 @@ export class ProjectsComponent implements OnInit {
   }
   //add task
   addTask(form : NgForm) {
+    form['projectID'] = this.pid
     console.log(form);
     this.pmService.addTask(localStorage.getItem('token'),form).subscribe((data) => {
       console.log(data);
-
+      this.getProAndTasks()
     },
     error => {
       console.log(error);
@@ -117,30 +122,32 @@ export class ProjectsComponent implements OnInit {
 
   // edit task (taskID must be added to body)
   editTask(form : NgForm) {
+    console.log(form)
     this.pmService.editTask(localStorage.getItem('token'),form).subscribe((data) => {
       console.log(data);
+      this.getProAndTasks()
     },
     error => {
       console.log(error);
     });
   }
+
   // delete project
   deleteProject(projectID : String) {
-
     this.pmService.deleteProject(localStorage.getItem('token'),projectID).subscribe((data) => {
       console.log(data);
-
+      this.getProAndTasks()
     },
     error => {
       console.log(error);
     }); 
   }
+
   // delete task
   deleteTask(taskID : String, projectID : String) {
-
     this.pmService.deleteTask(localStorage.getItem('token'),taskID,projectID).subscribe((data) => {
       console.log(data);
-
+      this.getProAndTasks()
     },
     error => {
       console.log(error);
@@ -184,6 +191,9 @@ export class ProjectsComponent implements OnInit {
   }
   //get tasks
   getTasks() {
+    this.tasks = []
+    this.upcoming = []
+
     for (let i = 0; i < this.projects.length; i++) {
       this.projects[i]['dueDate'] = Date.parse(this.projects[i]['dueDate'])
       var temp : Object[] = this.projects[i]['tasks']
@@ -236,12 +246,22 @@ export class ProjectsComponent implements OnInit {
     this.projectToEdit = {'projectID' : '', 'projectName' : '', 'dueDate' : '', 'hourlyRate' : 0}
   }
 
+  resetTaskForm() {
+    this.taskToEdit = {'taskID' : '', 'taskName' : '', 'dueDate' : ''}
+  }
+
   // populate forms
   popProjectForm(p : any) {
     this.projectToEdit.projectID = p.ID
     this.projectToEdit.projectName = p.projectName
     this.projectToEdit.dueDate = new Date(p.dueDate).toISOString().substring(0,10)
     this.projectToEdit.hourlyRate = p.hourlyRate
+  }
+
+  popTaskForm(t : any) {
+    this.taskToEdit.taskID = t.ID
+    this.taskToEdit.taskName = t.taskName
+    this.taskToEdit.dueDate = new Date(t.dueDate).toISOString().substring(0,10)
   }
 
   /****
