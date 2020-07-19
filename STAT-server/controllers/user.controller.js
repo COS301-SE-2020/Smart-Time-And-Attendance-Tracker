@@ -200,7 +200,7 @@ module.exports.addTeam = (req, res, next) => {
             result.save((err, doc) => {
                 if(!err)
                 {
-                    return res.status(200).json({ TeamID: result._id, message: 'User successfully added to team' });
+                    return res.status(200).json({ teamID: req.TeamID, message: 'User successfully added to team' });
                 }
                 else
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
