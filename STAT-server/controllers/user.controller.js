@@ -251,11 +251,12 @@ module.exports.getTasks = (req, res, next) => {
         {
             if(result.Team.length == 0)
                 return res.status(404).json({ message: 'User is not assigned to a team' });
+            console.log(result.Team.length);
             for(i=0; i<result.Team.length; i++)
             {
                 TeamHelper.getTasksOfTeam(result.Team[i],(err,val)=>
                  {
-                     count = count + 1;
+                    count = count + 1;
                     if(err)
                     {
                         error = true;

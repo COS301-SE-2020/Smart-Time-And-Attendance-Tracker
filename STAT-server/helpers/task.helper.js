@@ -40,7 +40,7 @@ module.exports.getTaskName = (id, done)=>{
         if(err) 
             done(err);
         else if (!result)
-            done("Task not found",false);
+            done(null,false);
         else if(result)
         {
             var text = {
