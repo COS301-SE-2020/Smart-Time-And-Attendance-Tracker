@@ -2,11 +2,12 @@
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
 const ProjectHelper =  require('../helpers/project.helper');
+const UserHelper =  require('../helpers/user.helper');
 
 
 module.exports.assignProject = (req, res, next) => {
     
-    TeamModel.findOne({_id : req.body.teamID}, function(err, result) {
+    TeamModel.findOne({_id : req.teamID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -14,12 +15,14 @@ module.exports.assignProject = (req, res, next) => {
         else if (!result)
             return res.status(404).send({message: 'Team not found'});
         else {
-            result.ProjectID = req.body.projectID;
+            result.ProjectID = req.ProjectID;
            
             result.save((err, doc) => {
-                if(!err)
+                if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                else if(!err)
                 {
-                    ProjectHelper.addTeam(req.body.teamID,(err,val)=>
+                    ProjectHelper.addTeam(result.ProjectID, req.teamID,(err,val)=>
                     {
                         if(err)
                            return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -28,7 +31,7 @@ module.exports.assignProject = (req, res, next) => {
                            return res.status(404).json({ message: 'Project not found' });
                        else 
                        {
-                           return res.status(200).json({projectID: req.body.projectID,teamID: result._id, message: 'Project successfully assigned to team'});
+                           return res.status(200).json({projectID: req.ProjectID,teamID: req.teamID, message: 'Project successfully added to team'});
                        }
                    });
                }  
@@ -69,6 +72,7 @@ module.exports.addTeamMember = (req, res, next) => {
 module.exports.createTeam = (req, res, next) => {
     var team = new TeamModel();
     team.TeamLeader = req.ID;
+    team.ProjectID = req.ProjectID;
     /*var teamMembers = [];
     for(var i=0; i< req.body.teamMembers.length; i++)
         teamMembers.push(req.body.teamMembers[i]);
@@ -77,9 +81,20 @@ module.exports.createTeam = (req, res, next) => {
     team.TeamMembers.push({ _id : team.TeamLeader, Role: "Team Leader"});
     team.save((err, doc) => {
         if(!err){
-            req.body.teamID = doc._id;
-            req.body.projectID = req.ProjectID;
-            next(); 
+            req.teamID = doc._id;
+            UserHelper.addTeam(team.TeamLeader, req.teamID,(err,val)=>
+            {
+                if(err)
+                   return res.status(500).send({message: 'Internal Server Error: ' + err});
+
+               else if(val == false) 
+                   return res.status(404).json({ message: 'User not found' });
+               else 
+                next(); 
+                  
+        
+           });
+            //req.body.projectID = req.ProjectID;
             //return res.status(200).json({ teamID : doc._id, message: 'Team Created' });
         }
         else{
