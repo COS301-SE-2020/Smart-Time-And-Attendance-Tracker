@@ -162,8 +162,8 @@ export class TodayComponent implements OnInit {
 
   // get tracking entries
   getEntries(date : string) {
-    this.amService.getTimeEntries(localStorage.getItem('token'), date).subscribe((data) => {
-      console.log(data);
+    this.amService.getTimeEntries(date, localStorage.getItem('token')).subscribe((data) => {
+      console.log('HERE' + data);
       this.entries = data['entries']
     },
     error => {

@@ -197,7 +197,7 @@
 
     <div class="modal-body">
       <form [formGroup]="addProjectForm">
-        <mat-form-field appearance="standard" class="col-6">
+        <mat-form-field appearance="standard" class="col-12">
           <mat-label>Project Name</mat-label>
           <input matInput formControlName="projectName" placeholder="My Project" name = "projectName">
           <mat-error>Please enter a value</mat-error>
@@ -209,7 +209,7 @@
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Hourly Rate</mat-label>
-          <input matInput formControlName="hourlyRate" placeholder="0.00" name = "hourlyRate">
+          <input matInput formControlName="hourlyRate" type="number" min="0" step="any" placeholder="0.00" name = "hourlyRate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
@@ -217,7 +217,7 @@
 
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); addProject(addProjectForm.value)"
+              (click)="modal.close('Save click'); addProject(addProjectForm.value); addProjectForm.reset()"
               [disabled]="addProjectForm.invalid">Create Project</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
@@ -243,7 +243,7 @@
     <div class="modal-body">
       <form #editProjectForm="ngForm">
         <input hidden name="projectID" type="text" [(ngModel)]="projectToEdit.projectID" [value]="projectToEdit.projectID">
-        <mat-form-field appearance="standard" class="col-6">
+        <mat-form-field appearance="standard" class="col-12">
           <mat-label>Project Name</mat-label>
           <input matInput placeholder="My Project" name = "projectName" [(ngModel)]="projectToEdit.projectName" [value]="projectToEdit.projectName">
           <mat-error>Please enter a value</mat-error>
@@ -255,7 +255,7 @@
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Hourly Rate</mat-label>
-          <input matInput placeholder="0.00" name = "hourlyRate" [(ngModel)]="projectToEdit.hourlyRate" [value]="projectToEdit.hourlyRate">
+          <input matInput placeholder="0.00" name = "hourlyRate" type="number" min="0" step="any" [(ngModel)]="projectToEdit.hourlyRate" [value]="projectToEdit.hourlyRate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
@@ -329,7 +329,7 @@
 
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); addTask(addTaskForm.value)"
+              (click)="modal.close('Save click'); addTask(addTaskForm.value); addTaskForm.reset()"
               [disabled]="addTaskForm.invalid">Create Task</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
