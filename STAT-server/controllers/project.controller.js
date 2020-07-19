@@ -132,7 +132,6 @@ module.exports.addTask = (req, res, next) => {
 
 
 module.exports.deleteProject = (req, res) => { 
-    console.log("project id " + req.query.projectID);
     ProjectModel.findOne({_id: req.query.projectID},(err,val)=>{
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
