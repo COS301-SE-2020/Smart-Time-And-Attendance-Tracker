@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const TimeEntrySchema = mongoose.Schema({
   TaskID: {
     type: mongoose.Schema.Types.ObjectId, 
-      ref: 'Task',
+    ref: 'Task',
     required : "Task required."
   },
   StartTime: {

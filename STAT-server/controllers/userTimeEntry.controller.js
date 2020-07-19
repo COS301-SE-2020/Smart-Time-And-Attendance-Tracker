@@ -160,7 +160,6 @@ module.exports.getDailyTimeEntries = (req, res) => {
             {
                 for(var a=0; a<times; a++)
                 {
-        
                     TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>
                     {   
                         count3= count3+1; 
@@ -173,13 +172,19 @@ module.exports.getDailyTimeEntries = (req, res) => {
                             if(date == val.Date)
                             {
                                 count = count+1;
-
                                 TaskHelper.getName(val.TaskID,(err,result)=>
                                 {
                                     count2 = count2 +1;
                                     if(err)
                                         return res.status(500).send({message: 'Internal Server Error: ' + err});
-                                    else if(result)
+                                    else if(!result)
+                                    {
+                                        timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: "Unspecified", description: val.Description, monetaryValue:val.MonetaryValue});
+                                        if(count == count2)
+                                            return res.status(200).json({timeEntries}); 
+                                        
+                                    }
+                                    else 
                                     {
                                         timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: result, description: val.Description, monetaryValue:val.MonetaryValue});
                                         if(count == count2)

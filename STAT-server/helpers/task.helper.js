@@ -29,9 +29,9 @@ module.exports.getName = (id, done)=>{
             done(err);
         else if (!result)
             done(null,false);
+    
         else if(result)
            done(null, result.TaskName);
-        
     });
 }
 
