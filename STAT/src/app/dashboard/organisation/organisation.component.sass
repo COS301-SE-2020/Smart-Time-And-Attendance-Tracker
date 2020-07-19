@@ -12,22 +12,31 @@ h2
 .info
   color: #4c585b90
   text-align: left
+  height: fit-content !important
+  display: flex
+  justify-content: center
+  align-items: center
 
-  >
-    div
+  .col-8, .col-auto
+    padding-bottom: 0
+    height: fit-content
+    vertical-align: top
+
+section
+    div.col-auto
       display: inline-block
       text-align: center
       float: right
 
-  #total-members
-    b
-      color: #366ceb
-      font-size: 1.4em
+    #total-members
+      b
+        color: #366ceb
+        font-size: 1.4em
 
-  #total-requests
-    b
-      color: #7846eb
-      font-size: 1.4em
+    #total-requests
+      b
+        color: #7846eb
+        font-size: 1.4em
 
 mat-card
   background-color: #366ceb
@@ -116,7 +125,7 @@ section
   overflow-x: hidden
   overflow-y: scroll
   padding: 0 1.5em 0.2em 0.8em
-  height: 58vh
+  height: 55vh
 
 .scroll::-webkit-scrollbar
   border-radius: 0.5em

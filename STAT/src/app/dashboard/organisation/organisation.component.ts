@@ -13,8 +13,9 @@ export class OrganisationComponent implements OnInit {
 
   panelOpenState = false;
 
-  requests : []
+  requests : Object[]
   members : []
+  searchText : string = null
 
   ngOnInit(): void {
     this.getAllUnauthenticatedUsers('n')
@@ -76,6 +77,16 @@ export class OrganisationComponent implements OnInit {
         this.requests.reverse()
         break;
     }
+  }
+
+  searchRequests(text : string) {
+    if (!this.searchText)
+      return this.requests
+    return this.requests.filter((x : any) => 
+      x['name'].toLowerCase().includes(text.toLowerCase()) ||
+      x['surname'].toLowerCase().includes(text.toLowerCase()) ||
+      x['email'].toLowerCase().includes(text.toLowerCase())
+    )
   }
 
   getMembers() {

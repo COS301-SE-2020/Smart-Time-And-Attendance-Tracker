@@ -28,9 +28,18 @@ export class TodayComponent implements OnInit {
   aTaskSelected : any
   aTasksDisabled : boolean = true
   mTasksDisabled : boolean = true
+  hourlyRate : number
+  monetaryValue : number
 
   entries : Object[]
-  week : Object[]
+  week : Object[] = []
+  date : Date = new Date()
+  date1 : Date = new Date()
+  date2 : Date = new Date()
+  date3 : Date = new Date()
+  date4 : Date = new Date()
+  date5 : Date = new Date()
+
 
   ngOnInit(): void { 
     this.manualTrackingForm = new FormGroup({
@@ -51,8 +60,21 @@ export class TodayComponent implements OnInit {
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
     this.getProAndTasks()
-    this.getEntries('2020-07-13')
-    this.getWeekInfo()
+
+    // set dates
+    this.date1.setDate(this.date.getDate()-1)
+    this.date2.setDate(this.date.getDate()-2)
+    this.date3.setDate(this.date.getDate()-3)
+    this.date4.setDate(this.date.getDate()-4)
+    this.date5.setDate(this.date.getDate()-5)
+
+    // get entries
+    this.getEntries(this.formatDate(this.date))
+    this.getEntries(this.formatDate(this.date1))
+    this.getEntries(this.formatDate(this.date2))
+    this.getEntries(this.formatDate(this.date3))
+    this.getEntries(this.formatDate(this.date4))
+    this.getEntries(this.formatDate(this.date5))
   }
 
   // modal
@@ -92,6 +114,21 @@ export class TodayComponent implements OnInit {
     }); 
   }
 
+  // calculate monetary value for manual entry
+  calculateMoney() {
+    var startTime = this.manualTrackingForm.get('StartTime').value
+    var endTime = this.manualTrackingForm.get('EndTime').value
+    if (startTime && endTime) {
+      startTime = new Date('2020/01/01 ' + startTime)
+      endTime = new Date('2020/01/01 ' + endTime)
+      var diff = endTime.getTime() - startTime.getTime()
+      var hours = diff / 3600000
+      this.monetaryValue = hours * this.hourlyRate
+      this.manualTrackingForm.get('MonetaryValue').setValue(this.monetaryValue)
+    }
+
+  }
+
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
     {
@@ -129,9 +166,8 @@ export class TodayComponent implements OnInit {
   getProAndTasks()
   {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
       this.projects = data['projects']
-      console.log(this.projects)
+      console.log(data)
     },
     error => {
       console.log(error);
@@ -143,17 +179,19 @@ export class TodayComponent implements OnInit {
   getTasks(projectID : any, form : string) {
     if (form == 'a') {
       if (this.aProjectSelected == null)
-      this.tasks = [ { "ID" : 0, "taskName" : "None" }];
+        this.tasks = [ { "ID" : 0, "taskName" : "None" }];
       else {
         this.aTasksDisabled = false;
         this.tasks = this.projects.find((p : any) => p.ID == projectID)['tasks'];
+        this.hourlyRate = this.projects.find((p : any) => p.ID == projectID)['hourlyRate']
       }
     } else {
       if (this.mProjectSelected == null)
-      this.tasks = [ { "ID" : 0, "taskName" : "None" }];
+        this.tasks = [ { "ID" : 0, "taskName" : "None" }];
       else {
         this.mTasksDisabled = false;
         this.tasks = this.projects.find((p : any) => p.ID == projectID)['tasks'];
+        this.hourlyRate = this.projects.find((p : any) => p.ID == projectID)['hourlyRate']
       }
     }
     
@@ -161,21 +199,48 @@ export class TodayComponent implements OnInit {
   }
 
   // get tracking entries
-  getEntries(date : string) {
+  getEntries(date : String) {
     this.amService.getTimeEntries(date, localStorage.getItem('token')).subscribe((data) => {
-      console.log('HERE' + data);
-      this.entries = data['entries']
+      console.log(data)
+      if (date == this.formatDate(this.date))
+        this.week['today'] = data['timeEntries']
+      if (date == this.formatDate(this.date1))
+        this.week['yesterday'] = data['timeEntries']
+      if (date == this.formatDate(this.date2))
+        this.week['2days'] = data['timeEntries']
+      if (date == this.formatDate(this.date3))
+        this.week['3days'] = data['timeEntries']
+      if (date == this.formatDate(this.date4))
+        this.week['4days'] = data['timeEntries']
+      if (date == this.formatDate(this.date5))
+        this.week['5days'] = data['timeEntries']
     },
     error => {
       console.log(error);
+      if (date == this.formatDate(this.date))
+        this.week['today'] = 'no entries'
+      if (date == this.formatDate(this.date1))
+        this.week['yesterday'] = 'no entries'
+      if (date == this.formatDate(this.date2))
+        this.week['2days'] = 'no entries'
+      if (date == this.formatDate(this.date3))
+        this.week['3days'] = 'no entries'
+      if (date == this.formatDate(this.date4))
+        this.week['4days'] = 'no entries'
+      if (date == this.formatDate(this.date5))
+        this.week['5days'] = 'no entries'
     }); 
+  }
+
+  getWeek(date : String) {
+    console.log(this.getEntries(date))
   }
 
   // format date
   formatDate(date : Date) {
     var y = date.getFullYear().toString();
     var m = (date.getMonth()+1).toString();
-    var d = date.getDay().toString();
+    var d = date.getDate().toString();
 
     let toReturn = new String(y + '/');
     
@@ -190,16 +255,6 @@ export class TodayComponent implements OnInit {
       toReturn += (d)
 
     return toReturn
-  }
-
-  getWeekInfo() {
-    var startDate = new Date()
-    for (let i = 0; i < 6; i++) {
-      console.log(this.formatWeekDate(startDate))
-      startDate.setDate(startDate.getDate()-1)
-    }
-
-    //this.week['today'] = this.getEntries()
   }
 
   // get correct date format

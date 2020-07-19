@@ -85,93 +85,138 @@
     <h2>This Week</h2>
 
     <div class="scroll">
-      <mat-accordion>
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-spinner *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" class="req-spinner"></mat-spinner>
+
+      <mat-accordion *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days']">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="week['today']">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <span class="date">July 13</span>
+              <span class="date">{{formatWeekDate(date)}}</span>
               <small>today</small>
             </mat-panel-title>
-            <span class="tag numEntries">3</span>
+            <span *ngIf="week['today'] == 'no entries'" class="tag numEntries">0</span>
+            <span *ngIf="week['today'] != 'no entries'" class="tag numEntries">{{week['today'].length}}</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Coding
+            <li *ngFor="let e of week['today']">{{e.task}}
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
                       matTooltipPosition="right">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
-              <span class="float-right">06:20:20</span></li>
-            <li>Browser - Firefox <span class="float-right">01:09:21</span></li>
-            <li>Tutorials <span class="float-right">00:30:55</span></li>
+              <span class="float-right">06:20:20</span>
+            </li>
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="week['yesterday']">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <span class="date">July 12</span>
+              <span class="date">{{formatWeekDate(date1)}}</span>
               <small>yesterday</small>
             </mat-panel-title>
-            <span class="tag numEntries">3</span>
+            <span *ngIf="week['yesterday'] == 'no entries'" class="tag numEntries">0</span>
+            <span *ngIf="week['yesterday'] != 'no entries'" class="tag numEntries">{{week['yesterday'].length}}</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Coding <span class="float-right">06:20:20</span></li>
-            <li>Browser - Firefox <span class="float-right">01:09:21</span></li>
-            <li>Tutorials <span class="float-right">00:30:55</span></li>
+            <li *ngFor="let e of week['yesterday']">{{e.task}} 
+              <button mat-button class="edit-btn"
+                      matTooltip="Edit"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="right">
+                      <mat-icon inline="true">edit</mat-icon>
+              </button>
+              <span class="float-right">06:20:20</span>
+            </li>
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="week['2days']">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <span class="date">July 11</span>
+              <span class="date">{{formatWeekDate(date2)}}</span>
               <small>2 days ago</small>
             </mat-panel-title>
-            <span class="tag numEntries">1</span>
+            <span *ngIf="week['2days'] == 'no entries'" class="tag numEntries">0</span>
+            <span *ngIf="week['2days'] != 'no entries'" class="tag numEntries">{{week['2days'].length}}</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">06:20:20</span></li>
+            <li *ngFor="let e of week['2days']">{{e.task}} 
+              <button mat-button class="edit-btn"
+                      matTooltip="Edit"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="right">
+                      <mat-icon inline="true">edit</mat-icon>
+              </button>
+              <span class="float-right">06:20:20</span>
+            </li>
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="week['3days']">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <span class="date">July 10</span>
+              <span class="date">{{formatWeekDate(date3)}}</span>
               <small>3 days ago</small>
             </mat-panel-title>
-            <span class="tag numEntries">5</span>
+            <span *ngIf="week['3days'] == 'no entries'" class="tag numEntries">0</span>
+            <span *ngIf="week['3days'] != 'no entries'" class="tag numEntries">{{week['3days'].length}}</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">03:28:17</span></li>
+            <li *ngFor="let e of week['3days']">{{e.task}} 
+              <button mat-button class="edit-btn"
+                      matTooltip="Edit"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="right">
+                      <mat-icon inline="true">edit</mat-icon>
+              </button>
+              <span class="float-right">03:28:17</span>
+            </li>
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="week['4days']">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <span class="date">July 09</span>
+              <span class="date">{{formatWeekDate(date4)}}</span>
               <small>4 days ago</small>
             </mat-panel-title>
-            <span class="tag numEntries">7</span>
+            <span *ngIf="week['4days'] == 'no entries'" class="tag numEntries">0</span>
+            <span *ngIf="week['5days'] != 'no entries'" class="tag numEntries">{{week['4days'].length}}</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">03:28:17</span></li>
+            <li *ngFor="let e of week['4days']">{{e.task}} 
+              <button mat-button class="edit-btn"
+                      matTooltip="Edit"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="right">
+                      <mat-icon inline="true">edit</mat-icon>
+              </button>
+              <span class="float-right">03:28:17</span>
+            </li>
           </ul>
         </mat-expansion-panel>
 
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="week['5days']">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <span class="date">July 08</span>
+              <span class="date">{{formatWeekDate(date5)}}</span>
               <small>5 days ago</small>
             </mat-panel-title>
-            <span class="tag numEntries">3</span>
+            <span *ngIf="week['5days'] == 'no entries'" class="tag numEntries">0</span>
+            <span *ngIf="week['5days'] != 'no entries'" class="tag numEntries">{{week['5days'].length}}</span>
           </mat-expansion-panel-header>
           <ul class="entries">
-            <li>Research <span class="float-right">03:28:17</span></li>
+            <li *ngFor="let e of week['5days']">{{e.task}} 
+              <button mat-button class="edit-btn"
+                      matTooltip="Edit"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="right">
+                      <mat-icon inline="true">edit</mat-icon>
+              </button>
+              <span class="float-right">03:28:17</span>
+            </li>
           </ul>
         </mat-expansion-panel>
         
@@ -220,7 +265,7 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Monetary value</mat-label>
-          <input matInput  formControlName="MonetaryValue" type="text" placeholder="0.00" name="monetary-value">
+          <input matInput readonly [value]="monetaryValue" formControlName="MonetaryValue" type="text" placeholder="0.00" name="monetary-value">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
@@ -230,12 +275,12 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Start time</mat-label>
-          <input matInput formControlName="StartTime" type="time" placeholder="0.00" name="monetary-value" required>
+          <input matInput formControlName="StartTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>End time</mat-label>
-          <input matInput formControlName="EndTime" type="time" placeholder="0.00" name="monetary-value" required>
+          <input matInput formControlName="EndTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
         </mat-form-field>
       </form>
       <!-- END ***************************************************************** -->
