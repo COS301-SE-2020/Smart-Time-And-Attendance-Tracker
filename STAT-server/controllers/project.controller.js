@@ -95,7 +95,9 @@ module.exports.add = (req, res, next) => {
 
     project.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ projectID : doc._id, message: 'Project Created' });
+            req.ProjectID = doc._id;
+            next();
+            //return res.status(200).json({ projectID : doc._id, message: 'Project Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});

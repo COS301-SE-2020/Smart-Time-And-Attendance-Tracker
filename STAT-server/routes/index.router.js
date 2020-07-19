@@ -35,10 +35,10 @@ router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.i
 
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
-router.post("/team/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, team.add);
+router.post("/team/createTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, team.createTeam);
 
 ////projects
-router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add);
+router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, team.createTeam, team.assignProject);
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
 router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.complete);
 router.delete("/project", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.deleteProject);
