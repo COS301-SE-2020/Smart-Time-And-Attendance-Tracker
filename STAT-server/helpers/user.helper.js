@@ -59,3 +59,23 @@ module.exports.isAuthenticated = (req, res, next) => {
     });
   
 }
+
+module.exports.addTeam = (id, teamID, done) => {
+    UserModel.findOne({_id : id}, function(err, result) {
+        if(err) 
+            done(err);
+        
+        else if (!result)
+            done(null, false);
+        else {
+            result.Team.push(teamID)
+            result.save((err, doc) => {
+                if(!err)
+                    done(err);
+        
+                else
+                    done(null, true);
+            });
+        }
+    });
+}
