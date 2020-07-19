@@ -59,7 +59,7 @@ userLogin.onclick = function(){
                  displayButton();
                  for(tabID in chrome.extension.getBackgroundPage().History) {
                    alert("tab ID " + tabID);
-                    AddTimeEntry(tabID[0][0], tabID[0][1], new Date(), tabID);
+                    AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][0], chrome.extension.getBackgroundPage().History[tabID][0][1], new Date(), tabID);
                     chrome.extension.getBackgroundPage().History[tabID][0][0] = new Date();
 
                  }
@@ -91,10 +91,12 @@ function getUserName(){
             if(http.readyState == 4 && http.status == 200) {
                 var data = JSON.parse(http.responseText);
                 console.log(data);
-                setCookie("token", data.token, 1);
+                //setCookie("token", data.token, 1);
                 setCookie("name", data.name, 1);
                 setCookie("email", data.surname, 1);
                 console.log(data);
+                alert(http.responseText);
+                console.log("token");
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.surname;
             }
@@ -146,6 +148,7 @@ function getTasks() {
 
 function AddTimeEntry(url,startTime, endTime,currentID ) {
   //getTasks();
+  alert("url " + url);
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
       var text = '{ "Description": "'+ url + '",'
@@ -160,9 +163,10 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
       http.open('POST', apiURL, true);
 
       http.setRequestHeader('Content-type', 'application/json');
-      http.setRequestHeader("authorization", "token "+getCookie("token"));
-
+      http.setRequestHeader("authorization", "token "+ getCookie("token"));
+      alert(getCookie("token"));
       http.onreadystatechange = function() {
+        alert(http.readyState + "  " + http.status);
           if(http.readyState == 4 && http.status == 200) {
               const obj = JSON.parse(http.responseText);
               chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
@@ -175,7 +179,7 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
           else if(http.readyState == 4 && http.status != 200) {  //error in recording time
               chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
               chrome.extension.getBackgroundPage().History[currentID][0][0] = new Date();
-              
+              alert(http.responseText);
               status = false;
               return status;
           }

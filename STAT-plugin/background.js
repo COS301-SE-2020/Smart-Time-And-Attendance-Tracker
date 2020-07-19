@@ -32,7 +32,7 @@ function Update(t, tabId, url) {
     }
     chrome.extension.getBackgroundPage().History[tabId].unshift(["0:00", url, ""]);
     AddTimeEntry(url, t, t, tabId);
-    alert(chrome.extension.getBackgroundPage().History[tabId][0][2]);
+    //alert(chrome.extension.getBackgroundPage().History[tabId][0][2]);
     chrome.extension.getBackgroundPage().History[tabId][0][0] = now;
     setCookie("stop", "false", 1); 
     stopStartBtn.name = "stop";

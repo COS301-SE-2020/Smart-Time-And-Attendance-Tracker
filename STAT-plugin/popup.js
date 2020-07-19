@@ -11,7 +11,7 @@ function showTime() {
         url = url.split("/")[0];
         //desc.innerHTML = url + ": ";
         var description="";
-        alert(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]))
+        //alert(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]))
         if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
         { 
             //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
@@ -21,7 +21,7 @@ function showTime() {
         }
         else
         {
-            alert(chrome.extension.getBackgroundPage().History[currentID][0][0])
+            //alert(chrome.extension.getBackgroundPage().History[currentID][0][0])
             desc.innerHTML = chrome.extension.getBackgroundPage().History[currentID][0][0]+ "\n";
             description = FormatDuration(chrome.extension.getBackgroundPage().History[currentID][0][0]);
         }
