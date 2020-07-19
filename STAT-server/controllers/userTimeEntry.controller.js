@@ -8,8 +8,10 @@ module.exports.addTimeEntry = (req, res) => {
     var timeEntry = new TimeEntryModel();
     timeEntry.Date = req.body.Date;
     timeEntry.TaskID = req.body.TaskID;
+    timeEntry.ProjectID = req.body.TaskID;
     timeEntry.StartTime = req.body.StartTime;
-
+    timeEntry.ProjectName = req.body.ProjectName;
+    timeEntry.TaskName = req.body.TaskName;
     if(req.body.ActiveTime)
         timeEntry.ActiveTime = req.body.ActiveTime;
     else
@@ -141,8 +143,7 @@ module.exports.updateTimeEntry = (req, res) => {
 //Parameters - Date string
 // Returns - Array of time entry objects
 module.exports.getDailyTimeEntries = (req, res) => {  
-    var count = 0;
-    var count2 = 0;
+    var count = true;
     var count3 = 0;
     UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
         if (err) 
@@ -171,32 +172,16 @@ module.exports.getDailyTimeEntries = (req, res) => {
                         {
                             if(date == val.Date)
                             {
-                                count = count+1;
-                                TaskHelper.getName(val.TaskID,(err,result)=>
-                                {
-                                    count2 = count2 +1;
-                                    if(err)
-                                        return res.status(500).send({message: 'Internal Server Error: ' + err});
-                                    else if(!result)
-                                    {
-                                        timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: "Unspecified", description: val.Description, monetaryValue:val.MonetaryValue});
-                                        if(count == count2)
-                                            return res.status(200).json({timeEntries}); 
-                                        
-                                    }
-                                    else 
-                                    {
-                                        timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, task: result, description: val.Description, monetaryValue:val.MonetaryValue});
-                                        if(count == count2)
-                                            return res.status(200).json({timeEntries}); 
-                                        
-                                    }
-                                });
+                                count = false;
+                                timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, description: val.Description, monetaryValue:val.MonetaryValue});
                             }
             
                         };
-                        if(count3 == times && count == 0)
+                        if(count3 == times && count)
                             return res.status(404).json({ message: 'No time entries for the given day were found' });
+                        else if(count3== times)
+                            return res.status(200).json({timeEntries}); 
+
                     
                     });
                 }

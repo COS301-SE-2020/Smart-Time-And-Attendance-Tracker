@@ -4,7 +4,12 @@ const TimeEntrySchema = mongoose.Schema({
   TaskID: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Task',
-    required : "Task required."
+    required : "Task ID required."
+  },
+  ProjectID: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Project',
+    required : "Project ID required."
   },
   StartTime: {
     type: Number,
@@ -32,7 +37,16 @@ const TimeEntrySchema = mongoose.Schema({
   },
   MonetaryValue: { 
     type: Number
-  }
+  },
+  ProjectName: { 
+    type: String,
+    required: "Project name required."
+  },
+  TaskName: { 
+    type: String,
+    required: "Task name required."
+  },
+
 });
 
 module.exports = mongoose.model('TimeEntry', TimeEntrySchema);
