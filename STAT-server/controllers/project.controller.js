@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 const TaskHelper = require("../helpers/task.helper");
+const TeamHelper = require("../helpers/team.helper");
 
 module.exports.complete = (req, res) => {
     ProjectModel.update({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
@@ -95,7 +96,9 @@ module.exports.add = (req, res, next) => {
 
     project.save((err, doc) => {
         if(!err){
-            return res.status(200).json({ projectID : doc._id, message: 'Project Created' });
+            req.ProjectID = doc._id;
+            next();
+            //return res.status(200).json({ projectID : doc._id, message: 'Project Created' });
         }
         else{
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -128,7 +131,7 @@ module.exports.addTask = (req, res, next) => {
 }
 
 
-module.exports.deleteProject = (req, res) => {  
+module.exports.deleteProject = (req, res) => { 
     ProjectModel.findOne({_id: req.query.projectID},(err,val)=>{
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -136,27 +139,36 @@ module.exports.deleteProject = (req, res) => {
             return res.status(404).json({ message: 'Project not found' });
         else 
         {
+            var Team = val.Team;
             TaskHelper.deleteTask(val.Tasks,(err,result)=>
             {
                 if(err)
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
                 else
                 {
-                    ProjectModel.deleteOne({_id: req.query.projectID},(err,val)=>{
+                    TeamHelper.deleteTeam(val.Team,(err,result)=>
+                    {
                         if(err)
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
-    
-                        else 
-                            return res.status(200).json({ message: 'Project successfully deleted '});
-                    });   
-                    
+                        else
+                        {
+                            ProjectModel.deleteOne({_id: req.query.projectID},(err,val)=>{
+                                if(err)
+                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            
+                                else 
+                                {    
+                                    return res.status(200).json({ message: 'Project successfully deleted '});
+                                }
+                            });   
+                        }
+                    });
                 }
-            });
-                
+            });   
         }    
-        
     });
 }
+
 module.exports.deleteTask = (req, res, next) => {  
     ProjectModel.updateOne({_id: req.query.projectID},{ $pull: { 'Tasks':   req.query.taskID}},(err,val)=>{
         if(err)
