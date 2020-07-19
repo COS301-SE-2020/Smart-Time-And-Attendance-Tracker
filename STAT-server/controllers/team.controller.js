@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
 const ProjectHelper =  require('../helpers/project.helper');
 
+
 module.exports.assignProject = (req, res, next) => {
     
     TeamModel.findOne({_id : req.body.teamID}, function(err, result) {
@@ -27,7 +28,7 @@ module.exports.assignProject = (req, res, next) => {
                            return res.status(404).json({ message: 'Project not found' });
                        else 
                        {
-                        return res.status(200).json({projectID: req.body.projectID,teamID: result._id, message: 'Project successfully assigned to team'});
+                           return res.status(200).json({projectID: req.body.projectID,teamID: result._id, message: 'Project successfully assigned to team'});
                        }
                    });
                }  
