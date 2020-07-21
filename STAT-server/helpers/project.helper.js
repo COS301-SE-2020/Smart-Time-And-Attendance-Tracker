@@ -38,7 +38,7 @@ module.exports.getTasks = (id, done)=>{
         {
             var values = [], task=0, text="";
             console.log(result.Tasks);
-            if(result.Tasks.length == 0)
+            if(!result.Tasks)
             {
                 text = {
                     'ID': result._id,
@@ -54,9 +54,7 @@ module.exports.getTasks = (id, done)=>{
                 TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
                     if(err)
                         done(err);
-                    else if(val == false) 
-                        done(null, false);
-                    else 
+                    else if(val)
                     {
                         values.push(val); 
                         if(values.length == result.Tasks.length)

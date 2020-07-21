@@ -237,6 +237,7 @@ module.exports.isAuthenticated = (req, res, next) => {
     });
   
 }
+
 module.exports.getTasks = (req, res, next) => {
     let error = false;
     let count = 0;
@@ -258,10 +259,8 @@ module.exports.getTasks = (req, res, next) => {
                  {
                     count = count + 1;
                     if(err)
-                    {
-                        error = true;
                         return res.status(500).send({message: 'Internal Server Error: ' + err});
-                    }
+
                     else if(val)
                     {
                         projectsOfUser.push(val);
@@ -276,6 +275,8 @@ module.exports.getTasks = (req, res, next) => {
                         {
                             if(projectsOfUser.length == 0)
                                 return res.status(404).json({ message:  'No projects found' });
+                            else
+                                return res.status(200).json({projects : projectsOfUser});
                         }
                     }
                 });

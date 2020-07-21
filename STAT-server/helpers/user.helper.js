@@ -79,3 +79,17 @@ module.exports.addTeam = (id, teamID, done) => {
         }
     });
 }
+//Deletes team from Team array
+module.exports.deleteTeam = (ids, teamID, done) => {
+
+    UserModel.updateMany({_id:{$in: ids}},{ $pull: { 'Team': teamID}},(err, result) => {
+        if (err) 
+            done(err);
+        else if (!result)
+            done(null, false);
+        else
+            done(null, false);
+        
+    });
+  
+}

@@ -3,13 +3,19 @@ const TeamModel = mongoose.model("teams");
 const ProjectHelper =require('../helpers/project.helper');
 
 
-module.exports.deleteTeam = (id, done) => {      
-    TeamModel.deleteOne({_id: id},(err,val)=>{
+module.exports.deleteTeam = (id, done) => {   
+
+    TeamModel.findOne({_id: id},(err,val)=>{
         if(err)
             done(err);
-        else 
-        {    
-            done(null);
+        else   
+        {
+            TeamModel.deleteOne({_id: id},(err,result)=>{
+                if(err)
+                    done(err);
+                else   
+                    done(null, val);
+            });
         }
     });   
  }
@@ -24,8 +30,9 @@ module.exports.getTasksOfTeam = (id, done)=>{
             done(null,false);
         else if(result)
         {
-            console.log("project" + result.ProjectID);
+    
             ProjectHelper.getTasks(result.ProjectID,(err,val)=> {
+                console.log("project" + result.ProjectID);
                 if(err)
                     done(err);
                 else if(val == false) 

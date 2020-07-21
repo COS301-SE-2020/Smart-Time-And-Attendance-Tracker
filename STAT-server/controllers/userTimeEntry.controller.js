@@ -173,7 +173,7 @@ module.exports.getDailyTimeEntries = (req, res) => {
                             if(date == val.Date)
                             {
                                 count = false;
-                                timeEntries.push({timeEntryID: val.ID, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, description: val.Description, monetaryValue:val.MonetaryValue});
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, description: val.Description, monetaryValue:val.MonetaryValue});
                             }
             
                         };

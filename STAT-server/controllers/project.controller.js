@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 const TaskHelper = require("../helpers/task.helper");
 const TeamHelper = require("../helpers/team.helper");
+const UserHelper = require("../helpers/user.helper");
 
 module.exports.complete = (req, res) => {
     ProjectModel.update({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
@@ -152,15 +153,28 @@ module.exports.deleteProject = (req, res) => {
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                         else
                         {
-                            ProjectModel.deleteOne({_id: req.query.projectID},(err,val)=>{
+                            ids= [];
+                            for(a=0; a<result.TeamMembers.length; a++)
+                            {
+                                ids.push(result.TeamMembers[a]._id);
+                            }
+                            UserHelper.deleteTeam(ids,val.Team, (err,result)=>
+                            {
                                 if(err)
                                     return res.status(500).send({message: 'Internal Server Error: ' + err});
-            
-                                else 
-                                {    
-                                    return res.status(200).json({ message: 'Project successfully deleted '});
+                                else
+                                {
+                                    ProjectModel.deleteOne({_id: req.query.projectID},(err,val)=>{
+                                        if(err)
+                                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    
+                                        else 
+                                        {    
+                                            return res.status(200).json({ message: 'Project successfully deleted '});
+                                        }
+                                    });   
                                 }
-                            });   
+                            });  
                         }
                     });
                 }
@@ -182,7 +196,6 @@ module.exports.deleteTask = (req, res, next) => {
         
     });
 }
-
 
 module.exports.complete = (req, res, next) => {
 
