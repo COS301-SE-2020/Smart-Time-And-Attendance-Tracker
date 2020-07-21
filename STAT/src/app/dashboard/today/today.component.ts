@@ -52,6 +52,8 @@ export class TodayComponent implements OnInit {
       EndTime : new FormControl('', [Validators.required])
     });
 
+    this.manualTrackingForm.setValidators(this.checkTimes('StartTime', 'EndTime'));
+
     this.automaticTrackingForm = new FormGroup({
       Description : new FormControl(''),
       Project : new FormControl('', [Validators.required]),
@@ -126,6 +128,9 @@ export class TodayComponent implements OnInit {
       this.monetaryValue = hours * this.hourlyRate
       this.manualTrackingForm.get('MonetaryValue').setValue(this.monetaryValue)
     }
+
+    if (isNaN(this.monetaryValue))
+      this.monetaryValue = 0
 
   }
 
@@ -266,4 +271,51 @@ export class TodayComponent implements OnInit {
     return new Date(d).toLocaleDateString('en-US', options)
   }
 
+  // ERROR MESSAGES
+
+  // start time must be at least a minute before end time
+  getStartError() {
+    if (this.manualTrackingForm.controls.StartTime.hasError('required')) {
+      return 'Please enter a value';
+    }
+
+    return this.manualTrackingForm.controls.StartTime.hasError('mustMatch') ? 'Invalid start time' : '';
+  }
+
+  // end time must be at least a minute after start time
+  getEndError() {
+    if (this.manualTrackingForm.controls.EndTime.hasError('required')) {
+      return 'Please enter a value';
+    }
+
+    return this.manualTrackingForm.controls.EndTime.hasError('mustMatch') ? 'End time must occur at least a minute after start time' : '';
+  }
+
+  // check time values
+  checkTimes(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+          // return if another validator has already found an error on the matchingControl
+          return;
+      }
+
+      var startTime = new Date('2020/01/01 ' + control.value)
+      var endTime = new Date('2020/01/01 ' + matchingControl.value)
+      var diff = endTime.getTime() - startTime.getTime()
+      var mins = diff / 60000
+      console.log(mins)
+
+      // set error on matchingControl if validation fails
+      if (mins < 1) {
+          matchingControl.setErrors({ mustMatch: true });
+      } else {
+          matchingControl.setErrors(null);
+      }
+
+      return null;
+    }
+  }
 }
