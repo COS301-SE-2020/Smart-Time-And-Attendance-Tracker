@@ -30,9 +30,7 @@ module.exports.getTasksOfTeam = (id, done)=>{
             done(null,false);
         else if(result)
         {
-    
             ProjectHelper.getTasks(result.ProjectID,(err,val)=> {
-                console.log("project" + result.ProjectID);
                 if(err)
                     done(err);
                 else if(val == false) 

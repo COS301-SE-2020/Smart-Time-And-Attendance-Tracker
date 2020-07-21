@@ -32,13 +32,10 @@ module.exports.getTasks = (id, done)=>{
             done(err);
         else if (!result)
             done(null,false);
-        else if(result.Tasks.length ==0)
-            done(null,false);
         else if(result)
         {
             var values = [], task=0, text="";
-            console.log(result.Tasks);
-            if(!result.Tasks)
+            if(result.Tasks.length ==0)
             {
                 text = {
                     'ID': result._id,
