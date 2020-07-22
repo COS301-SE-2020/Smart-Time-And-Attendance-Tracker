@@ -66,11 +66,36 @@
   </section>
 
   <section class="col-6">
-    <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
-      <b>1</b><br>MEMBER
-    </div>
-    <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
-      <b>{{members.length}}</b><br>MEMBERS
+    <h2>Members</h2>
+    <div class="info row p-0">
+      <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
+        <b>1</b><br>MEMBER
+      </div>
+      <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
+        <b>{{members.length}}</b><br>MEMBERS
+      </div>
+      
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-10">
+          <mat-label>Search Members</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
+        </mat-form-field>
+
+        <button mat-mini-fab id="sort-menu" 
+                matTooltip="Sort"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="right"
+                [matMenuTriggerFor]="menuM">
+          <mat-icon>sort</mat-icon>
+        </button>
+
+        <mat-menu #menuM="matMenu">
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('a')">By Name</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('o')">By Surname</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">By Email</button>
+        </mat-menu>
+      </div>
+      
     </div>
   </section>
 </div>
