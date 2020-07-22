@@ -126,6 +126,8 @@ module.exports.addTask = (req, res, next) => {
 
 
 module.exports.deleteProject = (req, res) => { 
+    if(!req.query.projectID)
+        return res.status(400).send({message: 'No project ID provided'});
     ProjectModel.findOne({_id: req.query.projectID},(err,val)=>{
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -176,6 +178,8 @@ module.exports.deleteProject = (req, res) => {
 }
 
 module.exports.deleteTask = (req, res, next) => {  
+    if(!req.query.projectID)
+        return res.status(400).send({message: 'No project ID provided'});
     ProjectModel.updateOne({_id: req.query.projectID},{ $pull: { 'Tasks':   req.query.taskID}},(err,val)=>{
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});

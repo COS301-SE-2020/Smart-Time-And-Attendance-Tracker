@@ -143,6 +143,8 @@ module.exports.updateTimeEntry = (req, res) => {
 //Parameters - Date string
 // Returns - Array of time entry objects
 module.exports.getDailyTimeEntries = (req, res) => {  
+    if(!req.query.date)
+        return res.status(400).send({message: 'No date provided'}); 
     var count = true;
     var count3 = 0;
     UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {

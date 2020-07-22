@@ -92,7 +92,9 @@ module.exports.add = (req, res, next) => {
 }
 
 
-module.exports.deleteTask= (req, res) => {           
+module.exports.deleteTask= (req, res) => {     
+    if(!req.query.taskID)
+        return res.status(400).send({message: 'No task ID provided'});      
 TaskModel.deleteOne({_id: req.query.taskID},(err,val)=>{
     if(err)
         return res.status(500).send({message: 'Internal Server Error: ' + err});
