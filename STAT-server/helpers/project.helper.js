@@ -3,7 +3,7 @@ const ProjectModel = mongoose.model("Project");
 const TaskHelper =require('../helpers/task.helper');
 
 module.exports.addTeam = (id, teamID, done)=>{
-    ProjectModel.update({_id: id},{Team: teamID},(err, result) => {
+    ProjectModel.updateOne({_id: id},{Team: teamID},(err, result) => {
         if(err) 
             done(err);
         else if (!result)

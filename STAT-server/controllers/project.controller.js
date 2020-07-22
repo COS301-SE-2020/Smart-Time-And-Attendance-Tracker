@@ -6,7 +6,7 @@ const TeamHelper = require("../helpers/team.helper");
 const UserHelper = require("../helpers/user.helper");
 
 module.exports.complete = (req, res) => {
-    ProjectModel.update({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
+    ProjectModel.updateOne({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
@@ -18,7 +18,7 @@ module.exports.complete = (req, res) => {
 }
 
 module.exports.uncomplete = (req, res) => {
-    ProjectModel.update({ _id: req.body.ProjectID},{Completed: false},(err, result) => {
+    ProjectModel.updateOne({ _id: req.body.ProjectID},{Completed: false},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
@@ -109,24 +109,17 @@ module.exports.add = (req, res, next) => {
 
 module.exports.addTask = (req, res, next) => {
 
-        ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
+        ProjectModel.updateOne({_id : req.body.projectID}, { $push: { Tasks: req.TaskID } },function(err, result) {
         if(err) 
-        {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
+
         else if (!result)
-        {
             return res.status(404).send({message: "Project not found"});
-        }
-        else {
-            result.Tasks.push(req.TaskID);
-            result.save((err, doc) => {
-                if(!err)
-                    return res.status(200).json({ taskID: req.TaskID, message: 'Task created and added to project' });
-                else
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-            });
-        }
+
+        else 
+            return res.status(200).json({ taskID: req.TaskID, message: 'Task created and added to project' });
+              
+           
     });
 
 }
