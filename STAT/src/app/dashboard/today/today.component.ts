@@ -135,7 +135,7 @@ export class TodayComponent implements OnInit {
   }
 
   //Add an automatic time entry from form
-  addAutomaticEntry(form : NgForm)
+  /*addAutomaticEntry(form : NgForm)
     {
       
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
@@ -149,10 +149,10 @@ export class TodayComponent implements OnInit {
         //console.log(error.error.message);  
       
       }); 
-  }
+  }*/
 
   //Update a time entry. Parameters are the new end time and active time
-  updateEntry(endTime, activeTime)
+  /*updateEntry(endTime, activeTime)
   {
       endTime =  new Date().getTime();
       activeTime = 10;
@@ -165,7 +165,7 @@ export class TodayComponent implements OnInit {
       //console.log(error.error.message);  
     
     }); 
-  }
+  }*/
 
   // get projects and tasks
   getProAndTasks()

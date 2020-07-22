@@ -51,7 +51,7 @@ export class OrganisationComponent implements OnInit {
   getAllUnauthenticatedUsers(sort : string) 
   {
     this.requests = null
-    this.service.getUnathenticatedUsers(localStorage.getItem('token')).subscribe((data) => {
+    this.service.getUnauthenticatedUsers(localStorage.getItem('token')).subscribe((data) => {
       this.requests = data['UnauthenticatedUsers'];
       this.sortRequests(sort)
     },

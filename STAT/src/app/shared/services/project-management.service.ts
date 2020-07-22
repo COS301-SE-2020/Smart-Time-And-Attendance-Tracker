@@ -49,7 +49,7 @@ export class ProjectManagementService {
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
     parameters = parameters.append('projectID', project);
-    return this.http.delete(this.ROOT_URL+'task', {
+    return this.http.delete(this.ROOT_URL+'project', {
       headers: headers,
       params: parameters
     });
@@ -84,7 +84,7 @@ export class ProjectManagementService {
   public completeTask(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+'/task/complete', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'task/complete', JSON.stringify(values), {
       headers: headers
     });
   }
@@ -93,7 +93,7 @@ export class ProjectManagementService {
   public startTask(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+'/task/start', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'task/start', JSON.stringify(values), {
       headers: headers
     });
   }
