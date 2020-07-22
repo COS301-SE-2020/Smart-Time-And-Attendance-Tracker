@@ -74,30 +74,37 @@ function HandleUpdate(tabId, changeInfo, tab) {
 
   function UpdateBadges() {
     var now = new Date();
-    pause();
-    for (tabId in chrome.extension.getBackgroundPage().History) {
-      var description = ""; 
-      description = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabId][0][0]);
-      description = addTimes([description, getCookie("historyTime"+tabId)]);
-      description = description.slice(0, -3);
-      chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
-      
+    var description = ""; 
+    if (document.cookie.indexOf('token') != -1) {
+      pause();
+      for (tabId in chrome.extension.getBackgroundPage().History) {
+        description = ""; 
+        description = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabId][0][0]);
+        description = addTimes([description, getCookie("historyTime"+tabId)]);
+        description = description.slice(0, -3);   
+        chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});     
+      }
     }
-    
+    else
+    {
+      for (tabId in chrome.extension.getBackgroundPage().History) {
+        chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': '00:00'});
+      }
+    }
 }
 
 
   function cacheDurationPeriodically()
   {
-      console.log("TABS: ");
+      //alert("TABS: ");
       for(tabID in chrome.extension.getBackgroundPage().History) {
         if(chrome.extension.getBackgroundPage().History[currentID][0][2] != "")
         {
             var now  = new Date();
-            console.log("tab ID " + tabID);
+            //alert("tab ID " + tabID);
             var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
             duration = addTimes([duration, getCookie("historyTime"+tabID)]);
-            console.log("Saving data  " + duration);
+           // alert("Saving data  " + duration);
             setCookie("historyTime"+tabID, duration, 1);
       }
     }

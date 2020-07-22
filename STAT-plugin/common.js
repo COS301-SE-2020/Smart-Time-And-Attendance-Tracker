@@ -58,9 +58,9 @@ userLogin.onclick = function(){
                 ////show starts and stop
                  displayButton();
                  for(tabID in chrome.extension.getBackgroundPage().History) {
-                   alert("tab ID " + tabID);
-                    AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][0], chrome.extension.getBackgroundPage().History[tabID][0][1], new Date(), tabID);
-                    chrome.extension.getBackgroundPage().History[tabID][0][0] = new Date();
+                   //alert("tab ID " + tabID);
+                  chrome.extension.getBackgroundPage().History[tabID][0][0] = new Date();
+                  AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][0], chrome.extension.getBackgroundPage().History[tabID][0][1], new Date(), tabID);
 
                  }
             }
@@ -95,7 +95,7 @@ function getUserName(){
                 setCookie("name", data.name, 1);
                 setCookie("email", data.surname, 1);
                 console.log(data);
-                alert(http.responseText);
+                //alert(http.responseText);
                 console.log("token");
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.surname;
@@ -112,7 +112,7 @@ function getUserName(){
 }
 
 
-getTasks();
+//getTasks();
 function getTasks() {
   tasksDropdown = document.getElementById("tasks");
   if(tasksDropdown.childElementCount == 0)
@@ -145,19 +145,87 @@ function getTasks() {
   }
 }
 
+function convertDurationToInt(time) {
+  var seconds = new Date('1970-01-01T' + time + 'Z').getTime() / 1000;
+  return seconds;
+}
+
+function getTimeWithID(currentID){
+  var now = new Date();
+  var t ="";
+  if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
+  { 
+    //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
+    t = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+    t = addTimes([t, document.cookie.indexOf("historyTime"+currentID)]);
+  }
+  else
+  {
+    //alert(chrome.extension.getBackgroundPage().History[currentID][0][0])
+    //alert("dis 2.2");
+    t = FormatDuration(chrome.extension.getBackgroundPage().History[currentID][0][0]);
+  }
+  //t = t.slice(0, -3);
+  //t+= ":00";
+  //alert("time  : " + t);
+  if(t.includes("NaN"))
+    t = "00:00:00";
+  return t;
+}
 
 function AddTimeEntry(url,startTime, endTime,currentID ) {
   //getTasks();
-  alert("url " + url);
+  //alert(getTimeWithID(currentID));
+  //alert("url: " + url);
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
       var text = '{ "Description": "'+ url + '",'
           + '"StartTime": "'+ startTime.getTime() + '",' 
           + '"EndTime": "'+ endTime.getTime() + '",' 
-          + '"TaskID": "abcd1234",' 
           + '"Device": "Browser",' 
-          + '"ActiveTime": 0,' 
+          + '"ProjectName": "Un-specified",' 
+          + '"TaskName": "Un-specified",' 
+          + '"ActiveTime":'+ convertDurationToInt(getTimeWithID(currentID)) +',' 
+//          + '"ActiveTime":' + convertDurationToInt(getTimeWithID(currentID)) + ',' 
           + '"Date": "'+ new Date() + '"' 
+          + '}';
+
+      http.open('POST', apiURL, true);
+
+      http.setRequestHeader('Content-type', 'application/json');
+      http.setRequestHeader("authorization", "token "+ getCookie("token"));
+      //alert(getCookie("token"));
+      http.onreadystatechange = function() {
+        //alert(http.readyState + "  " + http.status);
+          if(http.readyState == 4 && http.status == 200) {
+              const obj = JSON.parse(http.responseText);
+              chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.timeEntryID;
+              chrome.extension.getBackgroundPage().History[currentID][0][0] = new Date();
+              setCookie("historyTime"+currentID, "00:00", 1);
+              console.log("id :   " + obj.timeEntryID);
+              status = true;
+              return status;
+          }
+          else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+              chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
+              chrome.extension.getBackgroundPage().History[currentID][0][0] = new Date();
+              //alert(http.responseText);
+              status = false;
+              return status;
+          }
+      }
+      http.send(text);
+}
+function UpdateTimeEntry(endTime,currentID ) {
+  //getTasks();
+  alert(convertDurationToInt(getTimeWithID(currentID)));
+  alert("endTime: " + endTime);
+      var http = new XMLHttpRequest();
+      var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
+      var text = '{'
+          + '"TimeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'  
+          + '"EndTime": "'+ endTime.getTime() + '",'  
+          + '"ActiveTime":'+ convertDurationToInt(getTimeWithID(currentID)) +',' 
           + '}';
 
       http.open('POST', apiURL, true);
@@ -169,10 +237,7 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
         alert(http.readyState + "  " + http.status);
           if(http.readyState == 4 && http.status == 200) {
               const obj = JSON.parse(http.responseText);
-              chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.TimeEntryID;
-              chrome.extension.getBackgroundPage().History[currentID][0][0] = new Date();
-              setCookie("historyTime"+currentID, "00:00", 1);
-              alert(obj.TimeEntryID);
+              alert("message :   " + obj.message);
               status = true;
               return status;
           }

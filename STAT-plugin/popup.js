@@ -12,18 +12,25 @@ function showTime() {
         //desc.innerHTML = url + ": ";
         var description="";
         //alert(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]))
-        if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
-        { 
-            //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
-            description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
-            desc.innerHTML = addTimes([description, getCookie("historyTime"+currentID)]);
+        if(document.cookie.indexOf("token")>-1)
+        {
+            if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
+            { 
+                //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
+                description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
+                desc.innerHTML = addTimes([description, getCookie("historyTime"+currentID)]);
 
+            }
+            else
+            {
+                //alert(chrome.extension.getBackgroundPage().History[currentID][0][0])
+                desc.innerHTML = chrome.extension.getBackgroundPage().History[currentID][0][0]+ "\n";
+                description = FormatDuration(chrome.extension.getBackgroundPage().History[currentID][0][0]);
+            }
         }
         else
         {
-            //alert(chrome.extension.getBackgroundPage().History[currentID][0][0])
-            desc.innerHTML = chrome.extension.getBackgroundPage().History[currentID][0][0]+ "\n";
-            description = FormatDuration(chrome.extension.getBackgroundPage().History[currentID][0][0]);
+            desc.innerHTML = "00:00:00\n";
         }
     });    
 }
@@ -62,6 +69,7 @@ stopStartBtn.onclick = function(){
             url = url.split("://")[1];
             url = url.split("/")[0];
             console.log("Stopeed tracking " + url);
+            UpdateTimeEntry(now, currentID);
             //AddTimeEntry(url, chrome.extension.getBackgroundPage().History[currentID][0][0], now);
             var description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
             chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
