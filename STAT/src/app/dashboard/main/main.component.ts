@@ -8,18 +8,14 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 })
 export class MainComponent implements OnInit {
 
-  projects: any = [
-    {value: '0', name: 'Project 0'},
-    {value: '1', name: 'Project 1'},
-    {value: '2', name: 'Project 2'}
-  ];
-
+  isAuth : boolean
   roles : any
   // active tab
   active : string;
 
   constructor(public service : AccountManagementService) {
     this.roles =  this.service.roles
+    this.isAuth = true
   }
 
   ngOnInit(): void {
@@ -49,5 +45,6 @@ export class MainComponent implements OnInit {
     link.classList.add('active');
     this.active = tabName;
   }
+
 
 }
