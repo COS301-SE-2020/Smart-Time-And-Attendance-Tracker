@@ -41,7 +41,8 @@ module.exports.getTasks = (id, done)=>{
                     'ID': result._id,
                     'projectName': result.ProjectName,
                     "dueDate": result.DueDate,
-                    "hourlyRate": result.HourlyRate
+                    "hourlyRate": result.HourlyRate,
+                    "tasks": []
 
                 }
                 done(null, text);
