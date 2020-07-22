@@ -27,6 +27,8 @@ export class OrganisationComponent implements OnInit {
     let req = {"UserID": id};
     this.service.authenticate(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
+      this.getAllUnauthenticatedUsers('n')
+      this.getMembers()
     },
     error => {
       console.log(error);
@@ -40,6 +42,8 @@ export class OrganisationComponent implements OnInit {
     let req = {"UserID": id};
     this.service.reject( localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
+      this.getAllUnauthenticatedUsers('n')
+      this.getMembers()
     },
     error => {
       console.log(error);

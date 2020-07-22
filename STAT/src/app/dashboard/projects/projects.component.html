@@ -47,7 +47,7 @@
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(deleteProjectModal); pid = p.ID">
+                          (click)="open(deleteProjectModal); pid = p.ID; pname = p.projectName">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
                   </mat-panel-title>
@@ -58,7 +58,10 @@
                 <mat-divider></mat-divider><br>
 
                 <!-- tasks -->
-                <ul class="tasks">
+                <ul *ngIf="p.tasks.includes('no tasks')" class="tasks">
+                  <li>No tasks</li>
+                </ul>
+                <ul *ngIf="p.tasks != 'no tasks'" class="tasks">
                   <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
@@ -73,7 +76,7 @@
                             matTooltip="Delete"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="above"
-                            (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID">
+                            (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID; tname = t.taskName">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
                      <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
@@ -276,7 +279,7 @@
 <ng-template #deleteProjectModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
-      <h2> Delete project
+      <h2> Delete {{pname}}
         <br>
       </h2>
       <button (click)="modal.dismiss('Cross click')">
@@ -383,7 +386,7 @@
 <ng-template #deleteTaskModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
-      <h2> Delete task
+      <h2> Delete {{tname}}
         <br>
       </h2>
       <button (click)="modal.dismiss('Cross click')">

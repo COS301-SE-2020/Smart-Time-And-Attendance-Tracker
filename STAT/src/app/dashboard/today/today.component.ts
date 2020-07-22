@@ -30,6 +30,10 @@ export class TodayComponent implements OnInit {
   mTasksDisabled : boolean = true
   hourlyRate : number
   monetaryValue : number
+  activeTime : number
+
+  pName : string
+  tName : string
 
   entries : Object[]
   week : Object[] = []
@@ -49,7 +53,10 @@ export class TodayComponent implements OnInit {
       MonetaryValue : new FormControl('', [Validators.required]),
       Date : new FormControl('', [Validators.required]),
       StartTime : new FormControl('', [Validators.required]),
-      EndTime : new FormControl('', [Validators.required])
+      EndTime : new FormControl('', [Validators.required]),
+      ProjectName : new FormControl(''),
+      TaskName : new FormControl(''),
+      ActiveTime : new FormControl('')
     });
 
     this.manualTrackingForm.setValidators(this.checkTimes('StartTime', 'EndTime'));
@@ -61,7 +68,6 @@ export class TodayComponent implements OnInit {
     });
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
-    this.getProAndTasks()
 
     // set dates
     this.date1.setDate(this.date.getDate()-1)
@@ -69,6 +75,14 @@ export class TodayComponent implements OnInit {
     this.date3.setDate(this.date.getDate()-3)
     this.date4.setDate(this.date.getDate()-4)
     this.date5.setDate(this.date.getDate()-5)
+
+    this.reload()
+
+  }
+
+  // reload page data
+  reload() {
+    this.getProAndTasks()
 
     // get entries
     this.getEntries(this.formatDate(this.date))
@@ -105,9 +119,10 @@ export class TodayComponent implements OnInit {
   //Add a manual time entry from form
   addManualEntry(form : NgForm)
   {
-    
-      this.service.addMTimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
+    console.log(form)
+    this.service.addMTimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
+      this.reload()
     },
     error => {
       console.log(error);
@@ -124,6 +139,7 @@ export class TodayComponent implements OnInit {
       startTime = new Date('2020/01/01 ' + startTime)
       endTime = new Date('2020/01/01 ' + endTime)
       var diff = endTime.getTime() - startTime.getTime()
+      this.activeTime = diff / 60000
       var hours = diff / 3600000
       this.monetaryValue = hours * this.hourlyRate
       this.manualTrackingForm.get('MonetaryValue').setValue(this.monetaryValue)
@@ -137,12 +153,10 @@ export class TodayComponent implements OnInit {
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
     {
-      
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
         console.log(data);
         this.service.EntryID = data['TimeEntryID'];
-        this.getProAndTasks();
-        
+        //this.reload()        
       },
       error => {
         console.log(error);
@@ -241,18 +255,25 @@ export class TodayComponent implements OnInit {
     console.log(this.getEntries(date))
   }
 
+  // get time spent
+  getTime(mins : number) {
+    var hours = Math.floor(mins / 60)
+    var rem = mins % 60
+    return (hours + 'h ' + rem + 'm')
+  }
+
   // format date
   formatDate(date : Date) {
     var y = date.getFullYear().toString();
     var m = (date.getMonth()+1).toString();
     var d = date.getDate().toString();
 
-    let toReturn = new String(y + '/');
+    let toReturn = new String(y + '-');
     
     if (m.length == 1)
-      toReturn += ('0' + m + '/')
+      toReturn += ('0' + m + '-')
     else
-      toReturn += (m + '/')
+      toReturn += (m + '-')
       
     if (d.length == 1)
       toReturn += ('0' + d)

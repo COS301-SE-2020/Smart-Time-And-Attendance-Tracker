@@ -30,6 +30,8 @@ export class ProjectsComponent implements OnInit {
   addTaskForm : FormGroup
   pid : string
   tid : string
+  pname : string
+  tname : string
   projectToEdit : any
   taskToEdit : any
 
@@ -136,6 +138,7 @@ export class ProjectsComponent implements OnInit {
   // delete project
   deleteProject(projectID : String) {
     this.pmService.deleteProject(localStorage.getItem('token'),projectID).subscribe((data) => {
+      console.log('ID' + projectID)
       console.log(data);
       this.getProAndTasks()
     },
@@ -198,11 +201,15 @@ export class ProjectsComponent implements OnInit {
     for (let i = 0; i < this.projects.length; i++) {
       this.projects[i]['dueDate'] = Date.parse(this.projects[i]['dueDate'])
       var temp : Object[] = this.projects[i]['tasks']
-      for (let j = 0; j < temp.length; j++) {
-        temp[j]['projectID'] = this.projects[i]['ID']
-        temp[j]['projectName'] = this.projects[i]['projectName']
-        temp[j]['dueDate'] = Date.parse(temp[j]['dueDate'])
-        this.tasks.push(temp[j])
+
+      // if there are no tasks
+      if (temp.length != 0) {
+        for (let j = 0; j < temp.length; j++) {
+          temp[j]['projectID'] = this.projects[i]['ID']
+          temp[j]['projectName'] = this.projects[i]['projectName']
+          temp[j]['dueDate'] = Date.parse(temp[j]['dueDate'])
+          this.tasks.push(temp[j])
+        }
       }
     }
 
@@ -213,7 +220,6 @@ export class ProjectsComponent implements OnInit {
     // get week details
     var startDate = new Date()
     var endDate = startDate.getDate()+6
-    console.log(startDate + ' AND ' + endDate)
     this.tasksNum = this.tasks.length
 
     this.tasksDone = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
