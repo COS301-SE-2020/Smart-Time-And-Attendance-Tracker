@@ -36,7 +36,7 @@ module.exports.update = (req, res) => {
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if(!result)
-            return res.status(404).json({message: 'Project not found'});
+            return res.status(404).json({message: 'Task not found'});
         else
         {
             if(req.body.hasOwnProperty('taskName'))
