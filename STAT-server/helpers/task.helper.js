@@ -55,8 +55,7 @@ module.exports.getTaskName = (id, done)=>{
 }
 module.exports.deleteTask= (ids, done) => {      
        
-    TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{
-        
+    TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
         if(err) 
             done(err);
         else

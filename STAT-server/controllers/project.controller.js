@@ -133,7 +133,6 @@ module.exports.deleteProject = (req, res) => {
             return res.status(404).json({ message: 'Project not found' });
         else 
         {
-            var Team = val.Team;
             TaskHelper.deleteTask(val.Tasks,(err,result)=>
             {
                 if(err)

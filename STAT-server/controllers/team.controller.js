@@ -15,7 +15,7 @@ module.exports.assignProject = (req, res, next) => {
         else
         {
             
-        ProjectHelper.addTeam(result.ProjectID, req.teamID,(err,val)=>
+        ProjectHelper.addTeam(req.ProjectID, req.teamID,(err,val)=>
         {
             if(err)
                 return res.status(500).send({message: 'Internal Server Error: ' + err});

@@ -262,6 +262,7 @@ module.exports.getTasks = (req, res, next) => {
 
                     else if(val)
                     {
+                        
                         projectsOfUser.push(val);
                         if(count == result.Team.length)
                         {
@@ -270,6 +271,7 @@ module.exports.getTasks = (req, res, next) => {
                     }
                     else
                     {
+               
                         if(count == result.Team.length)
                         {
                             if(projectsOfUser.length == 0)
