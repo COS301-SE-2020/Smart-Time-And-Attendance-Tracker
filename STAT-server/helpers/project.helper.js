@@ -32,13 +32,10 @@ module.exports.getTasks = (id, done)=>{
             done(err);
         else if (!result)
             done(null,false);
-        else if(result.Tasks.length ==0)
-            done(null,false);
         else if(result)
         {
             var values = [], task=0, text="";
-            console.log(result.Tasks);
-            if(result.Tasks.length == 0)
+            if(result.Tasks.length ==0)
             {
                 text = {
                     'ID': result._id,
@@ -54,9 +51,7 @@ module.exports.getTasks = (id, done)=>{
                 TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
                     if(err)
                         done(err);
-                    else if(val == false) 
-                        done(null, false);
-                    else 
+                    else if(val)
                     {
                         values.push(val); 
                         if(values.length == result.Tasks.length)
