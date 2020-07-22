@@ -13,7 +13,7 @@ module.exports.add = (req, res, next) => {
     task.TimeSpent = req.body.timeSpent;
     task.StartDate = req.body.startDate;
     task.MonetaryValue = req.body.monetaryValue;    
-    task.save((err, doc) => {
+    task.updateOne((err, doc) => {
         if(!err){
             return res.status(200).send({message: 'Task Created'});
         }

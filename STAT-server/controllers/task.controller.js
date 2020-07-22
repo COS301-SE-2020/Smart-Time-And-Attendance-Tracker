@@ -19,7 +19,7 @@ module.exports.startTask = (req, res, next) => {
 
 module.exports.completeTask = (req, res, next) => {
    
-    TaskModel.update({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
+    TaskModel.updateOne({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
