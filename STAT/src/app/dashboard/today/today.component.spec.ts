@@ -11,6 +11,8 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { of } from 'rxjs';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
+import { MaterialComponentsModule } from 'src/app/material-components/material-components.module';
+import { MatCardModule } from '@angular/material/card';
 
 describe('Unit tests', () => {
 describe('TodayComponent', () => {
@@ -28,7 +30,13 @@ describe('TodayComponent', () => {
           RouterTestingModule,
           FormsModule,
           ReactiveFormsModule,
-        ]
+          MaterialComponentsModule,
+          MatCardModule
+        ],
+      providers: [
+        MaterialComponentsModule,
+        MatCardModule
+      ]
     })
     .compileComponents().then(()=>
     {

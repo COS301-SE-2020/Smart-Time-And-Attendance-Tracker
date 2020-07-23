@@ -5,6 +5,8 @@ import { ProjectsComponent } from './projects.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
+import { MaterialComponentsModule } from 'src/app/material-components/material-components.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 describe('Unit tests', () => {
 describe('ProjectsComponent', () => {
@@ -21,7 +23,15 @@ describe('ProjectsComponent', () => {
           RouterTestingModule,
           FormsModule,
           ReactiveFormsModule,
-        ]
+          MaterialComponentsModule,
+          MatProgressSpinnerModule
+        ],
+      providers: [
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialComponentsModule,
+        MatProgressSpinnerModule
+      ]
     })
     .compileComponents().then(()=>
     {
