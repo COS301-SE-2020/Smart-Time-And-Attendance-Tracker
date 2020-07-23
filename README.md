@@ -44,6 +44,7 @@ master
 
 ### Demo 2 Links
 - Coding Standards: https://drive.google.com/file/d/1d1UdJzh5wFhPiRaUNDHKQXwP5tUybyhg/view?usp=sharing
+- User Manual: https://drive.google.com/file/d/15kt7iyyR5ftf_Fn3ArE4Qo8IC1d66fBQ/view?usp=sharing
 - Video: https://drive.google.com/file/d/1OmGYxNenx2Y0tM0SRxsGXFICMzmHe66_/view?usp=sharing
 - SRS Document: https://www.overleaf.com/read/bkqdtqzspmtc
 
