@@ -67,6 +67,12 @@ STAT is a web and desktop application that allows people to track time and atten
  
 ## Meet the Team
 
+<p >
+    <h3>Hello.</h3>
+    <b>We are Visionary</b> - a group of 3rd year students at the University of Pretoria. We are all part of the EBIT faculty with most of us studying different degrees. Our collective experience covers front and backend developments, multimedia content creation, and programming using numerous coding languages.
+</p>
+<br>
+
 **Vianka Naidoo**\
 _Team Leader_
 - https://Vianka213.github.io
