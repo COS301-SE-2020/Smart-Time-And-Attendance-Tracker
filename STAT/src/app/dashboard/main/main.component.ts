@@ -8,43 +8,43 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 })
 export class MainComponent implements OnInit {
 
-  projects: any = [
-    {value: '0', name: 'Project 0'},
-    {value: '1', name: 'Project 1'},
-    {value: '2', name: 'Project 2'}
-  ];
+  isAuth : boolean
+  roles : any
+  // active tab
+  active : string;
 
-  admin : boolean;
-  dataAnalyst : boolean;
-  general : boolean;
-
-  constructor(public service : AccountManagementService) { }
+  constructor(public service : AccountManagementService) {
+    this.roles =  this.service.roles
+    this.isAuth = true
+  }
 
   ngOnInit(): void {
+    console.log(this.roles)
+
     const hamburger = document.getElementById('hamburger');
     const wrapper = document.getElementById('wrapper');
-    
+
     hamburger.addEventListener('click', () => {
       wrapper.classList.toggle('open')
-    })
+    });
 
-    this.dataAnalyst = false;
+    this.active = 'today';
   }
 
   // set active tab after component initialisation
   ngAfterViewInit(): void {
-    const navItem = document.getElementById('default');
+    const navItem = document.getElementById('today');
     navItem.classList.add('active');
   }
 
   // set new active tab after click
-  setActive(id: number) {
+  setActive(tabName : string) {
     const currActive = document.getElementsByClassName('active')[0];
-    console.log(currActive);
     currActive.classList.remove('active');
-    const navItem = document.getElementsByTagName('li')[id+1];
-    const link = navItem.getElementsByTagName('a')[0];
+    const link = document.getElementById(tabName);
     link.classList.add('active');
+    this.active = tabName;
   }
+
 
 }

@@ -1,90 +1,74 @@
+<body>
 <div id="wrapper" class="wrapper">
-  
+
     <div class="main_body">
-      
-      <div class="sidebar_menu bg-dark">
-            <div class="inner__sidebar_menu">
+      <div class="sidebar_menu">
+            <div class="inner__sidebar_menu bg-white">
               <ul>
-                <li>
+                <li id="stat">
                   <h1>STAT</h1>
                 </li>
               </ul>
               <ul>
                 <li>
-                  <a id="default" (click)="setActive(0)">
+                  <a id="today" (click)="setActive('today')">
+                    <span class="icon">
+                      <mat-icon>alarm</mat-icon>
+                    </span>
+                    <span class="list">Tracking</span>
+                  </a>
+                </li>
+                <li>
+                  <a id="schedule" (click)="setActive('schedule')" class="prev">
                     <span class="icon">
                       <mat-icon>today</mat-icon>
                     </span>
-                    <span class="list">Today</span>
-                  </a>
-                </li>
-                <li>
-                  <a (click)="setActive(1)">
-                    <span class="icon">
-                      <mat-icon>schedule</mat-icon>
-                    </span>
                     <span class="list">Schedule</span>
-                    
+
                   </a>
                 </li>
                 <li>
-                  <a (click)="setActive(2)">
+                  <a id="projects" (click)="setActive('projects')">
                     <span class="icon">
                       <mat-icon>assignment</mat-icon>
                     </span>
                     <span class="list">Projects</span>
                   </a>
                 </li>
-                <li *ngIf="dataAnalyst==true">
-                  <a (click)="setActive(3)">
+                <li>
+                  <a id="analysis" (click)="setActive('analysis')">
                     <span class="icon">
                       <mat-icon>bar_chart</mat-icon>
                     </span>
                     <span class="list">Analysis</span>
                   </a>
                 </li>
-                <li>
-                    <a (click)="setActive(4)">
+                <li *ngIf="roles && roles.includes('Data Analyst')">
+                    <a id="data" (click)="setActive('data')">
                         <span class="icon">
                           <mat-icon>timeline</mat-icon>
                         </span>
                         <span class="list">Data</span>
                     </a>
                 </li>
-                <li>
-                    <a (click)="setActive(5)">
+                <li *ngIf="roles && (roles.includes('Data Analyst') || roles.includes('System Administrator'))">
+                    <a id="iot" (click)="setActive('iot')">
                         <span class="icon">
                           <mat-icon>devices</mat-icon>
                         </span>
-                        <span class="list">IOT</span>
+                        <span class="list">IOT Devices</span>
                     </a>
                 </li>
-                <li>
-                  <a (click)="setActive(6)">
+                <li *ngIf="roles && roles.includes('Security Administrator')">
+                  <a id="organisation" (click)="setActive('organisation')">
                     <span class="icon">
-                      <mat-icon>person_pin</mat-icon>
+                      <mat-icon>supervisor_account</mat-icon>
                     </span>
-                    <span class="list">Profile</span>
+                    <span class="list">Organisation</span>
                   </a>
                 </li>
-                <li>
-                  <a (click)="setActive(7)">
-                    <span class="icon">
-                      <mat-icon>settings</mat-icon>
-                    </span>
-                    <span class="list">Settings</span>
-                  </a>
-                </li>
-                <li>
-                    <a (click)="setActive(8)">
-                      <span class="icon">
-                        <mat-icon>help</mat-icon>
-                      </span>
-                      <span class="list">Help</span>
-                    </a>
-                  </li>
               </ul>
-  
+
               <div id="hamburger" class="hamburger">
                 <div class="inner_hamburger">
                     <span class="arrow">
@@ -93,127 +77,28 @@
                     </span>
                 </div>
             </div>
-  
             </div>
-            
         </div>
 
+        <!-- dashboard -->
         <div class="container">
-          <div class="item-wrap row">
-            <div class="item col col-9 col-offset-1">
-              <mat-card class="inner">
-                <mat-card-title>Tracking Data</mat-card-title>
-                <mat-card-content>
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Duration</th>
-                        <th scope="col">Monetary Value</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Research
-                          <span class="badge badge-primary">Sales Pitch</span>
-                        </td>
-                        <td>3hrs 5mins</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Coding
-                          <span class="badge badge-info">Cool Project</span>
-                        </td>
-                        <td>2hrs</td>
-                        <td>300.00</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>Project Inspiration
-                          <span class="badge badge-danger">Music App</span>
-                        </td>
-                        <td>50mins</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">4</th>
-                        <td>Bug Fixes
-                          <span class="badge badge-info">Cool Project</span>
-                        </td>
-                        <td>25mins</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">5</th>
-                        <td>Client Meeting
-                          <span class="badge badge-success">Food App</span>
-                        </td>
-                        <td>2hrs</td>
-                        <td>100.00</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">6</th>
-                        <td>Research
-                          <span class="badge badge-danger">Music App</span>
-                        </td>
-                        <td>30mins</td>
-                        <td>100.00</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </mat-card-content>
-              </mat-card>
-            </div>
-            <div class="col col-3">
-              <div class="item col">
-                <mat-card class="inner">
-                  <mat-card-title>Add entry</mat-card-title>
-                  <mat-card-content>
-                    <form class="signForm" action="#">
-                      <!-- description -->
-                      <mat-form-field appearance="standard">
-                          <mat-label>Description</mat-label>
-                          <input matInput placeholder="Research">
-                      </mat-form-field>
-                      <!-- project -->
-                      <mat-form-field>
-                        <mat-label>Project</mat-label>
-                        <mat-select>
-                          <mat-option *ngFor="let project of projects" [value]="project.value">
-                            {{project.name}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                      <!-- start time -->
-                      <mat-form-field appearance="standard">
-                          <mat-label>Start Time</mat-label>
-                          <input matInput type="time">
-                      </mat-form-field>
-                      <!-- end time -->
-                      <mat-form-field appearance="standard">
-                        <mat-label>End Time</mat-label>
-                        <input matInput type="time">
-                    </mat-form-field>
-                      <!-- monetary value -->
-                      <mat-form-field appearance="standard">
-                        <mat-label>Value</mat-label>
-                        <input matInput placeholder="100.00">
-                    </mat-form-field>
-                      <button id="addEntry" mat-mini-fab color="accent">
-                        <mat-icon>add</mat-icon>
-                      </button>
-                    </form>
-                  </mat-card-content>
-                </mat-card>
-              </div>
-            </div>
-          </div>
-    </div>
-    
+          <app-today *ngIf="active=='today'"></app-today>
+          <app-projects *ngIf="active=='projects'"></app-projects>
+          <app-organisation *ngIf="active=='organisation'"></app-organisation>
+        </div>
+
     </div>
   </div>
-  
 
+</body>
+
+<!--<body id="unauthorised">
+  <div class="row">
+    <div class="col-6">
+      <h1>Our system administrator will authenticate you shortly.</h1>
+    </div>
+    <div class="col-6">
+      <img src="assets/unauthorised.jpg">
+    </div>
+  </div>
+</body>-->
