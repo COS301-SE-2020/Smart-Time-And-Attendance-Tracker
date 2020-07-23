@@ -352,13 +352,13 @@
       <button *ngIf="autoTracking==false" 
               mat-raised-button color="primary" 
               (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
-              [disabled]="manualTrackingForm.invalid">Create an Entry
+              [disabled]="manualTrackingForm.invalid", id= "m-tracking">Create an Entry
       </button>
       <button *ngIf="autoTracking==true" 
               mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); addAutomaticEntry(automaticTrackingForm.value)"
+              (click)="modal.close('Save click');"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
-      <button mat-raised-button color="accent" (click)="modal.close('Save click'); manualTrackingForm.reset(); automaticTrackingForm.reset(); autoTracking = true">Cancel</button>
+      <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset(); automaticTrackingForm.reset(); autoTracking = true">Cancel</button>
     </div>
 
   </div> 

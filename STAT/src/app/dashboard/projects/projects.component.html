@@ -218,7 +218,7 @@
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
               (click)="modal.close('Save click'); addProject(addProjectForm.value); addProjectForm.reset()"
-              [disabled]="addProjectForm.invalid">Create Project</button>
+              [disabled]="addProjectForm.invalid" id="addProject">Create Project</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -262,7 +262,7 @@
     </div>
 
     <div class="modal-footer">
-      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)">Save Changes</button>
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)" id="editProject">Save Changes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -289,7 +289,7 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject(pid)">Yes</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject(pid)" id="deleteProject">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -330,7 +330,7 @@
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
               (click)="modal.close('Save click'); addTask(addTaskForm.value); addTaskForm.reset()"
-              [disabled]="addTaskForm.invalid">Create Task</button>
+              [disabled]="addTaskForm.invalid" id="addTask">Create Task</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -369,7 +369,7 @@
     </div>
 
     <div class="modal-footer">
-      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editTask(editTaskForm.value)">Save Changes</button>
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editTask(editTaskForm.value)" id="editTask">Save Changes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -396,7 +396,7 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteTask(tid, pid)">Yes</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteTask(tid, pid)" id="deleteTask">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 

@@ -44,9 +44,9 @@ export class TodayComponent implements OnInit {
   ngOnInit(): void { 
     this.manualTrackingForm = new FormGroup({
       Description : new FormControl(''),
-      Project : new FormControl(''),
+      Project : new FormControl('',[Validators.required]),
       TaskID : new FormControl('', [Validators.required]),
-      MonetaryValue : new FormControl('', [Validators.required]),
+      //MonetaryValue : new FormControl('', [Validators.required]),
       Date : new FormControl('', [Validators.required]),
       StartTime : new FormControl('', [Validators.required]),
       EndTime : new FormControl('', [Validators.required])
