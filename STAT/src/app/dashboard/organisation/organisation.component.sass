@@ -1,0 +1,147 @@
+*
+  font-size: 1em
+
+.container
+  padding: 2em
+
+h2
+  color: #4c585b
+  font-size: 1.8em
+  margin-bottom: 0
+
+.info
+  color: #4c585b90
+  text-align: left
+  height: fit-content !important
+  display: flex
+  justify-content: center
+  align-items: center
+
+  .col-8, .col-auto
+    padding-bottom: 0
+    height: fit-content
+    vertical-align: top
+
+section
+    div.col-auto
+      display: inline-block
+      text-align: center
+      float: right
+
+    #total-members
+      b
+        color: #366ceb
+        font-size: 1.4em
+
+    #total-requests
+      b
+        color: #7846eb
+        font-size: 1.4em
+
+mat-card
+  background-color: #366ceb
+  border-radius: 1em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+  color: #ffffff
+  display: inline-block
+  margin-bottom: 1em
+  margin-left: 3%
+  margin-top: 1em
+  padding: 1.5em
+  padding-bottom: 2.25em
+  width: 100%
+  font-size: 0.9em
+  height: fit-content
+
+  mat-divider
+    color: #ffffff
+    margin-bottom: 1.5em
+    margin-top: 1.5em
+
+  mat-card-footer
+    color: #ffffff
+    padding-top: 0.5em
+    text-align: right
+
+    button
+      color: #333333
+      margin-left: 0.5em
+
+    .accept-request
+      background-color: #ffffff
+
+    .reject-request
+      background-color: #ffffff
+
+  mat-card-title
+    color: #ffffff
+    font-size: 1.25em
+
+  mat-card-subtitle
+    color: #ffffff
+    color: #ffffff
+
+mat-icon
+  font-size: 1.2em !important
+  vertical-align: top !important
+
+#requests
+
+    mat-card:nth-child(odd)
+        background: #366ceb
+        color: #ffffff
+
+    mat-card:nth-child(even)
+      background: #7846eb
+      color: #ffffff
+
+    button
+      outline: none !important
+
+.row
+  padding: 2em
+  padding-top: 0em
+
+  >
+    section
+      padding: 2em
+
+section
+  align-items: left
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: flex-start
+  height: 100%
+  padding: 1.5em
+  width: 100%
+
+#sort-menu
+  background-color: #00c8ff
+  color: #ffffff
+  outline: none !important
+
+.scroll
+  overflow-x: hidden
+  overflow-y: scroll
+  padding: 0 1.5em 0.2em 0.8em
+  height: 55vh
+
+.scroll::-webkit-scrollbar
+  border-radius: 0.5em
+  background-color: #ffffff
+  width: 0.5em
+
+.scroll::-webkit-scrollbar-track::hover
+  cursor: pointer
+
+.scroll::-webkit-scrollbar-thumb
+  border-radius: 0.5em
+  background-color: #4c585b70
+
+.scroll::-webkit-scrollbar-track
+  border-radius: 0.5em
+  background-color: #ffffff
+
+.req-spinner
+  margin: 1em auto 0 auto
