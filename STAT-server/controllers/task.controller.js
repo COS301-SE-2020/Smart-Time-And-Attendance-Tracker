@@ -10,7 +10,7 @@ module.exports.startTask = (req, res, next) => {
         else if (!result)
            return res.status(404).send({message: 'Task not found'});
         else
-            return res.status(200).json({message: 'Task status updated to "In Progress'});
+            return res.status(200).json({message: 'Task status updated to "In Progress"'});
 
     });
 
@@ -25,7 +25,7 @@ module.exports.completeTask = (req, res, next) => {
         else if (!result)
             return res.status(404).send({message: 'Task not found'});
         else
-            return res.status(200).json({message: 'Task status updated to "COMPLETED"'});
+            return res.status(200).json({message: 'Task status updated to "Completed"'});
 
     });
 }
