@@ -219,7 +219,11 @@ export class ProjectsComponent implements OnInit {
 
     // get week details
     var startDate = new Date()
-    var endDate = startDate.getDate()+6
+    var s = this.convertDate(startDate)
+    console.log(startDate)
+    var endDate = startDate.getDate()+1
+    var weekTasks = this.tasks.filter((t : any) => this.formatDate(t.dueDate) == this.formatDate(startDate))
+    console.log(weekTasks)
     this.tasksNum = this.tasks.length
 
     this.tasksDone = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
@@ -251,6 +255,27 @@ export class ProjectsComponent implements OnInit {
       day:"2-digit"
     }
     return new Date(d).toLocaleDateString('en-US', options)
+  }
+
+  // format date
+  convertDate(date : Date) {
+    var y = date.getFullYear().toString();
+    var m = (date.getMonth()+1).toString();
+    var d = date.getDate().toString();
+
+    let toReturn = new String(y + '/');
+    
+    if (m.length == 1)
+      toReturn += ('0' + m + '/')
+    else
+      toReturn += (m + '/')
+      
+    if (d.length == 1)
+      toReturn += ('0' + d)
+    else
+      toReturn += (d)
+
+    return toReturn
   }
 
   // reset forms

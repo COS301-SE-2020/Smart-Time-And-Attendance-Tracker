@@ -70,7 +70,7 @@ export class OrganisationComponent implements OnInit {
     switch (selection) {
       case 'a' :
         this.requests.sort((a : any ,b : any) =>
-          a.name.localeCompare(b.name) || a.email.localeCompare(b.email)
+          a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
         );
         break;
 
