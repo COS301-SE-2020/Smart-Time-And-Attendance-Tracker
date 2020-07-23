@@ -7,7 +7,7 @@ STAT is a web and desktop application that allows people to track time and atten
 This is how the branches will be laid out
 
 ```
-  master
+master
   └── testing-CICD
   └── server-master
       └──── server-develop
@@ -22,12 +22,12 @@ This is how the branches will be laid out
         └──── server-feature-unauthenticated-users
         └──── server-feature-updateTimeEntry
         └──── server-feature-user-API
-└── app-master
+  └── app-master
       └──── app-develop
         └──── app-feature-PM-testing
         └──── app-feature-testing
         └──── app-feature-tracking-functionality
-└── plugin-master
+  └── plugin-master
       └──── plugin-develop
         └──── plugin-feature-5-minute-updates
         └──── plugin-feature-display-tasks
@@ -40,6 +40,11 @@ This is how the branches will be laid out
 ```
 ### Demo 1 Links
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
+- SRS Document: https://drive.google.com/file/d/17SGuoiNxXJCnJ14fTUmAWB5VPJ2AD9UL/view?usp=sharing
+
+### Demo 2 Links
+- Coding Standards: https://drive.google.com/file/d/1d1UdJzh5wFhPiRaUNDHKQXwP5tUybyhg/view?usp=sharing
+- Video: https://drive.google.com/file/d/1OmGYxNenx2Y0tM0SRxsGXFICMzmHe66_/view?usp=sharing
 - SRS Document: https://www.overleaf.com/read/bkqdtqzspmtc
 
 ### Project Management Tools
