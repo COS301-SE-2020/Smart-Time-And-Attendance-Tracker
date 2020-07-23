@@ -43,7 +43,7 @@ master
 - SRS Document: https://drive.google.com/file/d/17SGuoiNxXJCnJ14fTUmAWB5VPJ2AD9UL/view?usp=sharing
 
 ### Demo 2 Links
-- Coding Standards: https://drive.google.com/file/d/1d1UdJzh5wFhPiRaUNDHKQXwP5tUybyhg/view?usp=sharing
+- Coding Standards: https://docs.google.com/document/d/1UK--tueDgegatmORo1HAdyZwmnInHzYxgoA8DnRVQRk/edit?usp=sharing
 - User Manual: https://drive.google.com/file/d/15kt7iyyR5ftf_Fn3ArE4Qo8IC1d66fBQ/view?usp=sharing
 - Video: https://drive.google.com/file/d/1OmGYxNenx2Y0tM0SRxsGXFICMzmHe66_/view?usp=sharing
 - SRS Document: https://www.overleaf.com/read/bkqdtqzspmtc
