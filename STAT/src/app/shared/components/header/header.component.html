@@ -1,18 +1,32 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
     <a class="navbar-brand" [routerLink]="['home']">
-        <img src="https://img.icons8.com/bubbles/2x/overtime.png" width="50" height="50" alt="logo" loading="lazy">
+        <img src="../../../../assets/STAT-logo.png" width="63" height="45" alt="logo" loading="lazy">
     </a>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div *ngIf="!isLoggedIn" class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link" [routerLink]="['home']">Home</a>
             <a class="nav-item nav-link" [routerLink]="['features']">Features</a>
             <a class="nav-item nav-link" [routerLink]="['desktop']">STAT Desktop</a>
             <a class="nav-item nav-link" [routerLink]="['sign-up']">Sign Up</a>
-        </div>      
+        </div>
     </div>
-    <button mat-raised-button color="primary" [routerLink]="['sign-in']">Sign In</button>
+    <button *ngIf="!isLoggedIn" mat-raised-button color="primary" [routerLink]="['sign-in']">Sign In</button>
+    <button *ngIf="isLoggedIn" mat-raised-button color="primary" (click)="open(mymodal)">Sign Out</button>
 </nav>
 
-<nav>
-    <!-- navbar when user is logged in -->
-</nav>
+<!-- sign out modal -->
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Sign Out</h4>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to sign out?
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" [routerLink]="['home']" (click)="modal.close('Save click'); logout()">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </ng-template>

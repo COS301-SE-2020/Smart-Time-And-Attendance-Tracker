@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { HeaderService } from '../../services/header.service';
 
 @Component({
   selector: 'app-header',
@@ -7,12 +9,47 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  closeResult: string;
+  isLoggedIn: boolean;
 
-  // know which header to display
-  isLoggedIn: string;
+  constructor(private modalService: NgbModal, private headerService : HeaderService) {
+    this.headerService.isUserLoggedIn.subscribe( value => {
+      this.isLoggedIn = value;
+    });
+  }
 
   ngOnInit(): void {
-    this.isLoggedIn = localStorage.getItem('loggedIn');
+    if (localStorage.getItem('loggedIn') == 'true') {
+      this.headerService.isUserLoggedIn.next(true);
+    }
+  }
+
+  // modal
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+
+  // LOGOUT
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('roles');
+    localStorage.removeItem('loggedIn');
+    this.headerService.isUserLoggedIn.next(false);
+    
   }
 }
+ 
