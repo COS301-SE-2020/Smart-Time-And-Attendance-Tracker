@@ -8,14 +8,35 @@ This is how the branches will be laid out
 
 ```
   master
+  └── testing-CICD
   └── server-master
       └──── server-develop
         └──── server-feature-API
         └──── server-feature-authentication
-      angular-master
-      └──── angular-develop
-        └──── angular-feature-home
-        └──── angular-feature-API-calls
+        └──── server-feature-api-delete-entry
+        └──── server-feature-delete-project-task
+        └──── server-feature-organisation-API
+        └──── server-feature-project-API
+        └──── server-feature-team-API
+        └──── server-feature-task-API
+        └──── server-feature-unauthenticated-users
+        └──── server-feature-updateTimeEntry
+        └──── server-feature-user-API
+└── app-master
+      └──── app-develop
+        └──── app-feature-PM-testing
+        └──── app-feature-testing
+        └──── app-feature-tracking-functionality
+└── plugin-master
+      └──── plugin-develop
+        └──── plugin-feature-5-minute-updates
+        └──── plugin-feature-display-tasks
+        └──── plugin-feature-login
+        └──── plugin-feature-popup
+        └──── plugin-feature-startTimer-stopTimer
+        └──── plugin-feature-add-timeEntry
+        └──── plugin-feature-sync-time
+        └──── plugin-feature-update-time
 ```
 ### Demo 1 Links
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
