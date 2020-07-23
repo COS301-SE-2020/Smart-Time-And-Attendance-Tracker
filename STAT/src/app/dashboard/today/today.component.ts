@@ -48,9 +48,9 @@ export class TodayComponent implements OnInit {
   ngOnInit(): void { 
     this.manualTrackingForm = new FormGroup({
       Description : new FormControl(''),
-      Project : new FormControl(''),
+      Project : new FormControl('',[Validators.required]),
       TaskID : new FormControl('', [Validators.required]),
-      MonetaryValue : new FormControl('', [Validators.required]),
+      //MonetaryValue : new FormControl('', [Validators.required]),
       Date : new FormControl('', [Validators.required]),
       StartTime : new FormControl('', [Validators.required]),
       EndTime : new FormControl('', [Validators.required]),
@@ -151,7 +151,7 @@ export class TodayComponent implements OnInit {
   }
 
   //Add an automatic time entry from form
-  addAutomaticEntry(form : NgForm)
+  /*addAutomaticEntry(form : NgForm)
     {
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
         console.log(data);
@@ -163,10 +163,10 @@ export class TodayComponent implements OnInit {
         //console.log(error.error.message);  
       
       }); 
-  }
+  }*/
 
   //Update a time entry. Parameters are the new end time and active time
-  updateEntry(endTime, activeTime)
+  /*updateEntry(endTime, activeTime)
   {
       endTime =  new Date().getTime();
       activeTime = 10;
@@ -179,7 +179,7 @@ export class TodayComponent implements OnInit {
       //console.log(error.error.message);  
     
     }); 
-  }
+  }*/
 
   // get projects and tasks
   getProAndTasks()

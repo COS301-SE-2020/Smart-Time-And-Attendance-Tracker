@@ -47,7 +47,7 @@
                     matTooltip="Accept"
                     matTooltipClass="action-tooltip"
                     matTooltipPosition="below"
-                    (click)="authenticateUser(r.ID)">
+                    (click)="authenticateUser(r.ID)" id="accept">
               <mat-icon inline="true">check</mat-icon>
             </button>
 
@@ -56,7 +56,7 @@
                     matTooltip="Reject"
                     matTooltipClass="action-tooltip"
                     matTooltipPosition="below"
-                    (click)="rejectUser(r.ID)">
+                    (click)="rejectUser(r.ID)" id="reject">
               <mat-icon inline="true">close</mat-icon>
             </button>
           </mat-card-footer>
