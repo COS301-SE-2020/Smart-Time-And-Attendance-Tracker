@@ -6,4 +6,11 @@ mongoose.connect(process.env.MONGODB_URI, (err) => {
     else { console.log('Error in MongoDB connection : ' + JSON.stringify(err, undefined, 2)); }
 });
 
-require('./user.model');
+const Organisation = require("./organisation.model")
+const Project = require("./project.model")
+const User = require("./user.model")
+const Task = require("./task.model")
+const Team = require("./team.model")
+const Role = require("./role.model")
+const TimeEntry = require("./timeEntry.model");
+const UserTimeEntry = require("./userTimeEntry.model");

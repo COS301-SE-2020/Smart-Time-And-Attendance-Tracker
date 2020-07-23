@@ -1,34 +1,34 @@
 const mongoose = require("mongoose")
 
-var TaskSchema = new mongoose.Schema({
-    ID:{
-        type: Number,
-        required : "Required",
-        unique: true
-    },
-    ProjectID:{
-        type: Number,
-        required : "Required"
-    },    
+var TaskSchema = new mongoose.Schema({    
     TaskName:{
         type: String,
         required : "Required"
     },
-    StartTime:{
-        type: Date,
+    StartDate:{
+        type: String,
+        required : "Required"
+    },
+    DueDate:{
+        type: String,
         required : "Required"
     },
     TimeSpent:{
+        type: Number
+        //required : "Required"
+    },
+    /*ExpectedCost:{
         type: Number,
         required : "Required"
-    },
-    ExpectedCost:{
-        type: Number,
-        required : "Required"
-    },
+    },*/
     MonetaryValue:{
-        type: Number,
-        required : "Required"
+        type: Number
+       // required : "Required"
+    },
+    Status:{
+        type: String,
+        enum : ['Not Started', 'In Progress', 'Completed'], 
+        default: 'Not Started' 
     }
 });
 

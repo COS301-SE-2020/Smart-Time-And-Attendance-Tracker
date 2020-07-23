@@ -1,23 +1,69 @@
-const express = require("express");
-const router = express.Router();
 const mongoose = require("mongoose");
 const RoleModel = mongoose.model("Role");
-router.get("/", (req, res)=>{
-    res.send("Role controller");
-});
+//var request = require('request');
 
-router.post("/add", (req, res) => {
-    var role = new RoleModel();
-    role.ID = db.Role.find().Count()+1;
-    role.Role = req.body.role;
-    role.save((err, doc) => {
-        if(!err){
-            res.send("Created Role");
-        }
-        else{
-            res.send("Error Occured");
-        }
-    })
-});
 
-module.exports = router;
+module.exports.add = (req, res) => {  
+   /* request({
+        method: 'POST',
+        url: 'http://127.0.0.1:3000' + '/api/user/getRoles',
+        body: {
+        token: req.body.token
+       },
+       json: true
+       }, (error, response, body) => {
+        if (error) {
+            return res.status(500).json({message: "Internal Server Error"});
+
+        }
+        else if(response.statusCode == 200 && body.authenticate == false)
+        {
+            return res.status(401).json({message: "Unauthenticate user"});
+        }
+        else if(response.statusCode == 200 && response.body.roles.includes("Security Administrator"))
+        {*/
+            RoleModel.find({}, function(err, allDocuments) {
+                if(err) return res.status(500).json({message: 'Internal Server Error: ' + error});
+                var currentID = (allDocuments[0].ID) + 1;          
+                var role = new RoleModel();
+                role.ID = currentID;
+                role.Role = req.body.role;
+                role.updateOne((err, doc) => {
+                    if(!err)
+                        return res.status(201).json({ message: "Role created"});
+                    
+                    else{
+                        if (err.code == 11000){
+                            return res.status(409).json({message: "Role already exists"});
+                        }
+                        else{
+                            return next(err);
+                        }
+                    }
+                })
+            }).sort({ ID: -1 });    //sorting all documents in descinding order of ID
+        }
+        /*else if(response.statusCode == 200 && !response.body.roles.includes("Security Administrator")) {
+            return res.status(403).json({message: "Access forbidden"});
+        }*/
+    //});        
+
+
+
+module.exports.getRole = (req, res, next) => {
+    RoleModel.findOne({ ID: req.body.ID},(err, result) => {
+        if(err) 
+        {
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        }
+        else if (!result)
+        {
+            return res.status(404).json({ message: 'Role record not found' });
+        }
+        else if (result)
+        {
+            return res.status(200).json({ role : result.Role});
+        }
+    });
+}
+

@@ -1,13 +1,8 @@
 const mongoose = require("mongoose")
-const bcrypt=require("bcrypt");
+const bcrypt=require("bcryptjs");
 const jwt = require('jsonwebtoken');
 
 var UserSchema = new mongoose.Schema({
-    ID:{
-        type: Number,
-        required : "ID required.",
-        unique: true
-    },
     ProfilePicture:{
         type: String
     },
@@ -29,7 +24,18 @@ var UserSchema = new mongoose.Schema({
         unique: true
     },
     Role:{
-        type: Array
+        type: Array,
+        required : "Role required.",
+    },
+    Team:[
+        { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Team' 
+        }
+    ],
+    Authenticate:{
+        type: Boolean,  
+        required : "Authentication required."
     }
 });
 
@@ -37,10 +43,10 @@ var UserSchema = new mongoose.Schema({
 
 UserSchema.methods.verifyPassword = function(password){
     return bcrypt.compareSync(password, this.Password);
-};
+}
 
 UserSchema.methods.generateJWT = function() {
-    return jwt.sign({id: this.ID, roles: this.Role},
+    return jwt.sign({id: this._id}, //,authenticate: this.Authenticate, roles: this.Role},
         process.env.JWT_SECRET,
         {
             expiresIn: process.env.JWT_EXP
@@ -48,13 +54,18 @@ UserSchema.methods.generateJWT = function() {
 }
 
 UserSchema.pre('save',function(next){
-    bcrypt.genSalt(10,(err,salt) => {
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(this.Password, salt);    
+    this.Password=hash;
+    //this.saltedsecret=salt;
+    next();
+   /* bcrypt.genSalt(10,(err,salt) => {
        bcrypt.hash(this.Password,salt,(err,hash) => {
            this.Password=hash;
            this.saltedsecret=salt;
            next();
        });
-    });
+    });*/
 });
 
 mongoose.model("User", UserSchema);
