@@ -1,30 +1,107 @@
-const express = require("express");
-const router = express.Router();
+
 const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
-router.get("/", (req, res)=>{
-    res.send("Task controller");
-});
+
+module.exports.startTask = (req, res, next) => {
+  
+    TaskModel.updateOne({ _id: req.body.taskID},{Status: 'In Progress'},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+           return res.status(404).send({message: 'Task not found'});
+        else
+            return res.status(200).json({message: 'Task status updated to "In Progress"'});
+
+    });
+
+}
 
 
-router.post("/add", (req, res) => {
+module.exports.completeTask = (req, res, next) => {
+   
+    TaskModel.updateOne({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).send({message: 'Task not found'});
+        else
+            return res.status(200).json({message: 'Task status updated to "Completed"'});
+
+    });
+}
+
+
+module.exports.update = (req, res) => {
+    TaskModel.findOne({ _id: req.body.taskID},(err, result) => {
+        if(err)
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if(!result)
+            return res.status(404).json({message: 'Task not found'});
+        else
+        {
+            if(req.body.hasOwnProperty('taskName'))
+                 result.TaskName = req.body.taskName;
+
+            if(req.body.hasOwnProperty('timeSpent'))
+                result.TimeSpent =  req.body.timeSpent;
+
+            if(req.body.hasOwnProperty('dueDate'))
+                result.DueDate =  req.body.dueDate;
+
+            if(req.body.hasOwnProperty('monetaryValue'))
+                result.MonetaryValue =  req.body.monetaryValue;
+
+            if(req.body.hasOwnProperty('startDate'))
+                result.StartDate =  req.body.startDate;
+
+        
+                TaskModel.updateOne({ _id: req.body.taskID},{TaskName: result.TaskName,TimeSpent:result.TimeSpent,
+                DueDate : result.DueDate, MonetaryValue: result.MonetaryValue, StartDate: result.StartDate},(err, result) => {
+                    if (err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else
+                        return res.status(200).json({message: 'Task successfully updated'});
+                
+                });
+           
+        }
+    });
+}
+
+
+/*
+  DESCRPTION
+*/
+
+module.exports.add = (req, res, next) => {
     var task = new TaskModel();
-    task.ID = db.Task.find().Count()+1;
-    task.ProjectID = req.body.projectID;
-    task.ClientName = req.body.clientName;
     task.TaskName = req.body.taskName;
-    task.StartTime = req.body.startTime;
-    task.TimeSpent = req.body.timeSpent;
-    task.ExpectedCost = req.body.expectedCost;
-    task.MonetaryValue = req.body.monetaryValue;    
+    task.DueDate = req.body.dueDate;
+    task.StartDate = req.body.startDate;
+    task.TimeSpent = 0;
+    task.MonetaryValue = 0;
     task.save((err, doc) => {
         if(!err){
-            res.send("Created Task");
+            req.TaskID = doc._id;
+            next();
         }
         else{
-            res.send("Error Occured");
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
-    })
-});
+    });
+}
 
-module.exports = router;
+
+module.exports.deleteTask= (req, res) => {     
+    if(!req.query.taskID)
+        return res.status(400).send({message: 'No task ID provided'});      
+TaskModel.deleteOne({_id: req.query.taskID},(err,val)=>{
+    if(err)
+        return res.status(500).send({message: 'Internal Server Error: ' + err});
+    else if (!val) 
+        return res.status(404).json({ message: 'Task not found' });
+    else 
+        return res.status(200).json({ message: 'Task successfully deleted '});
+    });            
+}
+

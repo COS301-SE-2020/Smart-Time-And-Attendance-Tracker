@@ -11,11 +11,11 @@ module.exports.verifyJWTtoken = (req, res, next)=>
         jwt.verify(token, process.env.JWT_SECRET,
             (err, decoded)=> {
                 if(err)
-                    return res.status(500).send({message: "Internal Server Error"});
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
                 else{
                     req.ID = decoded.id;
-                    req.Authenticate = decoded.authenticate;
-                    req.Roles = decoded.roles;
+                    //req.Authenticate = decoded.authenticate;
+                    //req.Roles = decoded.roles;
                     next();
                 }
             })
