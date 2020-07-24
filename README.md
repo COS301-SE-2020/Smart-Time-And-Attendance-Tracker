@@ -48,7 +48,7 @@ STAT is a web and desktop application that allows people to track time and atten
 **Automatic Tracking**\
 Automatically track time spent on your browser and emails without having to manually start and stop the timer. STAT will record the total time spent on these applications. You can even split the total time and allocate it to specific activities\
 **Chrome plug-in**\
-Automatic tracking is even easier with the STAT plug-in. The plug-in automatically starts timing when you open your browser. All you have to do is classify the entry so that STAT knows where to put it.
+Automatic tracking is even easier with the STAT plug-in. The plug-in automatically starts timing when you open your browser. All you have to do is classify the entry so that STAT knows where to put it.\
 **Manual Tracking**\
 Prefer the pen and paper method? No problem. Track your time any way you like and simply use those details to create a time entry.\
 **Calendar Syncing**\
