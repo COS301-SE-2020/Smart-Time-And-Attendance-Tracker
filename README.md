@@ -45,6 +45,20 @@
 STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
 
 ## Features
+**Automatic Tracking**\
+Automatically track time spent on your browser and emails without having to manually start and stop the timer. STAT will record the total time spent on these applications. You can even split the total time and allocate it to specific activities\
+**Chrome plug-in**\
+Automatic tracking is even easier with the STAT plug-in. The plug-in automatically starts timing when you open your browser. All you have to do is classify the entry so that STAT knows where to put it.
+**Manual Tracking**\
+Prefer the pen and paper method? No problem. Track your time any way you like and simply use those details to create a time entry.\
+**Calendar Syncing**\
+STAT automatically tracks your attendance when you connect it to your calendar. No need to worry about recording events in more than one place. STAT will retrieve the data from your calendar and automatically record your presence and track record the relevant time data.\
+**IOT Integration**\
+You can use STAT almost anywhere. STAT is designed to work with external devices like cameras to help you track time and attendance more efficiently. Simply connect your IOT device to the system and STAT will receive time and attendance data from the device and track your time accordingly.\
+**Predictive Analysis**\
+STAT produces graphs that allow you to view how time is being or was spent during the course of a project and help to manage your team better. Using historical data, STAT can even predict how much more time will need to be allocated to a project.\
+**Organisation Management**\
+Authentication requests are automatically sent to your administrator each time a new user registers, which allows you to control who has access to your system by accepting and rejecting requests. You can also control what information and functionality each user has using STAT's role assignment functionality.\
 
 ## Demo 1
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
