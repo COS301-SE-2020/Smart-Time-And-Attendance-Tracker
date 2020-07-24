@@ -64,7 +64,7 @@ You can use STAT almost anywhere. STAT is designed to work with external devices
 STAT produces graphs that allow you to view how time is being or was spent during the course of a project and help to manage your team better. Using historical data, STAT can even predict how much more time will need to be allocated to a project.
 
 **Organisation Management**\
-Authentication requests are automatically sent to your administrator each time a new user registers, which allows you to control who has access to your system by accepting and rejecting requests. You can also control what information and functionality each user has using STAT's role assignment functionality.\
+Authentication requests are automatically sent to your administrator each time a new user registers, which allows you to control who has access to your system by accepting and rejecting requests. You can also control what information and functionality each user has using STAT's role assignment functionality.
 
 ## Demo 1
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
