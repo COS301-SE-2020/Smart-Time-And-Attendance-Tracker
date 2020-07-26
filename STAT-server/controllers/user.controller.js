@@ -1,12 +1,41 @@
+/**
+  * @file user.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @fileoverview This file handles all the requests regarding User model in our database
+  * @date 11June 2020
+ */
+
+/**
+* Filename:             user.cotroller.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+*   
+* File Creation Date:   11 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles all the requests regarding User model in our database
+*
+*/ 
+
 const mongoose = require("mongoose");
 const passport = require("passport");
-const bodyParser = require("body-parser");
 const UserModel = mongoose.model("User");
 
 const RoleHelper =require('../helpers/role.helper');
 const TeamHelper =require('../helpers/team.helper');
-//const request = require('request');
 
+//const request = require('request');
+/**
+ * This function is called when a user login's into the STAT. 
+ * This function does all the validation the user's email and password, then returns a uniquely
+ * generated token to the user.
+ * @param req - HTTP request 
+ * @param res Http response 
+ * @return {Http Response} - If login is a success a token is returned, otherwise a error message is returned
+ */
 module.exports.login = (req, res, next) => {
     // call for passport authentication
     passport.authenticate('local', (err,user,info)=>{
@@ -31,6 +60,13 @@ module.exports.login = (req, res, next) => {
 
 }
 
+/**
+ * This function is called when a user registers's into the STAT. 
+ * This function does all the validation, and inserts user into database.
+ * @param {*} req 
+ * @param {*} res 
+ * @return {Http Response} - If registration is a success a token is returned, otherwise a error message is returned
+ */
 module.exports.register = (req, res, next) => {
     if(!( req.body.name &&  req.body.surname && req.body.email && req.body.password && req.body.passwordConf)) 
     {
@@ -72,6 +108,12 @@ module.exports.register = (req, res, next) => {
     }
 }
 
+/**
+ * This function allows the user to change password.
+ * @param {*} req 
+ * @param {*} res 
+ * @return {Http Response} - If changing password is a success a success message is returned, otherwise a error message is returned
+ */
 module.exports.changePass = (req, res, next) => {
     UserModel.updateOne({ _id: req.ID},{Password: req.body.pass},(err, result) => {
         if (err) 
@@ -85,6 +127,13 @@ module.exports.changePass = (req, res, next) => {
    
 }   
 
+/**
+ * This function returns the name and surname of the user.
+ * @param {*} req 
+ * @param {*} res 
+ * @return {Http Response} - Returns name and surname of the user if no error occured in 
+ * fecthing the user's details from the database.
+ */
 module.exports.getName = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
@@ -97,7 +146,12 @@ module.exports.getName = (req, res, next) => {
     });
 }
 
-
+/**
+ * This function returns the roles of a user. 
+ * @param {*} req 
+ * @param {*} res 
+ * @return {Http Response} - Returns roles pf the user if no error occured, otherwise an error message is returned.
+ */
 module.exports.getRoles = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
@@ -134,7 +188,12 @@ module.exports.getRoles = (req, res, next) => {
     
 }
 
-
+/**
+ * This function returns all unauthenticated users from the organisation.
+ * @param {*} req 
+ * @param {*} res 
+ * @return {Http Response} - Array with all unauthenticated users objects
+ */
 module.exports.getUnauthenticatedUsers = (req, res, next) => {
     UserModel.find({  Authenticate : false},(err, result) => {
         if (err) 
@@ -151,9 +210,13 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
         }
     });
 }
-//Only a security admin can make this request
-//Parameters - None
-//Returns - Array with all authenticated users objects
+
+/**
+ * This function returns an array with all authenticated users objects
+ * Only a security admin can make this request.
+ * @param {*} res 
+ * @return {Http Response} - Array with all authenticated users objects
+ */
 module.exports.getAllUsers = (req, res, next) => {
     UserModel.find({  Authenticate : true},(err, result) => {
         if (err) 
@@ -170,9 +233,13 @@ module.exports.getAllUsers = (req, res, next) => {
         }
     });
 }
-//Only a security admin can make this request
-//Request body - ID of user to authenticate
-//Returns - Succes or error message
+
+/**
+ * This function authenticates a user. Only a security admin can make this request.
+ * @param req Request body - ID of user to authenticate
+ * @param res Http Response
+ * @return {Http Response} - Succes or error message
+ */
 module.exports.authenticate = (req, res, next) => {
     UserModel.updateOne({ _id: req.body.UserID},{Authenticate: true},(err, result) => {
         if (err) 
@@ -185,6 +252,12 @@ module.exports.authenticate = (req, res, next) => {
     });
 }
 
+/**
+ * This function adds a team to the user. Only a team lead can make this request.
+ * @param req Request body - ID of user and Team id
+ * @param res Http Response
+ * @return {Http Response} - Success message with team id or error message
+ */
 module.exports.addTeam = (req, res, next) => {
     UserModel.findOne({_id : req.body.UserID}, function(err, result) {
         if(err) 
@@ -209,9 +282,13 @@ module.exports.addTeam = (req, res, next) => {
     });
 }
 
-//Only a security admin can make this request
-//Request body - ID of user to remove/reject
-//Returns - Succes or error message
+/**
+ * This function removes(deletes) a user from the organisation. 
+ * Only a security admin can make this request.
+ * @param req Request body - ID of user to remove/reject
+ * @param res Http Response
+ * @return {Http Response} - Succes or error message
+ */
 module.exports.remove = (req, res, next) => {
     UserModel.deleteOne({ _id: req.body.UserID},(err, result) => {
         if (err) 
@@ -223,8 +300,14 @@ module.exports.remove = (req, res, next) => {
                
     });
 }
-//Checks if the user is authenticated
-//Returns - Value of Authenticated attribute
+
+/**
+ * This function checks if the user is authenticated
+ * @param req Request - ID of user
+ * @param res Http Response
+ * @param next The next function to call
+ * @return {Http Response} - Value of Authenticated attribute or an error message
+ */
 module.exports.isAuthenticated = (req, res, next) => {
     UserModel.findOne({ _id: req.ID},(err, result) => {
         if (err) 
@@ -238,6 +321,12 @@ module.exports.isAuthenticated = (req, res, next) => {
   
 }
 
+/**
+ * This function gets all the tasks(with project) a user is working on.
+ * @param req Request - ID of user.
+ * @param res Http Response
+ * @return {Http Response} - Array with all projects and tasks objects
+ */
 module.exports.getTasks = (req, res, next) => {
     let error = false;
     let count = 0;
