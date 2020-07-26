@@ -1,5 +1,5 @@
 /**
-  * @file user.model.js
+  * @file STAT-server/models/user.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file contains the User model in our database
   * @date 11June 2020

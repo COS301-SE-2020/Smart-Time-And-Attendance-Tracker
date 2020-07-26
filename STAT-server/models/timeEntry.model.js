@@ -1,5 +1,5 @@
 /**
-  * @file timeEntry.model.js
+  * @file STAT-server/models/timeEntry.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file contains the TimeEntry model in our database
   * @date 3 July 2020

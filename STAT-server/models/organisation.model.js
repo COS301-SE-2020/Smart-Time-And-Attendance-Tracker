@@ -1,5 +1,5 @@
 /**
-  * @file organisation.model.js
+  * @file STAT-server/models/organisation.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file contains the Organisation model in our database
   * @date 11June 2020

@@ -1,5 +1,5 @@
 /**
-  * @file project.model.js
+  * @file STAT-server/models/project.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file contains the Project model in our database
   * @date 11June 2020

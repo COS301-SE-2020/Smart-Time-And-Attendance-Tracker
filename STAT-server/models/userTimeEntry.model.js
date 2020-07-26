@@ -1,5 +1,5 @@
 /**
-  * @file userTimeEntry.model.js
+  * @file STAT-server/models/userTimeEntry.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file contains the UserTimeEntry model in our database
   * @date 3 July 2020

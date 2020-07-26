@@ -1,5 +1,5 @@
 /**
-  * @file team.model.js
+  * @file STAT-server/models/team.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file contains the Team model in our database
   * @date 11June 2020
