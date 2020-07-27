@@ -6,29 +6,29 @@ const TimeEntryModel = mongoose.model("TimeEntry");
 
 module.exports.addTimeEntry = (req, res) => {  
     var timeEntry = new TimeEntryModel();
-    timeEntry.Date = req.body.Date;
-    timeEntry.TaskID = req.body.TaskID;
-    timeEntry.ProjectID = req.body.TaskID;
-    timeEntry.StartTime = req.body.StartTime;
-    timeEntry.ProjectName = req.body.ProjectName;
-    timeEntry.TaskName = req.body.TaskName;
-    if(req.body.ActiveTime)
-        timeEntry.ActiveTime = req.body.ActiveTime;
+    timeEntry.Date = req.body.date;
+    timeEntry.TaskID = req.body.taskID;
+    timeEntry.ProjectID = req.body.projectID;
+    timeEntry.StartTime = req.body.startTime;
+    timeEntry.ProjectName = req.body.projectName;
+    timeEntry.TaskName = req.body.taskName;
+    if(req.body.activeTime)
+        timeEntry.ActiveTime = req.body.activeTime;
     else
         timeEntry.ActiveTime = 0;
-    if(req.body.EndTime)
-        timeEntry.EndTime = req.body.EndTime;
+    if(req.body.endTime)
+        timeEntry.EndTime = req.body.endTime;
         /*if(timeEntry.ActiveTime == 0)
             timeEntry.ActiveTime = req.body.EndTime - req.body.StartTime;*/
     else
         timeEntry.EndTime = 0;
-    if(req.body.MonetaryValue)
-            timeEntry.MonetaryValue = req.body.MonetaryValue;
+    if(req.body.monetaryValue)
+            timeEntry.MonetaryValue = req.body.monetaryValue;
     else
         timeEntry.MonetaryValue = 0;
 
-    timeEntry.Description = req.body.Description;
-    timeEntry.Device = req.body.Device;
+    timeEntry.Description = req.body.description;
+    timeEntry.Device = req.body.device;
 
     timeEntry.save((error, timeEntryDoc) => {
         if(!error)
