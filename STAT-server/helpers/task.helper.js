@@ -20,7 +20,8 @@
 * Description:          This file handles some of the requests regarding Task model in our database. 
 *                       This is a helper file to handle Task related requests.
 *
-*/const mongoose = require("mongoose");
+*/
+const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
 
 /**
@@ -68,7 +69,7 @@ module.exports.getName = (id, done)=>{
  * 
  * @param {*} id ID of task
  * @param {*} done 
- * @return {Json Array} - Name of Task, Id of Task, status of Task, due date oF Task.
+ * @return {Array} - Name of Task, Id of Task, status of Task, due date oF Task.
  */
 module.exports.getTaskName = (id, done)=>{
     TaskModel.findOne({ _id: id},(err, result) => {
