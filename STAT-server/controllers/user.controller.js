@@ -206,7 +206,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
             for(var a=0; a<result.length; a++){
                 UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
-            return res.status(200).json({UnauthenticatedUsers});
+            return res.status(200).json({unathenticatedUsers: UnauthenticatedUsers});
         }
     });
 }
@@ -259,7 +259,7 @@ module.exports.authenticate = (req, res, next) => {
  * @return {Http Response} - Success message with team id or error message
  */
 module.exports.addTeam = (req, res, next) => {
-    UserModel.findOne({_id : req.body.UserID}, function(err, result) {
+    UserModel.findOne({_id : req.body.userID}, function(err, result) {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -290,7 +290,7 @@ module.exports.addTeam = (req, res, next) => {
  * @return {Http Response} - Succes or error message
  */
 module.exports.remove = (req, res, next) => {
-    UserModel.deleteOne({ _id: req.body.UserID},(err, result) => {
+    UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
