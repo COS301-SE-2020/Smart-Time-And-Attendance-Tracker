@@ -3,7 +3,7 @@
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file handles some of the requests regarding Role model in our database. 
   * This is a helper file to handle Role related requests.
-  * @date 15 July 2020
+  * @date 2 July 2020
  */
 
 /**
@@ -11,7 +11,7 @@
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
 *   
-* File Creation Date:   15 July 2020
+* File Creation Date:   2 July 2020
 *
 * Development Group:    Visionary
 *
