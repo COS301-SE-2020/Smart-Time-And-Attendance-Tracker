@@ -1,3 +1,24 @@
+/**
+  * @file STAT-server/calendar/googleCalendar.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @fileoverview This file handles some of the requests regarding Google Calendar API. 
+  * @date 27 July 2020
+ */
+
+/**
+* Filename:             STAT-server/calendar/googleCalendar.controller.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+*   
+* File Creation Date:   27 July 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles some of the requests regarding Google Calendar API. 
+*
+*/
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
@@ -85,8 +106,8 @@ function listEvents(auth, response) {
 
 /**
  * Gets all the events from your calender
- * @param {*} req 
- * @param {*} res 
+ * @param {HTTP-Request} req 
+ * @param {HTTP-Response} res 
  */
 module.exports.getEvents = (req, res) => {  
     // Load client secrets from a local file.
@@ -103,8 +124,8 @@ module.exports.getEvents = (req, res) => {
 
 /**
  * 
- * @param {*} req HTTP Request Body - authentication code
- * @param {*} response 
+ * @param {HTTP-Request} req HTTP Request Body - authentication code
+ * @param {HTTP-Response} response 
  */
 module.exports.authenticate = (req, response) => {
   var code = (req.body.code);
