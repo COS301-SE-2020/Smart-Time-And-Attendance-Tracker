@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+
+<body>
+    <div id="Events"></div> 
+    <a id="auth"> </a>
+    <h3 id="msg"></h3>
+    <input style="display: none" id="code" placeholder="Authentication Code"></input>
+    <button style="display: none">Submit code</button> 
+
+    <script>
+        getEvents();
+        
+        function getEvents(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+
+                    if(response.url)
+                    {
+                        document.getElementById("auth").href = response.url;
+                        document.getElementById("auth").innerHTML = response.message;
+                        document.getElementById("code").style.display = "block";
+                        document.getElementsByTagName("button")[0].style.display = "block";
+                        document.getElementsByTagName("button")[0].onclick = function(){
+                            var xhttp2 = new XMLHttpRequest();
+                            var data = {
+                                code: document.getElementById("code").value,
+                                oAuth2Client : response.oAuth2Client
+                            };
+                            xhttp2.onreadystatechange = function() {
+                                if(this.readyState == 4 && this.status == 200) {
+                                    var response2 = JSON.parse(this.responseText);
+                                    displayEvents(response2);
+                                    document.getElementById("auth").style.display = "none";
+                                    document.getElementById("code").style.display = "none";
+                                    document.getElementsByTagName("button")[0].style.display = "none";
+                                }
+                                else
+                                {
+                                    document.getElementById("msg").href = response.message;
+                                }
+                            }
+                            xhttp2.open("POST", "http://localhost:3000/api/googleCalender/authenticate", true);
+                            xhttp2.setRequestHeader("Content-Type", "application/json");
+                            xhttp2.send(JSON.stringify(data));
+                        }
+                    }
+                    else
+                    {
+                        displayEvents(response);
+                    }
+                }
+            }
+            xhttp.open("POST", "http://localhost:3000/api/googleCalender/getEvents", true);
+            xhttp.send();
+        }
+
+        function displayEvents(response) {
+            document.getElementById("Events").innerHTML = "";
+            for(var i=0; i<response.Events.length; i++)
+            {
+                var text = document.createTextNode(response.Events[i].Event + " => " + response.Events[i].Time);
+                var Node = document.createElement("h4");
+                Node.appendChild(text);
+                document.getElementById("Events").appendChild(Node);
+            }
+        }
+    </script>
+</body>
+
+</html>
