@@ -7,6 +7,7 @@ const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
+const googleCalendar = require('../calender/googleCalendar.controller');
 
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
@@ -55,5 +56,7 @@ router.post("/task/complete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,ta
 router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project.deleteTask, task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
+//calendar api
+router.post("/googleCalender/getEvents", googleCalendar.getEvents);
 
 module.exports = router;
