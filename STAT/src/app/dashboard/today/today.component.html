@@ -276,12 +276,12 @@
       <form [formGroup]="manualTrackingForm" *ngIf="autoTracking==false" id="manual-tracking-form" (ngSubmit)="addManualEntry(manualTrackingForm.value)">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
-          <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
+          <input matInput formControlName="description" type="text" placeholder="Research" name="description">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select [(value)]="mProjectSelected" formControlName="Project">
+          <mat-select [(value)]="mProjectSelected" formControlName="project">
             <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'm'); pName = p.projectName">{{p.projectName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
@@ -289,7 +289,7 @@
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
-          <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected" formControlName="TaskID">
+          <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected" formControlName="taskID">
           <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
@@ -297,30 +297,30 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Monetary value</mat-label>
-          <input matInput readonly [value]="monetaryValue" formControlName="MonetaryValue" type="text" placeholder="0.00" name="monetary-value">
+          <input matInput readonly [value]="monetaryValue" formControlName="monetaryValue" type="text" placeholder="0.00" name="monetary-value">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Date</mat-label>
-          <input matInput formControlName="Date" type="date" placeholder="0.00" name="monetary-value" [min]="formatDate(date5)" [max]="formatDate(date)" required>
+          <input matInput formControlName="date" type="date" placeholder="0.00" name="monetary-value" [min]="formatDate(date5)" [max]="formatDate(date)" required>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Start time</mat-label>
-          <input matInput formControlName="StartTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
+          <input matInput formControlName="startTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
           <mat-error>{{getStartError()}}</mat-error>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>End time</mat-label>
-          <input matInput formControlName="EndTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
+          <input matInput formControlName="endTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
           <mat-error>{{getEndError()}}</mat-error>
         </mat-form-field>
 
-        <input hidden formControlName="ProjectName" [(ngModel)]="pName" [value]="pName">
-        <input hidden formControlName="TaskName" [(ngModel)]="tName" [value]="tName">
-        <input hidden formControlName="ActiveTime" [(ngModel)]="activeTime" [value]="activeTime">
+        <input hidden formControlName="projectName" [(ngModel)]="pName" [value]="pName">
+        <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
+        <input hidden formControlName="activeTime" [(ngModel)]="activeTime" [value]="activeTime">
       </form>
       <!-- END ***************************************************************** -->
    
@@ -328,12 +328,12 @@
       <form [formGroup]="automaticTrackingForm" *ngIf="autoTracking==true" id="auto-tracking-form" method="post">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
-          <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
+          <input matInput formControlName="description" type="text" placeholder="Research" name="description">
         </mat-form-field>
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select [(value)]="aProjectSelected" formControlName="Project">
+          <mat-select [(value)]="aProjectSelected" formControlName="project">
             <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a')">{{p.projectName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
@@ -341,7 +341,7 @@
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
-          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="TaskID">
+          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="taskID">
           <mat-option *ngFor="let t of tasks" [value]="t.ID">{{t.taskName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>

@@ -47,24 +47,24 @@ export class TodayComponent implements OnInit {
 
   ngOnInit(): void { 
     this.manualTrackingForm = new FormGroup({
-      Description : new FormControl(''),
-      Project : new FormControl('',[Validators.required]),
-      TaskID : new FormControl('', [Validators.required]),
+      description : new FormControl(''),
+      project : new FormControl('',[Validators.required]),
+      taskID : new FormControl('', [Validators.required]),
       //MonetaryValue : new FormControl('', [Validators.required]),
-      Date : new FormControl('', [Validators.required]),
-      StartTime : new FormControl('', [Validators.required]),
-      EndTime : new FormControl('', [Validators.required]),
-      ProjectName : new FormControl(''),
-      TaskName : new FormControl(''),
-      ActiveTime : new FormControl('')
+      date : new FormControl('', [Validators.required]),
+      startTime : new FormControl('', [Validators.required]),
+      endTime : new FormControl('', [Validators.required]),
+      projectName : new FormControl(''),
+      taskName : new FormControl(''),
+      activeTime : new FormControl('')
     });
 
     this.manualTrackingForm.setValidators(this.checkTimes('StartTime', 'EndTime'));
 
     this.automaticTrackingForm = new FormGroup({
-      Description : new FormControl(''),
-      Project : new FormControl('', [Validators.required]),
-      TaskID : new FormControl('', [Validators.required]),
+      description : new FormControl(''),
+      project : new FormControl('', [Validators.required]),
+      taskID : new FormControl('', [Validators.required]),
     });
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
@@ -133,8 +133,8 @@ export class TodayComponent implements OnInit {
 
   // calculate monetary value for manual entry
   calculateMoney() {
-    var startTime = this.manualTrackingForm.get('StartTime').value
-    var endTime = this.manualTrackingForm.get('EndTime').value
+    var startTime = this.manualTrackingForm.get('startTime').value
+    var endTime = this.manualTrackingForm.get('endTime').value
     if (startTime && endTime) {
       startTime = new Date('2020/01/01 ' + startTime)
       endTime = new Date('2020/01/01 ' + endTime)
@@ -142,7 +142,7 @@ export class TodayComponent implements OnInit {
       this.activeTime = diff / 60000
       var hours = diff / 3600000
       this.monetaryValue = hours * this.hourlyRate
-      this.manualTrackingForm.get('MonetaryValue').setValue(this.monetaryValue)
+      this.manualTrackingForm.get('monetaryValue').setValue(this.monetaryValue)
     }
 
     if (isNaN(this.monetaryValue))

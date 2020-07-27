@@ -24,7 +24,7 @@ export class OrganisationComponent implements OnInit {
 
   authenticateUser(id)
   {
-    let req = {"UserID": id};
+    let req = {"userID": id};
     this.service.authenticate(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
       this.getAllUnauthenticatedUsers('n')
@@ -39,7 +39,7 @@ export class OrganisationComponent implements OnInit {
 
   rejectUser(id)
   {
-    let req = {"UserID": id};
+    let req = {"userID": id};
     this.service.reject( localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
       this.getAllUnauthenticatedUsers('n')
@@ -56,7 +56,7 @@ export class OrganisationComponent implements OnInit {
   {
     this.requests = null
     this.service.getUnauthenticatedUsers(localStorage.getItem('token')).subscribe((data) => {
-      this.requests = data['UnauthenticatedUsers'];
+      this.requests = data['unauthenticatedUsers'];
       this.sortRequests(sort)
       console.log(this.requests)
     },
