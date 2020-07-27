@@ -58,5 +58,6 @@ router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task
 
 //calendar api
 router.post("/googleCalender/getEvents", googleCalendar.getEvents);
+router.post("/googleCalender/authenticate", googleCalendar.authenticate);
 
 module.exports = router;

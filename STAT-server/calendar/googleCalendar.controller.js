@@ -100,3 +100,41 @@ module.exports.getEvents = (req, res) => {
       authorize(JSON.parse(content), listEvents, res);
     });
   }
+
+/**
+ * 
+ * @param {*} req HTTP Request Body - authentication code
+ * @param {*} response 
+ */
+module.exports.authenticate = (req, response) => {
+  var code = (req.body.code);
+  fs.readFile('credentials.json', (err, content) => {
+    if (err) {
+      response.status(400).json({message: 'Error loading client secret file. ' + err});
+      return;
+    }
+    // Authorize a client with credentials, then call the Google Calendar API.
+    const credentials = JSON.parse(content);
+    const {client_secret, client_id, redirect_uris} = credentials.installed;
+    const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+
+    oAuth2Client.getToken(code, (err, token) => {
+      if (err) 
+      {
+        response.status(400).json({message: 'Error retrieving access token', error: err});
+        return;
+      }
+      oAuth2Client.setCredentials(token);
+      // Store the token to disk for later program executions
+      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+        if (err) 
+        {
+          response.status(400).json({message: 'Error', error: err});
+          return;
+        }
+        console.log('Token stored to', TOKEN_PATH);
+        listEvents(oAuth2Client, response);
+      });
+    });
+  });
+}
