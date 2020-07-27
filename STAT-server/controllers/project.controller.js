@@ -6,7 +6,7 @@ const TeamHelper = require("../helpers/team.helper");
 const UserHelper = require("../helpers/user.helper");
 
 module.exports.complete = (req, res) => {
-    ProjectModel.updateOne({ _id: req.body.ProjectID},{Completed: true},(err, result) => {
+    ProjectModel.updateOne({ _id: req.body.projectID},{Completed: true},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
@@ -18,7 +18,7 @@ module.exports.complete = (req, res) => {
 }
 
 module.exports.uncomplete = (req, res) => {
-    ProjectModel.updateOne({ _id: req.body.ProjectID},{Completed: false},(err, result) => {
+    ProjectModel.updateOne({ _id: req.body.projectID},{Completed: false},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (!result)
@@ -195,7 +195,7 @@ module.exports.deleteTask = (req, res, next) => {
 
 module.exports.complete = (req, res, next) => {
 
-    ProjectModel.updateOne({_id : req.body.ProjectID, Completed: true},function(err, result) {
+    ProjectModel.updateOne({_id : req.body.projectID, Completed: true},function(err, result) {
     if(err) 
         return res.status(500).send({message: 'Internal Server Error: ' + err});
     else if (!result)
