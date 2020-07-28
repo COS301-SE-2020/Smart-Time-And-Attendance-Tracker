@@ -42,7 +42,11 @@ router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
 
 //organisation team
-router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,organisationTeam.createTeam);
+router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,organisationTeam.createTeam);
+router.post("/organisationTeam/addTeamMember",jwtHelper.verifyJWTtoken,organisationTeam.addTeamMember);
+router.delete("/organisationTeam/remove",jwtHelper.verifyJWTtoken,organisationTeam.remove);
+router.post("/organisationTeam/addRole",jwtHelper.verifyJWTtoken,organisationTeam.addRole);
+
 
 //project
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, team.createTeam, team.assignProject);
