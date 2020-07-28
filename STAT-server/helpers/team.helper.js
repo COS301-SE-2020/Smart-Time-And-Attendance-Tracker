@@ -86,7 +86,7 @@ module.exports.getTasksOfTeam = (id, done)=>{
   * @param {*} done 
   */
  module.exports.removeUser = (userID, ids, done)=>{
-    TeamModel.updateMany({_id: {$in: ids}},{ $pull: { TeamMembers: {userID}}},(err,val)=>{     
+    TeamModel.updateMany({_id: {$in: ids}},{ $pull: { TeamMembers: {_id:userID}}},(err,val)=>{     
         if(err) 
             done(err);
         else

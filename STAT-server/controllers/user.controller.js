@@ -402,4 +402,39 @@ module.exports.getTasks = (req, res, next) => {
         }
     });
 }
+/**
+ * This function edits a user from the organisation. 
+ * Only a security admin can make this request.
+ * @param req Request body - ID of user to edit
+ * @param res Http Response
+ * @return {Http Response} - Succes or error message
+ */
+module.exports.edit = (req, res) => {
+    UserModel.findOne({ _id: req.body.userID},(err, result) => {
+        if(err)
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if(!result)
+            return res.status(404).json({message: 'User not found'});
+        else
+        {
+            if(req.body.hasOwnProperty('name'))
+                 result.Name = req.body.name;
 
+            if(req.body.hasOwnProperty('email'))
+                result.Email =  req.body.email;
+
+            if(req.body.hasOwnProperty('surname'))
+                result.Surname =  req.body.surname;
+
+        
+                TaskModel.updateOne({ _id: req.body.taskID},{Name: result.Name,Email:result.Email, Surname : result.Surname},(err, result) => {
+                    if (err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else
+                        return res.status(200).json({message: 'User successfully updated'});
+                
+                });
+           
+        }
+    });
+}
