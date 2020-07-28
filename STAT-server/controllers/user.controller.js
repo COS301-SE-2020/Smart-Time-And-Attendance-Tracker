@@ -206,7 +206,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
             for(var a=0; a<result.length; a++){
                 UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
-            return res.status(200).json({unathenticatedUsers: UnauthenticatedUsers});
+            return res.status(200).json({unauthenticatedUsers: UnauthenticatedUsers});
         }
     });
 }
