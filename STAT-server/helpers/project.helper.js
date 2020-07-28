@@ -1,6 +1,6 @@
 /**
   * @file STAT-server/helper/project.helper.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles some of the requests regarding Project model in our database. 
   * This is a helper file to handle Project related requests.
   * @date 15 July 2020
@@ -9,7 +9,7 @@
 /**
 * Filename:             STAT-server/helper/project.helper.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
 * File Creation Date:   15 July 2020
 *

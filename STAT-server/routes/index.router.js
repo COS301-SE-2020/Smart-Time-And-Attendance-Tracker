@@ -1,3 +1,26 @@
+/**
+  * @file STAT-server/routes/index.router.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles all API requests routes.
+  * @date 14 June 2020
+ */
+
+/**
+* Filename:             STAT-server/routes/index.router.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   14 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:         This file handles all API requests routes.
+*
+*/
+
+
 const express = require('express');
 const router = express.Router();
 
@@ -37,8 +60,8 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 
 //team
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
-router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
-router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
+//router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
+//router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
 
 
 //project

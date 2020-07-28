@@ -1,14 +1,14 @@
 /**
-  * @file user.controller.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
-  * @fileoverview This file handles all the requests regarding User model in our database
-  * @date 11June 2020
+  * @file STAT-server/helper/user.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles all the requests regarding the User model in our database
+  * @date 11 June 2020
  */
 
 /**
-* Filename:             user.cotroller.js
+* Filename:             STAT-server/helper/user.controller.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
 * File Creation Date:   11 June 2020
 *
@@ -16,7 +16,7 @@
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:          This file handles all the requests regarding User model in our database
+* Description:          This file handles all the requests regarding the User model in our database
 *
 */ 
 
@@ -33,7 +33,7 @@ const TeamHelper =require('../helpers/team.helper');
  * This function does all the validation the user's email and password, then returns a uniquely
  * generated token to the user.
  * @param req - HTTP request 
- * @param res Http response 
+ * @param res HTTP response 
  * @return {Http Response} - If login is a success a token is returned, otherwise a error message is returned
  */
 module.exports.login = (req, res, next) => {
@@ -61,11 +61,11 @@ module.exports.login = (req, res, next) => {
 }
 
 /**
- * This function is called when a user registers's into the STAT. 
- * This function does all the validation, and inserts user into database.
- * @param {*} req 
- * @param {*} res 
- * @return {Http Response} - If registration is a success a token is returned, otherwise a error message is returned
+ * This function is called when a user registers to STAT. 
+ * This function does all the validation, and inserts the user into the database.
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
+ * @return {Http Response} - If registration is a success a token is returned, otherwise an error message is returned
  */
 module.exports.register = (req, res, next) => {
     if(!( req.body.name &&  req.body.surname && req.body.email && req.body.password && req.body.passwordConf)) 
@@ -110,8 +110,8 @@ module.exports.register = (req, res, next) => {
 
 /**
  * This function allows the user to change password.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
  * @return {Http Response} - If changing password is a success a success message is returned, otherwise a error message is returned
  */
 module.exports.changePass = (req, res, next) => {
@@ -129,8 +129,8 @@ module.exports.changePass = (req, res, next) => {
 
 /**
  * This function returns the name and surname of the user.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
  * @return {Http Response} - Returns name and surname of the user if no error occured in 
  * fecthing the user's details from the database.
  */
@@ -148,8 +148,8 @@ module.exports.getName = (req, res, next) => {
 
 /**
  * This function returns the roles of a user. 
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
  * @return {Http Response} - Returns roles pf the user if no error occured, otherwise an error message is returned.
  */
 module.exports.getRoles = (req, res, next) => {
@@ -190,8 +190,8 @@ module.exports.getRoles = (req, res, next) => {
 
 /**
  * This function returns all unauthenticated users from the organisation.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
  * @return {Http Response} - Array with all unauthenticated users objects
  */
 module.exports.getUnauthenticatedUsers = (req, res, next) => {
@@ -214,7 +214,8 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
 /**
  * This function returns an array with all authenticated users objects
  * Only a security admin can make this request.
- * @param {*} res 
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
  * @return {Http Response} - Array with all authenticated users objects
  */
 module.exports.getAllUsers = (req, res, next) => {
@@ -238,10 +239,13 @@ module.exports.getAllUsers = (req, res, next) => {
  * This function authenticates a user. Only a security admin can make this request.
  * @param req Request body - ID of user to authenticate
  * @param res Http Response
- * @return {Http Response} - Succes or error message
+ * @return {Http Response} - Success or error message
  */
 module.exports.authenticate = (req, res, next) => {
-    UserModel.updateOne({ _id: req.body.UserID},{Authenticate: true},(err, result) => {
+    if(!req.body.hasOwnProperty('userID'))
+        return res.status(400).send({message: 'No user ID given'});
+
+    UserModel.updateOne({ _id: req.body.userID},{Authenticate: true},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -254,11 +258,14 @@ module.exports.authenticate = (req, res, next) => {
 
 /**
  * This function adds a team to the user. Only a team lead can make this request.
- * @param req Request body - ID of user and Team id
+ * @param req Request body - ID of user and Team ID
  * @param res Http Response
- * @return {Http Response} - Success message with team id or error message
+ * @return {Http Response} - Success message with team ID or error message
  */
 module.exports.addTeam = (req, res, next) => {
+    if(!req.body.hasOwnProperty('userID'))
+        return res.status(400).send({message: 'No user ID given'});
+
     UserModel.findOne({_id : req.body.userID}, function(err, result) {
         if(err) 
         {
@@ -290,13 +297,33 @@ module.exports.addTeam = (req, res, next) => {
  * @return {Http Response} - Succes or error message
  */
 module.exports.remove = (req, res, next) => {
-    UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
+    if(!req.body.hasOwnProperty('userID'))
+        return res.status(400).send({message: 'No user ID given'});
+
+    UserModel.findOne({ _id: req.body.userID},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' }); 
         else
-            return res.status(200).json({message: 'User removed'});
+        {
+            //remove user from 'project' teams
+            TeamHelper.removeUser(req.body.userID, result.Team,(err)=>
+            {
+                if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                else
+                {
+                    UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
+                        if (err) 
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else
+                            return res.status(200).json({message: 'User removed'});
+                    });
+
+                }
+            });
+        }
                
     });
 }

@@ -1,6 +1,6 @@
 /**
   * @file STAT-server/helper/user.helper.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles some of the requests regarding User model in our database. 
   * This is a helper file to handle User related requests.
   * @date 2 July 2020
@@ -9,7 +9,7 @@
 /**
 * Filename:             STAT-server/helper/user.helper.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
 * File Creation Date:   2 July 2020
 *

@@ -1,3 +1,24 @@
+/**
+  * @file STAT-server/helper/team.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles all the requests regarding the Team model in our database
+  * @date 11 June 2020
+ */
+
+/**
+* Filename:             STAT-server/helper/team.controller.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   11 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles all the requests regarding the Team model in our database
+*
+*/ 
 
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
