@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const user = require('../controllers/user.controller');
+const organisationTeam = require('../controllers/organisationTeam.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
@@ -40,6 +41,8 @@ router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
 
+//organisation team
+router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,organisationTeam.createTeam);
 
 //project
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, team.createTeam, team.assignProject);
