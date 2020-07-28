@@ -218,8 +218,8 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
 }
 function UpdateTimeEntry(endTime,currentID ) {
   //getTasks();
-  alert(convertDurationToInt(getTimeWithID(currentID)));
-  alert("endTime: " + endTime);
+  //alert(convertDurationToInt(getTimeWithID(currentID)));
+  //alert("endTime: " + endTime);
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
       var text = '{'
@@ -232,19 +232,19 @@ function UpdateTimeEntry(endTime,currentID ) {
 
       http.setRequestHeader('Content-type', 'application/json');
       http.setRequestHeader("authorization", "token "+ getCookie("token"));
-      alert(getCookie("token"));
+      //alert(getCookie("token"));
       http.onreadystatechange = function() {
-        alert(http.readyState + "  " + http.status);
+        //alert(http.readyState + "  " + http.status);
           if(http.readyState == 4 && http.status == 200) {
               const obj = JSON.parse(http.responseText);
-              alert("message :   " + obj.message);
+              //alert("message :   " + obj.message);
               status = true;
               return status;
           }
           else if(http.readyState == 4 && http.status != 200) {  //error in recording time
               chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
               chrome.extension.getBackgroundPage().History[currentID][0][0] = new Date();
-              alert(http.responseText);
+              //alert(http.responseText);
               status = false;
               return status;
           }
