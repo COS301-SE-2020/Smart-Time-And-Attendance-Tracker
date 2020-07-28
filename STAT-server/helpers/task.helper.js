@@ -27,8 +27,8 @@ const TaskModel = mongoose.model("Task");
 /**
  * 
  * @param {HTTP Request} req Request body - Task name, due date of Task, time spent on Task, start date of Task and Monetary Value
- * @param {*} res Success or error message
- * @param {*} next 
+ * @param {HTTP Response} res Success or error message
+ * @param {Function} next Next function to be called
  */
 module.exports.add = (req, res, next) => {
     var task = new TaskModel();

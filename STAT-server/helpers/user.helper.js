@@ -28,8 +28,8 @@ const UserModel = mongoose.model("User");
 /**
  * checks to see if user has a role of "Security Administrator".
  * @param {HTTP Request} req ID of user.
- * @param {*} res 
- * @param {*} next 
+ * @param {HTTP Response} res  
+ * @param {Function} next Next function to be called.
  */
 module.exports.isSecurityAdmin = (req, res, next) => {
 
@@ -54,8 +54,8 @@ module.exports.isSecurityAdmin = (req, res, next) => {
 /**
  * checks to see if user has a role of "Team Leader".
  * @param {HTTP Request} req ID of user.
- * @param {*} res 
- * @param {*} next 
+ * @param {HTTP Response} res 
+ * @param {Function} next Next function to be called.
  */
 module.exports.isTeamLeader = (req, res, next) => {
 
@@ -79,8 +79,8 @@ module.exports.isTeamLeader = (req, res, next) => {
 /**
  * checks to see if user is authenticated.
  * @param {HTTP Request} req ID of User.
- * @param {*} res 
- * @param {*} next 
+ * @param {HTTP Response} res 
+ * @param {Function} next Next function to be called.
  */
 module.exports.isAuthenticated = (req, res, next) => {
 
@@ -104,7 +104,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 /**
  * Add team ID to user.
  * @param {String} id ID of user.
- * @param {*} teamID ID of Team.
+ * @param {String} teamID ID of Team.
  * @param {*} done 
  */
 module.exports.addTeam = (id, teamID, done) => {
@@ -124,7 +124,7 @@ module.exports.addTeam = (id, teamID, done) => {
 /**
  * Deletes team from Team array.
  * @param {*} ids 
- * @param {*} teamID 
+ * @param {String} teamID 
  * @param {*} done 
  */
 module.exports.deleteTeam = (ids, teamID, done) => {
