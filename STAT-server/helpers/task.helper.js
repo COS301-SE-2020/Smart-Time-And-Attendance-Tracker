@@ -26,7 +26,7 @@ const TaskModel = mongoose.model("Task");
 
 /**
  * 
- * @param {*} req Request body - Task name, due date of Task, time spent on Task, start date of Task and Monetary Value
+ * @param {HTTP Request} req Request body - Task name, due date of Task, time spent on Task, start date of Task and Monetary Value
  * @param {*} res Success or error message
  * @param {*} next 
  */
@@ -49,7 +49,7 @@ module.exports.add = (req, res, next) => {
 
 /**
  * 
- * @param {*} id ID of task
+ * @param {String} id ID of task
  * @param {*} done 
  * @return {String} - Name of Task.
  */
@@ -67,7 +67,7 @@ module.exports.getName = (id, done)=>{
 
 /**
  * 
- * @param {*} id ID of task
+ * @param {String} id ID of task
  * @param {*} done 
  * @return {Array} - Name of Task, Id of Task, status of Task, due date oF Task.
  */

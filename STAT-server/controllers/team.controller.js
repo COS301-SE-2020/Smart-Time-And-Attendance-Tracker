@@ -1,12 +1,36 @@
+/**
+  * @file STAT-server\controllers\team.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @fileoverview This file handles all the requests regarding Team model in our database
+  * @date 19 June 2020
+ */
 
+/**
+* Filename:             STAT-server\controllers\team.controller.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+*   
+* File Creation Date:   19 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles all the requests regarding Team model in our database
+*
+*/ 
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
 const ProjectHelper =  require('../helpers/project.helper');
 const UserHelper =  require('../helpers/user.helper');
 
-
-module.exports.assignProject = (req, res, next) => {
-    
+/**
+ * This function assigns a project to a Team.
+ * @param {HTTP Request} req HTTP-  TeamID, ProjectID
+ * @param {HTTP Response} res 
+ * @returns {JSON Array} success or error message, ProjectID and TeamID.
+ */
+module.exports.assignProject = (req, res) => {
     TeamModel.updateOne({_id : req.teamID},{ProjectID:req.ProjectID }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -31,6 +55,12 @@ module.exports.assignProject = (req, res, next) => {
     });
 }
 
+/**
+ * This function adds a member to a Team.
+ * @param {HTTP Request} req HTTP Body - TeamID, new Team Member's ID, and their role in the team.
+ * @param {HTTP Response} res 
+ * @param {Function} next next function to be called 
+ */
 module.exports.addTeamMember = (req, res, next) => {
 
     TeamModel.updateOne({_id : (req.body.TeamID)},{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
@@ -46,7 +76,12 @@ module.exports.addTeamMember = (req, res, next) => {
     });
 }
 
-
+/**
+ * This function creates a Team and adds the Team Leader(the member that creates the Team) to the team members of the Team.
+ * @param {HTTP Request} req HTTP Request - Project ID and User ID (the team leader).
+ * @param {HTTP Response} res 
+ * @param {Function} next next function to be called 
+ */
 module.exports.createTeam = (req, res, next) => {
     var team = new TeamModel();
     team.TeamLeader = req.ID;
@@ -81,22 +116,4 @@ module.exports.createTeam = (req, res, next) => {
     })
 }
 
-
-/*router.post("/update", (req, res) => {
-    var team = new TeamModel();
-    team.ID = req.body.teamID;
-    db.collection("Team").update({"ID" : req.body.teamID}, {$push: {"TeamMembers" :req.body.newMember }});
-    task.save((err, doc) => {
-        if(!err){
-            res.send("Updated Team");
-        }
-        else{
-            res.send("Error Occured");
-        }
-    })
-});
-
-
-module.exports = router;
-*/
 

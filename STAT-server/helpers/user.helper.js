@@ -27,7 +27,7 @@ const UserModel = mongoose.model("User");
 
 /**
  * checks to see if user has a role of "Security Administrator".
- * @param {*} req ID of user.
+ * @param {HTTP Request} req ID of user.
  * @param {*} res 
  * @param {*} next 
  */
@@ -53,7 +53,7 @@ module.exports.isSecurityAdmin = (req, res, next) => {
 
 /**
  * checks to see if user has a role of "Team Leader".
- * @param {*} req ID of user.
+ * @param {HTTP Request} req ID of user.
  * @param {*} res 
  * @param {*} next 
  */
@@ -78,7 +78,7 @@ module.exports.isTeamLeader = (req, res, next) => {
 
 /**
  * checks to see if user is authenticated.
- * @param {*} req ID of User.
+ * @param {HTTP Request} req ID of User.
  * @param {*} res 
  * @param {*} next 
  */
@@ -103,7 +103,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 
 /**
  * Add team ID to user.
- * @param {*} id ID of user.
+ * @param {String} id ID of user.
  * @param {*} teamID ID of Team.
  * @param {*} done 
  */
