@@ -130,7 +130,8 @@ module.exports.add = (req, res, next) => {
 }
 
 module.exports.addTask = (req, res, next) => {
-
+    if(!req.body.projectID)
+        return res.status(400).send({message: 'No project ID provided'});
         ProjectModel.updateOne({_id : req.body.projectID}, { $push: { Tasks: req.TaskID } },function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
