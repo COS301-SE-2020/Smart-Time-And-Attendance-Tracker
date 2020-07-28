@@ -376,3 +376,23 @@ module.exports.getTasks = (req, res, next) => {
     });
 }
 
+
+/**
+ * 
+ */
+
+module.exports.addRole = (req, res) => {  
+    console.log(req.body)
+    UserModel.update({ _id: req.body.UserID},{$push:{Role}},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            console.log(result);
+        }
+    })
+}       
+ 
