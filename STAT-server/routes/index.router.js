@@ -25,6 +25,7 @@ router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecur
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 
 router.post("/user/addRole",jwtHelper.verifyJWTtoken,user.addRole);
+router.post("/user/removeRole",jwtHelper.verifyJWTtoken,user.removeRole);
 
 
 //role
