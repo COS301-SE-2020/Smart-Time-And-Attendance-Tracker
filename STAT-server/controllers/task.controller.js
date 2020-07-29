@@ -1,9 +1,34 @@
+/**
+  * @file STAT-server\controllers\task.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @fileoverview This file handles all the requests regarding Task model in our database
+  * @date 19 June 2020
+ */
 
+/**
+* Filename:             STAT-server\controllers\task.controller.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+*   
+* File Creation Date:   19 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles all the requests regarding Task model in our database
+*
+*/ 
 const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
 
-module.exports.startTask = (req, res, next) => {
-  
+/**
+ * 
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.startTask = (req, res) => {
     TaskModel.updateOne({ _id: req.body.taskID},{Status: 'In Progress'},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
@@ -16,8 +41,13 @@ module.exports.startTask = (req, res, next) => {
 
 }
 
-
-module.exports.completeTask = (req, res, next) => {
+/**
+ * 
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.completeTask = (req, res) => {
    
     TaskModel.updateOne({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
         if (err) 
@@ -30,7 +60,13 @@ module.exports.completeTask = (req, res, next) => {
     });
 }
 
-
+/**
+ * 
+ * @param {HTTP Request} req Request body - ID of task, task name, time spent on task, due date of task,
+ * monetary value associated with task, start date of task.
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 module.exports.update = (req, res) => {
     TaskModel.findOne({ _id: req.body.taskID},(err, result) => {
         if(err)
@@ -68,11 +104,12 @@ module.exports.update = (req, res) => {
     });
 }
 
-
-/*
-  DESCRPTION
-*/
-
+/**
+ * 
+ * @param {HTTP Request} req Request body - Task name, start date of task, due date of task.
+ * @param {HTTP Response} res 
+ * @param {Function} next Next function to be called.
+ */
 module.exports.add = (req, res, next) => {
     var task = new TaskModel();
     task.TaskName = req.body.taskName;
@@ -91,7 +128,12 @@ module.exports.add = (req, res, next) => {
     });
 }
 
-
+/**
+ * 
+ * @param {HTTP Request} req Request query - Task ID.
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 module.exports.deleteTask= (req, res) => {     
     if(!req.query.taskID)
         return res.status(400).send({message: 'No task ID provided'});      

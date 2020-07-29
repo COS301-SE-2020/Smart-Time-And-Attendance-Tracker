@@ -26,7 +26,7 @@ const RoleModel = mongoose.model("Role");
 
  /**
   * 
-  * @param {*} id ID of role.
+  * @param {String} id ID of role.
   * @param {*} done 
   * @return {String} - Role of given ID.
   */

@@ -1,12 +1,12 @@
 /**
-  * @file user.controller.js
+  * @file STAT-server\controllers\user.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file handles all the requests regarding User model in our database
   * @date 11June 2020
  */
 
 /**
-* Filename:             user.cotroller.js
+* Filename:             STAT-server\controllers\user.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
 *   
@@ -32,8 +32,8 @@ const TeamHelper =require('../helpers/team.helper');
  * This function is called when a user login's into the STAT. 
  * This function does all the validation the user's email and password, then returns a uniquely
  * generated token to the user.
- * @param req - HTTP request 
- * @param res Http response 
+ * @param {HTTP Request} req - HTTP request 
+ * @param {HTTP Response} res 
  * @return {Http Response} - If login is a success a token is returned, otherwise a error message is returned
  */
 module.exports.login = (req, res, next) => {
@@ -63,8 +63,8 @@ module.exports.login = (req, res, next) => {
 /**
  * This function is called when a user registers's into the STAT. 
  * This function does all the validation, and inserts user into database.
- * @param {*} req 
- * @param {*} res 
+ * @param {HTTP Request} req 
+ * @param {HTTP Response} res  
  * @return {Http Response} - If registration is a success a token is returned, otherwise a error message is returned
  */
 module.exports.register = (req, res, next) => {
@@ -110,8 +110,8 @@ module.exports.register = (req, res, next) => {
 
 /**
  * This function allows the user to change password.
- * @param {*} req 
- * @param {*} res 
+ * @param {HTTP Request} req 
+ * @param {HTTP Response} res  
  * @return {Http Response} - If changing password is a success a success message is returned, otherwise a error message is returned
  */
 module.exports.changePass = (req, res, next) => {
@@ -129,8 +129,8 @@ module.exports.changePass = (req, res, next) => {
 
 /**
  * This function returns the name and surname of the user.
- * @param {*} req 
- * @param {*} res 
+ * @param {HTTP Request} req 
+ * @param {HTTP Response} res 
  * @return {Http Response} - Returns name and surname of the user if no error occured in 
  * fecthing the user's details from the database.
  */
@@ -148,8 +148,8 @@ module.exports.getName = (req, res, next) => {
 
 /**
  * This function returns the roles of a user. 
- * @param {*} req 
- * @param {*} res 
+ * @param {HTTP Request} req 
+ * @param {HTTP Response} res 
  * @return {Http Response} - Returns roles pf the user if no error occured, otherwise an error message is returned.
  */
 module.exports.getRoles = (req, res, next) => {
@@ -190,8 +190,8 @@ module.exports.getRoles = (req, res, next) => {
 
 /**
  * This function returns all unauthenticated users from the organisation.
- * @param {*} req 
- * @param {*} res 
+ * @param {HTTP Request} req 
+ * @param {HTTP Response} res 
  * @return {Http Response} - Array with all unauthenticated users objects
  */
 module.exports.getUnauthenticatedUsers = (req, res, next) => {
@@ -206,7 +206,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
             for(var a=0; a<result.length; a++){
                 UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
-            return res.status(200).json({unathenticatedUsers: UnauthenticatedUsers});
+            return res.status(200).json({unauthenticatedUsers: UnauthenticatedUsers});
         }
     });
 }
@@ -214,7 +214,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
 /**
  * This function returns an array with all authenticated users objects
  * Only a security admin can make this request.
- * @param {*} res 
+ * @param {HTTP Response} res 
  * @return {Http Response} - Array with all authenticated users objects
  */
 module.exports.getAllUsers = (req, res, next) => {
@@ -236,8 +236,8 @@ module.exports.getAllUsers = (req, res, next) => {
 
 /**
  * This function authenticates a user. Only a security admin can make this request.
- * @param req Request body - ID of user to authenticate
- * @param res Http Response
+ * @param {HTTP Request} req Request body - ID of user to authenticate
+ * @param {HTTP Response} res 
  * @return {Http Response} - Succes or error message
  */
 module.exports.authenticate = (req, res, next) => {
@@ -253,11 +253,11 @@ module.exports.authenticate = (req, res, next) => {
 }
 
 /**
- * 
+ * This function adds a team to the user. Only a team lead can make this request
  * @param {HTTP Request} req Request body - ID of user and Team 
  * @param {Http Response} res 
  * @returns {String} Success or error message.
- */
+**/
 module.exports.removeTeam = (req, res) => {
     UserModel.updateOne({_id : (req.body.UserID)},{ $pull: { Team: req.body.TeamID } }, function(err, result) {                
         if (err) 
@@ -290,8 +290,8 @@ module.exports.addTeam = (req, res) => {
 /**
  * This function removes(deletes) a user from the organisation. 
  * Only a security admin can make this request.
- * @param req Request body - ID of user to remove/reject
- * @param res Http Response
+ * @param {HTTP Request} req Request body - ID of user to remove/reject
+ * @param {HTTP Response} res 
  * @return {Http Response} - Succes or error message
  */
 module.exports.remove = (req, res, next) => {
@@ -308,9 +308,9 @@ module.exports.remove = (req, res, next) => {
 
 /**
  * This function checks if the user is authenticated
- * @param req Request - ID of user
- * @param res Http Response
- * @param next The next function to call
+ * @param {HTTP Request} req Request - ID of user
+ * @param {HTTP Response} res 
+ * @param {Function} next The next function to call
  * @return {Http Response} - Value of Authenticated attribute or an error message
  */
 module.exports.isAuthenticated = (req, res, next) => {
@@ -328,8 +328,8 @@ module.exports.isAuthenticated = (req, res, next) => {
 
 /**
  * This function gets all the tasks(with project) a user is working on.
- * @param req Request - ID of user.
- * @param res Http Response
+ * @param {HTTP Request} req Request - ID of user.
+ * @param {HTTP Response} res 
  * @return {Http Response} - Array with all projects and tasks objects
  */
 module.exports.getTasks = (req, res, next) => {
