@@ -26,7 +26,7 @@ const TimeEntryModel = mongoose.model("TimeEntry");
 
 /**
  * 
- * @param {*} id ID of time entry.
+ * @param {String} id ID of time entry.
  * @param {*} done 
  * @returns {Object} Time Entry document(object).
  */

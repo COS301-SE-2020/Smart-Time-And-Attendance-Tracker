@@ -25,6 +25,7 @@ const express = require('express');
 const router = express.Router();
 
 const user = require('../controllers/user.controller');
+const organisationTeam = require('../controllers/organisationTeam.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
@@ -48,6 +49,10 @@ router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecur
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 router.post("/user/editUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.edit);
 
+router.post("/user/addRole",jwtHelper.verifyJWTtoken,user.addRole);
+router.post("/user/removeRole",jwtHelper.verifyJWTtoken,user.removeRole);
+
+
 //role
 router.get("/role/getRole", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, role.getRole);
 router.post("/role/addRole",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, role.add);
@@ -61,8 +66,17 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 
 //team
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
+
 //router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 //router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
+router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.removeTeamMember, user.removeTeam);
+
+
+//organisation team    --- ----removed isleader etc for easier testing
+router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,organisationTeam.createTeam);
+router.post("/organisationTeam/addTeamMember",jwtHelper.verifyJWTtoken,organisationTeam.addTeamMember);
+router.delete("/organisationTeam/remove",jwtHelper.verifyJWTtoken,organisationTeam.remove);
+router.post("/organisationTeam/addRole",jwtHelper.verifyJWTtoken,organisationTeam.addRole);
 
 
 //project

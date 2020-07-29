@@ -1,13 +1,13 @@
 
 /**
-  * @file STAT-server/helper/role.controller.js
+  * @file STAT-server/controllers/role.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles all the requests regarding the Role model in our database
   * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server/helper/role.controller.js
+* Filename:             STAT-server/controllers/role.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
@@ -19,11 +19,18 @@
 *
 * Description:          This file handles all the requests regarding the Role model in our database
 *
-*/ const mongoose = require("mongoose");
+**/
+
+const mongoose = require("mongoose");
 const RoleModel = mongoose.model("Role");
 //var request = require('request');
 
-
+/**
+ * This function adds a new role to the organisation.
+ * @param {HTTP Request} req Request body - new role.
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 module.exports.add = (req, res) => {  
   
     RoleModel.find({}, function(err, allDocuments) {
@@ -49,7 +56,14 @@ module.exports.add = (req, res) => {
 }
        
 
-module.exports.getRole = (req, res, next) => {
+/**
+ * This function gets a role of the given ID.
+ * @param {HTTP Request} req Request body - ID of role
+ * @param {HTTP Response} res 
+ * @returns {String} error message or role.
+ */
+module.exports.getRole = (req, res) => {
+
     RoleModel.findOne({ ID: req.body.ID},(err, result) => {
         if(err) 
         {

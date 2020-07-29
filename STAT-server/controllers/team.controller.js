@@ -1,12 +1,13 @@
 /**
-  * @file STAT-server/helper/team.controller.js
+
+  * @file STAT-server/controllers/team.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles all the requests regarding the Team model in our database
   * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server/helper/team.controller.js
+* Filename:             STAT-server/controllers/team.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
@@ -20,14 +21,19 @@
 *
 */ 
 
+
 const mongoose = require("mongoose");
 const TeamModel = mongoose.model("teams");
 const ProjectHelper =  require('../helpers/project.helper');
 const UserHelper =  require('../helpers/user.helper');
 
-
-module.exports.assignProject = (req, res, next) => {
-    
+/**
+ * This function assigns a project to a Team.
+ * @param {HTTP Request} req HTTP-  TeamID, ProjectID
+ * @param {HTTP Response} res 
+ * @returns {JSON Array} success or error message, ProjectID and TeamID.
+ */
+module.exports.assignProject = (req, res) => {
     TeamModel.updateOne({_id : req.teamID},{ProjectID:req.ProjectID }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -52,22 +58,49 @@ module.exports.assignProject = (req, res, next) => {
     });
 }
 
-module.exports.addTeamMember = (req, res, next) => {
+/**
 
-    TeamModel.updateOne({_id : (req.body.TeamID)},{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
+ * This function adds a member to a Team.
+ * @param {HTTP Request} req HTTP Body - TeamID, new Team Member's ID, and their role in the team.
+ * @param {HTTP Response} res 
+ * @param {Function} next - The next function to be called 
+ */
+module.exports.addTeamMember = (req, res, next) => {
+    TeamModel.updateOne({_id : req.body.TeamID },{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).send({message: 'Team not found'});
         else {
-            req.TeamID = result._id;
             next();
             //return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });     
         }
     });
 }
+/**
+ * 
+ * @param {HTTP Request} req Request body - ID of user and Team.
+ * @param {Http Response} res 
+ * @param {Function} next The next function to be called.
+ */
+module.exports.removeTeamMember = (req, res, next) => {
+        TeamModel.updateOne({_id : req.body.TeamID },{ $pull: { TeamMembers: { _id: req.body.UserID} } }, function(err, result) {
+        if(err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).send({message: 'Team not found'});
+        else {
+            next();
+        }
+    });
+}
 
-
+/**
+ * This function creates a Team and adds the Team Leader(the member that creates the Team) to the team members of the Team.
+ * @param {HTTP Request} req HTTP Request - Project ID and User ID (the team leader).
+ * @param {HTTP Response} res 
+ * @param {Function} next next function to be called 
+ */
 module.exports.createTeam = (req, res, next) => {
     var team = new TeamModel();
     team.TeamLeader = req.ID;
@@ -102,22 +135,4 @@ module.exports.createTeam = (req, res, next) => {
     })
 }
 
-
-/*router.post("/update", (req, res) => {
-    var team = new TeamModel();
-    team.ID = req.body.teamID;
-    db.collection("Team").update({"ID" : req.body.teamID}, {$push: {"TeamMembers" :req.body.newMember }});
-    task.save((err, doc) => {
-        if(!err){
-            res.send("Updated Team");
-        }
-        else{
-            res.send("Error Occured");
-        }
-    })
-});
-
-
-module.exports = router;
-*/
 

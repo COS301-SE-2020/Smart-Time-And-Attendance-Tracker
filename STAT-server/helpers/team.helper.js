@@ -27,7 +27,7 @@ const ProjectHelper =require('../helpers/project.helper');
 
 /**
  * 
- * @param {*} id ID of Team.
+ * @param {String} id ID of Team.
  * @param {*} done 
  * @returns {Object} Team document(object).
  */
@@ -51,7 +51,7 @@ module.exports.deleteTeam = (id, done) => {
 
  /**
   * 
-  * @param {*} id ID of Team.
+  * @param {String} id ID of Team.
   * @param {*} done 
   * @returns {String} Project ID.
   */

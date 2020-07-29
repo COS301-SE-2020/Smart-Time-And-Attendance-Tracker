@@ -1,4 +1,5 @@
 
+
 /**
   * @file STAT-server/controllers/project.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
@@ -27,18 +28,13 @@ const TaskHelper = require("../helpers/task.helper");
 const TeamHelper = require("../helpers/team.helper");
 const UserHelper = require("../helpers/user.helper");
 
-module.exports.complete = (req, res) => {
-    ProjectModel.updateOne({ _id: req.body.projectID},{Completed: true},(err, result) => {
-        if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
-        else if (!result)
-            return res.status(404).json({ message: 'Project not found' }); 
-        else
-            return res.status(200).json({message: 'Project marked as completed'});
-                
-    });
-}
 
+/**
+ * Thos function changes the status of the project to incomplete.
+ * @param {HTTP Request} req Request body - ID of Project
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 module.exports.uncomplete = (req, res) => {
     ProjectModel.updateOne({ _id: req.body.projectID},{Completed: false},(err, result) => {
         if (err) 
@@ -51,6 +47,13 @@ module.exports.uncomplete = (req, res) => {
     });
 }
 
+/**
+ * This function updates any details about the project.
+ * @param {HTTP Request} req Request body - ID of project, porject's name, due date of project, time spent on project, 
+ * hourly rate of project and start date of project
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 module.exports.update = (req, res) => {
 
     ProjectModel.findOne({ _id: req.body.projectID},(err, result) => {
@@ -90,9 +93,10 @@ module.exports.update = (req, res) => {
 }
 
 /**
- * receives project details
- * - ensure person adding is a authenticated user
- * - 
+ * This function receives project details (ensure person adding is a authenticated user) and adds that prject to the organisation.
+ * @param {HTTP Request} req Request body - Project's name, due date of project, hourly rate of project and start date of project and due date of project.
+ * @param {HTTP Response} res 
+ * @param {Function} next The next function to be called.
  */
 module.exports.add = (req, res, next) => {
    
@@ -129,9 +133,16 @@ module.exports.add = (req, res, next) => {
     })
 }
 
-module.exports.addTask = (req, res, next) => {
+/**
+ * This function adds a new task to the project.
+ * @param {HTTP Request} req Request body - ID of project
+ * @param {HTTP Response} res 
+ * @returns {String} Task ID or error message.
+ */
+module.exports.addTask = (req, res) => {
     if(!req.body.projectID)
         return res.status(400).send({message: 'No project ID provided'});
+
         ProjectModel.updateOne({_id : req.body.projectID}, { $push: { Tasks: req.TaskID } },function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -147,7 +158,12 @@ module.exports.addTask = (req, res, next) => {
 
 }
 
-
+/**
+ * This function deletes the project, and all the tasks associated with the project and the team working on the project.
+ * @param {HTTP Request} req Request query - ID of project.
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 module.exports.deleteProject = (req, res) => { 
     if(!req.query.projectID)
         return res.status(400).send({message: 'No project ID provided'});
@@ -200,6 +216,12 @@ module.exports.deleteProject = (req, res) => {
     });
 }
 
+/**
+ * 
+ * @param {HTTP Request} req Request query - ID of project and task.
+ * @param {HTTP Response} res 
+ * @param {Function} next The next function to be called.
+ */
 module.exports.deleteTask = (req, res, next) => {  
     if(!req.query.projectID)
         return res.status(400).send({message: 'No project ID provided'});
@@ -216,16 +238,33 @@ module.exports.deleteTask = (req, res, next) => {
     });
 }
 
-module.exports.complete = (req, res, next) => {
-
+/**
+ * This function changes the status of the project to complete.
+ * @param {HTTP Request} req Request body - ID of project.
+ * @param {HTTP Response} res 
+ * @returns {String} Project ID or error message.
+ */
+module.exports.complete = (req, res) => {
     ProjectModel.updateOne({_id : req.body.projectID, Completed: true},function(err, result) {
-    if(err) 
-        return res.status(500).send({message: 'Internal Server Error: ' + err});
-    else if (!result)
-       return res.status(404).send({message: "Project not found"});
-    else 
-        return res.status(200).json({ projectID: req.body.ProjectID, message: 'Project marked as completed' });
-          
-});
+        if(err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+        return res.status(404).send({message: "Project not found"});
+        else 
+            return res.status(200).json({ projectID: req.body.ProjectID, message: 'Project marked as completed' });
+    });
 }
 
+/* dulicate functions
+module.exports.complete = (req, res) => {
+    ProjectModel.updateOne({ _id: req.body.projectID},{Completed: true},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (!result)
+            return res.status(404).json({ message: 'Project not found' }); 
+        else
+            return res.status(200).json({message: 'Project marked as completed'});
+                
+    });
+}
+*/

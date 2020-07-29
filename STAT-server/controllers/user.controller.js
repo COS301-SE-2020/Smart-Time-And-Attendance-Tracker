@@ -1,12 +1,12 @@
 /**
-  * @file STAT-server/helper/user.controller.js
+  * @file STAT-server/controllers/user.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles all the requests regarding the User model in our database
   * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server/helper/user.controller.js
+* Filename:             STAT-server/controllers/user.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
@@ -190,6 +190,7 @@ module.exports.getRoles = (req, res, next) => {
 
 /**
  * This function returns all unauthenticated users from the organisation.
+
  * @param {*} req HTTP request 
  * @param {*} res HTTP response 
  * @return {Http Response} - Array with all unauthenticated users objects
@@ -257,6 +258,24 @@ module.exports.authenticate = (req, res, next) => {
 }
 
 /**
+ * This function adds a team to the user. Only a team lead can make this request
+ * @param {HTTP Request} req Request body - ID of user and Team 
+ * @param {Http Response} res 
+ * @returns {String} Success or error message.
+**/
+module.exports.removeTeam = (req, res) => {
+    UserModel.updateOne({_id : (req.body.UserID)},{ $pull: { Team: req.body.TeamID } }, function(err, result) {                
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'User removed from team'});
+               
+    });
+}
+
+/**
  * This function adds a team to the user. Only a team lead can make this request.
  * @param req Request body - ID of user and Team ID
  * @param res Http Response
@@ -272,28 +291,22 @@ module.exports.addTeam = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else if (!result)
+
+    UserModel.updateOne({_id : (req.body.UserID)},{ $push: { Team: req.body.TeamID } }, function(err, result) {                
+        if(!err)
         {
-            return res.status(404).send({message: 'User not found'});
+            return res.status(200).json({ teamID: req.body.TeamID, message: 'User successfully added to team' });
         }
-        else {
-            result.Team.push(req.TeamID)
-            result.updateOne((err, doc) => {
-                if(!err)
-                {
-                    return res.status(200).json({ teamID: req.TeamID, message: 'User successfully added to team' });
-                }
-                else
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-            });
-        }
+        else
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
     });
 }
 
 /**
  * This function removes(deletes) a user from the organisation. 
  * Only a security admin can make this request.
- * @param req Request body - ID of user to remove/reject
- * @param res Http Response
+ * @param {HTTP Request} req Request body - ID of user to remove/reject
+ * @param {HTTP Response} res 
  * @return {Http Response} - Succes or error message
  */
 module.exports.remove = (req, res, next) => {
@@ -330,9 +343,9 @@ module.exports.remove = (req, res, next) => {
 
 /**
  * This function checks if the user is authenticated
- * @param req Request - ID of user
- * @param res Http Response
- * @param next The next function to call
+ * @param {HTTP Request} req Request - ID of user
+ * @param {HTTP Response} res 
+ * @param {Function} next The next function to call
  * @return {Http Response} - Value of Authenticated attribute or an error message
  */
 module.exports.isAuthenticated = (req, res, next) => {
@@ -350,8 +363,8 @@ module.exports.isAuthenticated = (req, res, next) => {
 
 /**
  * This function gets all the tasks(with project) a user is working on.
- * @param req Request - ID of user.
- * @param res Http Response
+ * @param {HTTP Request} req Request - ID of user.
+ * @param {HTTP Response} res 
  * @return {Http Response} - Array with all projects and tasks objects
  */
 module.exports.getTasks = (req, res, next) => {
@@ -438,3 +451,85 @@ module.exports.edit = (req, res) => {
         }
     });
 }
+
+
+/**  receive UserID and UserRole
+ *   check if UserRole exist
+ *  if not, add to the role array
+ */
+
+module.exports.addRole = (req, res) => {  
+    console.log(req.body)
+    UserModel.findOne({ _id: req.body.UserID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        else
+        {
+             if( result.Role.includes(req.body.UserRole)){
+                return res.status(200).json({message : "Role exist"});
+             }
+             else{
+                    UserModel.updateOne({ _id: req.body.UserID},{ $push: { Role: req.body.UserRole } },
+                        (err, result) => {
+                        if (err) 
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else if (!result)
+                            return res.status(404).json({ message: 'User not found' });
+                        else
+                        {
+                            return res.status(200).json({message : "Role updated succssfully"});
+                        }
+                    })
+
+             }
+
+        }
+    })
+
+
+}       
+
+
+
+/**  receive UserID and UserRole
+ *    if role exist, remove it
+ * 
+ * 
+ */
+ 
+
+module.exports.removeRole = (req, res) => {  
+    console.log(req.body)
+    UserModel.findOne({ _id: req.body.UserID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        else
+        {
+             if( result.Role.includes(req.body.UserRole)){
+
+                UserModel.updateOne({ _id: req.body.UserID},{ $pull: { Role: req.body.UserRole } },
+                    (err, result) => {
+                    if (err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else if (!result)
+                        return res.status(404).json({ message: 'User not found' });
+                    else
+                    {
+                        return res.status(200).json({message : "Role removed succssfully"});
+                    }
+                })
+             }
+             else{
+                  return res.status(200).json({message : "Role does not exist"});
+             }
+
+        }
+    })
+
+
+} 
+
