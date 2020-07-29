@@ -32,8 +32,21 @@ module.exports.assignProject = (req, res, next) => {
 }
 
 module.exports.addTeamMember = (req, res, next) => {
+    TeamModel.updateOne({_id : req.body.TeamID },{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
+        if(err) 
+            return res.status(500).send({message: 'Internal Server Error-: ' + err});
+        else if (!result)
+            return res.status(404).send({message: 'Team not found'});
+        else {
+            next();
+            //return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });     
+        }
+    });
+}
 
-    TeamModel.updateOne({_id : (req.body.TeamID)},{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
+module.exports.reomoveTeamMember = (req, res, next) => {
+
+    TeamModel.deleteOne({_id : req.body.TeamID, TeamMember: req.body.UserID}, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)

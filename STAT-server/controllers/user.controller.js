@@ -252,6 +252,18 @@ module.exports.authenticate = (req, res, next) => {
     });
 }
 
+module.exports.removeTeam = (req, res, next) => {
+    UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'User removed'});
+               
+    });
+}
+
 /**
  * This function adds a team to the user. Only a team lead can make this request.
  * @param req Request body - ID of user and Team id
@@ -259,26 +271,13 @@ module.exports.authenticate = (req, res, next) => {
  * @return {Http Response} - Success message with team id or error message
  */
 module.exports.addTeam = (req, res, next) => {
-    UserModel.findOne({_id : req.body.userID}, function(err, result) {
-        if(err) 
+    UserModel.updateOne({_id : (req.body.UserID)},{ $push: { Team: req.body.TeamID } }, function(err, result) {                
+        if(!err)
         {
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(200).json({ teamID: req.body.TeamID, message: 'User successfully added to team' });
         }
-        else if (!result)
-        {
-            return res.status(404).send({message: 'User not found'});
-        }
-        else {
-            result.Team.push(req.TeamID)
-            result.updateOne((err, doc) => {
-                if(!err)
-                {
-                    return res.status(200).json({ teamID: req.TeamID, message: 'User successfully added to team' });
-                }
-                else
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-            });
-        }
+        else
+            return res.status(500).send({message: 'Internal Server Error:= ' + err});
     });
 }
 
