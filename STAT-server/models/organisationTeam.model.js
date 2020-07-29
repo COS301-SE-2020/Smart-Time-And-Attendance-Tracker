@@ -22,6 +22,10 @@
 const mongoose = require("mongoose")
 
 var OrganisationTeamSchema = new mongoose.Schema({
+    TeamName : {
+        type: String,
+        required : "Required"
+    },
     TeamMembers:[
         { 
             _id : {

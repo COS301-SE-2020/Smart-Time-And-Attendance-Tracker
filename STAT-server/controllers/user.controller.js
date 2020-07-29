@@ -253,32 +253,37 @@ module.exports.authenticate = (req, res, next) => {
 }
 
 /**
- * This function adds a team to the user. Only a team lead can make this request.
- * @param {HTTP Request} req Request body - ID of user and Team id
- * @param {HTTP Response} res 
- * @return {Http Response} - Success message with team id or error message
- */
-module.exports.addTeam = (req, res, next) => {
-    UserModel.findOne({_id : req.body.userID}, function(err, result) {
-        if(err) 
-        {
+ * This function adds a team to the user. Only a team lead can make this request
+ * @param {HTTP Request} req Request body - ID of user and Team 
+ * @param {Http Response} res 
+ * @returns {String} Success or error message.
+**/
+module.exports.removeTeam = (req, res) => {
+    UserModel.updateOne({_id : (req.body.UserID)},{ $pull: { Team: req.body.TeamID } }, function(err, result) {                
+        if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
         else if (!result)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'User removed from team'});
+               
+    });
+}
+
+/**
+ * This function adds a team to the user. Only a team lead can make this request.
+ * @param req Request body - ID of user and Team
+ * @param res Http Response
+ * @return {String} - Success message with team id or error message
+ */
+module.exports.addTeam = (req, res) => {
+    UserModel.updateOne({_id : (req.body.UserID)},{ $push: { Team: req.body.TeamID } }, function(err, result) {                
+        if(!err)
         {
-            return res.status(404).send({message: 'User not found'});
+            return res.status(200).json({ teamID: req.body.TeamID, message: 'User successfully added to team' });
         }
-        else {
-            result.Team.push(req.TeamID)
-            result.updateOne((err, doc) => {
-                if(!err)
-                {
-                    return res.status(200).json({ teamID: req.TeamID, message: 'User successfully added to team' });
-                }
-                else
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-            });
-        }
+        else
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
     });
 }
 
