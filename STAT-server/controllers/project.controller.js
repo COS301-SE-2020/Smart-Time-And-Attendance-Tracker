@@ -1,13 +1,13 @@
 
 /**
-  * @file STAT-server/helper/project.controller.js
+  * @file STAT-server/controllers/project.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles all the requests regarding the Project model in our database
   * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server/helper/project.controller.js
+* Filename:             STAT-server/controllers/project.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   

@@ -77,7 +77,7 @@ module.exports.register = (req, res, next) => {
     }
     else{
             UserModel.findOne({ Email: req.body.email }, function(err, cons) { //check email duplicates
-                if (err) return res.status(500).send({message: 'Internal Server Error1: ' + err});
+                if (err) return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                 if (cons){
                     return res.status(409).send({message: 'User already exists'});
@@ -98,7 +98,7 @@ module.exports.register = (req, res, next) => {
                             if (err.code == 11000)
                                 res.status(409).send({message: 'User already exists'});
                             else
-                                return res.status(500).send({message: 'Internal Server Error2: ' + err});
+                                return res.status(500).send({message: 'Internal Server Error: ' + err});
                         }
                     });
     
@@ -206,7 +206,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
             for(var a=0; a<result.length; a++){
                 UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
             }
-            return res.status(200).json({unathenticatedUsers: UnauthenticatedUsers});
+            return res.status(200).json({unauthenticatedUsers: UnauthenticatedUsers});
         }
     });
 }

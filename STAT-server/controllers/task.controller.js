@@ -1,12 +1,12 @@
 /**
-  * @file STAT-server/helper/task.controller.js
+  * @file STAT-server/controllers/task.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles all the requests regarding the Task model in our database
   * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server/helper/task.controller.js
+* Filename:             STAT-server/controllers/task.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
