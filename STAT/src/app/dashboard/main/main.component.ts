@@ -28,7 +28,7 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     });
 
-    this.active = 'today';
+    this.active = 'teams';
 
   }
 

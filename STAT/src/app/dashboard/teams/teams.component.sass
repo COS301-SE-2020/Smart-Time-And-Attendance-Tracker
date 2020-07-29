@@ -80,10 +80,11 @@ span
   margin-left: 0.5em
   border-radius: 0.8em
   color: #7846eb
+  float: right
   font-size: 0.8em
   height: 1.8em
-  float: right
   font-weight: normal !important
+  margin-right: 10%
 
 mat-divider
   border-top-color: rgba(0,0,0,.12)
@@ -135,37 +136,10 @@ ul
       mat-divider
         display: block
 
-.info
-    text-align: center
-    color: #4c585b90
-    padding: 0
-
-    #numTasks
-      b
-        color: #7846eb
-        font-size: 1.4em
-
-    #numPro
-      b
-        color: #ff2885
-        font-size: 1.4em
-
-    #numTeams
-      b
-        color: #366ceb
-        font-size: 1.4em
-
-// PROJECTS *********************************************************************************
-
-.numTasks
+.numMembers
   margin-right: 1em !important
 
-.due-date
-  padding-right: 1em
-  color: #4c585b90
-  font-size: 0.9em
-
-.tasks button, .float-right button, .teams-btn
+.float-right button, .teams-btn
   padding: 0
   color: #4c585b90
   text-transform: uppercase
@@ -188,17 +162,7 @@ ul
   border: 1px dashed #4c585b90
   border-radius: 10em
 
-.tasks
-  .teams-btn
-    font-size: 0.8em
-    padding: 0.3em
-    margin-left: 0
-    margin-right: 0.6em
-
-  li button:nth-child(1)
-    margin-left: 0.8em
-
-.tasks button, .teams-btn
+.teams-btn
   visibility: hidden
 
 .member:hover, li:hover, mat-expansion-panel-header:hover
@@ -217,13 +181,13 @@ ul
   background-color: #4c585b90
   padding: 0.3em
 
-.role-badge
+.profile-pic
   width: 55px
   height: 55px
   margin-left: 0.3em
   margin-right: 1em
-  //border-radius: 5em
-  //box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+  border-radius: 5em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
 
 #team
   margin-right: 0.5em
@@ -263,25 +227,10 @@ ul
   span
     display: inline-block
 
-.start-tracking
-  color: white
-  background-color: #00c8ff !important
-  font-size: 1.4em
-  text-align: center
-  margin-left: 0.3em !important
-  vertical-align: top
-
-  &:focus
-    border: none !important
-    outline: none
-
 .member-role
-  float: right
-  margin-right: 15%
-
-#addPro
-  font-size: 0.7em
-  background-color: #7846eb !important
+  background-color: #00c8ff40 !important
+  color: #00c8ff !important
+  font-size: 0.9em
 
 mat-panel-title
   color: #4c585b !important
@@ -293,31 +242,12 @@ mat-action-row
   .addMember
     background-color: #4c585b !important
 
-mat-accordion .tasks
-  list-style-type: none
-  padding-left: 0
-
-  li
-    margin: 0.8em 0
-
-  .tag
-    margin-right: 0.8em
-
-  .tag-c
-    background-color: #17e88340
-    color: #17e883
-
-  .tag-ip
-    background-color: #00c8ff40
-    color: #00c8ff
-
-  .tag-ns
-    background-color: #ff288540
-    color: #ff2885
-
-// ******************************************************************************************
-
 // MODAL ************************************************************************************
+
+#add-team
+  &:focus
+    border: none !important
+    outline: none
 
 .modal-title
   margin-bottom: 0

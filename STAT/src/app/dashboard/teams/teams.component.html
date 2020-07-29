@@ -1,7 +1,13 @@
 <div class="row">
   <section>
     <h2>Teams
-      <button mat-mini-fab (click)="open(addTeamModal)">
+      <button
+              id="add-team"
+              mat-mini-fab
+              matTooltip="Add a team"
+              matTooltipClass="action-tooltip"
+              matTooltipPosition="right"
+              (click)="open(addTeamModal)">
         <mat-icon inline="true">add</mat-icon>
       </button>
     </h2>
@@ -9,19 +15,19 @@
       <div id="numTeams">
         <b>3</b><br>TEAMS
       </div>
-      <div id="numAssigned">
+      <!--<div id="numAssigned">
         <b>2</b><br>ASSIGNED
       </div>
       <div id="numWaiting">
         <b>1</b><br>WAITING
-      </div>
+      </div>-->
     </div>
     <div class="scroll">
       <mat-accordion>
-        <mat-expansion-panel>
+        <mat-expansion-panel expanded>
           <mat-expansion-panel-header>
-            Team 1
-            <span class="tag numTasks">3 members</span>
+            Team A
+            <span class="tag numMembers">3 members</span>
             <button mat-button class="teams-btn"
                     matTooltip="Edit"
                     matTooltipClass="teams-tooltip"
@@ -42,8 +48,8 @@
               <div>
                 <img
                   matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/3179/3179425.svg"
-                  class="role-badge" alt="Role Badge">
+                  src="../../../assets/profilePicDefault.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Jaymie Farsee
@@ -61,18 +67,18 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>Team leader</i></span>
+                  <span class="member-role tag">Team lead</span>
                 </p>
-                <p>jafar@dis-knee.mouse</p>
+                <p>jafar@yahoo.co.uk</p>
               </div>
               <mat-divider></mat-divider>
             </li>
             <li>
               <div>
                 <img
-                  matTooltip="TroyachaBolton Efron" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/2970/2970785.svg"
-                  class="role-badge" alt="Role Badge">
+                  matTooltip="Zac Efron" matTooltipPosition="below"
+                  src="../../../assets/proPic1.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Zac Efron
@@ -90,9 +96,9 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>UI/UX designer</i></span>
+                  <span class="member-role tag">UI/UX designer</span>
                 </p>
-                <p>zefron@easthigh.wildcats</p>
+                <p>zefron@gmail.com</p>
               </div>
               <mat-divider></mat-divider>
             </li>
@@ -100,8 +106,8 @@
               <div>
                 <img
                   matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/1005/1005141.svg"
-                  class="role-badge" alt="Role Badge">
+                  src="../../../assets/proPic2.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Henry Cavill
@@ -119,9 +125,9 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>Programmer</i></span>
+                  <span class="member-role tag">Programmer</span>
                 </p>
-                <p>henrycav@thebugle.com</p>
+                <p>henrycav@hotmail.co.us</p>
               </div>
               <mat-divider></mat-divider>
             </li>
@@ -135,8 +141,8 @@
         <!-- *************************************************** TEAM ***** -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            Team 1
-            <span class="tag numTasks">3 members</span>
+            Team B
+            <span class="tag numMembers">3 members</span>
             <button mat-button class="teams-btn"
                     matTooltip="Edit"
                     matTooltipClass="teams-tooltip"
@@ -157,8 +163,8 @@
               <div>
                 <img
                   matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/3179/3179425.svg"
-                  class="role-badge" alt="Role Badge">
+                  src="../../../assets/profilePicDefault.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Jaymie Farsee
@@ -176,18 +182,18 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>Team leader</i></span>
+                  <span class="member-role tag">Team lead</span>
                 </p>
-                <p>jafar@dis-knee.mouse</p>
+                <p>jafar@yahoo.co.uk</p>
               </div>
               <mat-divider></mat-divider>
             </li>
             <li>
               <div>
                 <img
-                  matTooltip="TroyachaBolton Efron" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/2970/2970785.svg"
-                  class="role-badge" alt="Role Badge">
+                  matTooltip="Zac Efron" matTooltipPosition="below"
+                  src="../../../assets/proPic1.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Zac Efron
@@ -205,9 +211,9 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>UI/UX designer</i></span>
+                  <span class="member-role tag">UI/UX designer</span>
                 </p>
-                <p>zefron@easthigh.wildcats</p>
+                <p>zefron@gmail.com</p>
               </div>
               <mat-divider></mat-divider>
             </li>
@@ -215,8 +221,8 @@
               <div>
                 <img
                   matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/1005/1005141.svg"
-                  class="role-badge" alt="Role Badge">
+                  src="../../../assets/proPic2.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Henry Cavill
@@ -234,9 +240,9 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>Programmer</i></span>
+                  <span class="member-role tag">Programmer</span>
                 </p>
-                <p>henrycav@thebugle.com</p>
+                <p>henrycav@hotmail.co.us</p>
               </div>
               <mat-divider></mat-divider>
             </li>
@@ -250,8 +256,8 @@
         <!-- *************************************************** TEAM ***** -->
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            Team 1
-            <span class="tag numTasks">3 members</span>
+            Team C
+            <span class="tag numMembers">3 members</span>
             <button mat-button class="teams-btn"
                     matTooltip="Edit"
                     matTooltipClass="teams-tooltip"
@@ -272,8 +278,8 @@
               <div>
                 <img
                   matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/3179/3179425.svg"
-                  class="role-badge" alt="Role Badge">
+                  src="../../../assets/profilePicDefault.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Jaymie Farsee
@@ -291,18 +297,18 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>Team leader</i></span>
+                  <span class="member-role tag">Team lead</span>
                 </p>
-                <p>jafar@dis-knee.mouse</p>
+                <p>jafar@yahoo.co.uk</p>
               </div>
               <mat-divider></mat-divider>
             </li>
             <li>
               <div>
                 <img
-                  matTooltip="TroyachaBolton Efron" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/2970/2970785.svg"
-                  class="role-badge" alt="Role Badge">
+                  matTooltip="Zac Efron" matTooltipPosition="below"
+                  src="../../../assets/proPic1.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Zac Efron
@@ -320,9 +326,9 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>UI/UX designer</i></span>
+                  <span class="member-role tag">UI/UX designer</span>
                 </p>
-                <p>zefron@easthigh.wildcats</p>
+                <p>zefron@gmail.com</p>
               </div>
               <mat-divider></mat-divider>
             </li>
@@ -330,8 +336,8 @@
               <div>
                 <img
                   matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="https://image.flaticon.com/icons/svg/1005/1005141.svg"
-                  class="role-badge" alt="Role Badge">
+                  src="../../../assets/proPic2.jpg"
+                  class="profile-pic" alt="Role Badge">
               </div>
               <div class="col-10">
                 <p>Henry Cavill
@@ -349,9 +355,9 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role">| <i>Programmer</i></span>
+                  <span class="member-role tag">Programmer</span>
                 </p>
-                <p>henrycav@thebugle.com</p>
+                <p>henrycav@hotmail.co.us</p>
               </div>
               <mat-divider></mat-divider>
             </li>
