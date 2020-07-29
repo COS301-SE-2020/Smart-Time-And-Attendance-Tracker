@@ -46,8 +46,12 @@ router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamL
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 //router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
 
-//organisation team
-router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,organisationTeam.createTeam);
+//organisation team    --- ----removed isleader etc for easier testing
+router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,organisationTeam.createTeam);
+router.post("/organisationTeam/addTeamMember",jwtHelper.verifyJWTtoken,organisationTeam.addTeamMember);
+router.delete("/organisationTeam/remove",jwtHelper.verifyJWTtoken,organisationTeam.remove);
+router.post("/organisationTeam/addRole",jwtHelper.verifyJWTtoken,organisationTeam.addRole);
+
 
 //project
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, team.createTeam, team.assignProject);
