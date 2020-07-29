@@ -131,34 +131,13 @@ This is how the branches will be laid out
 
 ```
 master
-  └── testing-CICD
   └── server-master
       └──── server-develop
-        └──── server-feature-API
-        └──── server-feature-authentication
-        └──── server-feature-api-delete-entry
-        └──── server-feature-delete-project-task
-        └──── server-feature-organisation-API
-        └──── server-feature-project-API
-        └──── server-feature-team-API
-        └──── server-feature-task-API
-        └──── server-feature-unauthenticated-users
-        └──── server-feature-updateTimeEntry
-        └──── server-feature-user-API
+        └──── server-feature-
   └── app-master
       └──── app-develop
-        └──── app-feature-PM-testing
-        └──── app-feature-testing
-        └──── app-feature-tracking-functionality
+        └──── app-feature-
   └── plugin-master
       └──── plugin-develop
-        └──── plugin-feature-5-minute-updates
-        └──── plugin-feature-display-tasks
-        └──── plugin-feature-login
-        └──── plugin-feature-popup
-        └──── plugin-feature-startTimer-stopTimer
-        └──── plugin-feature-add-timeEntry
-        └──── plugin-feature-sync-time
-        └──── plugin-feature-update-time
+        └──── plugin-feature-
 ```
-
