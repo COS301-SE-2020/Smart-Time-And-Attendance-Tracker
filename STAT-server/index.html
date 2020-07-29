@@ -1,10 +1,10 @@
-<!--<html>
+<html>
   <body>
     <div id='content'>
       <h1>Events</h1>
       <ul id='events'></ul>
     </div>
-    <a href='#' id='authorize-button' onclick='authorization()'>Login</a>
+    <a href='#' id='authorize-button' onclick='handleAuthClick();'>Login</a>
     <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
 <script src="https://apis.google.com/js/api.js"></script>
     <script>
@@ -13,8 +13,13 @@
 var clientId = '1023984585168-lnp38rrdhgp5vrv4vuteoo9qts1qe819.apps.googleusercontent.com'; //choose web app client Id, redirect URI and Javascript origin set to http://localhost
 var apiKey = 'AIzaSyBtNoZB-sJmUC1QM15P2uzAQV6PQ9Xah1w'; 
 var scopes = 'https://www.googleapis.com/auth/calendar';
-/*
 
+
+       /* var clientId = 'YOUR_CLIENT_ID';
+var apiKey = 'YOUR_API_KEY';
+var scopes = 'https://www.googleapis.com/auth/calendar';*/
+
+/*
       function handleClientLoad() {
   gapi.client.setApiKey(apiKey);
   window.setTimeout(checkAuth,5);
@@ -91,88 +96,6 @@ function authorization() {
  * Driver for sample application.
  */
 window.onload = (authorization);
-    </script>
-    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-
-    <div id="jsonData"></div>
-  </body>
-</html>-->
-
-<html>
-  <body>
-    <div id='content'>
-      <h1>Events</h1>
-      <ul id='events'></ul>
-    </div>
-    <a href='#' id='authorize-button' onclick='handleAuthClick();'>Login</a>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
-<script src="https://apis.google.com/js/api.js"></script>
-    <script>
-      
-        // FOR SECURITY PURPOSE, THESE DETAILS ARE NOT FROM TEAM VISIONARY EMAIL
-var clientId = '1023984585168-lnp38rrdhgp5vrv4vuteoo9qts1qe819.apps.googleusercontent.com'; //choose web app client Id, redirect URI and Javascript origin set to http://localhost
-var apiKey = 'AIzaSyBtNoZB-sJmUC1QM15P2uzAQV6PQ9Xah1w'; 
-var scopes = 'https://www.googleapis.com/auth/calendar';
-
-
-       /* var clientId = 'YOUR_CLIENT_ID';
-var apiKey = 'YOUR_API_KEY';
-var scopes = 'https://www.googleapis.com/auth/calendar';*/
-
-
-      function handleClientLoad() {
-  gapi.client.setApiKey(apiKey);
-  window.setTimeout(checkAuth,5);
-  checkAuth();
-}
-
-function checkAuth() {
-  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true},
-      handleAuthResult);
-}
-
-function handleAuthResult(authResult) {
-  var authorizeButton = document.getElementById('authorize-button');
-  if (authResult) { 
-    console.log("authResult");
-    console.log(authResult);
-    console.log("-------------");
-    authorizeButton.style.visibility = 'hidden';
-    makeApiCall();
-  } else {
-    authorizeButton.style.visibility = '';
-    authorizeButton.onclick = handleAuthClick;
-   }
-}
-
-function handleAuthClick(event) {
-  gapi.auth.authorize(
-      {client_id: clientId, scope: scopes, immediate: false},
-      handleAuthResult);
-  return false;
-}
-
-
-      function makeApiCall() {
-  gapi.client.load('calendar', 'v3', function() {
-    var request = gapi.client.calendar.events.list({
-      'calendarId': 'primary'
-    });
-          
-    request.execute(function(resp) {
-      ///document.getElementById("jsonData").innerHTML= resp;
-      console.log(resp);
-      for (var i = 0; i < resp.items.length; i++) {
-        var li = document.createElement('li');
-        li.appendChild(document.createTextNode(resp.items[i].summary));
-        li.appendChild(document.createTextNode(" FROM " +  moment(resp.items[i].start.dateTime).format("L") + ' ' + moment(resp.items[i].start.dateTime).  format("LT") ));
-        li.appendChild(document.createTextNode(" TO " + moment(resp.items[i].end.dateTime).format("LT")  ));
-       
-        document.getElementById('events').appendChild(li);
-      }
-    });
-  });
-}
     </script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 

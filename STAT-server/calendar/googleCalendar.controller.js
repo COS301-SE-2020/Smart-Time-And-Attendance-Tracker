@@ -28,8 +28,8 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = '../config/token.json';
-const CREDENTIAL_PATH = '../config/credentials.json';
+const TOKEN_PATH = './config/token.json';
+const CREDENTIAL_PATH = './config/credentials.json';
 
 /**
    * Create an OAuth2 client with the given credentials, and then execute the
@@ -58,6 +58,7 @@ const CREDENTIAL_PATH = '../config/credentials.json';
  */
 function getAccessToken(oAuth2Client, res) {
     const authUrl = oAuth2Client.generateAuthUrl({
+      prompt: 'select_account', // access type and approval prompt will force a new refresh token to be made each time signs in
       access_type: 'offline',
       scope: SCOPES,
     });
@@ -114,6 +115,7 @@ module.exports.getEvents = (req, res) => {
     fs.readFile(CREDENTIAL_PATH, (err, content) => {
       if (err) 
       {
+        console.log('Error loading client secret file'+  err);
         res.status(400).json({message: 'Error loading client secret file', error: err});
         return;
       }
@@ -128,28 +130,34 @@ module.exports.getEvents = (req, res) => {
  * @param {HTTP-Response} response 
  */
 module.exports.authenticate = (req, response) => {
-  var code = (req.body.code);
-  fs.readFile('credentials.json', (err, content) => {
+  console.log("param");
+  const code = (req.body.code);
+  fs.readFile(CREDENTIAL_PATH, (err, content) => {
     if (err) {
+      console.log('Error loading client secret file. ');
       response.status(400).json({message: 'Error loading client secret file. ' + err});
       return;
     }
     // Authorize a client with credentials, then call the Google Calendar API.
     const credentials = JSON.parse(content);
-    const {client_secret, client_id, redirect_uris} = credentials.installed;
-    const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+    console.log(credentials);
+    //const {client_secret, client_id, redirect_uris} = credentials.installed;
+    const oAuth2Client = new google.auth.OAuth2(credentials.installed.client_id, credentials.installed.client_secret, credentials.installed.redirect_uris[0]);
 
     oAuth2Client.getToken(code, (err, token) => {
       if (err) 
       {
+        console.log('Error retrieving access token  ' + err);
         response.status(400).json({message: 'Error retrieving access token', error: err});
         return;
       }
+      console.log( token);
       oAuth2Client.setCredentials(token);
       // Store the token to disk for later program executions
       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
         if (err) 
         {
+          cosnole.log('Error');
           response.status(400).json({message: 'Error', error: err});
           return;
         }

@@ -7,7 +7,7 @@ const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
-const googleCalendar = require('../calender/googleCalendar.controller');
+const googleCalendar = require('../calendar/googleCalendar.controller');
 
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');

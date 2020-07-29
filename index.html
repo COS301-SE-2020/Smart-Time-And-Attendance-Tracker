@@ -22,11 +22,13 @@
 
                     if(response.url)
                     {
+                        document.getElementById("auth").target = "_top";
                         document.getElementById("auth").href = response.url;
                         document.getElementById("auth").innerHTML = response.message;
                         document.getElementById("code").style.display = "block";
                         document.getElementsByTagName("button")[0].style.display = "block";
                         document.getElementsByTagName("button")[0].onclick = function(){
+                            alert(document.getElementById("code").value);
                             var xhttp2 = new XMLHttpRequest();
                             var data = {
                                 code: document.getElementById("code").value,
@@ -61,13 +63,17 @@
         }
 
         function displayEvents(response) {
+            alert("display events");
             document.getElementById("Events").innerHTML = "";
-            for(var i=0; i<response.Events.length; i++)
+            if(response.Events)
             {
-                var text = document.createTextNode(response.Events[i].Event + " => " + response.Events[i].Time);
-                var Node = document.createElement("h4");
-                Node.appendChild(text);
-                document.getElementById("Events").appendChild(Node);
+                for(var i=0; i<response.Events; i++)
+                {
+                    var text = document.createTextNode(response.Events[i].Event + " => " + response.Events[i].Time);
+                    var Node = document.createElement("h4");
+                    Node.appendChild(text);
+                    document.getElementById("Events").appendChild(Node);
+                }
             }
         }
     </script>
