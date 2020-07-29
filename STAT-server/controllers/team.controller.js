@@ -31,6 +31,12 @@ module.exports.assignProject = (req, res, next) => {
     });
 }
 
+/**
+ * 
+ * @param {HTTP Request} req 
+ * @param {Http Response} res 
+ * @param {Function} next The next function to be called.
+ */
 module.exports.addTeamMember = (req, res, next) => {
     TeamModel.updateOne({_id : req.body.TeamID },{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
         if(err) 
@@ -43,10 +49,16 @@ module.exports.addTeamMember = (req, res, next) => {
         }
     });
 }
+/**
+ * 
+ * @param {HTTP Request} req 
+ * @param {Http Response} res 
+ * @param {Function} next The next function to be called.
+ */
+module.exports.removeTeamMember = (req, res, next) => {
 
-module.exports.reomoveTeamMember = (req, res, next) => {
-
-    TeamModel.deleteOne({_id : req.body.TeamID, TeamMember: req.body.UserID}, function(err, result) {
+    //TeamModel.deleteOne({_id : req.body.TeamID, TeamMember: req.body.UserID}, function(err, result) {
+        TeamModel.updateOne({_id : req.body.TeamID },{ $pull: { TeamMembers: { _id: req.body.UserID} } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)

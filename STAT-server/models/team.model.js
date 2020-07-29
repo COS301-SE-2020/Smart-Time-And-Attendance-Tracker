@@ -36,10 +36,12 @@ var TeamSchema = new mongoose.Schema({
         { 
             _id : {
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: 'User'
+                ref: 'User',
+                unique: true
             },
             Role: {
-                type: String
+                type: String,
+                required : "Role of user in team is required"
             }
         }
     ],

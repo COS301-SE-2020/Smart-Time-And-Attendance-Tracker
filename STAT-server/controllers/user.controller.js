@@ -252,14 +252,21 @@ module.exports.authenticate = (req, res, next) => {
     });
 }
 
-module.exports.removeTeam = (req, res, next) => {
-    UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
+/**
+ * 
+ * @param {HTTP Request} req Request body - ID of user and Team id
+ * @param {Http Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.removeTeam = (req, res) => {
+//    UserModel.deleteOne({ _id: req.body.userID, Team: req.body.TeamID},(err, result) => {
+    UserModel.updateOne({_id : (req.body.UserID)},{ $pull: { Team: req.body.TeamID } }, function(err, result) {                
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' }); 
         else
-            return res.status(200).json({message: 'User removed'});
+            return res.status(200).json({message: 'User removed from team'});
                
     });
 }
@@ -268,9 +275,9 @@ module.exports.removeTeam = (req, res, next) => {
  * This function adds a team to the user. Only a team lead can make this request.
  * @param req Request body - ID of user and Team id
  * @param res Http Response
- * @return {Http Response} - Success message with team id or error message
+ * @return {String} - Success message with team id or error message
  */
-module.exports.addTeam = (req, res, next) => {
+module.exports.addTeam = (req, res) => {
     UserModel.updateOne({_id : (req.body.UserID)},{ $push: { Team: req.body.TeamID } }, function(err, result) {                
         if(!err)
         {

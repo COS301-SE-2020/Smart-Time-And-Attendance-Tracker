@@ -38,8 +38,9 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 
 //team
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
+router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.removeTeamMember, user.removeTeam);
 router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
-router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
+//router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
 
 //organisation team
 router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,organisationTeam.createTeam);
