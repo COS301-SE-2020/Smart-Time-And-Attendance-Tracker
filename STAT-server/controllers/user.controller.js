@@ -254,12 +254,11 @@ module.exports.authenticate = (req, res, next) => {
 
 /**
  * 
- * @param {HTTP Request} req Request body - ID of user and Team id
+ * @param {HTTP Request} req Request body - ID of user and Team 
  * @param {Http Response} res 
  * @returns {String} Success or error message.
  */
 module.exports.removeTeam = (req, res) => {
-//    UserModel.deleteOne({ _id: req.body.userID, Team: req.body.TeamID},(err, result) => {
     UserModel.updateOne({_id : (req.body.UserID)},{ $pull: { Team: req.body.TeamID } }, function(err, result) {                
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -273,7 +272,7 @@ module.exports.removeTeam = (req, res) => {
 
 /**
  * This function adds a team to the user. Only a team lead can make this request.
- * @param req Request body - ID of user and Team id
+ * @param req Request body - ID of user and Team
  * @param res Http Response
  * @return {String} - Success message with team id or error message
  */
@@ -284,7 +283,7 @@ module.exports.addTeam = (req, res) => {
             return res.status(200).json({ teamID: req.body.TeamID, message: 'User successfully added to team' });
         }
         else
-            return res.status(500).send({message: 'Internal Server Error:= ' + err});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
     });
 }
 

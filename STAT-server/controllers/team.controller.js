@@ -33,14 +33,14 @@ module.exports.assignProject = (req, res, next) => {
 
 /**
  * 
- * @param {HTTP Request} req 
+ * @param {HTTP Request} req Request body - ID of user and Team, and role of user within the team.
  * @param {Http Response} res 
  * @param {Function} next The next function to be called.
  */
 module.exports.addTeamMember = (req, res, next) => {
     TeamModel.updateOne({_id : req.body.TeamID },{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
         if(err) 
-            return res.status(500).send({message: 'Internal Server Error-: ' + err});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).send({message: 'Team not found'});
         else {
@@ -51,22 +51,18 @@ module.exports.addTeamMember = (req, res, next) => {
 }
 /**
  * 
- * @param {HTTP Request} req 
+ * @param {HTTP Request} req Request body - ID of user and Team.
  * @param {Http Response} res 
  * @param {Function} next The next function to be called.
  */
 module.exports.removeTeamMember = (req, res, next) => {
-
-    //TeamModel.deleteOne({_id : req.body.TeamID, TeamMember: req.body.UserID}, function(err, result) {
         TeamModel.updateOne({_id : req.body.TeamID },{ $pull: { TeamMembers: { _id: req.body.UserID} } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).send({message: 'Team not found'});
         else {
-            req.TeamID = result._id;
             next();
-            //return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });     
         }
     });
 }
