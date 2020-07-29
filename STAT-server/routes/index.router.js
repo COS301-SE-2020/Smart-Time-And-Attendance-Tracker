@@ -25,6 +25,10 @@ router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdm
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 
+router.post("/user/addRole",jwtHelper.verifyJWTtoken,user.addRole);
+router.post("/user/removeRole",jwtHelper.verifyJWTtoken,user.removeRole);
+
+
 //role
 router.get("/role/getRole", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, role.getRole);
 router.post("/role/addRole",jwtHelper.verifyJWTtoken, userHelper.isSecurityAdmin, role.add);

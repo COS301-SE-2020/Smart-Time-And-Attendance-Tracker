@@ -381,3 +381,83 @@ module.exports.getTasks = (req, res, next) => {
     });
 }
 
+
+/**  receive UserID and UserRole
+ *   check if UserRole exist
+ *  if not, add to the role array
+ */
+
+module.exports.addRole = (req, res) => {  
+    console.log(req.body)
+    UserModel.findOne({ _id: req.body.UserID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        else
+        {
+             if( result.Role.includes(req.body.UserRole)){
+                return res.status(200).json({message : "Role exist"});
+             }
+             else{
+                    UserModel.updateOne({ _id: req.body.UserID},{ $push: { Role: req.body.UserRole } },
+                        (err, result) => {
+                        if (err) 
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else if (!result)
+                            return res.status(404).json({ message: 'User not found' });
+                        else
+                        {
+                            return res.status(200).json({message : "Role updated succssfully"});
+                        }
+                    })
+
+             }
+
+        }
+    })
+
+
+}       
+
+
+
+/**  receive UserID and UserRole
+ *    if role exist, remove it
+ * 
+ * 
+ */
+ 
+
+module.exports.removeRole = (req, res) => {  
+    console.log(req.body)
+    UserModel.findOne({ _id: req.body.UserID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        else
+        {
+             if( result.Role.includes(req.body.UserRole)){
+
+                UserModel.updateOne({ _id: req.body.UserID},{ $pull: { Role: req.body.UserRole } },
+                    (err, result) => {
+                    if (err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else if (!result)
+                        return res.status(404).json({ message: 'User not found' });
+                    else
+                    {
+                        return res.status(200).json({message : "Role removed succssfully"});
+                    }
+                })
+             }
+             else{
+                  return res.status(200).json({message : "Role does not exist"});
+             }
+
+        }
+    })
+
+
+} 
