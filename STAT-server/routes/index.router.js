@@ -1,3 +1,26 @@
+/**
+  * @file STAT-server/routes/index.router.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles all API requests routes.
+  * @date 14 June 2020
+ */
+
+/**
+* Filename:             STAT-server/routes/index.router.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   14 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:         This file handles all API requests routes.
+*
+*/
+
+
 const express = require('express');
 const router = express.Router();
 
@@ -24,6 +47,7 @@ router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.i
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
+router.post("/user/editUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.edit);
 
 router.post("/user/addRole",jwtHelper.verifyJWTtoken,user.addRole);
 router.post("/user/removeRole",jwtHelper.verifyJWTtoken,user.removeRole);
@@ -42,9 +66,11 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 
 //team
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
-router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.removeTeamMember, user.removeTeam);
-router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
+
+//router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
 //router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
+router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.removeTeamMember, user.removeTeam);
+
 
 //organisation team    --- ----removed isleader etc for easier testing
 router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,organisationTeam.createTeam);

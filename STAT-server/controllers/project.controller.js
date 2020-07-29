@@ -1,24 +1,27 @@
+
+
 /**
-  * @file STAT-server\controllers\project.controller.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
-  * @fileoverview This file handles all the requests regarding Project model in our database
-  * @date 19 June 2020
+  * @file STAT-server/controllers/project.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles all the requests regarding the Project model in our database
+  * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server\controllers\project.controller.js
+* Filename:             STAT-server/controllers/project.controller.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
-* File Creation Date:   19 June 2020
+* File Creation Date:   11 June 2020
 *
 * Development Group:    Visionary
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:          This file handles all the requests regarding Project model in our database
+* Description:          This file handles all the requests regarding the Project model in our database
 *
 */ 
+
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 const TaskHelper = require("../helpers/task.helper");
@@ -137,6 +140,8 @@ module.exports.add = (req, res, next) => {
  * @returns {String} Task ID or error message.
  */
 module.exports.addTask = (req, res) => {
+    if(!req.body.projectID)
+        return res.status(400).send({message: 'No project ID provided'});
 
         ProjectModel.updateOne({_id : req.body.projectID}, { $push: { Tasks: req.TaskID } },function(err, result) {
         if(err) 

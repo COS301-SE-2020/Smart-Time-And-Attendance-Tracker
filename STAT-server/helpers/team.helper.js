@@ -1,6 +1,6 @@
 /**
   * @file STAT-server/helper/team.helper.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles some of the requests regarding Team model in our database. 
   * This is a helper file to handle Team related requests.
   * @date 15 July 2020
@@ -9,7 +9,7 @@
 /**
 * Filename:             STAT-server/helper/team.helper.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
 * File Creation Date:   15 July 2020
 *
@@ -78,4 +78,18 @@ module.exports.getTasksOfTeam = (id, done)=>{
            
         
     });
+}
+
+/**
+  * @param {*} userID User ID to be removed.
+  * @param {*} ids Array of Team IDs.
+  * @param {*} done 
+  */
+ module.exports.removeUser = (userID, ids, done)=>{
+    TeamModel.updateMany({_id: {$in: ids}},{ $pull: { TeamMembers: {_id:userID}}},(err,val)=>{     
+        if(err) 
+            done(err);
+        else
+            done(null);
+    });   
 }

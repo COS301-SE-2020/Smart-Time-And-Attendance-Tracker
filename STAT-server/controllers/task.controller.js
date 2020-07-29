@@ -1,24 +1,25 @@
 /**
-  * @file STAT-server\controllers\task.controller.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
-  * @fileoverview This file handles all the requests regarding Task model in our database
-  * @date 19 June 2020
- */
+  * @file STAT-server/controllers/task.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles all the requests regarding the Task model in our database
+  * @date 11 June 2020
+ **/
 
 /**
-* Filename:             STAT-server\controllers\task.controller.js
+* Filename:             STAT-server/controllers/task.controller.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
-* File Creation Date:   19 June 2020
+* File Creation Date:   11 June 2020
 *
 * Development Group:    Visionary
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:          This file handles all the requests regarding Task model in our database
+* Description:          This file handles all the requests regarding the Task model in our database
 *
 */ 
+
 const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
 

@@ -1,29 +1,23 @@
-/*
+/**
+  * @file STAT-server/index.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file initializes the middleware and starts the server.
+  * @date 14 June 2020
+ */
 
-const path = require("path");
-const expressHandlerbars = require("express-handlebars");
-
-application.use(bodyParser.urlencoded({
-    extended : true
-}));
-
-const OrganisationController = require("./controller/organisation");
-application.use("/organisation", OrganisationController);
-
-const UserController = require("./controller/user");
-application.use("/user", UserController);
-
-const ProjectController = require("./controller/project");
-application.use("/project", ProjectController);
-
-const TaskController = require("./controller/task");
-application.use("/task", TaskController);
-
-const TeamController = require("./controller/team");
-application.use("/team", TeamController);
-
-const RoleController = require("./controller/role");
-application.use("/team", RoleController);
+/**
+* Filename:             STAT-server/index.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   14 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file initializes the middleware and starts the server.
+*
 */
 require('./config/config');
 require('./models/db');

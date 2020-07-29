@@ -1,3 +1,25 @@
+/**
+  * @file STAT-server/helper/userTimeEntry.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles all the requests regarding the UserTimeEntry and TimeEntry models in our database
+  * @date 11 June 2020
+ */
+
+/**
+* Filename:             STAT-server/helper/userTimeEntry.controller.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   11 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles all the requests regarding the UserTimeEntry and TimeEntry models in our database
+*
+*/ 
+
 const mongoose = require("mongoose");
 const TaskHelper = require("../helpers/task.helper");
 const ProjectHelper = require("../helpers/project.helper");
@@ -80,62 +102,56 @@ module.exports.addTimeEntry = (req, res) => {
 //Request body - Has values to update
 //Response - Success or error message       
 module.exports.updateTimeEntry = (req, res) => {  
-    let error;
-    let resultReturn = true;
-    if(req.body.TaskID)
-        {
-            TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{TaskID: req.body.TaskID},(err, result) => {
-                if (err) 
-                    error= err;
-                else if (!result)
-                    resultReturn = false;
-                        
-            });
-        }
-        if(req.body.StartTime)
-        {
-            TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{StartTime: req.body.StartTime},(err, result) => {
-                if (err) 
-                    error= err;
-                else if (!result)
-                    resultReturn = false;                       
-            });
-        }
-        if(req.body.EndTime)
-        {
-            TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{EndTime: req.body.EndTime},(err, result) => {
-                if (err) 
-                    error= err;
-                else if (!result)
-                    resultReturn = false;              
-            });
-        }
-        //update monetary value too
-        if(req.body.ActiveTime)
-        {
-            TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{ActiveTime: req.body.ActiveTime},(err, result) => {
-                if (err) 
-                    error= err;
-                else if (!result)
-                    resultReturn = false;              
-            });
-        }
-
-        if(req.body.Date)
-        {
-            TimeEntryModel.updateOne({ _id: req.body.TimeEntryID},{Date: req.body.Date},(err, result) => {
-                if (err) 
-                    error= err;
-                else if (!result)
-                    resultReturn = false;      
-            });
-        }
-        if(error)
-            return res.status(500).send({message: 'Internal Server Error: ' + error});
-        if(!resultReturn)
-            return res.status(404).json({ message: 'Time entry not found' }); 
+    TimeEntryModel.findOne({ _id: req.body.timeEntryID},(err, result) => {
+        if(err)
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if(!result)
+            return res.status(404).json({message: 'Time entry not found'});
         else
-            return res.status(200).json({message: 'Time entry updated'});
+        {
+            if(req.body.hasOwnProperty('taskName'))
+                 result.TaskName = req.body.taskName;
+
+            if(req.body.hasOwnProperty('taskID'))
+                result.TaskID =  req.body.taskID;
+
+            if(req.body.hasOwnProperty('projectName'))
+                result.ProjectName =  req.body.projectName;
+
+            if(req.body.hasOwnProperty('projectID'))
+                result.ProjectID =  req.body.projectID;
+
+            if(req.body.hasOwnProperty('startTime'))
+                result.StartTime =  req.body.startTime;
+
+            if(req.body.hasOwnProperty('endTime'))
+                result.EndTime =  req.body.endTime;
+                
+            if(req.body.hasOwnProperty('activeTime'))
+                result.ActiveTime =  req.body.activeTime;
+
+            if(req.body.hasOwnProperty('date'))
+                result.Date =  req.body.date;
+
+            if(req.body.hasOwnProperty('description'))
+                result.Description =  req.body.description;
+                
+            if(req.body.hasOwnProperty('monetaryValue'))
+                result.MonetaryValue =  req.body.monetaryValue;
+        
+                TimeEntryModel.updateOne({ _id: req.body.timeEntryID},{TaskName: result.TaskName, TaskID:result.TaskID,
+                    ProjectName : result.ProjectName, ProjectID: result.ProjectID, StartTime: result.StartTime,EndTime: result.EndTime,
+                    ActiveTime: result.ActiveTime, Date: result.Date, Description: result.Description, MonetaryValue: result.MonetaryValue },(err, result) => {
+                    if (err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else
+                        return res.status(200).json({message: 'Time entry successfully updated'});
+                
+                });
+           
+        }
+    });
+
 }
 
 
@@ -198,40 +214,24 @@ module.exports.getDailyTimeEntries = (req, res) => {
    then deletes the item
 */
 module.exports.deleteTimeEntry = (req, res) => {  
-    UserTimeEntryModel.findOne({  UserID : req.query.ID},(err, result) => {
+    if(!req.query.timeEntryID)
+        return res.status(400).send({message: 'No time entry ID provided'}); 
+    UserTimeEntryModel.updateOne({  UserID : req.ID},{ $pull: { 'TimeEntries':  req.query.timeEntryID}},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'No time entries for the given user were found' }); 
         else
-        {          
-            console.log(req.query.timeEntry);
-            console.log(result.TimeEntries);
-            /*timeEntryModel.findOne({_id:{$type:req.query.timeEntry}},(err,val)=>
-            {
-                console.log(val)
-                if(err)
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-                else if (!val) 
+        {        
+            TimeEntryModel.deleteOne({_id : req.query.timeEntryID},(errs,vals) =>{
+                if(errs)
+                    return res.status(500).send({message: 'Internal Server Error: ' + errs});
+                else if (!vals) 
                     return res.status(404).json({ message: 'Time entry not found' });
                 else 
-                { */
-                    timeEntryModel.deleteOne({"_id":req.query.timeEntry},(errs,vals) =>{
-                        //console.log(errs);
-                        //return res.status(200).json({ message: 'Time entry deleted' });
-                        if(errs)
-                            return res.status(500).send({message: 'Internal Server Error: ' + errs});
-                        else if (!vals) 
-                            return res.status(404).json({ message: 'Time entry not found' });
-                        else 
-                            return res.status(200).json({ message: 'Time entry deleted' });
-        
-
-                        
-                    })
-                   
-               // }
-           // });    
+                    return res.status(200).json({ message: 'Time entry deleted' });
+                
+            });
         }
     });
 }
