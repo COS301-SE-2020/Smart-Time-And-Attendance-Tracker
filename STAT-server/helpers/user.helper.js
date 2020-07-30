@@ -163,6 +163,8 @@ module.exports.deleteProject = (ids, projectID, done) => {
  * @param {function} done - return to this funtion when done
  */
 module.exports.addProject = (ids, projectID, done) => {
+    console.log(ids.length);
+    console.log(projectID);
     if(ids.length == 1)
     {
         UserModel.updateOne({_id: ids[0]},{ $addToSet: { Projects: projectID}},(err, result) => {

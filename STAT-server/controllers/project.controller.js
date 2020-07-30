@@ -268,16 +268,16 @@ module.exports.addTeam = (req, res) => {
                 else 
                 {
                     ids= [];
-                    console.log(val.length);
                     for(i=0; i<val.length; i++)
                     {
+                        console.log(val[i]);
                         if(!result.TeamMembers.includes(val[i]))
                         {
                             result.TeamMembers.push(val[i]);
                             ids.push(val[i._id]);
                         }
                     }
-                    UserHelper.addProject(ids, req.body.projectID), (err, result)=>
+                    UserHelper.addProject(ids, req.body.projectID, (err, val)=>
                     {
                         if(err) 
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -293,7 +293,7 @@ module.exports.addTeam = (req, res) => {
                                 
                             });
                         }
-                    }
+                    });
                 }
             });
         }
