@@ -33,7 +33,7 @@ const UserHelper =  require('../helpers/user.helper');
  * @param {HTTP Response} res 
  * @returns {JSON Array} success or error message, ProjectID and TeamID.
  */
-module.exports.assignProject = (req, res) => {
+/*module.exports.assignProject = (req, res) => {
     TeamModel.updateOne({_id : req.teamID},{ProjectID:req.ProjectID }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -56,8 +56,23 @@ module.exports.assignProject = (req, res) => {
         });
         }  
     });
+}*/
+/**
+ * This function edits a team.
+ * @param {HTTP Request} req HTTP Request - Project ID.
+ * @param {HTTP Response} res 
+ * @return {String} Error or success message.
+ */
+module.exports.editTeam = (req, res, next) => {
+    TeamModel.updateOne({_id : (req.body.teamID)},{ TeamName: req.body.teamName }, function(err, result) {
+        if(err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).send({message: 'Team not found'});
+        else 
+            return res.status(200).json({ teamID: result._id, message: 'Team name successfully edited' });   
+    });
 }
-
 
 
 /**
