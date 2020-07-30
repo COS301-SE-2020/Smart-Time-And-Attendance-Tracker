@@ -55,7 +55,7 @@ module.exports.deleteTeam = (id, done) => {
   * @param {*} done 
   * @returns {String} Project ID.
   */
-module.exports.getTasksOfTeam = (id, done)=>{
+/*module.exports.getTasksOfTeam = (id, done)=>{
     TeamModel.findOne({ _id: id},(err, result) => {
         if(err) 
             done(err);
@@ -78,14 +78,14 @@ module.exports.getTasksOfTeam = (id, done)=>{
            
         
     });
-}
+}*/
 
 /**
   * @param {*} userID User ID to be removed.
   * @param {*} ids Array of Team IDs.
   * @param {*} done 
   */
- module.exports.removeUser = (userID, ids, done)=>{
+ module.exports.removeUser = (userID, done)=>{
     TeamModel.updateMany({_id: {$in: ids}},{ $pull: { TeamMembers: {_id:userID}}},(err,val)=>{     
         if(err) 
             done(err);

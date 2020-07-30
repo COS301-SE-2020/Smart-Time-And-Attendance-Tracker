@@ -26,6 +26,7 @@ const UserModel = mongoose.model("User");
 
 const RoleHelper =require('../helpers/role.helper');
 const TeamHelper =require('../helpers/team.helper');
+const ProjectHelper =require('../helpers/project.helper');
 
 //const request = require('request');
 /**
@@ -283,14 +284,13 @@ module.exports.removeProject = (req, res) => {
  * @return {Http Response} - Success message with project ID or error message
  */
 module.exports.addProject = (req, res, next) => {
-
-    UserModel.updateOne({_id : req.body.userID},{ $push: { Projects: req.body.projectID } }, (err, result) =>{   
+    UserModel.updateOne({_id : req.body.userID},{ $push: { Projects: req.ProjectID} }, (err, result) =>{   
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' }); 
         else;
-            return res.status(200).json({ projectID: req.body.projectID, message: 'User successfully added to project' });
+            return res.status(200).json({ projectID: req.ProjectID, message: 'User successfully added to project' });
     });
 }
 
@@ -319,11 +319,19 @@ module.exports.remove = (req, res, next) => {
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
                 else
                 {
-                    UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
-                        if (err) 
+                    TeamHelper.removeUser(req.body.userID,(err)=>
+                    {
+                        if(err)
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                         else
-                            return res.status(200).json({message: 'User removed'});
+                        {
+                            UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
+                                if (err) 
+                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                else
+                                    return res.status(200).json({message: 'User removed'});
+                            });
+                        }
                     });
 
                 }
@@ -360,7 +368,6 @@ module.exports.isAuthenticated = (req, res, next) => {
  * @return {Http Response} - Array with all projects and tasks objects
  */
 module.exports.getTasks = (req, res, next) => {
-    let error = false;
     let count = 0;
     let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},(err, result) => {
@@ -374,12 +381,30 @@ module.exports.getTasks = (req, res, next) => {
             if(result.Projects.length == 0)
                 return res.status(404).json({ message: 'User is not assigned to any projects' });
             for(i=0; i<result.Projects.length; i++)
-            {       
-                projectsOfUser.push(result.Projects[a]);
-                if(i == result.Projects.length)
-                {
-                    return res.status(200).json({projects : projectsOfUser});
-                }
+            {      
+                ProjectHelper.getTasks(result.Projects[i],(err,val)=> {
+                    count = count +1;
+                    if(err)
+                        done(err);
+                    else if(val == false) 
+                    {
+                        if(count == result.Projects.length)
+                        {
+                            return res.status(200).json({projects : projectsOfUser});
+                        };
+                    }
+                    else
+                    {
+                        projectsOfUser.push(val);
+                        if(count == result.Projects.length)
+                        {
+                            return res.status(200).json({projects : projectsOfUser});
+                        };
+                    
+                    }
+                
+                }); 
+                
             
             }
             

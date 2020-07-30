@@ -6,7 +6,7 @@
  */
 
 /**
-* Filename:             STAT-server/models/Project.model.js
+* Filename:             STAT-server/models/project.model.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
 *   
@@ -55,8 +55,7 @@ var ProjectSchema = new mongoose.Schema({
         { 
             _id : {
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: 'User',
-                unique: true
+                ref: 'User'
             },
             Role: {
                 type: String

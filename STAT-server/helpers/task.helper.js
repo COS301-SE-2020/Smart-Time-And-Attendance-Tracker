@@ -97,13 +97,25 @@ module.exports.getTaskName = (id, done)=>{
  * @returns {String} error message else void
  */
 module.exports.deleteTask= (ids, done) => {      
-       
-    TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
-        if(err) 
-            done(err);
-        else
-            done(null);
-    });            
+    if(ids.lentgh == 1)
+    {
+        TaskModel.deleteOne({_id: ids[0]},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        });            
+    
+    }
+    else
+    {
+        TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        }); 
+    }           
 
 }
 

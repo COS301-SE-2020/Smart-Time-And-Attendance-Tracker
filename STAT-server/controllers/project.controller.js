@@ -99,6 +99,7 @@ module.exports.update = (req, res) => {
  * @param {Function} next The next function to be called.
  */
 module.exports.add = (req, res, next) => {
+
     var project = new ProjectModel();
     project.ProjectName = req.body.projectName;
     project.TimeSpent = 0;
@@ -107,8 +108,7 @@ module.exports.add = (req, res, next) => {
     project.Completed = false;
     project.HourlyRate = req.body.hourlyRate;
     project.TeamLeader = req.ID;
-    project.TeamMembers.push({ _id : team.TeamLeader, Role: "Team Leader"});
-
+    project.TeamMembers.push({ _id : project.TeamLeader, Role: "Team Leader"});
     project.save((err, doc) => {
         if(!err){
             req.ProjectID = doc._id;
@@ -117,7 +117,7 @@ module.exports.add = (req, res, next) => {
             //return res.status(200).json({ projectID : doc._id, message: 'Project Created' });
         }
         else{
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
+            return res.status(500).send({message: 'Internal Server Error: 666' + err});
         }
     })
 }
@@ -173,9 +173,9 @@ module.exports.deleteProject = (req, res) => {
                     ids= [];
                     for(a=0; a<val.TeamMembers.length; a++)
                     {
-                        ids.push(result.TeamMembers[a]._id);
+                        ids.push(val.TeamMembers[a]._id);
                     }
-                    UserHelper.deleteProject(ids,val.Team, (err,result)=>
+                    UserHelper.deleteProject(ids,req.query.projectID, (err,result)=>
                     {
                         if(err)
                             return res.status(500).send({message: 'Internal Server Error: ' + err});

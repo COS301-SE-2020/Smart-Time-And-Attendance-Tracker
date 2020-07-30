@@ -128,15 +128,30 @@ module.exports.addTeam = (id, teamID, done) => {
  * @param {function} done - return to this funtion when done
  */
 module.exports.deleteProject = (ids, projectID, done) => {
-
-    UserModel.updateMany({_id:{$in: ids}},{ $pull: { Projects: projectID}},(err, result) => {
-        if (err) 
-            done(err);
-        else if (!result)
-            done(null, false);
-        else
-            done(null, false);
-        
-    });
-  
-}
+    if(ids.length == 1)
+    {
+        UserModel.updateOne({_id: ids[0]},{ $pull: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, false);
+            
+        });
+      
+    }
+    else
+    {
+        UserModel.updateMany({_id:{$in: ids}},{ $pull: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, false);
+            
+        });
+    }
+    
+    }
