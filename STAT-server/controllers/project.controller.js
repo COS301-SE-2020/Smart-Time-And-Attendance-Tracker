@@ -270,11 +270,10 @@ module.exports.addTeam = (req, res) => {
                     ids= [];
                     for(i=0; i<val.length; i++)
                     {
-                        console.log(val[i]);
-                        if(!result.TeamMembers.includes(val[i]))
+                        if( !result.TeamMembers.some(member => member._id.equals(val[i]._id )))
                         {
                             result.TeamMembers.push(val[i]);
-                            ids.push(val[i._id]);
+                            ids.push(val[i]._id);
                         }
                     }
                     UserHelper.addProject(ids, req.body.projectID, (err, val)=>
@@ -304,7 +303,7 @@ module.exports.addTeam = (req, res) => {
 }
 
 /**
- * This function assigns a team to a project.
+ * This function clears the team of a project.
  * @param {HTTP Request} req HTTP-  TeamID, ProjectID
  * @param {HTTP Response} res 
  * @returns {JSON Array} success or error message, ProjectID and TeamID.
@@ -313,9 +312,6 @@ module.exports.removeTeam = (req, res) => {
     if(!req.body.projectID)
         return res.status(400).send({message: 'No project ID provided'});
 
-    if(!req.body.teamID)
-        return res.status(400).send({message: 'No team ID provided'});
-
     ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -323,43 +319,26 @@ module.exports.removeTeam = (req, res) => {
             return res.status(404).send({message: 'Project not found'});
         else
         {
-            TeamHelper.getTeamMembers( req.body.teamID,(err,val)=>
+            ids =[]; 
+            clear= [];
+            for(i=0; i<result.TeamMembers.length; i++)
             {
-                if(err)
+                ids.push(result.TeamMembers[i]._id);
+            }
+            UserHelper.deleteProject(ids, req.body.projectID, (err, result)=>
+            {
+                if(err) 
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
-
-                else if(val == false) 
-                    return res.status(404).json({ message: 'Team not found' });
-                else 
+                else
                 {
-                    ids= [];
-                    newMembers = [];
-                    for(i=0; i<val.length; i++)
-                    {
-                        ids.push(val[i._id]);
-                    }
-
-                    for(i=0; i<result.TeamMembers.length; i++)
-                    {
-                        if(!val.includes(TeamMembers[i]))
-                            newMembers.push(TeamMembers[i]);
-                    }
-                    UserHelper.deleteProject(ids, req.body.projectID, (err, result)=>
-                    {
+                    ProjectModel.updateOne({_id : req.body.projectID},{TeamMembers:clear }, function(err, result) {
                         if(err) 
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else if (!result)
+                            return res.status(404).send({message: 'Project not found'});
                         else
-                        {
-                            ProjectModel.updateOne({_id : req.body.projectID},{TeamMembers:newMembers }, function(err, result) {
-                                if(err) 
-                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-                                else if (!result)
-                                    return res.status(404).send({message: 'Project not found'});
-                                else
-                                    return res.status(200).send({message: 'Team successfully added to project'});
-                                
-                            });
-                        }
+                            return res.status(200).send({message: 'All members removed from project'});
+                        
                     });
                 }
             });

@@ -77,7 +77,7 @@ router.post("/project/removeMember", jwtHelper.verifyJWTtoken, userHelper.isTeam
 router.post("/project/changeRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, project.addRole);
 
 router.post("/project/addTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.addTeam);
-router.post("/project/removeTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeTeam);
+router.post("/project/clearMembers", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeTeam);
 
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
 router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.complete);
