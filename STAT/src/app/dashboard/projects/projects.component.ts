@@ -3,6 +3,7 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
+import { TeamManagementService } from 'src/app/shared/services/team-management.service';
 
 @Component({
   selector: 'app-projects',
@@ -11,7 +12,7 @@ import { ProjectManagementService } from 'src/app/shared/services/project-manage
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
+  constructor(private modalService: NgbModal, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService) { }
 
   panelOpenState = false
   name = "John Doe"
@@ -65,7 +66,7 @@ export class ProjectsComponent implements OnInit {
     this.getProAndTasks()
   }
 
-  
+
 
   /********
   API CALLS
@@ -84,7 +85,7 @@ export class ProjectsComponent implements OnInit {
     error => {
       console.log(error);
       this.error = error.statusText
-    }); 
+    });
   }
 
   // add project
@@ -96,7 +97,7 @@ export class ProjectsComponent implements OnInit {
     },
     error => {
       console.log(error);
-    }); 
+    });
   }
   //add task
   addTask(form : NgForm) {
@@ -108,7 +109,7 @@ export class ProjectsComponent implements OnInit {
     },
     error => {
       console.log(error);
-    }); 
+    });
   }
 
   // edit project (projectID must be added to body)
@@ -122,7 +123,6 @@ export class ProjectsComponent implements OnInit {
       console.log(error);
     });
   }
-
   // edit task (taskID must be added to body)
   editTask(form : NgForm) {
     console.log(form)
@@ -144,9 +144,8 @@ export class ProjectsComponent implements OnInit {
     },
     error => {
       console.log(error);
-    }); 
+    });
   }
-
   // delete task
   deleteTask(taskID : String, projectID : String) {
     this.pmService.deleteTask(localStorage.getItem('token'),taskID,projectID).subscribe((data) => {
@@ -155,7 +154,7 @@ export class ProjectsComponent implements OnInit {
     },
     error => {
       console.log(error);
-    }); 
+    });
   }
 
   //mark project as completed
@@ -167,7 +166,7 @@ export class ProjectsComponent implements OnInit {
     },
     error => {
       console.log(error);
-    }); 
+    });
   }
 
   //mark task as started
@@ -179,19 +178,17 @@ export class ProjectsComponent implements OnInit {
     },
     error => {
       console.log(error);
-    }); 
+    });
   }
-
   //mark task as completed
   completeTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.completeTask(localStorage.getItem('token'),req).subscribe((data) => {
       console.log(data);
-
     },
     error => {
       console.log(error);
-    }); 
+    });
   }
   //get tasks
   getTasks() {
@@ -264,12 +261,12 @@ export class ProjectsComponent implements OnInit {
     var d = date.getDate().toString();
 
     let toReturn = new String(y + '/');
-    
+
     if (m.length == 1)
       toReturn += ('0' + m + '/')
     else
       toReturn += (m + '/')
-      
+
     if (d.length == 1)
       toReturn += ('0' + d)
     else
@@ -277,6 +274,40 @@ export class ProjectsComponent implements OnInit {
 
     return toReturn
   }
+
+
+      /*** TEAM MANAGEMENT ***/
+
+      // get teams
+      getTeam() {
+        
+      }
+      // add team
+      addTeam(form : NgForm) {
+        console.log(form);
+        let req = {
+          'projectID' : pid,
+          'teamID' : form['projectID']
+        }
+        this.tmService.assignProject(localStorage.getItem('token'), req).subscribe((data) => {
+          console.log(data);
+        },
+        error => {
+          console.log(error);
+        });
+      }
+
+      // add team member
+      addTeamMember(form : NgForm) {
+        console.log(form);
+        this.tmService.addTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
+          console.log(data);
+        },
+        error => {
+          console.log(error);
+        });
+      }
+
 
   // reset forms
   resetProjectForm() {
@@ -301,6 +332,7 @@ export class ProjectsComponent implements OnInit {
     this.taskToEdit.dueDate = new Date(t.dueDate).toISOString().substring(0,10)
   }
 
+
   /****
   MODAL
   ****/
@@ -313,7 +345,7 @@ export class ProjectsComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
