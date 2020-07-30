@@ -7,26 +7,36 @@
 h2
   color: #4c585b
   font-size: 1.8em
+  margin-bottom: 0
 
 .info
   color: #4c585b90
   text-align: left
+  height: fit-content !important
+  display: flex
+  justify-content: center
+  align-items: center
 
-  >
-    div
+  .col-8, .col-auto
+    padding-bottom: 0
+    height: fit-content
+    vertical-align: top
+
+section
+    div.col-auto
       display: inline-block
       text-align: center
       float: right
 
-  #total-members
-    b
-      color: #366ceb
-      font-size: 1.4em
+    #total-members
+      b
+        color: #366ceb
+        font-size: 1.4em
 
-  #total-requests
-    b
-      color: #ff2885
-      font-size: 1.4em
+    #total-requests
+      b
+        color: #7846eb
+        font-size: 1.4em
 
 mat-card
   background-color: #366ceb
@@ -40,6 +50,8 @@ mat-card
   padding: 1.5em
   padding-bottom: 2.25em
   width: 100%
+  font-size: 0.9em
+  height: fit-content
 
   mat-divider
     color: #ffffff
@@ -52,14 +64,14 @@ mat-card
     text-align: right
 
     button
-      color: #ffffff
+      color: #333333
       margin-left: 0.5em
 
     .accept-request
-      background-color: #ff2885
+      background-color: #ffffff
 
     .reject-request
-      background-color: #ff2885
+      background-color: #ffffff
 
   mat-card-title
     color: #ffffff
@@ -83,6 +95,9 @@ mat-icon
       background: #7846eb
       color: #ffffff
 
+    button
+      outline: none !important
+
 .row
   padding: 2em
   padding-top: 0em
@@ -104,12 +119,13 @@ section
 #sort-menu
   background-color: #00c8ff
   color: #ffffff
+  outline: none !important
 
 .scroll
   overflow-x: hidden
   overflow-y: scroll
   padding: 0 1.5em 0.2em 0.8em
-  height: 68vh
+  height: 55vh
 
 .scroll::-webkit-scrollbar
   border-radius: 0.5em
@@ -126,3 +142,87 @@ section
 .scroll::-webkit-scrollbar-track
   border-radius: 0.5em
   background-color: #ffffff
+
+.req-spinner
+  margin: 1em auto 0 auto
+
+// members
+#members-div
+  align-items: center
+  padding: 0 1em
+  margin-top: -2em
+
+  mat-form-field
+    margin-left: 0.5em
+ 
+#members
+  height: 71vh
+
+.alphabet
+  width: 1em
+  text-align: center
+  display: inline
+  float: left
+  position: fixed
+
+  a
+    display: block
+    font-size: 0.77em
+    color: #4c585b
+    width: 2em
+
+    &.active
+      color: #7846eb !important
+      font-weight: bold
+      border-radius: 5em
+      border: 1px dashed #4c585b70
+
+    &:visited
+      text-decoration: none
+      color: #4c585b
+
+    &:hover
+      color: #7846eb
+      text-decoration: none
+      font-weight: bold
+
+ul
+  list-style-type: none
+  margin-top: 0
+
+  li
+    padding: 0.5em
+    background-color: #ffffff
+    color: #4c585b
+    font-size: 0.9em
+    border-top: 1px solid #4c585b50
+
+  .list-alpha
+    background-color: #4c585b20
+    font-weight: bold
+    border-top: none
+    border-radius: 0.3em 0.3em 0 0 
+
+  img 
+    width: 40px
+    height: 40px
+    margin-left: 0.3em
+    border-radius: 5em
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+
+  span 
+    display: inline-block
+    vertical-align: middle
+    margin-left: 1.2em
+
+  i 
+    font-size: 0.85em
+    font-style: normal
+    color: #4c585b98
+
+  .role
+    background-color: #00c8ff40
+    color: #00c8ff
+    padding: 0.2em 0.5em !important
+    border-radius: 0.8em
+    font-size: 0.7em

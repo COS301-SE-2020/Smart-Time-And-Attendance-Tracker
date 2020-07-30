@@ -13,22 +13,33 @@
           </button>
         </h2>
         <div class="scroll">
+            <mat-spinner *ngIf="!projects && !error" class="req-spinner"></mat-spinner>
+
+            <i *ngIf="error == 'Not Found'">You have no projects.</i>
+
             <div id="accordion-padding"></div>
 
             <mat-accordion>
 
             <!-- PROJECT **************************** -->
-              <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel *ngFor="let p of projects" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    Project Name
-                  <span class="tag numTasks">3 tasks</span>
+                    {{p.projectName}}
+                  <span class="tag numTasks">{{p.tasks.length}} tasks</span>
+                  <button *ngIf="roles.includes('Team Leader')" 
+                          mat-button class="pro-btn"
+                          matTooltip="R{{p.hourlyRate}} per hour"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above">
+                          <mat-icon inline="true">payment</mat-icon>
+                  </button>
                   <button *ngIf="roles.includes('Team Leader')" 
                           mat-button class="pro-btn"
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(editProjectModal)">
+                          (click)="open(editProjectModal); popProjectForm(p)">
                           <mat-icon inline="true">edit</mat-icon>
                   </button>
                   <button *ngIf="roles.includes('Team Leader')" 
@@ -36,40 +47,50 @@
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(deleteProjectModal)">
+                          (click)="open(deleteProjectModal); pid = p.ID; pname = p.projectName">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
                   </mat-panel-title>
                   
-                <span class="due-date float-right">Due July 21, 2020</span>      
+                <span class="due-date float-right">Due {{formatDate(p.dueDate)}}</span>      
                 </mat-expansion-panel-header>
                 
                 <mat-divider></mat-divider><br>
 
                 <!-- tasks -->
-                <ul class="tasks">
-                  <li>Task 1
+                <ul *ngIf="p.tasks.includes('no tasks')" class="tasks">
+                  <li>No tasks</li>
+                </ul>
+                <ul *ngIf="p.tasks != 'no tasks'" class="tasks">
+                  <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
                             matTooltip="Edit"
                             matTooltipClass="pro-tooltip"
-                            matTooltipPosition="above">
+                            matTooltipPosition="above"
+                            (click)="open(editTaskModal); popTaskForm(t)">
                             <mat-icon inline="true">edit</mat-icon>
                     </button>
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
                             matTooltip="Delete"
                             matTooltipClass="pro-tooltip"
-                            matTooltipPosition="above">
+                            matTooltipPosition="above"
+                            (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID; tname = t.taskName">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
-                     <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-                  <mat-divider></mat-divider>
-                  <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-                  <mat-divider></mat-divider>
-                  <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li> 
+                     <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
+                     <span class="float-right tag" 
+                          [ngClass]="{'tag-ns': t.taskStatus == 'Not Started',
+                                      'tag-ip': t.taskStatus == 'In Progress',
+                                      'tag-c': t.taskStatus == 'Completed'}">{{t.taskStatus}}</span>
+
+                    <mat-divider></mat-divider>       
+                  </li>
                 </ul>
-                <span *ngIf="roles.includes('Team Leader')" class="float-right"><button mat-button><mat-icon inline="true">add</mat-icon>New task</button></span>
+                <span *ngIf="roles.includes('Team Leader')" class="float-right">
+                  <button mat-button (click)="open(addTaskModal); pid = p.ID"><mat-icon inline="true">add</mat-icon>New task</button>
+                </span>
 
                 <!-- team -->
                 <mat-action-row>
@@ -103,138 +124,6 @@
               </mat-expansion-panel>
             <!-- END PROJECT **************************************** -->
 
-            <!-- PROJECT **************************** -->
-            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Project Name
-                <span class="tag numTasks">3 tasks</span>
-                </mat-panel-title>
-              <span class="due-date float-right">Due July 21, 2020</span>                
-
-              </mat-expansion-panel-header>
-
-              <mat-divider></mat-divider>
-
-              <!-- tasks -->
-              <ul class="tasks">
-                <li>Task 1 <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-                <mat-divider></mat-divider>
-                <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-                <mat-divider></mat-divider>
-                <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
-              </ul>
-
-              <!-- team -->
-              <mat-action-row>
-                <img
-                  matTooltip={{name}} matTooltipPosition="below"
-                  src="../../../assets/profilePicDefault.jpg" 
-                  class="profile-pic" alt="Profile Picture">
-                <img
-                  matTooltip="Zac Efron" matTooltipPosition="below"
-                  src="../../../assets/proPic1.jpg" 
-                  class="profile-pic" alt="Profile Picture">
-                <img
-                  matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="../../../assets/proPic2.jpg" 
-                  class="profile-pic" alt="Profile Picture">
-              </mat-action-row>
-            </mat-expansion-panel>
-          <!-- END PROJECT **************************************** -->
-
-          <!-- PROJECT **************************** -->
-          <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Project Name
-              <span class="tag numTasks">3 tasks</span>
-              </mat-panel-title>
-            <span class="due-date float-right">Due July 21, 2020</span>                
-
-            </mat-expansion-panel-header>
-
-            <mat-divider></mat-divider><br>
-
-            <!-- tasks -->
-            <ul class="tasks">
-              <li>Task 1 <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-              <mat-divider></mat-divider>
-              <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-              <mat-divider></mat-divider>
-              <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
-            </ul>
-
-            <!-- team -->
-            <mat-action-row>
-              <img
-                matTooltip={{name}} matTooltipPosition="below"
-                src="../../../assets/profilePicDefault.jpg" 
-                class="profile-pic" alt="Profile Picture">
-              <img
-                matTooltip="Zac Efron" matTooltipPosition="below"
-                src="../../../assets/proPic1.jpg" 
-                class="profile-pic" alt="Profile Picture">
-              <img
-                matTooltip="Henry Cavill" matTooltipPosition="below"
-                src="../../../assets/proPic2.jpg" 
-                class="profile-pic" alt="Profile Picture">
-                <button mat-mini-fab
-                        class="start-tracking addMember" 
-                        matTooltip="Add team member"
-                        matTooltipPosition="below">
-                  <mat-icon inline="true">add</mat-icon>
-                </button>
-            </mat-action-row>
-          </mat-expansion-panel>
-        <!-- END PROJECT **************************************** -->
-
-        <!-- PROJECT **************************** -->
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Project Name
-            <span class="tag numTasks">3 tasks</span>
-            </mat-panel-title>
-          <span class="due-date float-right">Due July 21, 2020</span>                
-
-          </mat-expansion-panel-header>
-
-          <mat-divider></mat-divider><br>
-
-          <!-- tasks -->
-          <ul class="tasks">
-            <li>Task 1 <span class="float-right">July 13, 2020</span> <span class="float-right tag tag-c">Completed</span></li>
-            <mat-divider></mat-divider>
-            <li>Task 2 <span class="float-right">July 16, 2020</span> <span class="float-right tag tag-ip">In progress</span></li>
-            <mat-divider></mat-divider>
-            <li>Task 3 <span class="float-right">July 19, 2020</span> <span class="float-right tag tag-ns">Not started</span></li>
-          </ul>
-
-          <!-- team -->
-          <mat-action-row>
-            <img
-              matTooltip={{name}} matTooltipPosition="below"
-              src="../../../assets/profilePicDefault.jpg" 
-              class="profile-pic" alt="Profile Picture">
-            <img
-              matTooltip="Zac Efron" matTooltipPosition="below"
-              src="../../../assets/proPic1.jpg" 
-              class="profile-pic" alt="Profile Picture">
-            <img
-              matTooltip="Henry Cavill" matTooltipPosition="below"
-              src="../../../assets/proPic2.jpg" 
-              class="profile-pic" alt="Profile Picture">
-              <button mat-mini-fab
-                      class="start-tracking addMember" 
-                      matTooltip="Add team member"
-                      matTooltipPosition="below">
-                <mat-icon inline="true">add</mat-icon>
-              </button>
-          </mat-action-row>
-        </mat-expansion-panel>
-      <!-- END PROJECT **************************************** -->
-
             </mat-accordion>
         </div>
     </section>
@@ -242,45 +131,50 @@
     <section class="col-4">
       <h2>This Week</h2>
       <div class="info row">
-        <div id="numTasks" class="col-4">
-          <b>17</b><br>TASKS
+
+        <!-- tasks -->
+        <div *ngIf="loading" id="numTasks" class="col-4">
+          <b>-</b><br>TASKS
         </div>
-        <div id="numPro" class="col-4">
-          <b>5</b><br>DONE
+        <div *ngIf="tasksNum == 1" id="numTasks" class="col-4">
+          <b>1</b><br>TASK
         </div>
-        <div id="numTeams" class="col-4">
-          <b>12</b><br>DUE
+        <div *ngIf="(tasksNum == 0 || tasksNum > 1)" id="numTasks" class="col-4">
+          <b>{{tasksNum}}</b><br>TASKS
+        </div>
+        
+        <!-- due -->
+        <div *ngIf="loading" id="numDue" class="col-4">
+          <b>-</b><br>DUE
+        </div>
+        <div *ngIf="tasksDue == 1" id="numDue" class="col-4">
+          <b>1</b><br>DUE
+        </div>
+        <div *ngIf="tasksDue == 0 || tasksDue > 1" id="numDue" class="col-4">
+          <b>{{tasksDue}}</b><br>DUE
+        </div>
+
+        <!-- done -->
+        <div *ngIf="loading" id="numDone" class="col-4">
+          <b>-</b><br>DONE
+        </div>
+        <div *ngIf="tasksDone == 1" id="numDone" class="col-4">
+          <b>1</b><br>DONE
+        </div>
+        <div *ngIf="tasksDone == 0 || tasksDone > 1" id="numDone" class="col-4">
+          <b>{{tasksDone}}</b><br>DONE
         </div>
       </div><br>
 
       <h2>Upcoming Tasks</h2>
         <div id="tasks">
+          <mat-spinner *ngIf="upcoming.length == 0 && !error" class="req-spinner"></mat-spinner>
+          <i *ngIf="error == 'Not Found'">You have no upcoming tasks.</i>
           <ngb-carousel [showNavigationArrows]="false" interval="0">
-            <ng-template ngbSlide>
+            <ng-template ngbSlide *ngFor="let u of upcoming">
               <div>
                 <ul class="tasks">
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                </ul>
-              </div>
-            </ng-template>
-            <ng-template ngbSlide>
-              <div>
-                <ul class="tasks"> 
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                </ul>
-              </div>
-            </ng-template>
-            <ng-template ngbSlide>
-              <div>
-                <ul class="tasks"> 
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
-                  <li><small>PROJECT <span class="float-right">Date</span> </small> <span>Task Description</span></li>
+                  <li *ngFor="let t of u"><small>{{t.projectName}} <span class="float-right">{{formatDate(t.dueDate)}}</span> </small> <span>{{t.taskName}}</span></li>
                 </ul>
               </div>
             </ng-template>
@@ -306,21 +200,28 @@
 
     <div class="modal-body">
       <form [formGroup]="addProjectForm">
-        <mat-form-field appearance="standard" class="col-6">
+        <mat-form-field appearance="standard" class="col-12">
           <mat-label>Project Name</mat-label>
-          <input matInput formControlName="name" placeholder="My Project" name = "name" required>
+          <input matInput formControlName="projectName" placeholder="My Project" name = "projectName">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Due Date</mat-label>
-          <input matInput type="date" formControlName="date" placeholder="My Project" name = "date" required>
+          <input matInput type="date" formControlName="dueDate" name = "dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Hourly Rate</mat-label>
+          <input matInput formControlName="hourlyRate" type="number" min="0" step="any" placeholder="0.00" name = "hourlyRate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); addProject(addProjectForm.value)">Create Project</button>
+      <button mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addProject(addProjectForm.value); addProjectForm.reset()"
+              [disabled]="addProjectForm.invalid" id="addProject">Create Project</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -343,22 +244,28 @@
     </div>
 
     <div class="modal-body">
-      <form [formGroup]="editProjectForm">
-        <mat-form-field appearance="standard" class="col-6">
+      <form #editProjectForm="ngForm">
+        <input hidden name="projectID" type="text" [(ngModel)]="projectToEdit.projectID" [value]="projectToEdit.projectID">
+        <mat-form-field appearance="standard" class="col-12">
           <mat-label>Project Name</mat-label>
-          <input matInput formControlName="name" placeholder="My Project" name = "name" required>
+          <input matInput placeholder="My Project" name = "projectName" [(ngModel)]="projectToEdit.projectName" [value]="projectToEdit.projectName">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Due Date</mat-label>
-          <input matInput type="date" formControlName="date" placeholder="My Project" name = "date" required>
+          <input matInput type="date" placeholder="My Project" name = "dueDate" [(ngModel)]="projectToEdit.dueDate" [value]="projectToEdit.dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Hourly Rate</mat-label>
+          <input matInput placeholder="0.00" name = "hourlyRate" type="number" min="0" step="any" [(ngModel)]="projectToEdit.hourlyRate" [value]="projectToEdit.hourlyRate">
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
       </form>
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)">Save Changes</button>
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)" id="editProject">Save Changes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 
@@ -372,7 +279,7 @@
 <ng-template #deleteProjectModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
-      <h2> Delete project
+      <h2> Delete {{pname}}
         <br>
       </h2>
       <button (click)="modal.dismiss('Cross click')">
@@ -385,7 +292,114 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject()">Yes</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject(pid)" id="deleteProject">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- ADD TASK *******************************-->
+
+<ng-template #addTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Add a task
+        <br><h4>Please enter the task details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="addTaskForm">
+        <input hidden type="text" formControlName="projectID" name="projectID">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task Name</mat-label>
+          <input matInput formControlName="taskName" placeholder="My Task" name = "taskName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="dueDate" name = "dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addTask(addTaskForm.value); addTaskForm.reset()"
+              [disabled]="addTaskForm.invalid" id="addTask">Create Task</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- EDIT TASK *******************************-->
+
+<ng-template #editTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit task
+        <br><h4>Please enter the new task details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form #editTaskForm="ngForm">
+        <input hidden name="taskID" type="text" [(ngModel)]="taskToEdit.taskID" [value]="taskToEdit.taskID">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task Name</mat-label>
+          <input matInput placeholder="My Task" name = "taskName" [(ngModel)]="taskToEdit.taskName" [value]="taskToEdit.taskName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" placeholder="My Project" name = "dueDate" [(ngModel)]="taskToEdit.dueDate" [value]="taskToEdit.dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editTask(editTaskForm.value)" id="editTask">Save Changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- DELETE TASK *******************************-->
+
+<ng-template #deleteTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Delete {{tname}}
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      Are you sure you want to delete this task?
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteTask(tid, pid)" id="deleteTask">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
 

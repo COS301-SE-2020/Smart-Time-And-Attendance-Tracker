@@ -8,19 +8,19 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 })
 export class MainComponent implements OnInit {
 
-  projects: any = [
-    {value: '0', name: 'Project 0'},
-    {value: '1', name: 'Project 1'},
-    {value: '2', name: 'Project 2'}
-  ];
-
-  roles = localStorage.getItem('roles');
+  isAuth : boolean
+  roles : any
   // active tab
   active : string;
 
-  constructor(public service : AccountManagementService) { }
+  constructor(public service : AccountManagementService) {
+    this.roles =  this.service.roles
+    this.isAuth = true
+  }
 
   ngOnInit(): void {
+    console.log(this.roles)
+
     const hamburger = document.getElementById('hamburger');
     const wrapper = document.getElementById('wrapper');
 
@@ -28,8 +28,8 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     });
 
-    this.active = 'teams';
 
+    this.active = 'today';
   }
 
   // set active tab after component initialisation
@@ -46,5 +46,6 @@ export class MainComponent implements OnInit {
     link.classList.add('active');
     this.active = tabName;
   }
+
 
 }

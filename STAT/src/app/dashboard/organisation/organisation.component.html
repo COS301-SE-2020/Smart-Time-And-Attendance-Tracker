@@ -1,82 +1,165 @@
 <div class="row">
   <section id="organisation-header" class="col-6">
     <h2>Authorisation Requests</h2>
-    <div class="info row mb-2 mt-4 p-0">
-      <div id="total-requests" class="col-auto">
-        <b>182</b><br>REQUESTS
+    <div class="info row p-0">
+      <div *ngIf="requests && requests?.length == 1" id="total-requests" class="col-auto">
+        <b>1</b><br>REQUEST
       </div>
-      <div id="total-members" class="col-auto">
-        <b>746</b><br>MEMBERS
+      <div *ngIf="requests && (requests.length == 0 || requests.length > 1)" id="total-requests" class="col-auto">
+        <b>{{requests.length}}</b><br>REQUESTS
       </div>
-      <div class="px-3 p-1">
-        <button mat-mini-fab id="sort-menu" [matMenuTriggerFor]="menu"><mat-icon>sort</mat-icon></button>
+      
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-10">
+          <mat-label>Search Requests</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
+        </mat-form-field>
+
+        <button mat-mini-fab id="sort-menu" 
+                matTooltip="Sort"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="right"
+                [matMenuTriggerFor]="menu">
+          <mat-icon>sort</mat-icon>
+        </button>
+
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>Alphabetically</button>
-          <button mat-menu-item>Date (oldest first)</button>
-          <button mat-menu-item>Date (newest first)</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('a')">Alphabetically</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('o')">Date (oldest first)</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">Date (newest first)</button>
         </mat-menu>
       </div>
+      
     </div>
     <div id="requests" class="pr-3 row scroll">
-      <mat-card class="request">
-        <mat-card-title>Jay Farsee</mat-card-title>
-        <mat-card-subtitle>jafar@yahoo.co.uk</mat-card-subtitle>
-        <form class="authentication-form" method="post">
+      <mat-spinner *ngIf="!requests" class="req-spinner"></mat-spinner>
+      <mat-card *ngFor="let r of searchRequests(searchText)" class="request">
+
+          <!-- details -->
+        <mat-card-title>{{r.name}} {{r.surname}}</mat-card-title>
+        <mat-card-subtitle>{{r.email}}</mat-card-subtitle>
+        
           <mat-divider [inset]="true"></mat-divider>
           <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
+
+            <!-- accept -->
+            <button mat-mini-fab class="accept-request"
+                    matTooltip="Accept"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="authenticateUser(r.ID)" id="accept">
+              <mat-icon inline="true">check</mat-icon>
+            </button>
+
+            <!-- reject -->
+            <button mat-mini-fab class="reject-request"
+                    matTooltip="Reject"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="rejectUser(r.ID)" id="reject">
+              <mat-icon inline="true">close</mat-icon>
+            </button>
           </mat-card-footer>
-        </form>
       </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Cruella DeVille</mat-card-title>
-        <mat-card-subtitle>cDevil@gmail.com</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Corporate Laymar</mat-card-title>
-        <mat-card-subtitle>lame@boringcompany.co</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Dorethy Miller</mat-card-title>
-        <mat-card-subtitle>doremi@abcghana.com</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
-      <mat-card class="request">
-        <mat-card-title>Jeremy Dumont</mat-card-title>
-        <mat-card-subtitle>jdv@sundaymorningnews.co.za</mat-card-subtitle>
-        <form class="" action="index.html" method="post">
-          <input type="hidden" name="userid" value="1">
-          <mat-divider [inset]="true"></mat-divider>
-          <mat-card-footer class="px-3">
-            <button mat-mini-fab class="accept-request"><mat-icon inline="true">check</mat-icon></button>
-            <button mat-mini-fab class="reject-request"><mat-icon inline="true">close</mat-icon></button>
-          </mat-card-footer>
-        </form>
-      </mat-card>
+
     </div>
   </section>
+
+  <section class="col-6">
+    
+    <div id="members-div" class="info row p-0">
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Search Members</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
+        </mat-form-field>
+      </div>      
+      
+      <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
+        <b>1</b><br>MEMBER
+      </div>
+      <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
+        <b>{{members.length}}</b><br>MEMBERS
+      </div>
+    </div>
+
+    <!-- members -->
+    <div id="members" class="scroll">
+      <aside id="alphabet" class="alphabet">
+        <a href="" class="active">#</a>
+        <a href="#a" class="">A</a>
+        <a href="javascript:" >B</a>
+        <a href="javascript:" class="">C</a>
+        <a href="javascript:" class="">D</a>
+        <a href="javascript:" class="">E</a>
+        <a href="javascript:" class="">F</a>
+        <a href="javascript:" class="">G</a>
+        <a href="javascript:" class="">H</a>
+        <a href="javascript:" class="">I</a>
+        <a href="javascript:" class="">J</a>
+        <a href="javascript:" class="">K</a>
+        <a href="javascript:" class="">L</a>
+        <a href="javascript:" class="">M</a>
+        <a href="javascript:" class="">N</a>
+        <a href="javascript:" class="">O</a>
+        <a href="javascript:" class="">P</a>
+        <a href="javascript:" class="">Q</a>
+        <a href="javascript:" class="">R</a>
+        <a href="javascript:" class="">S</a>
+        <a href="javascript:" class="">T</a>
+        <a href="javascript:" class="">U</a>
+        <a href="javascript:" class="">V</a>
+        <a href="javascript:" class="">W</a>
+        <a href="javascript:" class="">X</a>
+        <a href="javascript:" class="">Y</a>
+        <a href="javascript:" class="">Z</a>
+      </aside>
+
+      <ul id="a">
+        <li class="list-alpha">A</li>
+        <li>
+          <img src="assets/proPic3.jpg">
+          <span>Adam Levine <br> <i>adam.lefine.af@gmail.com</i></span>
+          <span class="float-right tag role">Team Lead</span>
+        </li>
+        <li>
+          <img src="assets/proPic4.jpg">
+          <span>Avan Jogia <br> <i>avan@gmail.com</i></span>
+        </li>
+      </ul>
+
+      <ul id="a">
+        <li class="list-alpha">B</li>
+        <li>
+          <img src="assets/proPic5.jpg">
+          <span>Beyonce <br> <i>queen.bee@gmail.com</i></span>
+          <span class="float-right tag role">System Administrator</span>
+        </li>
+      </ul>
+
+      <ul id="a">
+        <li class="list-alpha">C</li>
+        <li>
+          <img src="assets/proPic6.jpg">
+          <span>Cara Delevinge <br> <i>cara@gmail.com</i></span>
+        </li>
+        <li>
+          <img src="assets/proPic7.jpg">
+          <span>Channing Tatum <br> <i>magicmike@gmail.com</i></span>
+        </li>
+        <li>
+          <img src="assets/proPic8.jpg">
+          <span>Chris Evans <br> <i>nocap@gmail.com</i></span>
+          <span class="float-right tag role">Team Lead</span>
+        </li>
+        <li>
+          <img src="assets/proPic9.jpg">
+          <span>Chris Hemsworth <br> <i>christopher.hemmingsworth@gmail.com</i></span>
+        </li>
+      </ul>
+    </div>
+
+  </section>
 </div>
+
+
