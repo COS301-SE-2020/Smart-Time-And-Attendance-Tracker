@@ -62,7 +62,7 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-  //add a project
+  //edit a project
   public editProject(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);

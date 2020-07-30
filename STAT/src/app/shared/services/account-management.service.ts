@@ -30,7 +30,7 @@ export class AccountManagementService {
       headers: headers
     });
   }
-  // sign in 
+  // sign in
   public signIn(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
@@ -54,6 +54,28 @@ export class AccountManagementService {
       headers: headers
     });
   }
+  //Get user's projects and tasks
+  public getProjectsAndTasks(token){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.get(this.ROOT_URL+ 'user/getTasks', {
+      headers: headers
+    });
+  }
+  //Get time entries for the day
+  public getTimeEntries(date, token){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+          let parameters = new HttpParams();
+          parameters = parameters.append('date', date);
+    return this.http.get(this.ROOT_URL+ 'userTimeEntry/getDailyTimeEntries',{
+      params: parameters,
+      headers: headers
+    });
+  }
+
+  /*** organisation management ***/
+
   //Authenticate user (security admin)
   public authenticate(token,userID){
     const headers = new HttpHeaders()
@@ -86,30 +108,10 @@ export class AccountManagementService {
       headers: headers
     });
   }
-  //Get user's projects and tasks
-  public getProjectsAndTasks(token){
-    const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.get(this.ROOT_URL+ 'user/getTasks', {
-      headers: headers
-    });
-  }
-  //Get time entries for the day
-  public getTimeEntries(date, token){
-    const headers = new HttpHeaders()
-          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-          let parameters = new HttpParams();
-          parameters = parameters.append('date', date);
-    return this.http.get(this.ROOT_URL+ 'userTimeEntry/getDailyTimeEntries',{ 
-      params: parameters,
-      headers: headers
-    });
-  }
+
   // edit profile
-
   // edit settings
-
   // sign out
-
   // delete account
-}
+
+} // end service
