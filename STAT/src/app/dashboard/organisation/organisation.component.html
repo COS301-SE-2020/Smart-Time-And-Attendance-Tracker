@@ -66,37 +66,99 @@
   </section>
 
   <section class="col-6">
-    <h2>Members</h2>
-    <div class="info row p-0">
+    
+    <div id="members-div" class="info row p-0">
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Search Members</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
+        </mat-form-field>
+      </div>      
+      
       <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
         <b>1</b><br>MEMBER
       </div>
       <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
         <b>{{members.length}}</b><br>MEMBERS
       </div>
-      
-      <div class="col-8">
-        <mat-form-field appearance="standard" class="col-10">
-          <mat-label>Search Members</mat-label>
-          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
-        </mat-form-field>
-
-        <button mat-mini-fab id="sort-menu" 
-                matTooltip="Sort"
-                matTooltipClass="action-tooltip"
-                matTooltipPosition="right"
-                [matMenuTriggerFor]="menuM">
-          <mat-icon>sort</mat-icon>
-        </button>
-
-        <mat-menu #menuM="matMenu">
-          <button mat-menu-item (click)="getAllUnauthenticatedUsers('a')">By Name</button>
-          <button mat-menu-item (click)="getAllUnauthenticatedUsers('o')">By Surname</button>
-          <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">By Email</button>
-        </mat-menu>
-      </div>
-      
     </div>
+
+    <!-- members -->
+    <div id="members" class="scroll">
+      <aside id="alphabet" class="alphabet">
+        <a href="" class="active">#</a>
+        <a href="#a" class="">A</a>
+        <a href="javascript:" >B</a>
+        <a href="javascript:" class="">C</a>
+        <a href="javascript:" class="">D</a>
+        <a href="javascript:" class="">E</a>
+        <a href="javascript:" class="">F</a>
+        <a href="javascript:" class="">G</a>
+        <a href="javascript:" class="">H</a>
+        <a href="javascript:" class="">I</a>
+        <a href="javascript:" class="">J</a>
+        <a href="javascript:" class="">K</a>
+        <a href="javascript:" class="">L</a>
+        <a href="javascript:" class="">M</a>
+        <a href="javascript:" class="">N</a>
+        <a href="javascript:" class="">O</a>
+        <a href="javascript:" class="">P</a>
+        <a href="javascript:" class="">Q</a>
+        <a href="javascript:" class="">R</a>
+        <a href="javascript:" class="">S</a>
+        <a href="javascript:" class="">T</a>
+        <a href="javascript:" class="">U</a>
+        <a href="javascript:" class="">V</a>
+        <a href="javascript:" class="">W</a>
+        <a href="javascript:" class="">X</a>
+        <a href="javascript:" class="">Y</a>
+        <a href="javascript:" class="">Z</a>
+      </aside>
+
+      <ul id="a">
+        <li class="list-alpha">A</li>
+        <li>
+          <img src="assets/proPic3.jpg">
+          <span>Adam Levine <br> <i>adam.lefine.af@gmail.com</i></span>
+          <span class="float-right tag role">Team Lead</span>
+        </li>
+        <li>
+          <img src="assets/proPic4.jpg">
+          <span>Avan Jogia <br> <i>avan@gmail.com</i></span>
+        </li>
+      </ul>
+
+      <ul id="a">
+        <li class="list-alpha">B</li>
+        <li>
+          <img src="assets/proPic5.jpg">
+          <span>Beyonce <br> <i>queen.bee@gmail.com</i></span>
+          <span class="float-right tag role">System Administrator</span>
+        </li>
+      </ul>
+
+      <ul id="a">
+        <li class="list-alpha">C</li>
+        <li>
+          <img src="assets/proPic6.jpg">
+          <span>Cara Delevinge <br> <i>cara@gmail.com</i></span>
+        </li>
+        <li>
+          <img src="assets/proPic7.jpg">
+          <span>Channing Tatum <br> <i>magicmike@gmail.com</i></span>
+        </li>
+        <li>
+          <img src="assets/proPic8.jpg">
+          <span>Chris Evans <br> <i>nocap@gmail.com</i></span>
+          <span class="float-right tag role">Team Lead</span>
+        </li>
+        <li>
+          <img src="assets/proPic9.jpg">
+          <span>Chris Hemsworth <br> <i>christopher.hemmingsworth@gmail.com</i></span>
+        </li>
+      </ul>
+    </div>
+
   </section>
 </div>
 
