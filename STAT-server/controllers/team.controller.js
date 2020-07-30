@@ -100,7 +100,7 @@ module.exports.addTeamMember = (req, res, next) => {
     if(!req.body.userRole)
         return res.status(400).send({message: 'No user role provided'});
 
-    TeamModel.updateOne({_id : (req.body.teamID)},{ $push: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
+    TeamModel.updateOne({_id : (req.body.teamID)},{ $addToSet: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)

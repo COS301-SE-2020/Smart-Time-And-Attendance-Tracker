@@ -245,34 +245,62 @@ module.exports.complete = (req, res) => {
  * @returns {JSON Array} success or error message, ProjectID and TeamID.
  */
 module.exports.addTeam = (req, res) => {
-    if(!req.query.projectID)
+    if(!req.body.projectID)
         return res.status(400).send({message: 'No project ID provided'});
     
-    if(!req.query.teamID)
+    if(!req.body.teamID)
         return res.status(400).send({message: 'No team ID provided'});
 
-    ProjectModel.updateOne({_id : req.teamID},{ProjectID:req.ProjectID }, function(err, result) {
+    ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
-            return res.status(404).send({message: 'Team not found'});
+            return res.status(404).send({message: 'Project not found'});
         else
         {
-            
-        ProjectHelper.addTeam(req.ProjectID, req.teamID,(err,val)=>
-        {
-            if(err)
-                return res.status(500).send({message: 'Internal Server Error: ' + err});
-
-            else if(val == false) 
-                return res.status(404).json({ message: 'Project not found' });
-            else 
+            TeamHelper.getTeamMembers( req.body.teamID,(err,val)=>
             {
-                return res.status(200).json({projectID: req.ProjectID,teamID: req.teamID, message: 'Project successfully added to team'});
-            }
-        });
-        }  
+                if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+
+                else if(val == false) 
+                    return res.status(404).json({ message: 'Team not found' });
+                else 
+                {
+                    ids= [];
+                    console.log(val.length);
+                    for(i=0; i<val.length; i++)
+                    {
+                        if(!result.TeamMembers.includes(val[i]))
+                        {
+                            result.TeamMembers.push(val[i]);
+                            ids.push(val[i._id]);
+                        }
+                    }
+                    UserHelper.addProject(ids, req.body.projectID), (err, result)=>
+                    {
+                        if(err) 
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else
+                        {
+                            ProjectModel.updateOne({_id : req.body.projectID},{TeamMembers:result.TeamMembers }, function(err, result) {
+                                if(err) 
+                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                else if (!result)
+                                    return res.status(404).send({message: 'Project not found'});
+                                else
+                                    return res.status(200).send({message: 'Team successfully added to project'});
+                                
+                            });
+                        }
+                    }
+                }
+            });
+        }
+        
     });
+
+
 }
 
 /**
@@ -282,33 +310,61 @@ module.exports.addTeam = (req, res) => {
  * @returns {JSON Array} success or error message, ProjectID and TeamID.
  */
 module.exports.removeTeam = (req, res) => {
-    if(!req.query.projectID)
+    if(!req.body.projectID)
         return res.status(400).send({message: 'No project ID provided'});
-    
-    if(!req.query.teamID)
+
+    if(!req.body.teamID)
         return res.status(400).send({message: 'No team ID provided'});
 
-    ProjectModel.updateOne({_id : req.teamID},{ProjectID:req.ProjectID }, function(err, result) {
+    ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
-            return res.status(404).send({message: 'Team not found'});
+            return res.status(404).send({message: 'Project not found'});
         else
         {
-            
-        ProjectHelper.addTeam(req.ProjectID, req.teamID,(err,val)=>
-        {
-            if(err)
-                return res.status(500).send({message: 'Internal Server Error: ' + err});
-
-            else if(val == false) 
-                return res.status(404).json({ message: 'Project not found' });
-            else 
+            TeamHelper.getTeamMembers( req.body.teamID,(err,val)=>
             {
-                return res.status(200).json({projectID: req.ProjectID,teamID: req.teamID, message: 'Project successfully added to team'});
-            }
-        });
-        }  
+                if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+
+                else if(val == false) 
+                    return res.status(404).json({ message: 'Team not found' });
+                else 
+                {
+                    ids= [];
+                    newMembers = [];
+                    for(i=0; i<val.length; i++)
+                    {
+                        ids.push(val[i._id]);
+                    }
+
+                    for(i=0; i<result.TeamMembers.length; i++)
+                    {
+                        if(!val.includes(TeamMembers[i]))
+                            newMembers.push(TeamMembers[i]);
+                    }
+                    UserHelper.deleteProject(ids, req.body.projectID, (err, result)=>
+                    {
+                        if(err) 
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else
+                        {
+                            ProjectModel.updateOne({_id : req.body.projectID},{TeamMembers:newMembers }, function(err, result) {
+                                if(err) 
+                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                else if (!result)
+                                    return res.status(404).send({message: 'Project not found'});
+                                else
+                                    return res.status(200).send({message: 'Team successfully added to project'});
+                                
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        
     });
 }
 
@@ -325,7 +381,10 @@ module.exports.addMember = (req, res, next) => {
     if(!req.body.hasOwnProperty('projectID'))
         return res.status(400).send({message: 'No project ID given'});
 
-    ProjectModel.updateOne({_id : req.body.projectID },{ $push: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
+    if(!req.body.hasOwnProperty('userRole'))
+        return res.status(400).send({message: 'No user role given'});
+
+    ProjectModel.updateOne({_id : req.body.projectID },{ $addToSet: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)

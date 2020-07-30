@@ -93,3 +93,40 @@ module.exports.deleteTeam = (id, done) => {
             done(null);
     });   
 }
+/**
+ * This function removes a user from all teams they're in
+ * @param {Array} userID ID of user
+ * @param {String} ids IDs of projects
+ * @param {Function} done 
+ */
+module.exports.removeUser = ( userID, done)=>{
+    TeamModel.updateMany({},{$pull: { TeamMembers: { _id: userID} }},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+            done(null, true);
+        
+    });                    
+        
+}
+
+/**
+ * This function removes a user from all teams they're in
+ * @param {Array} userID ID of user
+ * @param {String} ids IDs of projects
+ * @param {Function} done 
+ */
+module.exports.getTeamMembers = ( teamID, done)=>{
+    TeamModel.findOne({_id :teamID},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+            done(null, result.TeamMembers);
+        
+    });                    
+        
+}

@@ -29,9 +29,9 @@ const TaskHelper =require('../helpers/task.helper');
  * This function assigns a team to a project.
  * @param {String} id ID of project
  * @param {String} teamID ID of team
- * @param {*} done 
+ * @param {Function} done 
  */
-module.exports.addTeam = (id, teamID, done)=>{
+/*module.exports.addTeam = (id, teamID, done)=>{
     ProjectModel.updateOne({_id: id},{Team: teamID},(err, result) => {
         if(err) 
             done(err);
@@ -41,6 +41,42 @@ module.exports.addTeam = (id, teamID, done)=>{
            done(null, true);
         
     });
+}*/
+
+/**
+ * This function removes a user from all projects they work on.
+ * @param {Array} userID ID of user
+ * @param {String} ids IDs of projects
+ * @param {Function} done 
+ */
+module.exports.removeUser = ( userID, ids,done)=>{
+    if(ids.length == 1)
+    {
+        ProjectModel.updateOne({_id: ids[0]},{$pull: { TeamMembers: { _id: userID} }},(err, result) => {
+            if(err) 
+                done(err);
+            else if (!result)
+                done(null,false);
+            else if(result)
+               done(null, true);
+            
+        });            
+    
+    }
+    else
+    {
+        ProjectModel.updateMany({_id: {$in: ids}},{$pull: { TeamMembers: { _id: userID} }},(err, result) => {
+            if(err) 
+                done(err);
+            else if (!result)
+                done(null,false);
+            else if(result)
+               done(null, true);
+            
+        });
+
+    }           
+        
 }
 
 /**

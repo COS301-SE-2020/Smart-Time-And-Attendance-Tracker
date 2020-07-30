@@ -64,17 +64,17 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 
 
 // team  
-router.post("/team/createTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.createTeam);
+router.post("/team/add",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.createTeam);
 router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
-router.delete("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.removeTeamMember);
-router.post("/team/addRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.addRole);
+router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.removeTeamMember);
+router.post("/team/changeRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.addRole);
 
 
 //project
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, user.addProject);
 router.post("/project/addMember", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.addMember, user.addProject);
 router.post("/project/removeMember", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeMember, user.removeProject);
-router.post("/project/addRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, project.addRole);
+router.post("/project/changeRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, project.addRole);
 
 router.post("/project/addTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.addTeam);
 router.post("/project/removeTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeTeam);

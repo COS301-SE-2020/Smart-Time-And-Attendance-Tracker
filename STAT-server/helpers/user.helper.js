@@ -154,4 +154,39 @@ module.exports.deleteProject = (ids, projectID, done) => {
         });
     }
     
+}
+
+/**
+ * Adds project to Projects array.
+ * @param {*} ids 
+ * @param {String} projectID 
+ * @param {function} done - return to this funtion when done
+ */
+module.exports.addProject = (ids, projectID, done) => {
+    if(ids.length == 1)
+    {
+        UserModel.updateOne({_id: ids[0]},{ $addToSet: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, true);
+            
+        });
+      
     }
+    else
+    {
+        UserModel.updateMany({_id:{$in: ids}},{ $addToSet: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, true);
+            
+        });
+    }
+    
+}
