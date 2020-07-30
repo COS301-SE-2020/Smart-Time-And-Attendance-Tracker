@@ -181,6 +181,11 @@ export class TodayComponent implements OnInit {
     }); 
   }*/
 
+  // edit tracking entry
+  editEntry(form : NgForm) {
+
+  }
+
   // get projects and tasks
   getProAndTasks()
   {
