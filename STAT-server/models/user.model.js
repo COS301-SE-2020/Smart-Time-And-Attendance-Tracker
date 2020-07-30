@@ -2,7 +2,7 @@
   * @file STAT-server/models/user.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file contains the User model in our database
-  * @date 11June 2020
+  * @date 11 June 2020
  */
 
 /**
@@ -52,7 +52,7 @@ var UserSchema = new mongoose.Schema({
         type: Array,
         required : "Role required.",
     },
-    Team:[
+    Projects:[
         { 
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'Team' 

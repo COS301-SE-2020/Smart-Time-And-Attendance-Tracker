@@ -1,7 +1,7 @@
 /**
   * @file STAT-server/routes/index.router.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
-  * @fileoverview This file handles all API requests routes.
+  * @fileoverview This file handles all API requests' route.
   * @date 14 June 2020
  */
 
@@ -16,7 +16,7 @@
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:         This file handles all API requests routes.
+* Description:         This file handles all API requests' route.
 *
 */
 
@@ -25,7 +25,6 @@ const express = require('express');
 const router = express.Router();
 
 const user = require('../controllers/user.controller');
-const organisationTeam = require('../controllers/organisationTeam.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
@@ -49,8 +48,8 @@ router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecur
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 router.post("/user/editUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.edit);
 
-router.post("/user/addRole",jwtHelper.verifyJWTtoken,user.addRole);
-router.post("/user/removeRole",jwtHelper.verifyJWTtoken,user.removeRole);
+router.post("/user/addRole",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin, user.addRole);
+router.post("/user/removeRole",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin, user.removeRole);
 
 
 //role
@@ -64,23 +63,22 @@ router.post("/userTimeEntry/updateTimeEntry", jwtHelper.verifyJWTtoken,userHelpe
 router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getDailyTimeEntries);
 
 
-//team
-router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember, user.addTeam);
-
-//router.post("/team/assignProject",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.assignProject);
-//router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
-router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.removeTeamMember, user.removeTeam);
-
-
-//organisation team    --- ----removed isleader etc for easier testing
-router.post("/organisationTeam/createTeam",jwtHelper.verifyJWTtoken,organisationTeam.createTeam);
-router.post("/organisationTeam/addTeamMember",jwtHelper.verifyJWTtoken,organisationTeam.addTeamMember);
-router.delete("/organisationTeam/remove",jwtHelper.verifyJWTtoken,organisationTeam.remove);
-router.post("/organisationTeam/addRole",jwtHelper.verifyJWTtoken,organisationTeam.addRole);
+// team  
+router.post("/team/createTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.createTeam);
+router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.addTeamMember);
+router.delete("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.removeTeamMember);
+router.post("/team/addRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.addRole);
 
 
 //project
-router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, team.createTeam, team.assignProject);
+router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, user.addProject);
+router.post("/project/addMember", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.addMember, user.addProject);
+router.post("/project/removeMember", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeMember, user.removeProject);
+router.post("/project/addRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, project.addRole);
+
+router.post("/project/addTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.addTeam);
+router.post("/project/removeTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeTeam);
+
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
 router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.complete);
 router.delete("/project", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.deleteProject);

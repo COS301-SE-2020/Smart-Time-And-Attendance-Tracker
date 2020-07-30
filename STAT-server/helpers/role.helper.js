@@ -25,8 +25,8 @@ const mongoose = require("mongoose");
 const RoleModel = mongoose.model("Role");
 
  /**
-  * 
-  * @param {String} id ID of role.
+  * Get role name from ID
+  * @param {Number} id ID of role.
   * @param {*} done 
   * @return {String} - Role of given ID.
   */
@@ -42,4 +42,21 @@ module.exports.getRole = (id, done)=>{
     });
 }
 
+ /**
+  * Get ID of role.
+  * @param {String} name Name of role.
+  * @param {*} done 
+  * @return {Int} - Role ID of given role.
+  */
+ module.exports.getRoleID = (name, done)=>{
+    RoleModel.findOne({Role: name},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+           done(null, result.ID);
+        
+    });
+}
 
