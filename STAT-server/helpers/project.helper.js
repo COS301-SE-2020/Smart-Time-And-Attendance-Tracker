@@ -24,6 +24,7 @@
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 const TaskHelper =require('../helpers/task.helper');
+const UserHelper =require('../helpers/user.helper');
 
 /**
  * This function assigns a team to a project.
@@ -112,18 +113,44 @@ module.exports.getTasks = (id, done)=>{
             done(null,false);
         else if(result)
         {
-            var values = [], task=0, text="";
+            var values = [], task=0, text="", projectMemebers=[];
             if(result.Tasks.length ==0)
             {
-                text = {
-                    'ID': result._id,
-                    'projectName': result.ProjectName,
-                    "dueDate": result.DueDate,
-                    "hourlyRate": result.HourlyRate,
-                    "tasks": []
-
+                if(result.TeamMembers.length ==0)
+                {
+                    text = {
+                        'ID': result._id,
+                        'projectName': result.ProjectName,
+                        "dueDate": result.DueDate,
+                        "hourlyRate": result.HourlyRate,
+                        'tasks': values,
+                        'projectMemebers': projectMemebers
+                    }
+                    done(null, text);
                 }
-                done(null, text);
+                for(task=0; task<result.TeamMembers.length; task++) 
+                {
+                    UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                        if(err)
+                            done(err);
+                        else if(val)
+                        {
+                            projectMemebers.push(val); 
+                            if(projectMemebers.length == result.TeamMembers.length)
+                            {
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMemebers': projectMemebers
+                                }
+                                done(null, text);
+                            }                       
+                        }
+                    });
+                }
             }
             for(task; task<result.Tasks.length; task++) 
             {
@@ -135,15 +162,42 @@ module.exports.getTasks = (id, done)=>{
                         values.push(val); 
                         if(values.length == result.Tasks.length)
                         {
-                            text = {
-                                'ID': result._id,
-                                'projectName': result.ProjectName,
-                                "dueDate": result.DueDate,
-                                "hourlyRate": result.HourlyRate,
-                                'tasks': values
-
+                            if(result.TeamMembers.length ==0)
+                            {
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMemebers': projectMemebers
+                                }
+                                done(null, text);
+             
                             }
-                            done(null, text);
+                            for(task=0; task<result.TeamMembers.length; task++) 
+                            {
+                                UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                                    if(err)
+                                        done(err);
+                                    else if(val)
+                                    {
+                                        projectMemebers.push(val); 
+                                        if(projectMemebers.length == result.TeamMembers.length)
+                                        {
+                                            text = {
+                                                'ID': result._id,
+                                                'projectName': result.ProjectName,
+                                                "dueDate": result.DueDate,
+                                                "hourlyRate": result.HourlyRate,
+                                                'tasks': values,
+                                                'projectMemebers': projectMemebers
+                                            }
+                                            done(null, text);
+                                        }                       
+                                    }
+                                });
+                            }    
                         }                       
                     }
                 });
