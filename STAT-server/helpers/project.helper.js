@@ -112,7 +112,15 @@ module.exports.getTasks = (id, done)=>{
             done(null,false);
         else if(result)
         {
-            var values = [], task=0, text="";
+            var values = [], memberValues = [], member=0, task=0, text="";
+            for(member; member<result.TeamMembers.length; member++) 
+            {
+                text = {
+                    'ID': result.TeamMembers[member]._id,
+                    'Role': result.TeamMembers[member].Role
+                }
+                memberValues.push(text); 
+            }   
             if(result.Tasks.length ==0)
             {
                 text = {
@@ -120,11 +128,12 @@ module.exports.getTasks = (id, done)=>{
                     'projectName': result.ProjectName,
                     "dueDate": result.DueDate,
                     "hourlyRate": result.HourlyRate,
-                    "tasks": []
-
+                    "tasks": [],
+                    "ProjectMembers": memberValues
                 }
                 done(null, text);
             }
+            
             for(task; task<result.Tasks.length; task++) 
             {
                 TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
@@ -140,8 +149,8 @@ module.exports.getTasks = (id, done)=>{
                                 'projectName': result.ProjectName,
                                 "dueDate": result.DueDate,
                                 "hourlyRate": result.HourlyRate,
-                                'tasks': values
-
+                                'tasks': values,
+                                "ProjectMembers": memberValues
                             }
                             done(null, text);
                         }                       
@@ -150,8 +159,31 @@ module.exports.getTasks = (id, done)=>{
             }
             
         }
-           
-        
     });
 }
 
+module.exports.getProjectMembers = (id, done)=>{
+    ProjectModel.findOne({ _id: id},{ Completed: false},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+        {
+            var values = [], member=0, text="";
+            for(member; member<result.TeamMembers.length; member++) 
+            {
+                text = {
+                    'MemberID': result.TeamMembers[task]._id,
+                    'MemberRole': result.TeamMembers[task].Role
+                }
+                values.push(text); 
+                if(values.length == result.Tasks.length)
+                {
+                    done(null, text);                   
+                }
+            }
+            
+        }
+    });
+}

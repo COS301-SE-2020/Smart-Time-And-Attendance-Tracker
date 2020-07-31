@@ -388,19 +388,27 @@ module.exports.getTasks = (req, res, next) => {
                         done(err);
                     else if(val == false) 
                     {
-                        if(count == result.Projects.length)
-                        {
-                            return res.status(200).json({projects : projectsOfUser});
-                        };
+                        
                     }
                     else
                     {
-                        projectsOfUser.push(val);
-                        if(count == result.Projects.length)
+                        projectsOfUser.push(val);        
+                    }
+                    ProjectHelper.getProjectMembers(result.Projects[i],(error,memeberOfProject)=> {
+                        if(error)
+                            done(error);
+                        else if(memeberOfProject == false) 
                         {
-                            return res.status(200).json({projects : projectsOfUser});
-                        };
-                    
+                            
+                        }
+                        else
+                        {
+                            
+                        }
+                    });
+                    if(count == result.Projects.length)
+                    {
+                        return res.status(200).json({projects : projectsOfUser});
                     }
                 
                 }); 
