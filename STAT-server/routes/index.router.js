@@ -57,7 +57,7 @@ router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
 //calendar api
-router.post("/googleCalender/getEvents", googleCalendar.getEvents);
-router.post("/googleCalender/authenticate", googleCalendar.authenticate);
+router.get("/googleCalendar/getEvents", googleCalendar.getEvents);
+router.post("/googleCalendar/getCredentials", googleCalendar.getCredentials);
 
 module.exports = router;

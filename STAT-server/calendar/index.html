@@ -1,181 +1,94 @@
-<!--<html>
-  <body>
-    <div id='content'>
-      <h1>Events</h1>
-      <ul id='events'></ul>
-    </div>
-    <a href='#' id='authorize-button' onclick='authorization()'>Login</a>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
-<script src="https://apis.google.com/js/api.js"></script>
-    <script>
-      
-        // FOR SECURITY PURPOSE, THESE DETAILS ARE NOT FROM TEAM VISIONARY EMAIL
-var clientId = '1023984585168-lnp38rrdhgp5vrv4vuteoo9qts1qe819.apps.googleusercontent.com'; //choose web app client Id, redirect URI and Javascript origin set to http://localhost
-var apiKey = 'AIzaSyBtNoZB-sJmUC1QM15P2uzAQV6PQ9Xah1w'; 
-var scopes = 'https://www.googleapis.com/auth/calendar';
-/*
-
-      function handleClientLoad() {
-  gapi.client.setApiKey(apiKey);
-  window.setTimeout(checkAuth,5);
-  checkAuth();
-}
-
-function checkAuth() {
-  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true},
-      handleAuthResult);
-}
-
-function handleAuthResult(authResult) {
-  var authorizeButton = document.getElementById('authorize-button');
-  if (authResult) {
-    authorizeButton.style.visibility = 'hidden';
-    makeApiCall();
-  } else {
-    authorizeButton.style.visibility = '';
-    authorizeButton.onclick = handleAuthClick;
-   }
-}
-
-function handleAuthClick(event) {
-  gapi.auth.authorize(
-      {client_id: clientId, scope: scopes, immediate: false},
-      handleAuthResult);
-  return false;
-}
-
-
-      function makeApiCall() {
-  gapi.client.load('calendar', 'v3', function() {
-    var request = gapi.client.calendar.events.list({
-      'calendarId': 'primary'
-    });
-          
-    request.execute(function(resp) {
-      ///document.getElementById("jsonData").innerHTML= resp;
-      console.log(resp);
-      for (var i = 0; i < resp.items.length; i++) {
-        var li = document.createElement('li');
-        li.appendChild(document.createTextNode(resp.items[i].summary));
-        li.appendChild(document.createTextNode(" FROM " +  moment(resp.items[i].start.dateTime).format("L") + ' ' + moment(resp.items[i].start.dateTime).  format("LT") ));
-        li.appendChild(document.createTextNode(" TO " + moment(resp.items[i].end.dateTime).format("LT")  ));
-       
-        document.getElementById('events').appendChild(li);
-      }
-    });
-}*/
-
-function authorization() {
-  gapi.client.setApiKey(apiKey);
-  gapi.auth.authorize({
-    client_id: clientId,
-    scope: scopes,
-    immediate: false
-  }, function(authResult) {
-       if (authResult && !authResult.error) {
-         window.alert('Auth was successful!');
-         alert(authResult);
-       } 
-       
-       else if(authResult.error)
-       {
-        alert(authResult.error); 
-       }else {
-         window.alert('Auth was not successful');
-       }
-     }
-  );
-}
-
-/**
- * Driver for sample application.
- */
-window.onload = (authorization);
-    </script>
-    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-
-    <div id="jsonData"></div>
-  </body>
-</html>-->
-
 <html>
-  <body>
+  <body onload="checkAuth()">
     <div id='content'>
       <h1>Events</h1>
+      <h3 id="error"></h3>
       <ul id='events'></ul>
     </div>
     <a href='#' id='authorize-button' onclick='handleAuthClick();'>Login</a>
     <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
-<script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
     <script>
-      
-        // FOR SECURITY PURPOSE, THESE DETAILS ARE NOT FROM TEAM VISIONARY EMAIL
-var clientId = '169229825461-901tgjrg1avbbvmjegd2uq3kkb5jnhsq.apps.googleusercontent.com'; //choose web app client Id, redirect URI and Javascript origin set to http://localhost
-var apiKey = 'AIzaSyAoZp9Tz9JV3-yd4bhQewfzBxz-_fWNxaE'; 
-var scopes = 'https://www.googleapis.com/auth/calendar';
-
-
-       /* var clientId = 'YOUR_CLIENT_ID';
-var apiKey = 'YOUR_API_KEY';
-var scopes = 'https://www.googleapis.com/auth/calendar';*/
-
-
-      function handleClientLoad() {
-  gapi.client.setApiKey(apiKey);
-  window.setTimeout(checkAuth,5);
-  checkAuth();
-}
-
-function checkAuth() {
-  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true},
-      handleAuthResult);
-}
-
-function handleAuthResult(authResult) {
-  var authorizeButton = document.getElementById('authorize-button');
-  if (authResult) { 
-    console.log("authResult");
-    console.log(authResult);
-    console.log("-------------");
-    authorizeButton.style.visibility = 'hidden';
-    makeApiCall();
-  } else {
-    authorizeButton.style.visibility = '';
-    authorizeButton.onclick = handleAuthClick;
-   }
-}
-
-function handleAuthClick(event) {
-  gapi.auth.authorize(
-      {client_id: clientId, scope: scopes, immediate: false},
-      handleAuthResult);
-  return false;
-}
-
-
-      function makeApiCall() {
-  gapi.client.load('calendar', 'v3', function() {
-    var request = gapi.client.calendar.events.list({
-      'calendarId': 'primary'
-    });
-          
-    request.execute(function(resp) {
-      ///document.getElementById("jsonData").innerHTML= resp;
-      console.log(resp);
-      for (var i = 0; i < resp.items.length; i++) {
-        var li = document.createElement('li');
-        li.appendChild(document.createTextNode(resp.items[i].summary));
-        li.appendChild(document.createTextNode(" FROM " +  moment(resp.items[i].start.dateTime).format("L") + ' ' + moment(resp.items[i].start.dateTime).  format("LT") ));
-        li.appendChild(document.createTextNode(" TO " + moment(resp.items[i].end.dateTime).format("LT")  ));
-       
-        document.getElementById('events').appendChild(li);
+        
+      function checkAuth() {
+        const http = new XMLHttpRequest();
+        var apiURL = "http://localhost:3000/api/googleCalendar/getCredentials";
+        http.open("POST",apiURL , true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            gapi.client.setApiKey(response.apiKey);
+            gapi.auth.authorize({client_id: response.clientId, scope: response.scopes, immediate: true}, handleAuthResult);
+          }
+          else if(this.readyState == 4)
+            document.getElementById('error').innerHTML = response.message;
+        }
+        http.send();
       }
-    });
-  });
-}
-    </script>
-    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 
-    <div id="jsonData"></div>
+      function handleAuthResult(authResult) {
+        var authorizeButton = document.getElementById('authorize-button');
+        if (authResult && !authResult.error) { 
+          authorizeButton.style.visibility = 'hidden';
+          makeApiCall(authResult);
+        } else {
+          authorizeButton.style.visibility = '';
+          authorizeButton.onclick = handleAuthClick;
+        }
+      }
+
+      function handleAuthClick(event) {
+        const http = new XMLHttpRequest();
+        var apiURL = "http://localhost:3000/api/googleCalendar/getCredentials";
+        http.open("POST",apiURL , true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            gapi.auth.authorize({client_id: response.clientId, scope: response.scopes, immediate: false}, handleAuthResult); 
+          }
+          else if(this.readyState == 4)
+            document.getElementById('error').innerHTML = response.message;    
+        }
+        http.send();
+        return false;
+      }
+      
+      function makeApiCall(authResult) {
+        const http = new XMLHttpRequest();
+        var apiURL = "http://localhost:3000/api/googleCalendar/getEvents?" 
+                    + "accessToken=" + authResult.access_token 
+                    + "&expiryDate=" + authResult.expires_at 
+                    + "&tokenType=" + authResult.token_type ;
+
+        http.open("GET",apiURL , true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            if(response.Events)
+            {
+              var i=0;
+              for (i in response.Events) {
+                var li = document.createElement('li');
+                li.appendChild(document.createTextNode(response.Events[i].Event));
+                li.appendChild(document.createTextNode(" FROM " +  moment(response.Events[i].StartTime).format("L") + ' ' + moment(response.Events[i].StartTime).format("LT") ));
+                li.appendChild(document.createTextNode(" TO " + moment(response.Events[i].EndTime).format("LT")  ));
+              
+                document.getElementById('events').appendChild(li);
+              }
+            }
+            else
+              document.getElementById('error').innerHTML = response.message;
+          }
+          else if(this.readyState == 4)
+            document.getElementById('error').innerHTML = response.message;
+        }
+        http.send();  
+      }
+      
+    </script>
   </body>
 </html>
