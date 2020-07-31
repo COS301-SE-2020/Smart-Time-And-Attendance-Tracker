@@ -192,3 +192,23 @@ module.exports.addProject = (ids, projectID, done) => {
     }
     
 }
+
+module.exports.getUserDetails = (val, done)=>{
+    UserModel.findOne({ _id: val._id},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+        {
+            var text = {
+                'ID': val._id,
+                'Email': result.Email,
+                'Name': result.Name,
+                'Surname': result.Surname,
+                'Role': val.Role
+            }
+            done(null, text);
+        }        
+    });
+}

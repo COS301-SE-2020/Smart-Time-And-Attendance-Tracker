@@ -385,32 +385,21 @@ module.exports.getTasks = (req, res, next) => {
                 ProjectHelper.getTasks(result.Projects[i],(err,val)=> {
                     count = count +1;
                     if(err)
-                        done(err);
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
                     else if(val == false) 
                     {
-                        
                     }
                     else
                     {
-                        projectsOfUser.push(val);        
+                        projectsOfUser.push(val);
+                     
+                    
                     }
-                    ProjectHelper.getProjectMembers(result.Projects[i],(error,memeberOfProject)=> {
-                        if(error)
-                            done(error);
-                        else if(memeberOfProject == false) 
-                        {
-                            
-                        }
-                        else
-                        {
-                            
-                        }
-                    });
+                    
                     if(count == result.Projects.length)
                     {
                         return res.status(200).json({projects : projectsOfUser});
-                    }
-                
+                    };
                 }); 
                 
             

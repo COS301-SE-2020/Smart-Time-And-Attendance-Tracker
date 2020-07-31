@@ -24,6 +24,7 @@
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 const TaskHelper =require('../helpers/task.helper');
+const UserHelper =require('../helpers/user.helper');
 
 /**
  * This function assigns a team to a project.
@@ -112,28 +113,45 @@ module.exports.getTasks = (id, done)=>{
             done(null,false);
         else if(result)
         {
-            var values = [], memberValues = [], member=0, task=0, text="";
-            for(member; member<result.TeamMembers.length; member++) 
-            {
-                text = {
-                    'ID': result.TeamMembers[member]._id,
-                    'Role': result.TeamMembers[member].Role
-                }
-                memberValues.push(text); 
-            }   
+            var values = [], task=0, text="", projectMemebers=[];
             if(result.Tasks.length ==0)
             {
-                text = {
-                    'ID': result._id,
-                    'projectName': result.ProjectName,
-                    "dueDate": result.DueDate,
-                    "hourlyRate": result.HourlyRate,
-                    "tasks": [],
-                    "ProjectMembers": memberValues
+                if(result.TeamMembers.length ==0)
+                {
+                    text = {
+                        'ID': result._id,
+                        'projectName': result.ProjectName,
+                        "dueDate": result.DueDate,
+                        "hourlyRate": result.HourlyRate,
+                        'tasks': values,
+                        'projectMemebers': projectMemebers
+                    }
+                    done(null, text);
                 }
-                done(null, text);
+                for(task=0; task<result.TeamMembers.length; task++) 
+                {
+                    UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                        if(err)
+                            done(err);
+                        else if(val)
+                        {
+                            projectMemebers.push(val); 
+                            if(projectMemebers.length == result.TeamMembers.length)
+                            {
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMemebers': projectMemebers
+                                }
+                                done(null, text);
+                            }                       
+                        }
+                    });
+                }
             }
-            
             for(task; task<result.Tasks.length; task++) 
             {
                 TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
@@ -144,46 +162,50 @@ module.exports.getTasks = (id, done)=>{
                         values.push(val); 
                         if(values.length == result.Tasks.length)
                         {
-                            text = {
-                                'ID': result._id,
-                                'projectName': result.ProjectName,
-                                "dueDate": result.DueDate,
-                                "hourlyRate": result.HourlyRate,
-                                'tasks': values,
-                                "ProjectMembers": memberValues
+                            if(result.TeamMembers.length ==0)
+                            {
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMemebers': projectMemebers
+                                }
+                                done(null, text);
+             
                             }
-                            done(null, text);
+                            for(task=0; task<result.TeamMembers.length; task++) 
+                            {
+                                UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                                    if(err)
+                                        done(err);
+                                    else if(val)
+                                    {
+                                        projectMemebers.push(val); 
+                                        if(projectMemebers.length == result.TeamMembers.length)
+                                        {
+                                            text = {
+                                                'ID': result._id,
+                                                'projectName': result.ProjectName,
+                                                "dueDate": result.DueDate,
+                                                "hourlyRate": result.HourlyRate,
+                                                'tasks': values,
+                                                'projectMemebers': projectMemebers
+                                            }
+                                            done(null, text);
+                                        }                       
+                                    }
+                                });
+                            }    
                         }                       
                     }
                 });
             }
             
         }
+           
+        
     });
 }
 
-module.exports.getProjectMembers = (id, done)=>{
-    ProjectModel.findOne({ _id: id},{ Completed: false},(err, result) => {
-        if(err) 
-            done(err);
-        else if (!result)
-            done(null,false);
-        else if(result)
-        {
-            var values = [], member=0, text="";
-            for(member; member<result.TeamMembers.length; member++) 
-            {
-                text = {
-                    'MemberID': result.TeamMembers[task]._id,
-                    'MemberRole': result.TeamMembers[task].Role
-                }
-                values.push(text); 
-                if(values.length == result.Tasks.length)
-                {
-                    done(null, text);                   
-                }
-            }
-            
-        }
-    });
-}
