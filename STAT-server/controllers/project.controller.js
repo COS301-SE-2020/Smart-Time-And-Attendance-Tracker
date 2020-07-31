@@ -111,13 +111,13 @@ module.exports.add = (req, res, next) => {
     project.TeamMembers.push({ _id : project.TeamLeader, Role: "Team Leader"});
     project.save((err, doc) => {
         if(!err){
-            req.ProjectID = doc._id;
+            req.body.projectID = doc._id;
             req.body.userID = req.ID;
             next();
             //return res.status(200).json({ projectID : doc._id, message: 'Project Created' });
         }
         else{
-            return res.status(500).send({message: 'Internal Server Error: 666' + err});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
     })
 }

@@ -113,7 +113,7 @@ module.exports.getTasks = (id, done)=>{
             done(null,false);
         else if(result)
         {
-            var values = [], task=0, text="", projectMemebers=[];
+            var values = [], task=0, text="", projectMembers=[];
             if(result.Tasks.length ==0)
             {
                 if(result.TeamMembers.length ==0)
@@ -124,66 +124,72 @@ module.exports.getTasks = (id, done)=>{
                         "dueDate": result.DueDate,
                         "hourlyRate": result.HourlyRate,
                         'tasks': values,
-                        'projectMemebers': projectMemebers
+                        'projectMembers': projectMembers
                     }
                     done(null, text);
                 }
-                for(task=0; task<result.TeamMembers.length; task++) 
+                else
                 {
-                    UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                    for(task=0; task<result.TeamMembers.length; task++) 
+                    {
+                        UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                            if(err)
+                                done(err);
+                            else if(val)
+                                projectMembers.push(val); 
+
+                            if(projectMembers.length == result.TeamMembers.length)
+                            {
+                                console.log("hello");
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMembers': projectMembers
+                                }
+                                done(null, text);
+                            }                       
+                            
+                        });
+                    }
+                }
+            }
+            else
+            {
+                for(task; task<result.Tasks.length; task++) 
+                {
+                    TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
                         if(err)
                             done(err);
                         else if(val)
                         {
-                            projectMemebers.push(val); 
-                            if(projectMemebers.length == result.TeamMembers.length)
+                            values.push(val); 
+                            if(values.length == result.Tasks.length)
                             {
-                                text = {
-                                    'ID': result._id,
-                                    'projectName': result.ProjectName,
-                                    "dueDate": result.DueDate,
-                                    "hourlyRate": result.HourlyRate,
-                                    'tasks': values,
-                                    'projectMemebers': projectMemebers
+                                if(result.TeamMembers.length ==0)
+                                {
+                                    text = {
+                                        'ID': result._id,
+                                        'projectName': result.ProjectName,
+                                        "dueDate": result.DueDate,
+                                        "hourlyRate": result.HourlyRate,
+                                        'tasks': values,
+                                        'projectMembers': projectMembers
+                                    }
+                                    done(null, text);
+                
                                 }
-                                done(null, text);
-                            }                       
-                        }
-                    });
-                }
-            }
-            for(task; task<result.Tasks.length; task++) 
-            {
-                TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
-                    if(err)
-                        done(err);
-                    else if(val)
-                    {
-                        values.push(val); 
-                        if(values.length == result.Tasks.length)
-                        {
-                            if(result.TeamMembers.length ==0)
-                            {
-                                text = {
-                                    'ID': result._id,
-                                    'projectName': result.ProjectName,
-                                    "dueDate": result.DueDate,
-                                    "hourlyRate": result.HourlyRate,
-                                    'tasks': values,
-                                    'projectMemebers': projectMemebers
-                                }
-                                done(null, text);
-             
-                            }
-                            for(task=0; task<result.TeamMembers.length; task++) 
-                            {
-                                UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
-                                    if(err)
-                                        done(err);
-                                    else if(val)
-                                    {
-                                        projectMemebers.push(val); 
-                                        if(projectMemebers.length == result.TeamMembers.length)
+                                for(task=0; task<result.TeamMembers.length; task++) 
+                                {
+                                    UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                                        if(err)
+                                            done(err);
+                                        else if(val)
+                                            projectMembers.push(val); 
+                                    
+                                        if(projectMembers.length == result.TeamMembers.length)
                                         {
                                             text = {
                                                 'ID': result._id,
@@ -191,20 +197,20 @@ module.exports.getTasks = (id, done)=>{
                                                 "dueDate": result.DueDate,
                                                 "hourlyRate": result.HourlyRate,
                                                 'tasks': values,
-                                                'projectMemebers': projectMemebers
+                                                'projectMembers': projectMembers
                                             }
                                             done(null, text);
                                         }                       
-                                    }
-                                });
-                            }    
-                        }                       
-                    }
-                });
+                                        
+                                    });
+                                }    
+                            }                       
+                        }
+                    });
+                }
             }
             
-        }
-           
+        }          
         
     });
 }

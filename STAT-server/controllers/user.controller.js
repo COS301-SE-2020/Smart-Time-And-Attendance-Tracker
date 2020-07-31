@@ -362,12 +362,12 @@ module.exports.isAuthenticated = (req, res, next) => {
 }
 
 /**
- * This function gets all the tasks(with project) a user is working on.
+ * This function gets all the projects (and associated details) a user is working on.
  * @param {HTTP Request} req Request - ID of user.
  * @param {HTTP Response} res 
  * @return {Http Response} - Array with all projects and tasks objects
  */
-module.exports.getTasks = (req, res, next) => {
+module.exports.getProjects = (req, res, next) => {
     let count = 0;
     let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},(err, result) => {
@@ -380,22 +380,17 @@ module.exports.getTasks = (req, res, next) => {
         {
             if(result.Projects.length == 0)
                 return res.status(404).json({ message: 'User is not assigned to any projects' });
+
             for(i=0; i<result.Projects.length; i++)
             {      
                 ProjectHelper.getTasks(result.Projects[i],(err,val)=> {
                     count = count +1;
                     if(err)
                         return res.status(500).send({message: 'Internal Server Error: ' + err});
-                    else if(val == false) 
-                    {
-                    }
-                    else
-                    {
+                   
+                    else if(val)
                         projectsOfUser.push(val);
-                     
-                    
-                    }
-                    
+
                     if(count == result.Projects.length)
                     {
                         return res.status(200).json({projects : projectsOfUser});
@@ -413,7 +408,7 @@ module.exports.getTasks = (req, res, next) => {
  * Only a security admin can make this request.
  * @param req Request body - ID of user to edit
  * @param res Http Response
- * @return {Http Response} - Succes or error message
+ * @return {Http Response} - Success or error message
  */
 module.exports.edit = (req, res) => {
     UserModel.findOne({ _id: req.body.userID},(err, result) => {
@@ -451,7 +446,7 @@ module.exports.edit = (req, res) => {
  * Only a security admin can make this request.
  * @param req Request body - ID of user to add role to
  * @param res Http Response
- * @return {Http Response} - Succes or error message
+ * @return {Http Response} - Success or error message
  */
 
 module.exports.addRole = (req, res) => {  
@@ -507,7 +502,7 @@ module.exports.addRole = (req, res) => {
  * Only a security admin can make this request.
  * @param req Request body - ID of user to add role to
  * @param res Http Response
- * @return {Http Response} - Succes or error message
+ * @return {Http Response} - Success or error message
  */
 
 module.exports.removeRole = (req, res) => {  
