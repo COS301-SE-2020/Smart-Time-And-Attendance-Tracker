@@ -67,7 +67,6 @@ module.exports.getEvents = (req, response) => {
       orderBy: 'startTime',
     }, (err, res) => {
       if (err) {
-        console.log("error API");
         response.status(400).json({message: 'The API returned an error: ' + err});
         return;
       }
@@ -85,7 +84,7 @@ module.exports.getEvents = (req, response) => {
           }
           EventList.push(EventItem);
         });
-        response.status(200).json({message: 'Upcoming 10 events:' , Events: EventList});
+        response.status(200).json({message: 'Upcoming events:' , Events: EventList});
       } 
       else {
         response.status(200).json({message: 'No upcoming events found.'});
@@ -103,7 +102,7 @@ module.exports.getEvents = (req, response) => {
  module.exports.getCredentials = (req, response) => {
   fs.readFile(CREDENTIAL_PATH, (err, content) => {
     if (err) {
-      response.status(400).json({message: 'Error loading client secret file. ' + err});
+      response.status(400).json({message: 'Error loading credentials. ' + err});
       return;
     }
     // Authorize a client with credentials, then call the Google Calendar API.
