@@ -159,7 +159,7 @@ module.exports.removeTeamMember = (req, res) => {
  * @param {HTTP Response} res 
  * @return {String} Error or success message.
  */
-
+////
 module.exports.addRole = (req, res) => {  / ////optimize
     if(!req.body.teamID)
         return res.status(400).send({message: 'No team ID provided'});
@@ -187,4 +187,89 @@ module.exports.addRole = (req, res) => {  / ////optimize
         }
     });   
 }
+
+
+
+
+module.exports.deleteTeam = (req, res) => {
+    if(!req.body.teamID)
+       return res.status(400).send({message: 'No team ID provided'}); 
+   
+   TeamModel.deleteOne({_id: req.body.teamID},(err,val)=>{
+    if(err)
+        return res.status(500).send({message: 'Internal Server Error: ' + err});
+    else if (!val) 
+        return res.status(404).json({ message: 'Team not found' });
+    else 
+        //console.log(val.n);
+        if(val.n == 0){   ///if the teamid is same size as required
+            return res.status(404).json({ message: 'Team not found' });
+        }
+        return res.status(200).json({ message: 'Team successfully deleted ' });
+    });
+}
+
+
+
+/**
+ * INCOMPLETE 
+ * 
+ * doesnt receive any parameters
+ * returns all teams as
+  teams : [
+       {
+           ID:
+           TeamName:
+           TeamMembers: []
+       },
+        {
+           ID:
+           TeamName:
+           TeamMembers: []
+       }
+  ]
+ */
+module.exports.getTeams = (req, res, next) => {
+    let count = 0;
+    TeamModel.find((err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'Teams dont exist' });
+        
+        else
+        {
+            if(result.length == 0)
+                return res.status(404).json({ message: 'No teams found' });
+            var allTeams =[];
+            for(i=0; i<result.length; i++) ///result array with team objects
+            {      
+                var teamDetails ={"ID": result[i]._id, "TeamName": result[i].TeamName};  //team details
+                var  teamUsers = [];
+                   ///take team member detals
+                    var teamLength =result[i].TeamMembers.length;
+                    console.log(teamLength);
+                    for(var a=0; a<result[i].TeamMembers.length; a++){
+                        UserHelper.userDetails(result[i].TeamMembers[a]._id, (err,val)=> {
+                           var user ={"ID":val._id, "Name":val.Name, "Surname":val.Surname, "Email":val.Email};
+                            //console.log(user);
+                            teamUsers.push(user);
+                        });
+                    } 
+                    teamDetails["TeamMembers"] =teamUsers;
+
+         
+                allTeams.push(teamDetails);
+              
+            }
+
+           return res.status(200).json({teams : allTeams });
+        }
+    });
+}
+
+
+
+
+
 

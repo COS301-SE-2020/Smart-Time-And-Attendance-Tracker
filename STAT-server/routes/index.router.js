@@ -1,3 +1,4 @@
+
 /**
   * @file STAT-server/routes/index.router.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
@@ -68,6 +69,8 @@ router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.removeTeamMember);
 router.post("/team/changeRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.addRole);
 router.post("/team/editTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.editTeam);
+router.post("/team/deleteTeam", team.deleteTeam);
+router.get("/team/getTeams", team.getTeams);
 
 //project
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, user.addProject);
@@ -87,6 +90,5 @@ router.post("/task/start",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.
 router.post("/task/complete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
 router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project.deleteTask, task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
-
 
 module.exports = router;
