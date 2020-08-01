@@ -1,3 +1,4 @@
+
 /**
   * @file STAT-server/routes/index.router.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
@@ -40,14 +41,13 @@ router.post("/user/login", user.login);
 router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 router.get("/user/isAuthenticated",jwtHelper.verifyJWTtoken, user.isAuthenticated);
-router.get("/user/getTasks",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getTasks);
+router.get("/user/getProjects",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getProjects);
 router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 router.post("/user/editUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.edit);
-
 router.post("/user/addRole",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin, user.addRole);
 router.post("/user/removeRole",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin, user.removeRole);
 
@@ -69,7 +69,6 @@ router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.removeTeamMember);
 router.post("/team/changeRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.addRole);
 router.post("/team/editTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.editTeam);
-
 router.post("/team/deleteTeam", team.deleteTeam);
 router.get("/team/getTeams", team.getTeams);
 
@@ -78,10 +77,8 @@ router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, p
 router.post("/project/addMember", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.addMember, user.addProject);
 router.post("/project/removeMember", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeMember, user.removeProject);
 router.post("/project/changeRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, project.addRole);
-
 router.post("/project/addTeam", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.addTeam);
 router.post("/project/clearMembers", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.removeTeam);
-
 router.post("/project/addTask",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, task.add, project.addTask);
 router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.complete);
 router.delete("/project", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.deleteProject);
@@ -93,6 +90,5 @@ router.post("/task/start",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.
 router.post("/task/complete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
 router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project.deleteTask, task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
-
 
 module.exports = router;
