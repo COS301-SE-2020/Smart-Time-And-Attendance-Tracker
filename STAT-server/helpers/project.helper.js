@@ -130,6 +130,7 @@ module.exports.getTasks = (id, done)=>{
                 }
                 else
                 {
+                    var inLen = result.TeamMembers.length;
                     for(task=0; task<result.TeamMembers.length; task++) 
                     {
                         UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
@@ -137,10 +138,11 @@ module.exports.getTasks = (id, done)=>{
                                 done(err);
                             else if(val)
                                 projectMembers.push(val); 
+                            else if (!val)
+                                inLen = inLen -1;
 
-                            if(projectMembers.length == result.TeamMembers.length)
+                            if(projectMembers.length == inLen)
                             {
-                                console.log("hello");
                                 text = {
                                     'ID': result._id,
                                     'projectName': result.ProjectName,
@@ -158,29 +160,34 @@ module.exports.getTasks = (id, done)=>{
             }
             else
             {
+                var inLen = result.Tasks.length;
                 for(task; task<result.Tasks.length; task++) 
                 {
                     TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
                         if(err)
                             done(err);
                         else if(val)
-                        {
                             values.push(val); 
-                            if(values.length == result.Tasks.length)
+                        else if(!val)
+                            inLen = inLen -1;
+                        if(values.length == inLen)
+                        {
+                            if(result.TeamMembers.length ==0)
                             {
-                                if(result.TeamMembers.length ==0)
-                                {
-                                    text = {
-                                        'ID': result._id,
-                                        'projectName': result.ProjectName,
-                                        "dueDate": result.DueDate,
-                                        "hourlyRate": result.HourlyRate,
-                                        'tasks': values,
-                                        'projectMembers': projectMembers
-                                    }
-                                    done(null, text);
-                
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMembers': projectMembers
                                 }
+                                done(null, text);
+            
+                            }
+                            else
+                            {
+                                var inLen2 = result.TeamMembers.length;
                                 for(task=0; task<result.TeamMembers.length; task++) 
                                 {
                                     UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
@@ -188,6 +195,8 @@ module.exports.getTasks = (id, done)=>{
                                             done(err);
                                         else if(val)
                                             projectMembers.push(val); 
+                                        else if(!val)
+                                            inLen2 = inLen2 -1;
                                     
                                         if(projectMembers.length == result.TeamMembers.length)
                                         {
@@ -204,8 +213,9 @@ module.exports.getTasks = (id, done)=>{
                                         
                                     });
                                 }    
-                            }                       
-                        }
+                            }
+                        }                       
+                        
                     });
                 }
             }

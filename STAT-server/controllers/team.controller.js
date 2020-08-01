@@ -159,7 +159,7 @@ module.exports.removeTeamMember = (req, res) => {
  * @param {HTTP Response} res 
  * @return {String} Error or success message.
  */
-////
+
 module.exports.addRole = (req, res) => {  / ////optimize
     if(!req.body.teamID)
         return res.status(400).send({message: 'No team ID provided'});
@@ -189,22 +189,22 @@ module.exports.addRole = (req, res) => {  / ////optimize
 }
 
 
-
-
+/**
+ * Receives TeamID and deletes the corresponding team.
+ * @param {HTTP Request} req Request parameter - team ID 
+ * @param {HTTP Response} res 
+ * @return {String} Error or success message.
+ */
 module.exports.deleteTeam = (req, res) => {
-    if(!req.body.teamID)
+    if(!req.query.teamID)
        return res.status(400).send({message: 'No team ID provided'}); 
    
-   TeamModel.deleteOne({_id: req.body.teamID},(err,val)=>{
+   TeamModel.deleteOne({_id: req.query.teamID},(err,val)=>{
     if(err)
         return res.status(500).send({message: 'Internal Server Error: ' + err});
     else if (!val) 
         return res.status(404).json({ message: 'Team not found' });
     else 
-        //console.log(val.n);
-        if(val.n == 0){   ///if the teamid is same size as required
-            return res.status(404).json({ message: 'Team not found' });
-        }
         return res.status(200).json({ message: 'Team successfully deleted ' });
     });
 }
@@ -212,9 +212,6 @@ module.exports.deleteTeam = (req, res) => {
 
 
 /**
- * INCOMPLETE 
- * 
- * doesnt receive any parameters
  * returns all teams as
   teams : [
        {
@@ -229,13 +226,19 @@ module.exports.deleteTeam = (req, res) => {
        }
   ]
  */
+
+/**
+ * Returns all teams in the team collection
+ * @param {HTTP Request} req 
+ * @param {HTTP Response} res 
+ * @return {String} Array with teams and appropriate details
+ */
 module.exports.getTeams = (req, res, next) => {
-    let count = 0;
-    TeamModel.find((err, result) => {
+    TeamModel.find({},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
-            return res.status(404).json({ message: 'Teams dont exist' });
+            return res.status(404).json({ message: 'Team collection not found' });
         
         else
         {
@@ -243,27 +246,45 @@ module.exports.getTeams = (req, res, next) => {
                 return res.status(404).json({ message: 'No teams found' });
             var allTeams =[];
             for(i=0; i<result.length; i++) ///result array with team objects
-            {      
-                var teamDetails ={"ID": result[i]._id, "TeamName": result[i].TeamName};  //team details
+            {    
+                var teamDetails ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
                 var  teamUsers = [];
                    ///take team member detals
-                    var teamLength =result[i].TeamMembers.length;
-                    console.log(teamLength);
-                    for(var a=0; a<result[i].TeamMembers.length; a++){
-                        UserHelper.userDetails(result[i].TeamMembers[a]._id, (err,val)=> {
-                           var user ={"ID":val._id, "Name":val.Name, "Surname":val.Surname, "Email":val.Email};
-                            //console.log(user);
-                            teamUsers.push(user);
+                var teamLength =result[i].TeamMembers.length;
+                if(teamLength == 0)
+                {
+                    teamDetails["TeamMembers"] =teamUsers;
+                    allTeams.push(teamDetails);
+                }
+                else
+                {
+                    var teamDetails2 ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
+                    var teamUsers2 = [];
+                    var inLen = teamLength;
+                    for(var a=0; a<teamLength; a++)
+                    {
+                        UserHelper.getUserDetails(result[i].TeamMembers[a], (err,val)=> {
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else if(val)
+                            teamUsers2.push(val);
+                        else if(!val)
+                            inLen = inLen - 1;  
+
+                        if(teamUsers2.length == inLen)
+                        {
+                            teamDetails2["TeamMembers"] =teamUsers2;
+                            allTeams.push(teamDetails2);
+                            if(allTeams.length == result.length )
+                                return res.status(200).json({teams : allTeams });
+                        }
                         });
                     } 
-                    teamDetails["TeamMembers"] =teamUsers;
-
-         
-                allTeams.push(teamDetails);
-              
+                }
+                if(allTeams.length == result.length )
+                    return res.status(200).json({teams : allTeams });
             }
-
-           return res.status(200).json({teams : allTeams });
+        
         }
     });
 }

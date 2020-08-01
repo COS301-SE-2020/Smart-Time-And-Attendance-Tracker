@@ -69,8 +69,8 @@ router.post("/team/addTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLead
 router.post("/team/removeTeamMember",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.removeTeamMember);
 router.post("/team/changeRole",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.addRole);
 router.post("/team/editTeam",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.editTeam);
-router.post("/team/deleteTeam", team.deleteTeam);
-router.get("/team/getTeams", team.getTeams);
+router.delete("/team", jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.deleteTeam);
+router.get("/team/getTeams",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader, team.getTeams);
 
 //project
 router.post("/project/add", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.add, user.addProject);
