@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TeamManagementService } from 'src/app/shared/services/team-management.service';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-teams',
@@ -10,7 +11,7 @@ import { TeamManagementService } from 'src/app/shared/services/team-management.s
 })
 export class TeamsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public tmService: TeamManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public tmService: TeamManagementService) { }
 
   panelOpenState = false;
   roles : string
@@ -52,11 +53,17 @@ export class TeamsComponent implements OnInit {
       this.getMembers();
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
       this.error = error.statusText
     });
   }
-
   // get team members
   getMembers() {
     this.members == []
@@ -71,7 +78,6 @@ export class TeamsComponent implements OnInit {
       }
     }
   }
-
   // create new team
   createTeam(form : NgForm) {
     console.log(form);
@@ -79,10 +85,16 @@ export class TeamsComponent implements OnInit {
       console.log(data);
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
-
   // add team member
   addTeamMember(form : NgForm) {
     console.log(form);
@@ -90,10 +102,16 @@ export class TeamsComponent implements OnInit {
       console.log(data);
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
-
   // remove team member
   removeTeamMember(form : NgForm) {
     // get user id
@@ -101,10 +119,16 @@ export class TeamsComponent implements OnInit {
       console.log(data);
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
-
   // change role in team
   changeRole(form : NgForm) {
     console.log(form);
@@ -112,7 +136,14 @@ export class TeamsComponent implements OnInit {
       console.log(data);
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 

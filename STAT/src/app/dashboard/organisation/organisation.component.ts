@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
+import { AccountManagementService } from 'src/app/shared/services/account-management.service';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-organisation',
@@ -9,7 +10,7 @@ import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/templa
 })
 export class OrganisationComponent implements OnInit {
 
-  constructor(public service : AccountManagementService) { }
+  constructor(public headerService : HeaderService, public service : AccountManagementService) { }
 
   panelOpenState = false;
 
@@ -31,10 +32,16 @@ export class OrganisationComponent implements OnInit {
       this.getMembers()
     },
     error => {
-      console.log(error);
-      //console.log(error.error.message);  
-    
-    }); 
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   rejectUser(id)
@@ -46,13 +53,19 @@ export class OrganisationComponent implements OnInit {
       this.getMembers()
     },
     error => {
-      console.log(error);
-      //console.log(error.error.message);  
-    
-    }); 
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
-  getAllUnauthenticatedUsers(sort : string) 
+  getAllUnauthenticatedUsers(sort : string)
   {
     this.requests = null
     this.service.getUnauthenticatedUsers(localStorage.getItem('token')).subscribe((data) => {
@@ -62,10 +75,16 @@ export class OrganisationComponent implements OnInit {
       console.log(this.requests)
     },
     error => {
-      console.log(error);
-      //console.log(error.error.message);  
-    
-    }); 
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   sortRequests(selection : string) {
@@ -88,7 +107,7 @@ export class OrganisationComponent implements OnInit {
   searchRequests(text : string) {
     if (!this.searchText)
       return this.requests
-    return this.requests.filter((x : any) => 
+    return this.requests.filter((x : any) =>
       x['name'].toLowerCase().includes(text.toLowerCase()) ||
       x['surname'].toLowerCase().includes(text.toLowerCase()) ||
       x['email'].toLowerCase().includes(text.toLowerCase())
@@ -100,7 +119,14 @@ export class OrganisationComponent implements OnInit {
       this.members = data['users'];
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 }

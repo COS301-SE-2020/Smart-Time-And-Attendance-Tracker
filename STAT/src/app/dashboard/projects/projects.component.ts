@@ -4,6 +4,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 import { TeamManagementService } from 'src/app/shared/services/team-management.service';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-projects',
@@ -12,7 +13,7 @@ import { TeamManagementService } from 'src/app/shared/services/team-management.s
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService) { }
 
   panelOpenState = false
   name = "John Doe"
@@ -83,8 +84,15 @@ export class ProjectsComponent implements OnInit {
       this.error = 'none'
     },
     error => {
-      console.log(error);
-      this.error = error.statusText
+      //console.log(error);
+      //this.error = error.statusText
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 
@@ -96,7 +104,14 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
   //add task
@@ -108,7 +123,14 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 
@@ -120,7 +142,14 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
   // edit task (taskID must be added to body)
@@ -131,7 +160,14 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 
@@ -143,7 +179,14 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
   // delete task
@@ -153,7 +196,14 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 
@@ -165,7 +215,14 @@ export class ProjectsComponent implements OnInit {
 
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 
@@ -177,7 +234,14 @@ export class ProjectsComponent implements OnInit {
 
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
   //mark task as completed
@@ -187,7 +251,14 @@ export class ProjectsComponent implements OnInit {
       console.log(data);
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
   //get tasks
@@ -289,7 +360,14 @@ export class ProjectsComponent implements OnInit {
           console.log(data);
         },
         error => {
-          console.log(error);
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
         });
       }
 
@@ -300,7 +378,14 @@ export class ProjectsComponent implements OnInit {
           console.log(data);
         },
         error => {
-          console.log(error);
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
         });
       }
 

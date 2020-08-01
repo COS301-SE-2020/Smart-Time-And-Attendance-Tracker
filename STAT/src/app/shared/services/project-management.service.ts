@@ -101,21 +101,33 @@ export class ProjectManagementService {
   addTeam(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+'project/addTeam', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'team/addTeam', JSON.stringify(values), {
       headers: headers
     });
   }
   // add member to project team
-  addTeamMember(token, userID) {
-    // what does the button do? does it submit a form?
+  addTeamMember(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'team/addTeamMember', JSON.stringify(values), {
+      headers: headers
+    });
   }
   // remove member from project team
-  removeTeamMember(token, userID) {
-    // how does this work?
+  removeTeamMember(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'team/removeTeamMember', JSON.stringify(values), {
+      headers: headers
+    });
   }
   // change role in project
-  changeRole(token, userID, values) {
-
+  changeRole(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'project/changeRole', JSON.stringify(values), {
+      headers: headers
+    });
   }
 
 } // end service

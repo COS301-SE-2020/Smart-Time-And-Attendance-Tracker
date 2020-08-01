@@ -128,7 +128,13 @@ export class TodayComponent implements OnInit {
     error => {
       //console.log(error);
       //console.log(error.error.message);
-
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 
@@ -196,7 +202,6 @@ export class TodayComponent implements OnInit {
     },
     error => {
       //console.log(error);
-
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -249,6 +254,15 @@ export class TodayComponent implements OnInit {
     },
     error => {
       //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+
+      // should this still happen if error 403 ?????????????????????????????????????????????????
       if (date == this.formatDate(this.date))
         this.week['today'] = 'no entries'
       if (date == this.formatDate(this.date1))
