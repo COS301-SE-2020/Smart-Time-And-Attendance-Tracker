@@ -70,7 +70,6 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-
   //mark project as completed
   public completeProject(token, values) {
     const headers = new HttpHeaders()
@@ -79,7 +78,6 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-
   //mark task as completed
   public completeTask(token, values) {
     const headers = new HttpHeaders()
@@ -88,7 +86,6 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-
   //mark task as started
   public startTask(token, values) {
     const headers = new HttpHeaders()
@@ -97,4 +94,28 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-}
+
+  /*** organisation management ***/
+
+  // add team to project
+  addTeam(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'project/addTeam', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  // add member to project team
+  addTeamMember(token, userID) {
+    // what does the button do? does it submit a form?
+  }
+  // remove member from project team
+  removeTeamMember(token, userID) {
+    // how does this work?
+  }
+  // change role in project
+  changeRole(token, userID, values) {
+
+  }
+
+} // end service

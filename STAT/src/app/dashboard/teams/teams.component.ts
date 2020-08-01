@@ -15,7 +15,7 @@ export class TeamsComponent implements OnInit {
   panelOpenState = false;
   roles : string
 
-  addTeamForm : FromGroup
+  addTeamForm : FormGroup
   addMemberForm : FormGroup
   teams : Object[]
   tid : string
@@ -24,15 +24,17 @@ export class TeamsComponent implements OnInit {
   mid : string
   memberName : string
 
+  error : string
+
   ngOnInit(): void {
     // page setup
     this.roles = localStorage.getItem('roles');
     // add team form
-    this.addTeamForm = newFormGroup({
+    this.addTeamForm = new FormGroup({
       teamName : new FormControl('', [Validators.required])
     });
     // add member form
-    this.addMemberForm = newFormGroup({
+    this.addMemberForm = new FormGroup({
       userID : new FormControl(''), // ??
       projectID : new FormControl('')
     });
@@ -47,7 +49,7 @@ export class TeamsComponent implements OnInit {
     this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
       this.teams = data['teams']
       console.log(data);
-      this.members = getMembers();
+      this.getMembers();
     },
     error => {
       console.log(error);
@@ -59,7 +61,7 @@ export class TeamsComponent implements OnInit {
   getMembers() {
     this.members == []
 
-    for (let x = 0; x M this.teams.length; z++) {
+    for (let x = 0; x = this.teams.length; x++) {
       var temp : Object[] = this.teams['members']
 
       if (temp.length != 0) {
@@ -70,10 +72,10 @@ export class TeamsComponent implements OnInit {
     }
   }
 
-  // add team
-  addTeam(form : NgForm) {
+  // create new team
+  createTeam(form : NgForm) {
     console.log(form);
-    this.pmService.addTeam(localStorage.getItem('token'), form).subscribe((data) => {
+    this.tmService.createTeam(localStorage.getItem('token'), form).subscribe((data) => {
       console.log(data);
     },
     error => {
@@ -84,7 +86,7 @@ export class TeamsComponent implements OnInit {
   // add team member
   addTeamMember(form : NgForm) {
     console.log(form);
-    this.pmService.addTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
+    this.tmService.addTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
       console.log(data);
     },
     error => {
@@ -93,9 +95,9 @@ export class TeamsComponent implements OnInit {
   }
 
   // remove team member
-  removeTeamMember() {
-    console.log(form);
-    this.pmService.removeTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
+  removeTeamMember(form : NgForm) {
+    // get user id
+    this.tmService.removeTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
       console.log(data);
     },
     error => {
@@ -104,9 +106,9 @@ export class TeamsComponent implements OnInit {
   }
 
   // change role in team
-  changeRole() {
+  changeRole(form : NgForm) {
     console.log(form);
-    this.pmService.changeRole(localStorage.getItem('token'), form).subscribe((data) => {
+    this.tmService.changeRole(localStorage.getItem('token'), form).subscribe((data) => {
       console.log(data);
     },
     error => {

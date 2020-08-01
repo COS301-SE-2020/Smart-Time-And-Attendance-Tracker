@@ -280,16 +280,12 @@ export class ProjectsComponent implements OnInit {
 
       // get teams
       getTeam() {
-        
+
       }
       // add team
       addTeam(form : NgForm) {
         console.log(form);
-        let req = {
-          'projectID' : pid,
-          'teamID' : form['projectID']
-        }
-        this.tmService.assignProject(localStorage.getItem('token'), req).subscribe((data) => {
+        this.pmService.addTeam(localStorage.getItem('token'), form).subscribe((data) => {
           console.log(data);
         },
         error => {

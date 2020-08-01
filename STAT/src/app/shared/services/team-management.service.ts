@@ -5,7 +5,7 @@ import { formatDate } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
-export class TeamsManagementService {
+export class TeamManagementService {
 
   constructor(public http: HttpClient) { }
   private ROOT_URL = "http://localhost:3000/api/";
@@ -20,7 +20,7 @@ export class TeamsManagementService {
   }*/
 
   // create team
-  public addTeam(token, values) {
+  public createTeam(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
     return this.http.post(this.ROOT_URL+'team/add', JSON.stringify(values), {
@@ -28,7 +28,7 @@ export class TeamsManagementService {
     });
   }
   // get all teams
-  public getTeams() {
+  public getTeams(token) {
       const headers = new HttpHeaders()
             .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
       return this.http.post(this.ROOT_URL+'team/add', {
