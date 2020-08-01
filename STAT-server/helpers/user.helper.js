@@ -1,5 +1,6 @@
+
 /**
-  * @file STAT-server/helper/user.helper.js
+  * @file STAT-server/helpers/user.helper.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles some of the requests regarding User model in our database. 
   * This is a helper file to handle User related requests.
@@ -7,7 +8,7 @@
  */
 
 /**
-* Filename:             STAT-server/helper/user.helper.js
+* Filename:             STAT-server/helpers/user.helper.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
@@ -122,21 +123,94 @@ module.exports.addTeam = (id, teamID, done) => {
 }
 
 /**
- * Deletes team from Team array.
+ * Deletes project from Projects array.
  * @param {*} ids 
- * @param {String} teamID 
- * @param {*} done 
+ * @param {String} projectID 
+ * @param {function} done - return to this funtion when done
  */
-module.exports.deleteTeam = (ids, teamID, done) => {
+module.exports.deleteProject = (ids, projectID, done) => {
+    if(ids.length == 1)
+    {
+        UserModel.updateOne({_id: ids[0]},{ $pull: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, false);
+            
+        });
+      
+    }
+    else
+    {
+        UserModel.updateMany({_id:{$in: ids}},{ $pull: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, false);
+            
+        });
+    }
+    
+}
 
-    UserModel.updateMany({_id:{$in: ids}},{ $pull: { Team: teamID}},(err, result) => {
-        if (err) 
+/**
+ * Adds project to Projects array.
+ * @param {*} ids 
+ * @param {String} projectID 
+ * @param {function} done - return to this funtion when done
+ */
+module.exports.addProject = (ids, projectID, done) => {
+    if(ids.length == 0)
+        done(null, true);
+    else if(ids.length == 1)
+    {
+        UserModel.updateOne({_id: ids[0]},{ $addToSet: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, true);
+            
+        });
+      
+    }
+    else
+    {
+        UserModel.updateMany({_id:{$in: ids}},{ $addToSet: { Projects: projectID}},(err, result) => {
+            if (err) 
+                done(err);
+            else if (!result)
+                done(null, false);
+            else
+                done(null, true);
+            
+        });
+    }
+    
+}
+
+module.exports.getUserDetails = (val, done)=>{
+    UserModel.findOne({ _id: val._id},(err, result) => {
+        if(err) 
             done(err);
         else if (!result)
-            done(null, false);
-        else
-            done(null, false);
-        
+            done(null,false);
+        else if(result)
+        {
+            var text = {
+                'ID': val._id,
+                'email': result.Email,
+                'name': result.Name,
+                'surname': result.Surname,
+                'role': val.Role
+            }
+            done(null, text);
+        }        
     });
-  
 }
+

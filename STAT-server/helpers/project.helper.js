@@ -24,14 +24,15 @@
 const mongoose = require("mongoose");
 const ProjectModel = mongoose.model("Project");
 const TaskHelper =require('../helpers/task.helper');
+const UserHelper =require('../helpers/user.helper');
 
 /**
  * This function assigns a team to a project.
  * @param {String} id ID of project
  * @param {String} teamID ID of team
- * @param {*} done 
+ * @param {Function} done 
  */
-module.exports.addTeam = (id, teamID, done)=>{
+/*module.exports.addTeam = (id, teamID, done)=>{
     ProjectModel.updateOne({_id: id},{Team: teamID},(err, result) => {
         if(err) 
             done(err);
@@ -41,6 +42,42 @@ module.exports.addTeam = (id, teamID, done)=>{
            done(null, true);
         
     });
+}*/
+
+/**
+ * This function removes a user from all projects they work on.
+ * @param {Array} userID ID of user
+ * @param {String} ids IDs of projects
+ * @param {Function} done 
+ */
+module.exports.removeUser = ( userID, ids,done)=>{
+    if(ids.length == 1)
+    {
+        ProjectModel.updateOne({_id: ids[0]},{$pull: { TeamMembers: { _id: userID} }},(err, result) => {
+            if(err) 
+                done(err);
+            else if (!result)
+                done(null,false);
+            else if(result)
+               done(null, true);
+            
+        });            
+    
+    }
+    else
+    {
+        ProjectModel.updateMany({_id: {$in: ids}},{$pull: { TeamMembers: { _id: userID} }},(err, result) => {
+            if(err) 
+                done(err);
+            else if (!result)
+                done(null,false);
+            else if(result)
+               done(null, true);
+            
+        });
+
+    }           
+        
 }
 
 /**
@@ -76,45 +113,114 @@ module.exports.getTasks = (id, done)=>{
             done(null,false);
         else if(result)
         {
-            var values = [], task=0, text="";
+            var values = [], task=0, text="", projectMembers=[];
             if(result.Tasks.length ==0)
             {
-                text = {
-                    'ID': result._id,
-                    'projectName': result.ProjectName,
-                    "dueDate": result.DueDate,
-                    "hourlyRate": result.HourlyRate,
-                    "tasks": []
-
-                }
-                done(null, text);
-            }
-            for(task; task<result.Tasks.length; task++) 
-            {
-                TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
-                    if(err)
-                        done(err);
-                    else if(val)
-                    {
-                        values.push(val); 
-                        if(values.length == result.Tasks.length)
-                        {
-                            text = {
-                                'ID': result._id,
-                                'projectName': result.ProjectName,
-                                "dueDate": result.DueDate,
-                                "hourlyRate": result.HourlyRate,
-                                'tasks': values
-
-                            }
-                            done(null, text);
-                        }                       
+                if(result.TeamMembers.length ==0)
+                {
+                    text = {
+                        'ID': result._id,
+                        'projectName': result.ProjectName,
+                        "dueDate": result.DueDate,
+                        "hourlyRate": result.HourlyRate,
+                        'tasks': values,
+                        'projectMembers': projectMembers
                     }
-                });
+                    done(null, text);
+                }
+                else
+                {
+                    var inLen = result.TeamMembers.length;
+                    for(task=0; task<result.TeamMembers.length; task++) 
+                    {
+                        UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                            if(err)
+                                done(err);
+                            else if(val)
+                                projectMembers.push(val); 
+                            else if (!val)
+                                inLen = inLen -1;
+
+                            if(projectMembers.length == inLen)
+                            {
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMembers': projectMembers
+                                }
+                                done(null, text);
+                            }                       
+                            
+                        });
+                    }
+                }
+            }
+            else
+            {
+                var inLen = result.Tasks.length;
+                for(task; task<result.Tasks.length; task++) 
+                {
+                    TaskHelper.getTaskName(result.Tasks[task],(err,val)=> {
+                        if(err)
+                            done(err);
+                        else if(val)
+                            values.push(val); 
+                        else if(!val)
+                            inLen = inLen -1;
+                        if(values.length == inLen)
+                        {
+                            if(result.TeamMembers.length ==0)
+                            {
+                                text = {
+                                    'ID': result._id,
+                                    'projectName': result.ProjectName,
+                                    "dueDate": result.DueDate,
+                                    "hourlyRate": result.HourlyRate,
+                                    'tasks': values,
+                                    'projectMembers': projectMembers
+                                }
+                                done(null, text);
+            
+                            }
+                            else
+                            {
+                                var inLen2 = result.TeamMembers.length;
+                                for(task=0; task<result.TeamMembers.length; task++) 
+                                {
+                                    UserHelper.getUserDetails(result.TeamMembers[task],(err,val)=> {
+                                        if(err)
+                                            done(err);
+                                        else if(val)
+                                            projectMembers.push(val); 
+                                        else if(!val)
+                                            inLen2 = inLen2 -1;
+                                    
+                                        if(projectMembers.length == result.TeamMembers.length)
+                                        {
+                                            text = {
+                                                'ID': result._id,
+                                                'projectName': result.ProjectName,
+                                                "dueDate": result.DueDate,
+                                                "hourlyRate": result.HourlyRate,
+                                                'tasks': values,
+                                                'projectMembers': projectMembers
+                                            }
+                                            done(null, text);
+                                        }                       
+                                        
+                                    });
+                                }    
+                            }
+                        }                       
+                        
+                    });
+                }
             }
             
-        }
-           
+        }          
         
     });
 }

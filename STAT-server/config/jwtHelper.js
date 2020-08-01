@@ -32,12 +32,12 @@ module.exports.verifyJWTtoken = (req, res, next)=>
     else{
         jwt.verify(token, process.env.JWT_SECRET,
             (err, decoded)=> {
+                if(!decoded)
+                    return res.status(403).send({message: 'Token has expired'});
                 if(err)
                     return res.status(500).send({message: 'Internal Server Error: ' + err});
                 else{
                     req.ID = decoded.id;
-                    //req.Authenticate = decoded.authenticate;
-                    //req.Roles = decoded.roles;
                     next();
                 }
             })

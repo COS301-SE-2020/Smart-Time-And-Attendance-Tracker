@@ -33,7 +33,7 @@ const UserHelper =  require('../helpers/user.helper');
  * @param {HTTP Response} res 
  * @returns {JSON Array} success or error message, ProjectID and TeamID.
  */
-module.exports.assignProject = (req, res) => {
+/*module.exports.assignProject = (req, res) => {
     TeamModel.updateOne({_id : req.teamID},{ProjectID:req.ProjectID }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -56,83 +56,241 @@ module.exports.assignProject = (req, res) => {
         });
         }  
     });
-}
-
+}*/
 /**
-
- * This function adds a member to a Team.
- * @param {HTTP Request} req HTTP Body - TeamID, new Team Member's ID, and their role in the team.
+ * This function edits a team.
+ * @param {HTTP Request} req HTTP Request - Project ID.
  * @param {HTTP Response} res 
- * @param {Function} next - The next function to be called 
+ * @return {String} Error or success message.
  */
-module.exports.addTeamMember = (req, res, next) => {
-    TeamModel.updateOne({_id : req.body.TeamID },{ $push: { TeamMembers: { _id: req.body.UserID, Role: req.body.UserRole } } }, function(err, result) {
+module.exports.editTeam = (req, res, next) => {
+    TeamModel.updateOne({_id : (req.body.teamID)},{ TeamName: req.body.teamName }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).send({message: 'Team not found'});
-        else {
-            next();
-            //return res.status(200).json({ message: 'Member added successfully', "TeamID": result._id });     
-        }
-    });
-}
-/**
- * 
- * @param {HTTP Request} req Request body - ID of user and Team.
- * @param {Http Response} res 
- * @param {Function} next The next function to be called.
- */
-module.exports.removeTeamMember = (req, res, next) => {
-        TeamModel.updateOne({_id : req.body.TeamID },{ $pull: { TeamMembers: { _id: req.body.UserID} } }, function(err, result) {
-        if(err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
-            return res.status(404).send({message: 'Team not found'});
-        else {
-            next();
-        }
+        else 
+            return res.status(200).json({ teamID: result._id, message: 'Team name successfully edited' });   
     });
 }
 
+
 /**
- * This function creates a Team and adds the Team Leader(the member that creates the Team) to the team members of the Team.
- * @param {HTTP Request} req HTTP Request - Project ID and User ID (the team leader).
+ * This function creates a Team.
+ * @param {HTTP Request} req HTTP Request - Project ID.
  * @param {HTTP Response} res 
- * @param {Function} next next function to be called 
+ * @return {String} Error or success message.
  */
 module.exports.createTeam = (req, res, next) => {
+    if(!req.body.teamName)
+        return res.status(400).send({message: 'No team name provided'});
     var team = new TeamModel();
-    team.TeamLeader = req.ID;
-    team.ProjectID = req.ProjectID;
+    team.TeamName= req.body.teamName;
     /*var teamMembers = [];
     for(var i=0; i< req.body.teamMembers.length; i++)
         teamMembers.push(req.body.teamMembers[i]);
     team.TeamMembers = teamMembers;
     console.log( req.body.teamMembers.length);*/
-    team.TeamMembers.push({ _id : team.TeamLeader, Role: "Team Leader"});
     team.save((err, doc) => {
-        if(!err){
-            req.teamID = doc._id;
-            UserHelper.addTeam(team.TeamLeader, req.teamID,(err,val)=>
-            {
-                if(err)
-                   return res.status(500).send({message: 'Internal Server Error55: ' + err});
-
-               else if(val == false) 
-                   return res.status(404).json({ message: 'User not found' });
-               else 
-                next(); 
-                  
-        
-           });
-            //req.body.projectID = req.ProjectID;
-            //return res.status(200).json({ teamID : doc._id, message: 'Team Created' });
-        }
-        else{
+        if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
+        else
+            return res.status(200).send({teamID :doc._id,  message: 'Team created'});
     })
 }
+
+/**
+ * This function receives a TeamID, a UserID and the user Role and adds the user to the team
+ * @param {HTTP Request} req Request body - ID of user and Team.
+ * @param {Http Response} res 
+ * @return {String} Error or success message.
+ */
+module.exports.addTeamMember = (req, res, next) => {
+    if(!req.body.teamID)
+        return res.status(400).send({message: 'No team ID provided'});
+        
+    if(!req.body.userID)
+        return res.status(400).send({message: 'No user ID provided'});   
+
+    if(!req.body.userRole)
+        return res.status(400).send({message: 'No user role provided'});
+
+    TeamModel.updateOne({_id : (req.body.teamID)},{ $addToSet: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
+        if(err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).send({message: 'Team not found'});
+        else 
+            return res.status(200).json({ teamID: result._id, message: 'Member successfully added to team' });     
+        
+    });
+}
+
+/**
+ * This function receives TeamID, UserID and deletes user from the team
+ * @param {HTTP Request} req Request body - ID of user and team.
+ * @param {HTTP Response} res 
+ * @return {String} Error or success message.
+ */
+
+module.exports.removeTeamMember = (req, res) => {
+     if(!req.body.teamID)
+        return res.status(400).send({message: 'No team ID provided'});
+        
+    if(!req.body.userID)
+        return res.status(400).send({message: 'No user ID provided'});
+
+    TeamModel.updateOne({_id : (req.body.teamID)},{ $pull: { TeamMembers: { _id: req.body.userID} } }, function(err, result) {
+        if(err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).send({message: 'Team not found'});
+        else 
+            return res.status(200).json({ teamID: result._id, message: 'Member successfully removed from team' });   
+    });   
+}
+
+
+/**
+ * Receives TeamID , UserID and UserRole
+ * then updates users role - 
+ * to optimize - delete user, then adds again with new role
+ * @param {HTTP Request} req Request body - ID of user, team and new role.
+ * @param {HTTP Response} res 
+ * @return {String} Error or success message.
+ */
+
+module.exports.addRole = (req, res) => {  / ////optimize
+    if(!req.body.teamID)
+        return res.status(400).send({message: 'No team ID provided'});
+    
+    if(!req.body.userID)
+        return res.status(400).send({message: 'No user ID provided'});
+
+    if(!req.body.userRole)
+        return res.status(400).send({message: 'No user role provided'});
+        
+
+    TeamModel.updateOne({_id : (req.body.teamID)},{ $pull: { TeamMembers: { _id: req.body.userID} } },function(err, result) {
+        if(err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).send({message: 'Team not found'});
+        else {
+           TeamModel.updateOne({_id : (req.body.teamID)},{ $push: { TeamMembers: { _id: req.body.userID,  Role: req.body.userRole} } },function(err, result) {
+                if(err) 
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                else 
+                    return res.status(200).json({ teamID: req.body.teamID, message: 'Member role updated successfully'});     
+
+           });
+        }
+    });   
+}
+
+
+/**
+ * Receives TeamID and deletes the corresponding team.
+ * @param {HTTP Request} req Request parameter - team ID 
+ * @param {HTTP Response} res 
+ * @return {String} Error or success message.
+ */
+module.exports.deleteTeam = (req, res) => {
+    if(!req.query.teamID)
+       return res.status(400).send({message: 'No team ID provided'}); 
+   
+   TeamModel.deleteOne({_id: req.query.teamID},(err,val)=>{
+    if(err)
+        return res.status(500).send({message: 'Internal Server Error: ' + err});
+    else if (!val) 
+        return res.status(404).json({ message: 'Team not found' });
+    else 
+        return res.status(200).json({ message: 'Team successfully deleted ' });
+    });
+}
+
+
+
+/**
+ * returns all teams as
+  teams : [
+       {
+           ID:
+           TeamName:
+           TeamMembers: []
+       },
+        {
+           ID:
+           TeamName:
+           TeamMembers: []
+       }
+  ]
+ */
+
+/**
+ * Returns all teams in the team collection
+ * @param {HTTP Request} req 
+ * @param {HTTP Response} res 
+ * @return {String} Array with teams and appropriate details
+ */
+module.exports.getTeams = (req, res, next) => {
+    TeamModel.find({},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'Team collection not found' });
+        
+        else
+        {
+            if(result.length == 0)
+                return res.status(404).json({ message: 'No teams found' });
+            var allTeams =[];
+            for(i=0; i<result.length; i++) ///result array with team objects
+            {    
+                var teamDetails ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
+                var  teamUsers = [];
+                   ///take team member detals
+                var teamLength =result[i].TeamMembers.length;
+                if(teamLength == 0)
+                {
+                    teamDetails["TeamMembers"] =teamUsers;
+                    allTeams.push(teamDetails);
+                }
+                else
+                {
+                    var teamDetails2 ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
+                    var teamUsers2 = [];
+                    var inLen = teamLength;
+                    for(var a=0; a<teamLength; a++)
+                    {
+                        UserHelper.getUserDetails(result[i].TeamMembers[a], (err,val)=> {
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else if(val)
+                            teamUsers2.push(val);
+                        else if(!val)
+                            inLen = inLen - 1;  
+
+                        if(teamUsers2.length == inLen)
+                        {
+                            teamDetails2["TeamMembers"] =teamUsers2;
+                            allTeams.push(teamDetails2);
+                            if(allTeams.length == result.length )
+                                return res.status(200).json({teams : allTeams });
+                        }
+                        });
+                    } 
+                }
+                if(allTeams.length == result.length )
+                    return res.status(200).json({teams : allTeams });
+            }
+        
+        }
+    });
+}
+
+
+
+
 
 

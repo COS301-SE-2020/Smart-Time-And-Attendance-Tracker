@@ -91,19 +91,31 @@ module.exports.getTaskName = (id, done)=>{
 }
 
 /**
- * 
- * @param {*} ids ID of tasks
- * @param {*} done 
+ * Deletes all tasks in the array.
+ * @param {Array} ids ID of tasks
+ * @param {Function} done 
  * @returns {String} error message else void
  */
 module.exports.deleteTask= (ids, done) => {      
-       
-    TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
-        if(err) 
-            done(err);
-        else
-            done(null);
-    });            
+    if(ids.length == 1)
+    {
+        TaskModel.deleteOne({_id: ids[0]},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        });            
+    
+    }
+    else
+    {
+        TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        }); 
+    }           
 
 }
 

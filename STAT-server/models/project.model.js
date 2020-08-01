@@ -2,11 +2,11 @@
   * @file STAT-server/models/project.model.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse
   * @fileoverview This file contains the Project model in our database
-  * @date 11June 2020
+  * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server/models/Project.model.js
+* Filename:             STAT-server/models/project.model.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
 *   
@@ -46,10 +46,22 @@ var ProjectSchema = new mongoose.Schema({
             ref: 'Task' 
         }
     ],
-    Team: {
+    TeamLeader:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Team' 
+        ref: 'User', 
+        required : "Required"
     },
+    TeamMembers:[
+        { 
+            _id : {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: 'User'
+            },
+            Role: {
+                type: String
+            }
+        }
+    ],
     Completed:{
         type: Boolean
     },
