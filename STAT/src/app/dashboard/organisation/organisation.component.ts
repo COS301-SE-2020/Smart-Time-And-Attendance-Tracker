@@ -166,4 +166,48 @@ export class OrganisationComponent implements OnInit {
     
     this.membersResult = Object.values(grouped)
   }
+
+  // filter members
+  filterMem(alphabet : string) {
+    let lists = document.getElementsByClassName('member-list')
+    // if # then show all lists
+    if (alphabet == '#') {
+      for (let i = 0; i < lists.length; i++)
+        lists[i].removeAttribute('hidden')
+    } else {
+      for (let i = 0; i < lists.length; i++)
+        lists[i].setAttribute('hidden', 'true')
+
+      // list to be displayed
+      let list = document.getElementById(alphabet)
+      if (list)
+        list.hidden = false
+    }
+
+    // set active letter
+    let alpha = document.getElementById('alphabet').children
+    let i = 0
+    let active = null
+    let remove = null
+
+    // remove class from previous letter
+    while (!remove) {
+      if (alpha[i].classList.contains('active')) {
+        remove = alpha[i]
+        remove.classList.remove('active')
+      }
+      i++
+    }
+    i = 0
+
+    // add class to new letter
+    while (!active) {
+      if (alpha[i].innerHTML == alphabet) {
+        console.log(alpha[i])
+        active = alpha[i]
+        active.classList.add('active')
+      }
+      i++
+    }
+  }
 }

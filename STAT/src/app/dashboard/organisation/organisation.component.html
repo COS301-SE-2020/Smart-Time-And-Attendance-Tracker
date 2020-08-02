@@ -86,36 +86,36 @@
     <!-- members -->
     <div id="members" class="scroll">
       <aside id="alphabet" class="alphabet">
-        <a href="" class="active">#</a>
-        <a href="#a" class="">A</a>
-        <a href="javascript:" >B</a>
-        <a href="javascript:" class="">C</a>
-        <a href="javascript:" class="">D</a>
-        <a href="javascript:" class="">E</a>
-        <a href="javascript:" class="">F</a>
-        <a href="javascript:" class="">G</a>
-        <a href="javascript:" class="">H</a>
-        <a href="javascript:" class="">I</a>
-        <a href="javascript:" class="">J</a>
-        <a href="javascript:" class="">K</a>
-        <a href="javascript:" class="">L</a>
-        <a href="javascript:" class="">M</a>
-        <a href="javascript:" class="">N</a>
-        <a href="javascript:" class="">O</a>
-        <a href="javascript:" class="">P</a>
-        <a href="javascript:" class="">Q</a>
-        <a href="javascript:" class="">R</a>
-        <a href="javascript:" class="">S</a>
-        <a href="javascript:" class="">T</a>
-        <a href="javascript:" class="">U</a>
-        <a href="javascript:" class="">V</a>
-        <a href="javascript:" class="">W</a>
-        <a href="javascript:" class="">X</a>
-        <a href="javascript:" class="">Y</a>
-        <a href="javascript:" class="">Z</a>
+        <a class="active" (click)="filterMem('#')">#</a>
+        <a class="" (click)="filterMem('A')">A</a>
+        <a class="" (click)="filterMem('B')">B</a>
+        <a class="" (click)="filterMem('C')">C</a>
+        <a class="" (click)="filterMem('D')">D</a>
+        <a class="" (click)="filterMem('E')">E</a>
+        <a class="" (click)="filterMem('F')">F</a>
+        <a class="" (click)="filterMem('G')">G</a>
+        <a class="" (click)="filterMem('H')">H</a>
+        <a class="" (click)="filterMem('I')">I</a>
+        <a class="" (click)="filterMem('J')">J</a>
+        <a class="" (click)="filterMem('K')">K</a>
+        <a class="" (click)="filterMem('L')">L</a>
+        <a class="" (click)="filterMem('M')">M</a>
+        <a class="" (click)="filterMem('N')">N</a>
+        <a class="" (click)="filterMem('O')">O</a>
+        <a class="" (click)="filterMem('P')">P</a>
+        <a class="" (click)="filterMem('Q')">Q</a>
+        <a class="" (click)="filterMem('R')">R</a>
+        <a class="" (click)="filterMem('S')">S</a>
+        <a class="" (click)="filterMem('T')">T</a>
+        <a class="" (click)="filterMem('U')">U</a>
+        <a class="" (click)="filterMem('V')">V</a>
+        <a class="" (click)="filterMem('W')">W</a>
+        <a class="" (click)="filterMem('X')">X</a>
+        <a class="" (click)="filterMem('Y')">Y</a>
+        <a class="" (click)="filterMem('Z')">Z</a>
       </aside>
 
-      <ul *ngFor="let m of membersResult" id="{{m.alphabet}}">
+      <ul class="member-list" *ngFor="let m of membersResult" id="{{m.alphabet}}">
         <li class="list-alpha">{{m.alphabet}}</li>
         <li *ngFor="let r of m.records">
           <div *ngIf="r.profilePicture == 'none'" class="pro-pic">{{r.name[0]}}{{r.surname[0]}}</div>
