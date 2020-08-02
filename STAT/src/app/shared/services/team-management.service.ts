@@ -31,7 +31,7 @@ export class TeamManagementService {
   public getTeams(token) {
       const headers = new HttpHeaders()
             .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
-      return this.http.post(this.ROOT_URL+'team/add', {
+      return this.http.get(this.ROOT_URL+'team/getTeams', {
         headers: headers
       });
   }

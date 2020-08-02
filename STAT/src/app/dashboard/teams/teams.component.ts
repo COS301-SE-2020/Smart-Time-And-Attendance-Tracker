@@ -49,7 +49,10 @@ export class TeamsComponent implements OnInit {
   getTeams() {
     this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
       this.teams = data['teams']
-      console.log(data);
+      /*this.teams.sort((a : any ,b : any) =>
+          a.name.localeCompare(b.teamName)
+      );*/
+      console.log(this.teams)
       this.getMembers();
     },
     error => {
@@ -68,14 +71,16 @@ export class TeamsComponent implements OnInit {
   getMembers() {
     this.members == []
 
-    for (let x = 0; x = this.teams.length; x++) {
-      var temp : Object[] = this.teams['members']
+    for (let x = 0; x < this.teams.length; x++) {
+      console.log(this.teams)
+      var temp : Object[] = this.teams[x]['TeamMembers']
+      console.log(temp)
 
-      if (temp.length != 0) {
+      /*if (temp.length != 0) {
         for (let y = 0; y < temp.length; y++) {
           // need to know get teams response structure
         }
-      }
+      }*/
     }
   }
   // create new team

@@ -12,8 +12,14 @@
       </button>
     </h2>
     <div class="info row">
-      <div id="numTeams">
-        <b>3</b><br>TEAMS
+      <div *ngIf="!teams" id="numTeams" class="col-auto">
+        <b>-</b><br>TEAMS
+      </div>
+      <div *ngIf="teams && teams?.length == 1" id="numTeams" class="col-auto">
+        <b>{{teams.length}}</b><br>TEAM
+      </div>
+      <div *ngIf="teams && (teams.length == 0 || teams.length > 1)" id="numTeams" class="col-auto">
+        <b>{{teams.length}}</b><br>TEAMS
       </div>
       <!--<div id="numAssigned">
         <b>2</b><br>ASSIGNED
@@ -22,12 +28,15 @@
         <b>1</b><br>WAITING
       </div>-->
     </div>
+
+
     <div class="scroll">
+      <mat-spinner *ngIf="!teams" class="req-spinner"></mat-spinner>
       <mat-accordion>
-        <mat-expansion-panel expanded>
+        <mat-expansion-panel *ngFor="let t of teams">
           <mat-expansion-panel-header>
-            Team A
-            <span class="tag numMembers">3 members</span>
+            {{t.teamName}}
+            <span class="tag numMembers">{{t.TeamMembers.length}} members</span>
             <button mat-button class="teams-btn"
                     matTooltip="Edit"
                     matTooltipClass="teams-tooltip"
@@ -43,16 +52,13 @@
                     <mat-icon inline="true">delete</mat-icon>
             </button>
           </mat-expansion-panel-header>
+          <i *ngIf="t.TeamMembers.length == 0">This team has no members.</i>
           <ul class="members">
-            <li>
-              <div>
-                <img
-                  matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="../../../assets/profilePicDefault.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
+            <li *ngFor="let m of t.TeamMembers">
+              <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+              <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="assets/proPic3.jpg">
               <div class="col-10">
-                <p>Jaymie Farsee
+                <p>{{m.name}} {{m.surname}}
                   <span class="member-edit">
                     <button mat-button class="teams-btn"
                             matTooltip="Edit"
@@ -67,67 +73,9 @@
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role tag">Team lead</span>
+                  <span class="member-role tag">{{m.role}}</span>
                 </p>
-                <p>jafar@yahoo.co.uk</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Zac Efron" matTooltipPosition="below"
-                  src="../../../assets/proPic1.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Zac Efron
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">UI/UX designer</span>
-                </p>
-                <p>zefron@gmail.com</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="../../../assets/proPic2.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Henry Cavill
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Programmer</span>
-                </p>
-                <p>henrycav@hotmail.co.us</p>
+                <p>{{m.email}}</p>
               </div>
               <mat-divider></mat-divider>
             </li>
@@ -138,7 +86,7 @@
             </button>
           </span>
         </mat-expansion-panel>
-        <!-- *************************************************** TEAM ***** -->
+        <!-- *************************************************** TEAM ***** 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             Team B
@@ -252,122 +200,8 @@
               <mat-icon inline="true">add</mat-icon>New member
             </button>
           </span>
-        </mat-expansion-panel>
-        <!-- *************************************************** TEAM ***** -->
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Team C
-            <span class="tag numMembers">3 members</span>
-            <button mat-button class="teams-btn"
-                    matTooltip="Edit"
-                    matTooltipClass="teams-tooltip"
-                    matTooltipPosition="above"
-                    (click)="open(editTeamModal)">
-                    <mat-icon inline="true">edit</mat-icon>
-            </button>
-            <button mat-button class="teams-btn"
-                    matTooltip="Delete"
-                    matTooltipClass="teams-tooltip"
-                    matTooltipPosition="above"
-                    (click)="open(deleteTeamModal)">
-                    <mat-icon inline="true">delete</mat-icon>
-            </button>
-          </mat-expansion-panel-header>
-          <ul class="members">
-            <li>
-              <div>
-                <img
-                  matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="../../../assets/profilePicDefault.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Jaymie Farsee
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Team lead</span>
-                </p>
-                <p>jafar@yahoo.co.uk</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Zac Efron" matTooltipPosition="below"
-                  src="../../../assets/proPic1.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Zac Efron
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">UI/UX designer</span>
-                </p>
-                <p>zefron@gmail.com</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="../../../assets/proPic2.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Henry Cavill
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Programmer</span>
-                </p>
-                <p>henrycav@hotmail.co.us</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-          </ul>
-          <span class="float-right">
-            <button mat-button (click)="open(addMemberModal)">
-              <mat-icon inline="true">add</mat-icon>New member
-            </button>
-          </span>
-        </mat-expansion-panel>
+        </mat-expansion-panel>-->
+  
       </mat-accordion>
     </div>
   </section>

@@ -92,7 +92,7 @@
     <mat-spinner *ngIf="!members" class="req-spinner"></mat-spinner>
 
     <!-- members -->
-    <div id="members" class="scroll">
+    <div *ngIf="members" id="members" class="scroll">
       <aside id="alphabet" class="alphabet">
         <a class="active" (click)="filterMem('#')">#</a>
         <a class="" (click)="filterMem('A')">A</a>
