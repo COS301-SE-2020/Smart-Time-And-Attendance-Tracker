@@ -2,6 +2,9 @@
   <section id="organisation-header" class="col-6">
     <h2>Authorisation Requests</h2>
     <div class="info row p-0">
+      <div *ngIf="!requests" id="total-requests" class="col-auto">
+        <b>-</b><br>REQUESTS
+      </div>
       <div *ngIf="requests && requests?.length == 1" id="total-requests" class="col-auto">
         <b>1</b><br>REQUEST
       </div>
@@ -75,6 +78,9 @@
         </mat-form-field>
       </div>      
       
+      <div *ngIf="!members" id="total-members" class="col-auto">
+        <b>-</b><br>MEMBERS
+      </div>
       <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
         <b>1</b><br>MEMBER
       </div>
@@ -82,6 +88,8 @@
         <b>{{members.length}}</b><br>MEMBERS
       </div>
     </div>
+
+    <mat-spinner *ngIf="!members" class="req-spinner"></mat-spinner>
 
     <!-- members -->
     <div id="members" class="scroll">
