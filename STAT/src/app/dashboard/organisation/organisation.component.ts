@@ -16,7 +16,9 @@ export class OrganisationComponent implements OnInit {
 
   requests : Object[]
   members : []
+  membersResult : any
   searchText : string = null
+  searchMem : string = null
 
   ngOnInit(): void {
     this.getAllUnauthenticatedUsers('n')
@@ -27,7 +29,6 @@ export class OrganisationComponent implements OnInit {
   {
     let req = {"UserID": id};
     this.service.authenticate(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
       this.getAllUnauthenticatedUsers('n')
       this.getMembers()
     },
@@ -48,7 +49,6 @@ export class OrganisationComponent implements OnInit {
   {
     let req = {"UserID": id};
     this.service.reject( localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
       this.getAllUnauthenticatedUsers('n')
       this.getMembers()
     },
@@ -69,10 +69,8 @@ export class OrganisationComponent implements OnInit {
   {
     this.requests = null
     this.service.getUnauthenticatedUsers(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data)
       this.requests = data['unauthenticatedUsers'];
       this.sortRequests(sort)
-      console.log(this.requests)
     },
     error => {
       //console.log(error);
@@ -117,6 +115,7 @@ export class OrganisationComponent implements OnInit {
   getMembers() {
     this.service.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
       this.members = data['users'];
+      this.groupAndSort(this.members)
     },
     error => {
       //console.log(error);
@@ -128,5 +127,43 @@ export class OrganisationComponent implements OnInit {
         this.headerService.kickOut();
       }
     });
+  }
+
+  // search members
+  searchMembers(text : string) {
+    if (!this.searchMem)
+      this.groupAndSort(this.members)
+    let d : any[] = new Array()
+    d = this.members.filter((x : any) =>
+      x['name'].toLowerCase().includes(text.toLowerCase()) ||
+      x['surname'].toLowerCase().includes(text.toLowerCase()) ||
+      x['email'].toLowerCase().includes(text.toLowerCase())
+    )
+    this.groupAndSort(d)
+  }
+
+  // group and sort members
+  groupAndSort(data : any[]) {
+    // sort members
+    data.sort((a : any ,b : any) =>
+      a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
+    );
+
+    // group alphabetically
+    let grouped = data.reduce((r : any, e : any) => {
+      // get first letter of name of current element
+      let alphabet = e.name.toUpperCase()[0];
+    
+      // if there is no property in accumulator with this letter create it
+      if (!r[alphabet]) r[alphabet] = { alphabet, records: [e] }
+    
+      // if there is push current element to children array for that letter
+      else r[alphabet].records.push(e);
+    
+      // return accumulator
+      return r;
+    }, {});
+    
+    this.membersResult = Object.values(grouped)
   }
 }

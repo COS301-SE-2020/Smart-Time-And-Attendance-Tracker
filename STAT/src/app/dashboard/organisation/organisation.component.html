@@ -71,7 +71,7 @@
       <div class="col-8">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Search Members</mat-label>
-          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)">
         </mat-form-field>
       </div>      
       
@@ -115,7 +115,17 @@
         <a href="javascript:" class="">Z</a>
       </aside>
 
-      <ul id="a">
+      <ul *ngFor="let m of membersResult" id="{{m.alphabet}}">
+        <li class="list-alpha">{{m.alphabet}}</li>
+        <li *ngFor="let r of m.records">
+          <div *ngIf="r.profilePicture == 'none'" class="pro-pic">{{r.name[0]}}{{r.surname[0]}}</div>
+          <img *ngIf="r.profilePicture != 'none'" src="assets/proPic3.jpg">
+          <span>{{r.name}} {{r.surname}} <br> <i>{{r.email}}</i></span>
+          <span *ngIf="r.role[0] != 'General Team Member'" class="float-right tag role">{{r.role[0]}}</span>
+        </li>
+      </ul>
+
+      <!--<ul id="a">
         <li class="list-alpha">A</li>
         <li>
           <img src="assets/proPic3.jpg">
@@ -156,7 +166,7 @@
           <img src="assets/proPic9.jpg">
           <span>Chris Hemsworth <br> <i>christopher.hemmingsworth@gmail.com</i></span>
         </li>
-      </ul>
+      </ul>-->
     </div>
 
   </section>
