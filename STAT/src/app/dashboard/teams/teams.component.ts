@@ -152,6 +152,11 @@ export class TeamsComponent implements OnInit {
     });
   }
 
+  // delete team
+  deleteTeam(id : string) {
+    
+  }
+
 
   /*** MODAL ***/
   closeResult: string;

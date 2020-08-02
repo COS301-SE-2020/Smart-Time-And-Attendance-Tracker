@@ -48,7 +48,7 @@
                     matTooltip="Delete"
                     matTooltipClass="teams-tooltip"
                     matTooltipPosition="above"
-                    (click)="open(deleteTeamModal)">
+                    (click)="open(deleteTeamModal); tid = t.ID; teamName = t.teamName">
                     <mat-icon inline="true">delete</mat-icon>
             </button>
           </mat-expansion-panel-header>
@@ -361,7 +361,7 @@
 <ng-template #deleteTeamModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
-      <h2> Delete team
+      <h2> Delete {{teamName}}
         <br>
       </h2>
       <button (click)="modal.dismiss('Cross click')">
@@ -372,7 +372,7 @@
       Are you sure you want to delete this team?
     </div>
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click')">Yes</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteTeam(tid)">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
   </div>
