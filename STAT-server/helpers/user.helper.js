@@ -207,7 +207,8 @@ module.exports.getUserDetails = (val, done)=>{
                 'email': result.Email,
                 'name': result.Name,
                 'surname': result.Surname,
-                'role': val.Role
+                'role': val.Role,
+                'profilePicture': result.ProfilePicture
             }
             done(null, text);
         }        

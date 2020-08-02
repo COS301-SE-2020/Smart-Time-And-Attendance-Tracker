@@ -42,6 +42,28 @@ module.exports.getRole = (id, done)=>{
     });
 }
 
+module.exports.getRoles = (user, done)=>{
+    var roles = [];
+    var roleLen =  user.Role.length;
+    var inlen = roleLen;
+    for(i=0; i<roleLen;i++)
+    {
+        RoleModel.findOne({ID: user.Role[i]},(err, result) => {
+            if(err) 
+                done(err);
+            else if (result)
+                roles.push(result.Role);
+            else if (!result)
+                inlen = inlen-1;
+
+            if(roles.length== inlen)
+               done(null, roles, user);
+            
+        });
+    }
+    
+}
+
  /**
   * Get ID of role.
   * @param {String} name Name of role.

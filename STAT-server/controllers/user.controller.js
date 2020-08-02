@@ -91,6 +91,7 @@ module.exports.register = (req, res, next) => {
                     user.Password = req.body.password;
                     user.Role = [5]; 
                     user.Authenticate = false; 
+                    user.ProfilePicture = "none";
                     user.save((err, doc) => {
                         if(!err)
                             return res.status(201).json({token: user.generateJWT(), message :"Sign up successful"});
@@ -229,10 +230,23 @@ module.exports.getAllUsers = (req, res, next) => {
         else
         {
             users=[];
-            for(var a=0; a<result.length; a++){
-                users.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
+            for(var a=0; a<result.length; a++)
+            {
+                RoleHelper.getRoles(result[a],(err,val,user)=>
+                {
+                    if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+
+                    else
+                        users.push({'ID' : user._id, 'email' : user.Email, 'name' : user.Name, 'surname' : user.Surname, 'profilePicture': user.ProfilePicture, 'role':val});
+                    
+                    if(users.length == result.length)
+                            return res.status(200).json({users});
+                    
+            
+                });
+             
             }
-            return res.status(200).json({users});
         }
     });
 }
