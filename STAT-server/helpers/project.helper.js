@@ -106,7 +106,7 @@ module.exports.hourlyRate = (id, done)=>{
  * project name, project ID, due date of project, and the hourly rate of the project.
  */
 module.exports.getTasks = (id, done)=>{
-    ProjectModel.findOne({ _id: id},{ Completed: false},(err, result) => {
+    ProjectModel.findOne({ _id: id},{},(err, result) => {
         if(err) 
             done(err);
         else if (!result)
@@ -149,6 +149,7 @@ module.exports.getTasks = (id, done)=>{
                                     'projectName': result.ProjectName,
                                     "dueDate": result.DueDate,
                                     "hourlyRate": result.HourlyRate,
+                                    "completed": result.Completed,
                                     'tasks': values,
                                     'projectMembers': projectMembers
                                 }
@@ -180,6 +181,7 @@ module.exports.getTasks = (id, done)=>{
                                     'projectName': result.ProjectName,
                                     "dueDate": result.DueDate,
                                     "hourlyRate": result.HourlyRate,
+                                    "completed": result.Completed,
                                     'tasks': values,
                                     'projectMembers': projectMembers
                                 }
@@ -206,6 +208,7 @@ module.exports.getTasks = (id, done)=>{
                                                 'projectName': result.ProjectName,
                                                 "dueDate": result.DueDate,
                                                 "hourlyRate": result.HourlyRate,
+                                                "completed": result.Completed,
                                                 'tasks': values,
                                                 'projectMembers': projectMembers
                                             }
