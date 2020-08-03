@@ -123,6 +123,7 @@ module.exports.getTasks = (id, done)=>{
                         'projectName': result.ProjectName,
                         "dueDate": result.DueDate,
                         "hourlyRate": result.HourlyRate,
+                        "completed": result.Completed,
                         'tasks': values,
                         'projectMembers': projectMembers
                     }
