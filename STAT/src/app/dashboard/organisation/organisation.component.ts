@@ -25,9 +25,86 @@ export class OrganisationComponent implements OnInit {
     this.getMembers()
   }
 
+  removeUser(id)
+  {
+    let req = {"userID": id};
+    this.service.removeUser(localStorage.getItem('token'), req).subscribe((data) => {
+    },
+    error => {
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  addRole(id, role)
+  {
+    let req = {"userID": id, "userRole": role};
+    this.service.addRole(localStorage.getItem('token'), req).subscribe((data) => {
+    },
+    error => {
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  removeRole(id, role)
+  {
+    let req = {"userID": id, "userRole": role};
+    this.service.removeRole(localStorage.getItem('token'), req).subscribe((data) => {
+    this.getMembers()
+    },
+    error => {
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  editUser(id, name, surname, email)
+  {
+    let req = {"userID": id,
+                "name": name,
+                "surname": surname,
+                "email": email};
+    this.service.removeRole(localStorage.getItem('token'), req).subscribe((data) => {
+    this.getMembers()
+    },
+    error => {
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
   authenticateUser(id)
   {
-    let req = {"UserID": id};
+    let req = {"userID": id};
     this.service.authenticate(localStorage.getItem('token'), req).subscribe((data) => {
       this.getAllUnauthenticatedUsers('n')
       this.getMembers()
@@ -47,7 +124,7 @@ export class OrganisationComponent implements OnInit {
 
   rejectUser(id)
   {
-    let req = {"UserID": id};
+    let req = {"userID": id};
     this.service.reject( localStorage.getItem('token'), req).subscribe((data) => {
       this.getAllUnauthenticatedUsers('n')
       this.getMembers()
@@ -153,17 +230,17 @@ export class OrganisationComponent implements OnInit {
     let grouped = data.reduce((r : any, e : any) => {
       // get first letter of name of current element
       let alphabet = e.name.toUpperCase()[0];
-    
+
       // if there is no property in accumulator with this letter create it
       if (!r[alphabet]) r[alphabet] = { alphabet, records: [e] }
-    
+
       // if there is push current element to children array for that letter
       else r[alphabet].records.push(e);
-    
+
       // return accumulator
       return r;
     }, {});
-    
+
     this.membersResult = Object.values(grouped)
   }
 

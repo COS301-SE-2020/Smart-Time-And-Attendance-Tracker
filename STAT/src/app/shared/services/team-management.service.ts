@@ -19,7 +19,7 @@ export class TeamManagementService {
     });
   }*/
 
-  // create team
+  // Create team (Team leader)
   public createTeam(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
@@ -35,7 +35,7 @@ export class TeamManagementService {
         headers: headers
       });
   }
-  // add team member
+  // Add team member (Team leader)
   public addTeamMember(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
@@ -43,7 +43,7 @@ export class TeamManagementService {
       headers: headers
     });
   }
-  // remove team member
+  // Remove team member (Team leader)
   public removeTeamMember(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
@@ -51,11 +51,19 @@ export class TeamManagementService {
       headers: headers
     });
   }
-  // change role in team
+  // Change role in team (Team leader)
   public changeRole(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
     return this.http.post(this.ROOT_URL+'team/changeRole', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  // Delete team (Team leader)
+  public deleteTeam(token, teamID) {
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
+    return this.http.post(this.ROOT_URL+'team/deleteTeam', JSON.stringify(teamID), {
       headers: headers
     });
   }
