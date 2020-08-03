@@ -260,6 +260,30 @@ mat-accordion .tasks
     background-color: #ff288540
     color: #ff2885
 
+$colors : #7846eb, #00c8ff, #ff2885, #366ceb
+@for $i from 0 through 10
+  .member-button:nth-child(#{$i}) div.pro-pic
+    background-color: nth($colors, random(length($colors)))
+
+.member-button:focus
+  outline: none !important
+
+img, .pro-pic
+  display: inline-block
+  text-align: center
+  align-items: center
+  vertical-align: middle
+  color: #ffffff
+  font-size: 0.8em
+  letter-spacing: 1px
+  width: 33px
+  height: 33px
+  line-height: 33px
+  margin-right: 0.5em
+  border-radius: 5em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 4px 6px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)
+
+
 // ******************************************************************************************
 
 // MODAL ************************************************************************************

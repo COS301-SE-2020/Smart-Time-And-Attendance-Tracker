@@ -41,6 +41,8 @@ export class ProjectsComponent implements OnInit {
   searchProj : string = null
   showComp : boolean = false
 
+  members : []
+
   error : string = null
 
   ngOnInit(): void {
@@ -69,6 +71,7 @@ export class ProjectsComponent implements OnInit {
     });
 
     this.getProAndTasks()
+    this.getMembers()
   }
 
 
@@ -395,6 +398,24 @@ export class ProjectsComponent implements OnInit {
 
 
       /*** TEAM MANAGEMENT ***/
+
+      // get members
+      getMembers() {
+        this.amService.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
+          this.members = data['users'];
+          console.log(this.members)
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
 
       // get teams
       getTeam() {

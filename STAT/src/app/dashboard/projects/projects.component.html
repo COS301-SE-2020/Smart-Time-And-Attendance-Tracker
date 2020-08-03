@@ -151,13 +151,22 @@
                             matTooltip="Add team member"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
-                      <mat-icon inline="true">add</mat-icon>
+                      <mat-icon inline="true" [matMenuTriggerFor]="menu">add</mat-icon>
                     </button>
                 </mat-action-row>
               </mat-expansion-panel>
             <!-- END PROJECT **************************************** -->
 
             </mat-accordion>
+
+            <mat-menu #menu="matMenu">
+              <input type="text" autofocus>
+              <button class="member-button" *ngFor="let m of members" mat-menu-item>
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+              </button>
+            </mat-menu>
         </div>
     </section>
 
