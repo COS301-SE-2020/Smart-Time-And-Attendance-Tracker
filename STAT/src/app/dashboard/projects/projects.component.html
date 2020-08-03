@@ -12,6 +12,39 @@
             <mat-icon inline="true">add</mat-icon>
           </button>
         </h2>
+
+        <div id="members-div" class="info row">
+          <div class="col-8">
+            <mat-form-field appearance="standard" class="col-12">
+              <mat-label>Search Projects</mat-label>
+              <input matInput type="search" type="text" placeholder="Project details" name="searchProjects" [(ngModel)]="searchProj" (keyup)="searchProjects(searchProj)">
+            </mat-form-field>
+          </div>      
+          
+          <div *ngIf="!projects" id="total-projects" class="col-auto">
+            <b>-</b><br>PROJECTS<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+          <div *ngIf="projects && projects?.length == 1" id="total-projects" class="col-auto">
+            <b>1</b><br>PROJECT<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+          <div *ngIf="projects && (projects.length == 0 || projects.length > 1)" id="total-projects" class="col-auto">
+            <b>{{projects.length}}</b><br>PROJECTS<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+
+        </div>
+
         <div class="scroll">
             <mat-spinner *ngIf="!projects && !error" class="req-spinner"></mat-spinner>
 

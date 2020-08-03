@@ -18,6 +18,7 @@ export class ProjectsComponent implements OnInit {
   panelOpenState = false
   name = "John Doe"
   roles : string
+  allProjects : Object[]
   projects : Object[]
   tasks : Object[] = []
   tasksNum : number
@@ -36,6 +37,9 @@ export class ProjectsComponent implements OnInit {
   tname : string
   projectToEdit : any
   taskToEdit : any
+
+  searchProj : string = null
+  showComp : boolean = false
 
   error : string = null
 
@@ -78,8 +82,9 @@ export class ProjectsComponent implements OnInit {
   {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
-      this.projects = data['projects']
-      this.projects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
+      this.allProjects = data['projects']
+      this.projects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
+      this.projects = this.projects.filter((x : any) => x['completed'] == false)
       this.getTasks()
       this.error = 'none'
     },
@@ -344,6 +349,48 @@ export class ProjectsComponent implements OnInit {
       toReturn += (d)
 
     return toReturn
+  }
+
+  // search projects
+  searchProjects(text : string) {
+    // only search upcoming projects
+    if (this.searchProj && !this.showComp) {
+      this.projects = this.allProjects.filter((x : any) =>
+        x['projectName'].toLowerCase().includes(text.toLowerCase()) &&
+        x['completed'] == false
+      )
+
+    // search all projects - including completed ones
+    } else if (this.searchProj && this.showComp) {
+      this.projects = this.allProjects.filter((x : any) =>
+        x['projectName'].toLowerCase().includes(text.toLowerCase())
+      )
+
+    // show all projects - including completed ones
+    } else if (!this.searchProj && this.showComp) {
+      this.projects = this.allProjects
+
+    // default - all projects in progress
+    } else if (!this.searchProj && !this.showComp) {
+      this.projects = this.allProjects.filter((x : any) =>
+        x['completed'] == false
+      )
+    }
+
+  }
+
+  // toggle completed projects visibility
+  completed() {
+    this.showComp = !this.showComp
+    if (this.showComp) { // show all
+      this.projects = this.allProjects
+      document.getElementById('show-comp').setAttribute('hidden', 'true')
+      document.getElementById('hide-comp').removeAttribute('hidden')
+    } else { // show in progress
+      this.projects = this.allProjects.filter((x : any) => x['completed'] == false)
+      document.getElementById('hide-comp').setAttribute('hidden', 'true')
+      document.getElementById('show-comp').removeAttribute('hidden')
+    }
   }
 
 
