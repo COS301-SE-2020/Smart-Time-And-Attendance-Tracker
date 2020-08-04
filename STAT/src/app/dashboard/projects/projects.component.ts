@@ -40,8 +40,10 @@ export class ProjectsComponent implements OnInit {
 
   searchProj : string = null
   showComp : boolean = false
+  searchMem : string = null
 
-  members : []
+  allMembers : []
+  members : any[]
 
   error : string = null
 
@@ -406,8 +408,13 @@ export class ProjectsComponent implements OnInit {
       // get members
       getMembers() {
         this.amService.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
-          this.members = data['users'];
-          console.log(this.members)
+          this.allMembers = data['users'];
+          // sort alphabetically
+          this.allMembers.sort((a : any ,b : any) =>
+            a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
+          );
+          this.members = this.allMembers
+          console.log(this.allMembers)
         },
         error => {
           //console.log(error);
@@ -419,6 +426,17 @@ export class ProjectsComponent implements OnInit {
             this.headerService.kickOut();
           }
         });
+      }
+
+      // search members
+      searchMembers(text : string) {
+        if (!this.searchMem)
+          this.members = this.allMembers
+        this.members = this.allMembers.filter((x : any) =>
+          x['name'].toLowerCase().includes(text.toLowerCase()) ||
+          x['surname'].toLowerCase().includes(text.toLowerCase()) ||
+          x['email'].toLowerCase().includes(text.toLowerCase())
+        )
       }
 
       // get teams
