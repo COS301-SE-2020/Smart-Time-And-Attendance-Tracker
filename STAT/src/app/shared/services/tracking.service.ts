@@ -45,13 +45,13 @@ export class TrackingService {
     });
   }*/
   //Update time entry
-  /*public updateTimeEntry(values, token) {
+  public updateTimeEntry(values, token) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.post(this.ROOT_URL+'userTimeEntry/updateTimeEntry', JSON.stringify(values), {
       headers: headers
     });
-  }*/
+  }
   //Get user's projects and tasks
   public getProjectsAndTasks(values){
     const headers = new HttpHeaders()

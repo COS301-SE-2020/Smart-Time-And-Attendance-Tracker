@@ -4,6 +4,8 @@ import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
+import { timer } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-today',
@@ -13,7 +15,10 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 export class TodayComponent implements OnInit {
 
 
+
   constructor(private modalService: NgbModal, public headerService : HeaderService, public service : TrackingService, public amService : AccountManagementService) { }
+
+  stop =false;
 
   panelOpenState = false;
   closeResult: string;
@@ -120,14 +125,10 @@ export class TodayComponent implements OnInit {
   //Add a manual time entry from form
   addManualEntry(form : NgForm)
   {
-    console.log(form)
     this.service.addMTimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
       this.reload()
     },
     error => {
-      //console.log(error);
-      //console.log(error.error.message);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -158,22 +159,31 @@ export class TodayComponent implements OnInit {
   }
 
   //Add an automatic time entry from form
-  /*addAutomaticEntry(form : NgForm)
-    {
-        this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
-        console.log(data);
-        this.service.EntryID = data['TimeEntryID'];
-        //this.reload()
-      },
-      error => {
-        console.log(error);
-        //console.log(error.error.message);
+  addAutomaticEntry(form : NgForm)
+  {
+      delay(60000);
+      if(this.stop == false)
+      {
+        this.service.addMTimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
+          this.service.EntryID = data['TimeEntryID'];
+          },
+          error => {
+            let errorCode = error['status'];
+            if (errorCode == '403')
+              this.headerService.kickOut();
 
-      });
-  }*/
+          });
+      }
+      this.stop = false;
+  }
+
+  stopTracking()
+  {
+    this.stop = true;
+  }
 
   //Update a time entry. Parameters are the new end time and active time
-  /*updateEntry(endTime, activeTime)
+  updateEntry(endTime, activeTime)
   {
       endTime =  new Date().getTime();
       activeTime = 10;
@@ -182,11 +192,12 @@ export class TodayComponent implements OnInit {
       console.log(data);
     },
     error => {
-      console.log(error);
-      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+        this.headerService.kickOut();
 
     });
-  }*/
+  }
 
   // edit tracking entry
   editEntry(form : NgForm) {
