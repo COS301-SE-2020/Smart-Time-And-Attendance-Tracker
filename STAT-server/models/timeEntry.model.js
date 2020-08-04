@@ -24,13 +24,11 @@ const mongoose = require('mongoose');
 const TimeEntrySchema = mongoose.Schema({
   TaskID: {
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Task',
-    required : "Task ID required."
+    ref: 'Task'
   },
   ProjectID: {
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Project',
-    required : "Project ID required."
+    ref: 'Project'
   },
   StartTime: {
     type: Number,
@@ -60,12 +58,10 @@ const TimeEntrySchema = mongoose.Schema({
     type: Number
   },
   ProjectName: { 
-    type: String,
-    required: "Project name required."
+    type: String
   },
   TaskName: { 
-    type: String,
-    required: "Task name required."
+    type: String
   },
 
 });
