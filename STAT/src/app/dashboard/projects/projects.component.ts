@@ -44,6 +44,7 @@ export class ProjectsComponent implements OnInit {
 
   allMembers : []
   members : any[]
+  availMembers : any[]
 
   error : string = null
 
@@ -431,12 +432,18 @@ export class ProjectsComponent implements OnInit {
       // search members
       searchMembers(text : string) {
         if (!this.searchMem)
-          this.members = this.allMembers
-        this.members = this.allMembers.filter((x : any) =>
+          this.members = this.availMembers
+        this.members = this.availMembers.filter((x : any) =>
           x['name'].toLowerCase().includes(text.toLowerCase()) ||
           x['surname'].toLowerCase().includes(text.toLowerCase()) ||
           x['email'].toLowerCase().includes(text.toLowerCase())
         )
+      }
+
+      // get all the members that are not in the team already
+      getAvailableMembers(members : Object[]) {
+        this.availMembers = this.allMembers.filter((m) => members.findIndex(a => a['ID'] === m['ID']))
+        this.members = this.availMembers
       }
 
       // get teams

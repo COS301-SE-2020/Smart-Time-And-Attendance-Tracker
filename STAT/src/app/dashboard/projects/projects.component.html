@@ -127,31 +127,23 @@
 
                 <!-- team -->
                 <mat-action-row>
-                  <img
-                    matTooltip={{name}} 
-                    matTooltipClass="pro-tooltip"
-                    matTooltipPosition="below"
-                    src="../../../assets/profilePicDefault.jpg" 
-                    class="profile-pic" alt="Profile Picture">
-                  <img
-                    matTooltip="Zac Efron" 
-                    matTooltipClass="pro-tooltip"
-                    matTooltipPosition="below"
-                    src="../../../assets/proPic1.jpg" 
-                    class="profile-pic" alt="Profile Picture">
-                  <img
-                    matTooltip="Henry Cavill" 
-                    matTooltipClass="pro-tooltip"
-                    matTooltipPosition="below"
-                    src="../../../assets/proPic2.jpg" 
-                    class="profile-pic" alt="Profile Picture">
+                  <span *ngFor="let m of p.projectMembers" class="proj-member">
+                    <div *ngIf="m.profilePicture == 'none'" class="pro-pic proj"
+                          matTooltip="{{m.name}} {{m.surname}}" 
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
+                    <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg"
+                          matTooltip="{{m.name}} {{m.surname}}" 
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="below">
+                  </span>
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-mini-fab
                             class="start-tracking addMember" 
                             matTooltip="Add team member"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
-                      <mat-icon inline="true" [matMenuTriggerFor]="menu">add</mat-icon>
+                      <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="getAvailableMembers(p.projectMembers)">add</mat-icon>
                     </button>
                 </mat-action-row>
               </mat-expansion-panel>

@@ -287,7 +287,7 @@ mat-accordion .tasks
 
 $colors : #7846eb, #00c8ff, #ff2885, #366ceb
 @for $i from 0 through 10
-  .member-button:nth-child(#{$i}) div.pro-pic
+  .member-button:nth-child(#{$i}) div.pro-pic, .proj-member:nth-child(#{$i}) div.pro-pic
     background-color: nth($colors, random(length($colors)))
 
 .member-button:focus
@@ -324,6 +324,14 @@ img, .pro-pic
   border-radius: 5em
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 4px 6px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)
 
+.proj
+  font-size: 1em
+  width: 40px
+  height: 40px
+  line-height: 40px
+  margin-left: 0.3em
+  border-radius: 5em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
 
 // ******************************************************************************************
 
