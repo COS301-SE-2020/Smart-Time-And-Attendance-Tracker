@@ -136,7 +136,7 @@ export class TeamsComponent implements OnInit {
   }
   // change role in team
   changeRole(form : NgForm) {
-    console.log(form);
+    //console.log(form);
     this.tmService.changeRole(localStorage.getItem('token'), form).subscribe((data) => {
       console.log(data);
     },
@@ -151,10 +151,39 @@ export class TeamsComponent implements OnInit {
       }
     });
   }
-
+  // edit team
+  editTeam(id: string, name : string) {
+    let req = {"teamID": id, "teamName": name};
+    this.tmService.editTeam(localStorage.getItem('token'), req).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
   // delete team
   deleteTeam(id : string) {
-    
+    let req = {"teamID": id};
+    this.tmService.deleteTeam(localStorage.getItem('token'), req).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
 

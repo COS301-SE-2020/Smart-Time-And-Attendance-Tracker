@@ -188,7 +188,7 @@ export class ProjectsComponent implements OnInit {
   // delete project
   deleteProject(projectID : String) {
     this.pmService.deleteProject(localStorage.getItem('token'),projectID).subscribe((data) => {
-      console.log('ID' + projectID)
+      //console.log('ID' + projectID)
       console.log(data);
       this.getProAndTasks()
     },

@@ -25,7 +25,6 @@ export class AccountManagementService {
   public signUp(values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
-
     return this.http.post(this.ROOT_URL+'user/register', JSON.stringify(values), {
       headers: headers
     });
@@ -88,7 +87,7 @@ export class AccountManagementService {
   public reject(token, userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID),{
+    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID), {
       headers: headers
     });
   }
@@ -105,6 +104,38 @@ export class AccountManagementService {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.get(this.ROOT_URL+ 'user/getAllUsers', {
+      headers: headers
+    });
+  }
+  //Remove user from organisation
+  public removeUser(token, userID){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID), {
+      headers: headers
+    });
+  }
+  //Add organisation role (security admin)
+  public addRole(token, userID){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/addRole', JSON.stringify(userID), {
+      headers: headers
+    });
+  }
+  //Remove organisation role (security admin)
+  public removeRole(token, values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/removeRole', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  //Edit user details (security admin)
+  public editUser(token, values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/editUser', JSON.stringify(values), {
       headers: headers
     });
   }
