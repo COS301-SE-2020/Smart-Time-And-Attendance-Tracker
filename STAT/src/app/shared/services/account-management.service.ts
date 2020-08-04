@@ -25,7 +25,6 @@ export class AccountManagementService {
   public signUp(values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
-
     return this.http.post(this.ROOT_URL+'user/register', JSON.stringify(values), {
       headers: headers
     });
@@ -104,7 +103,7 @@ export class AccountManagementService {
   public getAllUsers(token){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.get(this.ROOT_URL+ 'user/getAllUsers', JSON.stringify(userID), {
+    return this.http.get(this.ROOT_URL+ 'user/getAllUsers', {
       headers: headers
     });
   }
@@ -112,7 +111,7 @@ export class AccountManagementService {
   public removeUser(token, userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.get(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID), {
+    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID), {
       headers: headers
     });
   }
@@ -120,7 +119,7 @@ export class AccountManagementService {
   public addRole(token, userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.get(this.ROOT_URL+ 'user/addRole', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+ 'user/addRole', JSON.stringify(userID), {
       headers: headers
     });
   }
@@ -128,7 +127,7 @@ export class AccountManagementService {
   public removeRole(token, values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.get(this.ROOT_URL+ 'user/removeRole', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+ 'user/removeRole', JSON.stringify(values), {
       headers: headers
     });
   }
@@ -136,7 +135,7 @@ export class AccountManagementService {
   public editUser(token, values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.get(this.ROOT_URL+ 'user/editUser', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+ 'user/editUser', JSON.stringify(values), {
       headers: headers
     });
   }

@@ -152,7 +152,7 @@ export class TeamsComponent implements OnInit {
     });
   }
   // edit team
-  editTeam(teamID: string, teamName : string) {
+  editTeam(id: string, name : string) {
     let req = {"teamID": id, "teamName": name};
     this.tmService.editTeam(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
