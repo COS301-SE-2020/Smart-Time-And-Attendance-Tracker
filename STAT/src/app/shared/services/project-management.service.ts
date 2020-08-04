@@ -38,7 +38,7 @@ export class ProjectManagementService {
     let parameters = new HttpParams();
     parameters = parameters.append('taskID', task);
     parameters = parameters.append('projectID', project);
-    return this.http.delete(this.ROOT_URL+'task', {
+    return this.http.delete(this.ROOT_URL+'task?', {
       headers: headers,
       params: parameters
     });
@@ -49,7 +49,7 @@ export class ProjectManagementService {
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
     parameters = parameters.append('projectID', project);
-    return this.http.delete(this.ROOT_URL+'project', {
+    return this.http.delete(this.ROOT_URL+'project?', {
       headers: headers,
       params: parameters
     });

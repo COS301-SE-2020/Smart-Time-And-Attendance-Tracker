@@ -59,11 +59,19 @@ export class TeamManagementService {
       headers: headers
     });
   }
+  // Edit team (Team leader)
+  public editTeam(token, values) {
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
+    return this.http.post(this.ROOT_URL+'team/editTeam', JSON.stringify(values), {
+      headers: headers
+    });
+  }
   // Delete team (Team leader)
   public deleteTeam(token, teamID) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
-    return this.http.post(this.ROOT_URL+'team/deleteTeam', JSON.stringify(teamID), {
+    return this.http.post(this.ROOT_URL+'team/team?', JSON.stringify(teamID), {
       headers: headers
     });
   }

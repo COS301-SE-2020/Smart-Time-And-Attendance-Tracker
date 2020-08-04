@@ -151,7 +151,23 @@ export class TeamsComponent implements OnInit {
       }
     });
   }
-
+  // edit team
+  editTeam(teamID: string, teamName : string) {
+    let req = {"teamID": id, "teamName": name};
+    this.tmService.editTeam(localStorage.getItem('token'), req).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
   // delete team
   deleteTeam(id : string) {
     let req = {"teamID": id};
