@@ -201,6 +201,29 @@ mat-divider
   background-color: #4c585b90
   padding: 0.3em
 
+#member-menu
+  overflow-x: hidden
+  overflow-y: scroll
+  padding: 0 1.5em 0.2em 0.8em
+  height: 15em
+  color: red !important
+
+#mat-menu-panel::-webkit-scrollbar
+  border-radius: 0.5em
+  background-color: #ffffff
+  width: 0.5em
+
+#mat-menu-panel::-webkit-scrollbar-track::hover
+  cursor: pointer
+
+#mat-menu-panel::-webkit-scrollbar-thumb
+  border-radius: 0.5em
+  background-color: #4c585b70
+
+#mat-menu-panel::-webkit-scrollbar-track
+  border-radius: 0.5em
+  background-color: #ffffff
+
 .profile-pic
   width: 40px
   height: 40px
@@ -267,6 +290,21 @@ $colors : #7846eb, #00c8ff, #ff2885, #366ceb
 
 .member-button:focus
   outline: none !important
+
+#member-search-wrapper
+  width: 100% !important
+
+  .mat-form-field-infix
+    padding: 0 !important
+    border-top: 0 !important
+
+  mat-label, #member-search
+    padding-left: 0.5em !important
+
+::ng-deep .mat-menu-content
+  max-height: 15em !important
+  padding-top: 0 !important
+
 
 img, .pro-pic
   display: inline-block

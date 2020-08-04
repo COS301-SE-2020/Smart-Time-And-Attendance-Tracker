@@ -75,6 +75,10 @@ export class ProjectsComponent implements OnInit {
   }
 
 
+  stopPropagation(event){
+    event.stopPropagation();
+    // console.log("Clicked!");
+  }
 
   /********
   API CALLS
