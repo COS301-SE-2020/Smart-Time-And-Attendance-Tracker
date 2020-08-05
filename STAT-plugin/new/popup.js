@@ -38,20 +38,21 @@ stopStartBtn.onclick = function(){
         {
             console.log("Stopeed tracking " + url);
             var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]) + parseInt(getCookie("historyTime"+currentID)); 
-            setCookie("historyTime"+currentID, currentDuration, 1);        
-            console.log(getCookie("historyTime"+currentID));
-            //UpdateTimeEntry(now, currentID);
-            
-            //startTimer.style.display = "block";
-            //stopTimer.style.display = "none";
-            stopStartBtn.name = "start";
-            stopStartBtn.innerHTML = "Start";
-            chrome.extension.getBackgroundPage().History[currentID][0][2] = "";  
-            chrome.extension.getBackgroundPage().History[currentID][0][3] = "true"; 
-            chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
+            if(currentDuration>60)
+            {
+                UpdateTimeEntry(now, currentID, currentDuration);
+                //startTimer.style.display = "block";
+                //stopTimer.style.display = "none";
+            }
+            else
+            {
+                document.getElementById("errorMessage").style.display="block";
+                document.getElementById("errorMessage").innerHTML= "Time < 60 seconds";
+
+            }
         }
         else{
-            
+            setCookie("historyTime"+currentID, "0", 1);        
             setTimeout (() => {
                 if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false")
                 {

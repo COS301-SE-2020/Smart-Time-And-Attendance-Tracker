@@ -107,15 +107,15 @@ function getUserName(){
         http.send();
 }
 
-
+var stopStartBtn = document.getElementById("start_stop");
 
 function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
   //getTasks();
   //alert(getTimeWithID(currentID));
   alert("url: " + url);
-      var http = new XMLHttpRequest();
-      var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
-      var text = '{ "description": "'+ url + '",'
+  var http = new XMLHttpRequest();
+  var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
+  var text = '{ "description": "'+ url + '",'
           + '"startTime": "'+ startTime.getTime() + '",' 
           + '"endTime": "'+ endTime.getTime() + '",' 
           + '"device": "Browser",' 
@@ -126,21 +126,54 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
           + '"date": "'+ new Date() + '"' 
           + '}';
 
-      http.open('POST', apiURL, true);
+  http.open('POST', apiURL, true);
 
-      http.setRequestHeader('Content-type', 'application/json');
-      http.setRequestHeader("authorization", "token "+ getCookie("token"));
-      //alert(getCookie("token"));
-      http.onreadystatechange = function() {
-        alert(http.readyState + "  " + http.status);
-          if(http.readyState == 4 && http.status == 200) {
-            const obj = JSON.parse(http.responseText);
-            chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.timeEntryID;
-          }
-          else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-          }
-      }
-      http.send(text);
+  http.setRequestHeader('Content-type', 'application/json');
+  http.setRequestHeader("authorization", "token "+ getCookie("token"));
+  http.onreadystatechange = function() {
+    if(http.readyState == 4 && http.status == 200) {
+      const obj = JSON.parse(http.responseText);
+      chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.timeEntryID;
+    }
+    else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+      AddTimeEntry(url, startTime, endTime, currentID, duration);
+    }
+  }
+  http.send(text);
+}
+
+function UpdateTimeEntry(endTime,currentID, duration) {
+  alert("updaing time entry  " + duration);
+  alert(chrome.extension.getBackgroundPage().History[currentID][0][2]);
+  var http = new XMLHttpRequest();
+  var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
+  var text = '{'
+          + '"timeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'  
+          + '"endTime": "'+ endTime.getTime() + '",'  
+          + '"activeTime":'+ duration  
+          + '}';
+
+  http.open('POST', apiURL, true);
+  alert(text);
+  http.setRequestHeader('Content-type', 'application/json');
+  http.setRequestHeader("authorization", "token "+ getCookie("token"));
+  http.onreadystatechange = function() {
+    alert(http.readyState + "  " + http.status);
+    if(http.readyState == 4 && http.status == 200) {
+      const obj = JSON.parse(http.responseText);
+      alert("message :   " + obj.message);
+      stopStartBtn.name = "start";
+                stopStartBtn.innerHTML = "Start";
+                setCookie("historyTime"+currentID, duration, 1);        
+                chrome.extension.getBackgroundPage().History[currentID][0][2] = "";  
+                chrome.extension.getBackgroundPage().History[currentID][0][3] = "true"; 
+                chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
+    }
+    else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+      alert(http.responseText);              
+    }
+  }
+  http.send(text);
 }
 
 function isString(str) {
