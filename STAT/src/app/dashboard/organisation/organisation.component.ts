@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-organisation',
@@ -10,7 +11,7 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 })
 export class OrganisationComponent implements OnInit {
 
-  constructor(public headerService : HeaderService, public service : AccountManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public service : AccountManagementService) { }
 
   panelOpenState = false;
 
@@ -20,15 +21,20 @@ export class OrganisationComponent implements OnInit {
   searchText : string = null
   searchMem : string = null
 
+  memberName : string
+  mid : string
+
   ngOnInit(): void {
     this.getAllUnauthenticatedUsers('n')
     this.getMembers()
   }
 
-  removeUser(id)
+  removeUser(id : string)
   {
     let req = {"userID": id};
     this.service.removeUser(localStorage.getItem('token'), req).subscribe((data) => {
+      console.log(data)
+      this.getMembers()
     },
     error => {
       //console.log(error);
@@ -285,6 +291,27 @@ export class OrganisationComponent implements OnInit {
         active.classList.add('active')
       }
       i++
+    }
+  }
+
+  /*** MODAL ***/
+  closeResult: string;
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
     }
   }
 }

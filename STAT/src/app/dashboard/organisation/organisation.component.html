@@ -125,59 +125,50 @@
 
       <ul class="member-list" *ngFor="let m of membersResult" id="{{m.alphabet}}">
         <li class="list-alpha">{{m.alphabet}}</li>
-        <li *ngFor="let r of m.records">
+        <li *ngFor="let r of m.records" class="member">
           <div *ngIf="r.profilePicture == 'none'" class="pro-pic">{{r.name[0]}}{{r.surname[0]}}</div>
           <img *ngIf="r.profilePicture != 'none'" src="assets/proPic3.jpg">
           <span>{{r.name}} {{r.surname}} <br> <i>{{r.email}}</i></span>
+          <span class="member-edit">
+            <button mat-button class="teams-btn"
+                    matTooltip="Edit"
+                    matTooltipClass="teams-tooltip"
+                    matTooltipPosition="above">
+                    <mat-icon inline="true">edit</mat-icon>
+            </button>
+            <button mat-button class="teams-btn"
+                    matTooltip="Remove"
+                    matTooltipClass="teams-tooltip"
+                    matTooltipPosition="above"
+                    (click)="open(removeMemberModal); mid = r.ID; memberName = r.name + ' ' + r.surname">
+                    <mat-icon inline="true">remove_circle</mat-icon>
+            </button>
+          </span>
           <span *ngIf="r.role[0] != 'General Team Member'" class="float-right tag role">{{r.role[0]}}</span>
         </li>
       </ul>
-
-      <!--<ul id="a">
-        <li class="list-alpha">A</li>
-        <li>
-          <img src="assets/proPic3.jpg">
-          <span>Adam Levine <br> <i>adam.lefine.af@gmail.com</i></span>
-          <span class="float-right tag role">Team Lead</span>
-        </li>
-        <li>
-          <img src="assets/proPic4.jpg">
-          <span>Avan Jogia <br> <i>avan@gmail.com</i></span>
-        </li>
-      </ul>
-
-      <ul id="a">
-        <li class="list-alpha">B</li>
-        <li>
-          <img src="assets/proPic5.jpg">
-          <span>Beyonce <br> <i>queen.bee@gmail.com</i></span>
-          <span class="float-right tag role">System Administrator</span>
-        </li>
-      </ul>
-
-      <ul id="a">
-        <li class="list-alpha">C</li>
-        <li>
-          <img src="assets/proPic6.jpg">
-          <span>Cara Delevinge <br> <i>cara@gmail.com</i></span>
-        </li>
-        <li>
-          <img src="assets/proPic7.jpg">
-          <span>Channing Tatum <br> <i>magicmike@gmail.com</i></span>
-        </li>
-        <li>
-          <img src="assets/proPic8.jpg">
-          <span>Chris Evans <br> <i>nocap@gmail.com</i></span>
-          <span class="float-right tag role">Team Lead</span>
-        </li>
-        <li>
-          <img src="assets/proPic9.jpg">
-          <span>Chris Hemsworth <br> <i>christopher.hemmingsworth@gmail.com</i></span>
-        </li>
-      </ul>-->
     </div>
 
   </section>
 </div>
 
-
+<!-- ****************************************** REMOVE MEMBER ****************************************** -->
+<ng-template #removeMemberModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Remove {{memberName}}
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to remove this member from the organisation?
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); removeUser(mid)">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
