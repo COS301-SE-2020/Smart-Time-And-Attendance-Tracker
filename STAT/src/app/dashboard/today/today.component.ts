@@ -23,6 +23,7 @@ export class TodayComponent implements OnInit {
   currentTime : number;
   startTime : number;
   timing :number;
+  hours: number;
   count = timer(60000);
   sync = timer(600000);
   projectName: string;
@@ -259,15 +260,17 @@ export class TodayComponent implements OnInit {
     console.log("update");
     var endTime = new Date().getTime();
     var activeTime = this.timing;
-    var hours =  activeTime / 60;
-    var monetaryValue = hours * this.hourlyRate
-
-    if (isNaN(monetaryValue))
+    this.hours =  activeTime / 60;
+    if(this.hourlyRate == undefined)
+      this.monetaryValue = 0
+    else
+      this.monetaryValue = this.hours * this.hourlyRate
+ 
+    if (isNaN(this.monetaryValue))
     {
-      console.log("hello");
-      monetaryValue = 0
+      this.monetaryValue = 0
     }
-    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" : activeTime," monetaryValue" : monetaryValue};
+    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" : activeTime," monetaryValue" : this.monetaryValue};
      return this.service.updateTimeEntry(values, localStorage.getItem('token'));
 
   }
