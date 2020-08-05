@@ -13,13 +13,13 @@ export class TrackingService {
 
   // Add manual time entry
   public addMTimeEntry(values, token) {
-    let epoch = new Date(values.Date +" " +values.StartTime).getTime();
-    values.StartTime = epoch;
-    epoch = new Date(values.Date +" " +values.EndTime).getTime();
-    values.EndTime = epoch;
-    if(!values.Description)
-      values.Description = "Manual Entry";
-    values.Device = "Website";
+    let epoch = new Date(values.date +" " +values.startTime).getTime();
+    values.startTime = epoch;
+    epoch = new Date(values.date +" " +values.endTime).getTime();
+    values.endTime = epoch;
+    if(!values.description)
+      values.description = "Manual Entry";
+    values.device = "Website";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
@@ -28,22 +28,17 @@ export class TrackingService {
     });
   }
   //Add "automatic" time entry
-  /*public addATimeEntry(values, token) {
-    let date =  new Date()
-    let epoch = date.getTime();
-    let dateStr = formatDate(date, 'yyyy/MM/dd', 'en');
-    values.Date = dateStr;
-    values.StartTime = epoch;
-    if(!values.Description)
-      values.Description = "Timed Entry";
-    values.Device = "Website";
+  public addATimeEntry(values, token) {
+    if(!values.description)
+      values.description = "Timed Entry";
+    values.device = "Website";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
     return this.http.post(this.ROOT_URL+'userTimeEntry/addTimeEntry', JSON.stringify(values), {
       headers: headers
     });
-  }*/
+  }
   //Update time entry
   public updateTimeEntry(values, token) {
     const headers = new HttpHeaders()
@@ -56,7 +51,7 @@ export class TrackingService {
   public getProjectsAndTasks(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.get(this.ROOT_URL+ 'user/getTasks', {
+    return this.http.get(this.ROOT_URL+ 'user/getProjects', {
       headers: headers
     });
   }

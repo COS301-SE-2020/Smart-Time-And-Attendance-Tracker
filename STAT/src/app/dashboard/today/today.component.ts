@@ -6,6 +6,7 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { timer } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-today',
@@ -19,7 +20,14 @@ export class TodayComponent implements OnInit {
   constructor(private modalService: NgbModal, public headerService : HeaderService, public service : TrackingService, public amService : AccountManagementService) { }
 
   stop =false;
-
+  currentTime : number;
+  startTime : number;
+  timing :number;
+  count = timer(60000);
+  sync = timer(600000);
+  projectName: string;
+  projectID : string;
+  
   panelOpenState = false;
   closeResult: string;
   autoTracking = true;
@@ -69,11 +77,14 @@ export class TodayComponent implements OnInit {
 
     this.automaticTrackingForm = new FormGroup({
       description : new FormControl(''),
-      project : new FormControl('', [Validators.required]),
-      taskID : new FormControl('', [Validators.required]),
+      projectID : new FormControl(''),
+      taskID : new FormControl(''),
+      projectName : new FormControl(''),
+      taskName : new FormControl('')
     });
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
+
 
     // set dates
     this.date1.setDate(this.date.getDate()-1)
@@ -147,7 +158,7 @@ export class TodayComponent implements OnInit {
       startTime = new Date('2020/01/01 ' + startTime)
       endTime = new Date('2020/01/01 ' + endTime)
       var diff = endTime.getTime() - startTime.getTime()
-      this.activeTime = diff / 60000
+      this.activeTime = Math.floor( diff / 60000);
       var hours = diff / 3600000
       this.monetaryValue = hours * this.hourlyRate
       this.manualTrackingForm.get('monetaryValue').setValue(this.monetaryValue)
@@ -161,42 +172,104 @@ export class TodayComponent implements OnInit {
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
-      delay(60000);
+    this.stop = false;
+    let now = new Date();
+    this.startTime = now.getTime();
+    form['startTime']= this.startTime;
+    setTimeout (() => {
       if(this.stop == false)
       {
-        this.service.addMTimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
-          this.service.EntryID = data['TimeEntryID'];
+        console.log("start");
+        now = new Date();
+        form['endTime']=  now.getTime();
+
+        this.timing = 1;
+        form['activeTime'] = 1;
+        form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
+
+
+        this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
+          this.service.EntryID = data['timeEntryID'];
+          localStorage.setItem('currentlyTracking', data['timeEntryID']);
+
+          var details = {'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
+  
+          localStorage.setItem('currentlyTrackingDetails',JSON.stringify( details));
+
+          this.tracking();
           },
           error => {
+            console.log(error);
             let errorCode = error['status'];
             if (errorCode == '403')
               this.headerService.kickOut();
 
           });
-      }
-      this.stop = false;
+   }this.stop = false;
+  }, 60000);
+      
   }
 
   stopTracking()
   {
+    console.log("Stop");
     this.stop = true;
+    if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
+    {
+      localStorage.removeItem('currentlyTracking');
+      this.updateEntry();
+    }
+     
+
+  }
+  tracking()
+  {
+    console.log("tracking");
+    this.count.subscribe(x => {
+      if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
+      { 
+        this.timing = this.timing +1;
+         ////////////////////////////////////////////display new time
+        console.log(this.timing);
+        this.tracking();
+      }
+    });
+
+    this.sync.subscribe(x => {
+      if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
+      { 
+        this.updateEntry().subscribe((data) => {
+        },
+        error => {
+          let errorCode = error['status'];
+          if (errorCode == '403')
+            this.headerService.kickOut();
+    
+        });
+      }
+      else
+        this.stopTracking();
+    });
+
   }
 
   //Update a time entry. Parameters are the new end time and active time
-  updateEntry(endTime, activeTime)
+  updateEntry()
   {
-      endTime =  new Date().getTime();
-      activeTime = 10;
-      let values = {"TimeEntryID" : this.service.EntryID, "EndTime": endTime, "ActiveTime" : activeTime};
-      this.service.updateTimeEntry(values, localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
-    },
-    error => {
-      let errorCode = error['status'];
-      if (errorCode == '403')
-        this.headerService.kickOut();
+    console.log("update");
+    var endTime = new Date().getTime();
+    var activeTime = this.timing;
+    var hours =  activeTime / 60;
+    var monetaryValue = hours * this.hourlyRate
 
-    });
+    if (isNaN(monetaryValue))
+    {
+      console.log("hello");
+      monetaryValue = 0
+    }
+    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" : activeTime," monetaryValue" : monetaryValue};
+     return this.service.updateTimeEntry(values, localStorage.getItem('token'));
+
   }
 
   // edit tracking entry
@@ -209,10 +282,8 @@ export class TodayComponent implements OnInit {
   {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       this.projects = data['projects']
-      console.log(data)
     },
     error => {
-      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -228,6 +299,7 @@ export class TodayComponent implements OnInit {
     if (form == 'a') {
       if (this.aProjectSelected == null)
         this.tasks = [ { "ID" : 0, "taskName" : "None" }];
+    
       else {
         this.aTasksDisabled = false;
         this.tasks = this.projects.find((p : any) => p.ID == projectID)['tasks'];
@@ -306,12 +378,12 @@ export class TodayComponent implements OnInit {
     var m = (date.getMonth()+1).toString();
     var d = date.getDate().toString();
 
-    let toReturn = new String(y + '-');
+    let toReturn = new String(y + '/');
 
     if (m.length == 1)
-      toReturn += ('0' + m + '-')
+      toReturn += ('0' + m + '/')
     else
-      toReturn += (m + '-')
+      toReturn += (m + '/')
 
     if (d.length == 1)
       toReturn += ('0' + d)

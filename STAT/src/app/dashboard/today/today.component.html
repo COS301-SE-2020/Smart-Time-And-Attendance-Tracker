@@ -336,8 +336,8 @@
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select [(value)]="aProjectSelected" formControlName="project">
-            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a')">{{p.projectName}}</mat-option>
+          <mat-select [(value)]="aProjectSelected" formControlName="projectID">
+            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a'); pName = p.projectName" >{{p.projectName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
@@ -345,9 +345,12 @@
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="taskID">
-          <mat-option *ngFor="let t of tasks" [value]="t.ID">{{t.taskName}}</mat-option>
+          <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
+
+          <input hidden formControlName="projectName" [(ngModel)]="pName" [value]="pName">
+          <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
         </mat-form-field>
       </form>
     </div>
@@ -363,7 +366,7 @@
       </button>
       <button *ngIf="autoTracking==true" 
               mat-raised-button color="primary" 
-              (click)="modal.close('Save click');"
+              (click)="modal.close('Save click'); addAutomaticEntry(automaticTrackingForm.value);"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
       <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset(); automaticTrackingForm.reset(); autoTracking = true">Cancel</button>
     </div>
@@ -401,7 +404,7 @@
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="TaskID">
-          <mat-option *ngFor="let t of tasks" [value]="t.ID">{{t.taskName}}</mat-option>
+          <mat-option *ngFor="let t of tasks" [value]="t.ID" >{{t.taskName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
