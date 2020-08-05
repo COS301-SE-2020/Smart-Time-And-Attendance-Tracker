@@ -45,6 +45,8 @@ export class ProjectsComponent implements OnInit {
   allMembers : []
   members : any[]
   availMembers : any[]
+  addMembers : Object[] = []
+  role : string = null
 
   error : string = null
 
@@ -431,6 +433,7 @@ export class ProjectsComponent implements OnInit {
 
       // search members
       searchMembers(text : string) {
+        console.log(this.searchMem)
         if (!this.searchMem)
           this.members = this.availMembers
         this.members = this.availMembers.filter((x : any) =>
@@ -443,6 +446,8 @@ export class ProjectsComponent implements OnInit {
       // get all the members that are not in the team already
       getAvailableMembers(members : Object[]) {
         this.availMembers = this.allMembers.filter((m) => members.findIndex(a => a['ID'] === m['ID']))
+        for (let i = 0; i < this.availMembers.length; i++)
+          this.availMembers[i]['role'] = ''
         this.members = this.availMembers
       }
 
@@ -483,6 +488,35 @@ export class ProjectsComponent implements OnInit {
             // kick user out
             this.headerService.kickOut();
           }
+        });
+      }
+
+      addMember(m : any) {
+        console.log(m)
+        let index = this.addMembers.findIndex(a => a == m)
+        if (index == -1)
+          this.addMembers.push(m)
+        else
+          this.addMembers.splice(index, 1)
+        console.log(this.addMembers)
+      }
+
+      addRole(m : any, role : string) {
+        let index = this.addMembers.findIndex(a => a == m)
+        m['role'] = role
+        this.addMembers[index] = m
+        console.log(this.addMembers)
+      }
+
+      typeRole(event) {
+        this.role = event.target.value
+        console.log(this.role)
+      }
+
+      addMembersToProject() {
+        this.addMembers.forEach((m : any) => {
+          console.log(m)
+          this.addTeamMember(m.ID, this.pid, m.role)
         });
       }
 

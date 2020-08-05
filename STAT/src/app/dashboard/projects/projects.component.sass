@@ -287,8 +287,16 @@ mat-accordion .tasks
 
 $colors : #7846eb, #00c8ff, #ff2885, #366ceb
 @for $i from 0 through 10
-  .member-button:nth-child(#{$i}) div.pro-pic, .proj-member:nth-child(#{$i}) div.pro-pic
+  .member-button:nth-child(#{$i}) div.pro-pic, .proj-member:nth-child(#{$i}) div.pro-pic, .members-to-add:nth-child(#{$i}) div.pro-pic
     background-color: nth($colors, random(length($colors)))
+
+::ng-deep .mat-option
+  height: 4em !important
+  line-height: 4em !important
+  color: #4c585b !important
+
+.member-button .pro-pic, .member-button img
+  margin-left: 0.5em
 
 .member-button:focus
   outline: none !important
@@ -333,6 +341,38 @@ img, .pro-pic
   border-radius: 5em
   white-space: pre-line
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+
+.members-to-add
+  list-style-type: none
+  padding-left: 0
+
+  li 
+    margin: 0.8em 0
+    display: flex
+    align-items: center
+
+    mat-form-field
+      padding-right: 0 !important
+
+    .col-7
+      display: flex
+      align-items: center
+
+  .tag
+    margin-right: 0.8em
+
+.add-member
+  > mat-form-field mat-option
+    width: 8em !important
+
+::ng-deep .mat-chip-list-wrapper
+  display: inline-block !important
+  width: fit-content !important
+  margin-left: 0.8em !important
+
+
+mat-chip
+  font-size: 0.8em
 
 // ******************************************************************************************
 

@@ -109,7 +109,7 @@ export class ProjectManagementService {
   addTeamMember(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+'team/addTeamMember', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'project/addMember', JSON.stringify(values), {
       headers: headers
     });
   }
