@@ -118,10 +118,12 @@ export class TeamsComponent implements OnInit {
     });
   }
   // remove team member
-  removeTeamMember(form : NgForm) {
+  removeTeamMember(teamID : string, userID : string) {
     // get user id
-    this.tmService.removeTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
+    let req = {"teamID": teamID, "userID": userID};
+    this.tmService.removeTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
+      this.getTeams();
     },
     error => {
       //console.log(error);
