@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { formatDate } from '@angular/common';
+import { templateJitUrl } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -71,8 +72,11 @@ export class TeamManagementService {
   public deleteTeam(token, teamID) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
-    return this.http.post(this.ROOT_URL+'team/team?', JSON.stringify(teamID), {
-      headers: headers
+    let parameters = new HttpParams();
+    parameters = parameters.append('teamID', teamID);
+    return this.http.delete(this.ROOT_URL+'team?', {
+      headers: headers,
+      params: parameters
     });
   }
 

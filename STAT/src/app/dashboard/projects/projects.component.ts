@@ -469,9 +469,9 @@ export class ProjectsComponent implements OnInit {
       }
 
       // add team member
-      addTeamMember(form : NgForm) {
-        console.log(form);
-        this.tmService.addTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
+      addTeamMember(uID : string, pID: string, role : string) {
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        this.pmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
           console.log(data);
         },
         error => {

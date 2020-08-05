@@ -170,9 +170,9 @@ export class TeamsComponent implements OnInit {
   }
   // delete team
   deleteTeam(id : string) {
-    let req = {"teamID": id};
-    this.tmService.deleteTeam(localStorage.getItem('token'), req).subscribe((data) => {
+    this.tmService.deleteTeam(localStorage.getItem('token'), id).subscribe((data) => {
       console.log(data);
+      this.getTeams();
     },
     error => {
       //console.log(error);

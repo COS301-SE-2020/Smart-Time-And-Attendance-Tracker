@@ -129,7 +129,7 @@
                 <mat-action-row>
                   <span *ngFor="let m of p.projectMembers" class="proj-member">
                     <div *ngIf="m.profilePicture == 'none'" class="pro-pic proj"
-                          matTooltip="{{m.name}} {{m.surname}}" 
+                          matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]" 
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
                     <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg"
@@ -145,23 +145,33 @@
                             matTooltipPosition="below">
                       <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="getAvailableMembers(p.projectMembers)">add</mat-icon>
                     </button>
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-mini-fab
+                            class="start-tracking addMember" 
+                            matTooltip="Add team"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="below">
+                      <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="getAvailableMembers(p.projectMembers)">group_add</mat-icon>
+                    </button>
                 </mat-action-row>
+
+                <mat-menu #menu="matMenu" id="member-menu">
+                  <mat-form-field appearance="standard" id="member-search-wrapper">
+                    <mat-label>Search members</mat-label>
+                    <input (click)="$event.stopPropagation()" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)" matInput id="member-search" placeholder="Member name">
+                  </mat-form-field>
+                  <button class="member-button" *ngFor="let m of members" mat-menu-item (click)="addTeamMember(m.ID, p.ID, 'GENERAL')">
+                    <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                    <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                    <span>{{m.name}} {{m.surname}}</span>
+                  </button>
+                </mat-menu>
               </mat-expansion-panel>
             <!-- END PROJECT **************************************** -->
 
             </mat-accordion>
 
-            <mat-menu #menu="matMenu" id="member-menu">
-              <mat-form-field appearance="standard" id="member-search-wrapper">
-                <mat-label>Search members</mat-label>
-                <input (click)="$event.stopPropagation()" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)" matInput id="member-search" placeholder="Member name">
-              </mat-form-field>
-              <button class="member-button" *ngFor="let m of members" mat-menu-item>
-                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
-                <span>{{m.name}} {{m.surname}}</span>
-              </button>
-            </mat-menu>
+            
         </div>
     </section>
 
