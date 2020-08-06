@@ -3,6 +3,7 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TeamManagementService } from 'src/app/shared/services/team-management.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
+import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({
   selector: 'app-teams',
@@ -11,12 +12,11 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 })
 export class TeamsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public headerService : HeaderService, public tmService: TeamManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public tmService: TeamManagementService, public amService : AccountManagementService) { }
 
   panelOpenState = false;
   roles : string
 
-  addTeamForm : FormGroup
   addMemberForm : FormGroup
   teams : Object[]
   tid : string
@@ -25,15 +25,19 @@ export class TeamsComponent implements OnInit {
   mid : string
   memberName : string
 
+  searchMem : string = null
+  allMembers : any[]
+  searchedMembers : any[]
+  addMembers : Object[] = []
+  role : string
+  pid : string
+
   error : string
 
   ngOnInit(): void {
     // page setup
     this.roles = localStorage.getItem('roles');
-    // add team form
-    this.addTeamForm = new FormGroup({
-      teamName : new FormControl('', [Validators.required])
-    });
+    
     // add member form
     this.addMemberForm = new FormGroup({
       userID : new FormControl(''), // ??
@@ -41,9 +45,31 @@ export class TeamsComponent implements OnInit {
     });
 
     this.getTeams();
+    this.getAllMembers();
   }
 
   /*** API CALLS ***/
+
+  // get all members
+  getAllMembers() {
+    this.amService.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
+      this.allMembers = data['users'];
+      // sort alphabetically
+      this.allMembers.sort((a : any ,b : any) =>
+        a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
+      );
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
 
   // get all teams
   getTeams() {
@@ -84,10 +110,13 @@ export class TeamsComponent implements OnInit {
     }
   }
   // create new team
-  createTeam(form : NgForm) {
-    console.log(form);
-    this.tmService.createTeam(localStorage.getItem('token'), form).subscribe((data) => {
+  createTeam(name : string) {
+    let req = { 'teamName' : name }
+    this.tmService.createTeam(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
+      this.tid = data['teamID']
+      console.log(this.tid)
+      this.addMembersToTeam()
     },
     error => {
       //console.log(error);
@@ -101,9 +130,10 @@ export class TeamsComponent implements OnInit {
     });
   }
   // add team member
-  addTeamMember(form : NgForm) {
-    console.log(form);
-    this.tmService.addTeamMember(localStorage.getItem('token'), form).subscribe((data) => {
+  addTeamMember(tID : string, uID: string, role : string) {
+    let req = {"teamID" : tID, "userID" : uID, "userRole" : role};      
+
+    this.tmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
     },
     error => {
@@ -117,6 +147,49 @@ export class TeamsComponent implements OnInit {
       }
     });
   }
+
+  // search members
+  searchMembers(text : string) {
+    console.log(this.searchMem)
+    if (!this.searchMem)
+      this.allMembers = this.searchedMembers
+    this.allMembers = this.searchedMembers.filter((x : any) =>
+      x['name'].toLowerCase().includes(text.toLowerCase()) ||
+      x['surname'].toLowerCase().includes(text.toLowerCase()) ||
+      x['email'].toLowerCase().includes(text.toLowerCase())
+    )
+  }
+
+  addMember(m : any) {
+    console.log(m)
+    let index = this.addMembers.findIndex(a => a == m)
+    if (index == -1)
+      this.addMembers.push(m)
+    else
+      this.addMembers.splice(index, 1)
+    console.log(this.addMembers)
+  }
+
+  addRole(m : any, role : string) {
+    let index = this.addMembers.findIndex(a => a == m)
+    m['teamRole'] = role
+    this.addMembers[index] = m
+    console.log(this.addMembers)
+  }
+
+  typeRole(event) {
+    this.role = event.target.value
+    console.log(this.role)
+  }
+
+  addMembersToTeam() {
+    this.addMembers.forEach((m : any) => {
+      console.log(m)
+      this.addTeamMember(this.tid, m.ID, m.teamRole)
+    });
+    this.getTeams()
+  }
+
   // remove team member
   removeTeamMember(teamID : string, userID : string) {
     // get user id

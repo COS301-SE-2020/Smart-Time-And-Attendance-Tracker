@@ -44,7 +44,7 @@ export class ProjectsComponent implements OnInit {
 
   allMembers : []
   members : any[]
-  availMembers : any[]
+  availMembers : any[] = []
   addMembers : Object[] = []
   role : string = null
 
@@ -444,11 +444,15 @@ export class ProjectsComponent implements OnInit {
       }
 
       // get all the members that are not in the team already
-      getAvailableMembers(members : Object[]) {
-        this.availMembers = this.allMembers.filter((m) => members.findIndex(a => a['ID'] === m['ID']))
+      getAvailableMembers(members : []) {
+        
+        this.availMembers = this.allMembers.filter((m1 : any) => !members.some((m2 : any) => m1.ID === m2.ID))
+
         for (let i = 0; i < this.availMembers.length; i++)
           this.availMembers[i]['role'] = ''
         this.members = this.availMembers
+        console.log(members)
+        console.log(this.members)
       }
 
       // get teams
