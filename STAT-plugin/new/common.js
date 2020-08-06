@@ -176,6 +176,38 @@ function UpdateTimeEntry(endTime,currentID, duration) {
   http.send(text);
 }
 
+function getTasks() {
+  tasksDropdown = document.getElementById("tasks");
+  if(tasksDropdown.childElementCount == 0)
+  {
+    var http = new XMLHttpRequest();
+    var apiURL = 'http://localhost:3000/api/user/getTasks';
+
+    var text = '{ "token": "'+ getCookie("token") + '"' + '}';
+    http.open('GET', apiURL, true);
+
+    http.setRequestHeader('Content-type', 'application/json');
+    http.setRequestHeader("authorization", "token "+getCookie("token"));
+    http.onreadystatechange = function() {
+        if(http.readyState == 4 && http.status == 200) {
+            const obj = JSON.parse(http.responseText);
+            for( t in obj.tasks)
+            {
+              var opt = document.createElement('option');
+              opt.appendChild( document.createTextNode(obj.tasks[t].taskName) );
+              opt.value = obj.tasks[t].ID;
+              opt.name = obj.tasks[t].projectName;
+              tasksDropdown.appendChild(opt); 
+            }
+        }
+        else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+            console.log(http.responseText);
+        }
+    }
+    http.send(text);
+  }
+}
+
 function isString(str) {
     return typeof str == "string";
 }
@@ -223,51 +255,3 @@ function getCookie(cname) {
       return hours + ":" + minutes + ":" + seconds;
     
   }
-  
-function char_count(str, letter) 
-{
- var letter_Count = 0;
- for (var position = 0; position < str.length; position++) 
- {
-    if (str.charAt(position) == letter) 
-      {
-      letter_Count += 1;
-      }
-  }
-  return letter_Count;
-}
-
-function addTimes(times = []) {
-
-    const z = (n) => (n < 10 ? '0' : '') + n;
-    for(var i=0; i<times.length; i++) {
-  
-      if(char_count(times[i],":") == 0)
-      {
-        times[i] = "0:0:"+times[i];
-      }
-      else if(char_count(times[i],":") == 1)
-      {
-        times[i] = "0:"+times[i];
-      }
-      else if(char_count(times[i],":") == 2)
-      {}
-      //alert("time " + (i+1) + " : " + times[i]);
-    }
-    let hour = 0
-    let minute = 0
-    let second = 0
-    for (const time of times) {
-        const splited = time.split(':');
-        hour += parseInt(splited[0]);
-        minute += parseInt(splited[1])
-        second += parseInt(splited[2])
-    }
-    const seconds = second % 60
-    const minutes = parseInt(minute % 60) + parseInt(second / 60)
-    const hours = hour + parseInt(minute / 60)
-  
-    return z(hours) + ':' + z(minutes) + ':' + z(seconds)
-  }
-
-
