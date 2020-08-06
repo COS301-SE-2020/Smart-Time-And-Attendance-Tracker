@@ -215,3 +215,40 @@ module.exports.getUserDetails = (val, done)=>{
     });
 }
 
+module.exports.getTeamUserDetails = (team, done)=>{
+
+    var users = [];
+    var roleLen =  team.TeamMembers.length;
+    var inlen = roleLen;
+    if(roleLen == 0)
+    {
+        done(null, users, team);
+    }
+    else
+    {
+        for(i=0; i<roleLen;i++)
+        {
+            var val =  team.TeamMembers[i].Role;
+            UserModel.findOne({ _id:  team.TeamMembers[i]._id},(err, result) => {
+                if(err) 
+                    done(err);
+                else if (!result)
+                    inlen = inlen-1;
+                else if(result)
+                {
+                    var text = {
+                        'ID': result._id,
+                        'email': result.Email,
+                        'name': result.Name,
+                        'surname': result.Surname,
+                        'role': val,
+                        'profilePicture': result.ProfilePicture
+                    }
+                    users.push(text);
+                }
+                if(users.length== inlen)
+                    done(null, users, team);       
+            });
+        }
+    }
+}
