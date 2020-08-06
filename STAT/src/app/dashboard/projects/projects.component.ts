@@ -41,6 +41,8 @@ export class ProjectsComponent implements OnInit {
   searchProj : string = null
   showComp : boolean = false
   searchMem : string = null
+  searchTeam : string = null
+  availTeams : any[] = []
 
   allMembers : []
   members : any[]
@@ -469,9 +471,10 @@ export class ProjectsComponent implements OnInit {
         this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
           console.log(data)
           this.teams = data['teams']
-          /*this.teams.sort((a : any ,b : any) =>
-              a.name.localeCompare(b.teamName)
-          );*/
+          this.teams.sort((a : any ,b : any) =>
+              a.teamName.localeCompare(b.teamName)
+          );
+          this.availTeams = this.teams
           console.log(this.teams)
           this.getTeamMembers();
         },
@@ -639,6 +642,15 @@ export class ProjectsComponent implements OnInit {
           this.changeRole(m.ID, this.pid, m.role)
         });
         this.editRoles = []
+      }
+
+      // search teams
+      searchTeams(text : string) {
+        if (!this.searchTeam)
+          this.availTeams = this.teams
+        this.availTeams = this.teams.filter((x : any) =>
+          x['teamName'].toLowerCase().includes(text.toLowerCase())
+        )
       }
 
 

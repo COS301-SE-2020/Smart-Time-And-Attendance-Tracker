@@ -165,13 +165,11 @@
 
                 <mat-menu #menu="matMenu" id="member-menu">
                   <mat-form-field appearance="standard" id="member-search-wrapper">
-                    <mat-label>Search members</mat-label>
-                    <input (click)="$event.stopPropagation()" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)" matInput id="member-search" placeholder="Member name">
+                    <mat-label>Search teams</mat-label>
+                    <input (click)="$event.stopPropagation()" [(ngModel)]="searchTeam" (keyup)="searchTeams(searchTeam)" matInput id="member-search" placeholder="Team name">
                   </mat-form-field>
-                  <button class="member-button" *ngFor="let m of members" mat-menu-item (click)="addTeamMember(m.ID, p.ID, 'GENERAL')">
-                    <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                    <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
-                    <span>{{m.name}} {{m.surname}}</span>
+                  <button class="member-button" *ngFor="let t of availTeams" mat-menu-item (click)="addTeamMember(t.ID, p.ID, 'GENERAL')">
+                    <span>{{t.teamName}}</span>
                   </button>
                 </mat-menu>
               </mat-expansion-panel>
