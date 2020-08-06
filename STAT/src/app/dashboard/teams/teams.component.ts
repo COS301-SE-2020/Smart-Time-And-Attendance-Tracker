@@ -32,6 +32,8 @@ export class TeamsComponent implements OnInit {
   role : string
   pid : string
 
+  availMembers : any[] = []
+
   error : string
 
   ngOnInit(): void {
@@ -94,17 +96,41 @@ export class TeamsComponent implements OnInit {
     });
   }
 
-  // get team members
+  // get members
   getMembers() {
-    this.members = []
-
-    for (let x = 0; x < this.teams.length; x++) {
-      console.log(this.teams)
-      var temp : Object[] = this.teams[x]['teamMembers']
-      console.log(temp)
-      this.members.push(temp)
-    }
+    this.amService.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
+      this.allMembers = data['users'];
+      // sort alphabetically
+      this.allMembers.sort((a : any ,b : any) =>
+        a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
+      );
+      this.members = this.allMembers
+      console.log(this.allMembers)
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
+
+  // get all the members that are not in the team already
+  getAvailableMembers(members : []) {
+    
+    this.availMembers = this.allMembers.filter((m1 : any) => !members.some((m2 : any) => m1.ID === m2.ID))
+
+    for (let i = 0; i < this.availMembers.length; i++)
+      this.availMembers[i]['role'] = ''
+    this.members = this.availMembers
+    console.log(members)
+    console.log(this.members)
+  }
+
 
   // create new team
   createTeam(name : string) {
@@ -132,6 +158,7 @@ export class TeamsComponent implements OnInit {
 
     this.tmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
+      this.getTeams()
     },
     error => {
       //console.log(error);
@@ -159,7 +186,7 @@ export class TeamsComponent implements OnInit {
 
   addMember(m : any) {
     console.log(m)
-    let index = this.addMembers.findIndex(a => a == m)
+    let index = this.addMembers.findIndex(a => a['ID'] == m['ID'])
     if (index == -1)
       this.addMembers.push(m)
     else
@@ -168,7 +195,7 @@ export class TeamsComponent implements OnInit {
   }
 
   addRole(m : any, role : string) {
-    let index = this.addMembers.findIndex(a => a == m)
+    let index = this.addMembers.findIndex(a => a['ID'] == m['ID'])
     m['teamRole'] = role
     this.addMembers[index] = m
     console.log(this.addMembers)
@@ -184,7 +211,6 @@ export class TeamsComponent implements OnInit {
       console.log(m)
       this.addTeamMember(this.tid, m.ID, m.teamRole)
     });
-    this.getTeams()
   }
 
   // remove team member

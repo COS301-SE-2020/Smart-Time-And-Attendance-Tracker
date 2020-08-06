@@ -82,7 +82,7 @@
             </li>
           </ul>
           <span class="float-right">
-            <button mat-button (click)="open(addMemberModal)">
+            <button mat-button (click)="open(addMemberModal); tid = t.ID; getAvailableMembers(t.teamMembers)">
               <mat-icon inline="true">add</mat-icon>New member
             </button>
           </span>
@@ -223,30 +223,64 @@
       </button>
     </div>
     <div class="modal-body">
-      <form method="post">
         <div class="add-member">
-          <mat-form-field appearance="standard" class="col-5">
-            <mat-label>Member</mat-label>
-            <mat-select matInput name="organisation-members">
-              <mat-option value="jaymie-farsee">Jaymie Farsee</mat-option>
-              <mat-option value="zac-efron">Zac Efron</mat-option>
-              <mat-option value="henry-cavill">Henry Cavill</mat-option>
+          <mat-form-field color="accent" appearance="standard" class="col-12">
+            <mat-label>Members</mat-label>
+            <mat-select  placeholder="Search members" [multiple]="true" #multiSelect>
+              <mat-option placeholder="Search members">
+                <ngx-mat-select-search name="searchMember" ng-reflect-placeholder="Search" placeholder="Search" [showToggleAllCheckbox]="true" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option class="member-button" *ngFor="let m of members" (click)="addMember(m)">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+              </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="standard" class="col-5 offset-1">
-            <mat-label>Role</mat-label>
-            <mat-select matInput>
-            </mat-select>
-          </mat-form-field>
+          
+          <mat-divider></mat-divider>
+          <ul *ngIf="addMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of addMembers">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.role}}
+                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Add member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.role"
+                    (keyup)="addRole(m, m.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="member" (click)="typeRole($event)">
+                    member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
         </div>
-      </form>
     </div>
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click')">Add members</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); addMembersToTeam()">Add members</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
   </div>
 </ng-template>
+
 
 <!-- ****************************************** ADD TEAM ****************************************** -->
 <ng-template #addTeamModal let-modal>
