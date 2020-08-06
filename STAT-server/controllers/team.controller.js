@@ -233,7 +233,7 @@ module.exports.deleteTeam = (req, res) => {
  * @param {HTTP Response} res 
  * @return {String} Array with teams and appropriate details
  */
-module.exports.getTeams = (req, res) => {
+module.exports.getTeams = (req, res, next) => {
     TeamModel.find({},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -244,46 +244,45 @@ module.exports.getTeams = (req, res) => {
         {
             if(result.length == 0)
                 return res.status(404).json({ message: 'No teams found' });
-            else
-            {
-                var allTeams =[];
-                var len = result.length;
-                console.log("res" + result.length);
-                for(i=0; i<len; i++) ///result array with team objects
-                {    
-                    console.log("i" + i);
-                   /* var teamLength =result[i].TeamMembers.length;
-                    console.log("i" + i);
-                    if(teamLength == 0)
-                    {
-                        var teamDetails ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
-                        var teamUsers = [];
-                        teamDetails["teamMembers"] =teamUsers;
-                        console.log("none");
-                        allTeams.push(teamDetails);
-                        console.log("inLen" + allTeams.length);
-                        if(allTeams.length == result.length)
-                            return res.status(200).json({teams : allTeams });
-                    }
-                    else
-                    {  */  
-        
-                        UserHelper.getTeamUserDetails(result[i], (err,val,team)=> {
-                            if(err)
-                                return res.status(500).send({message: 'Internal Server Error: ' + err});
-                            else if(val)
-                            {
-                                var teamDetails ={"ID": team._id, "teamName": team.TeamName, "teamMembers" : val};
-                                allTeams.push(teamDetails);
-                            } 
-                            console.log("2inLen" + allTeams.length);
-                            if(allTeams.length == result.length)
-                                return res.status(200).json({teams : allTeams });
-                            
-                        });
-                   //}
-
+            var allTeams =[];
+            for(i=0; i<result.length; i++) ///result array with team objects
+            {    
+                var teamDetails ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
+                var  teamUsers = [];
+                   ///take team member detals
+                var teamLength =result[i].TeamMembers.length;
+                if(teamLength == 0)
+                {
+                    teamDetails["TeamMembers"] =teamUsers;
+                    allTeams.push(teamDetails);
                 }
+                else
+                {
+                    var teamDetails2 ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
+                    var teamUsers2 = [];
+                    var inLen = teamLength;
+                    for(var a=0; a<teamLength; a++)
+                    {
+                        UserHelper.getUserDetails(result[i].TeamMembers[a], (err,val)=> {
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else if(val)
+                            teamUsers2.push(val);
+                        else if(!val)
+                            inLen = inLen - 1;  
+
+                        if(teamUsers2.length == inLen)
+                        {
+                            teamDetails2["TeamMembers"] =teamUsers2;
+                            allTeams.push(teamDetails2);
+                            if(allTeams.length == result.length )
+                                return res.status(200).json({teams : allTeams });
+                        }
+                        });
+                    } 
+                }
+                if(allTeams.length == result.length )
+                    return res.status(200).json({teams : allTeams });
             }
         
         }
