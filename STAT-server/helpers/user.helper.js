@@ -217,7 +217,7 @@ module.exports.getUserDetails = (val, done)=>{
 }
 
 module.exports.getTeamUserDetails = (team, done)=>{
-    const roles = [];
+    const roles = new Object();
     const users = [];
     var userLen =  team.TeamMembers.length;
     var inlen = userLen;
@@ -227,10 +227,7 @@ module.exports.getTeamUserDetails = (team, done)=>{
     {
         for(i=0; i<userLen;i++)
         {
-            roles.push(team.TeamMembers[i].Role);
-        }
-        for(i=0; i<userLen;i++)
-        {
+            roles[team.TeamMembers[i]._id] = team.TeamMembers[i].Role;
             UserModel.findOne({ _id:  team.TeamMembers[i]._id},(err, result) => {
                 if(err) 
                     done(err);
@@ -243,7 +240,7 @@ module.exports.getTeamUserDetails = (team, done)=>{
                         'email': result.Email,
                         'name': result.Name,
                         'surname': result.Surname,
-                        'role': roles.pop(),
+                        'role': roles[result._id],
                         'profilePicture': result.ProfilePicture
                     }
                     users.push(text);
