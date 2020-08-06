@@ -81,7 +81,8 @@ module.exports.addTimeEntry = (req, res) => {
                     userTimeEntry.TimeEntries = [timeEntryDoc];
                     userTimeEntry.save((err, doc) => {
                     if(!err)
-                        return res.status(200).json({ timeEntryID: timeEntryDoc._id, message: 'Time recorded successfully' });
+                        return res.status(200).json({ timeEntryID: timeEntryDoc._id, projectName: timeEntryDoc.ProjectName, projectID :timeEntryDoc.ProjectID,
+                            taskName :timeEntryDoc.TaskName, taskID : timeEntryDoc.TaskID, message: 'Time recorded successfully' });
                     else 
                     {
                         if (err.code == 11000)
@@ -95,7 +96,8 @@ module.exports.addTimeEntry = (req, res) => {
                     result.TimeEntries.push(timeEntryDoc);
                     result.save((err, doc) => {
                         if(!err)
-                            return res.status(200).json({timeEntryID: timeEntryDoc._id, message: 'Time recorded successfully' });
+                            return res.status(200).json({timeEntryID: timeEntryDoc._id,projectName: timeEntryDoc.ProjectName, projectID :timeEntryDoc.ProjectID,
+                                taskName :timeEntryDoc.TaskName, taskID : timeEntryDoc.TaskID, message: 'Time recorded successfully' });
                         else
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                     });
