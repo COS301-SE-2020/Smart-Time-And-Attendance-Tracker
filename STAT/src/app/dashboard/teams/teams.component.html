@@ -36,7 +36,7 @@
         <mat-expansion-panel *ngFor="let t of teams">
           <mat-expansion-panel-header>
             {{t.teamName}}
-            <span class="tag numMembers">{{t.TeamMembers.length}} members</span>
+            <span class="tag numMembers">{{t.teamMembers.length}} members</span>
             <button mat-button class="teams-btn"
                     matTooltip="Edit"
                     matTooltipClass="teams-tooltip"
@@ -52,9 +52,9 @@
                     <mat-icon inline="true">delete</mat-icon>
             </button>
           </mat-expansion-panel-header>
-          <i *ngIf="t.TeamMembers.length == 0">This team has no members.</i>
+          <i *ngIf="t.teamMembers.length == 0">This team has no members.</i>
           <ul class="members">
-            <li *ngFor="let m of t.TeamMembers">
+            <li *ngFor="let m of t.teamMembers">
               <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
               <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="assets/proPic3.jpg">
               <div class="col-10">

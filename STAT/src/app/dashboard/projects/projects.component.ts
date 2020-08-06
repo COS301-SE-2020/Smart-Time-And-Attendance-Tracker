@@ -48,6 +48,13 @@ export class ProjectsComponent implements OnInit {
   addMembers : Object[] = []
   role : string = null
 
+  teams : Object[]
+  teamMembers : Object[]
+
+  editTeamMembers : Object[]
+  removeMembers : Object[] = []
+  editRoles : Object[] = []
+
   error : string = null
 
   ngOnInit(): void {
@@ -77,6 +84,7 @@ export class ProjectsComponent implements OnInit {
 
     this.getProAndTasks()
     this.getMembers()
+    this.getTeam()
   }
 
 
@@ -457,8 +465,40 @@ export class ProjectsComponent implements OnInit {
 
       // get teams
       getTeam() {
-
+        console.log('here')
+        this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
+          console.log(data)
+          this.teams = data['teams']
+          /*this.teams.sort((a : any ,b : any) =>
+              a.name.localeCompare(b.teamName)
+          );*/
+          console.log(this.teams)
+          this.getTeamMembers();
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+          this.error = error.statusText
+        });
       }
+
+      // get team members
+      getTeamMembers() {
+        this.teamMembers == []
+
+        for (let x = 0; x < this.teams.length; x++) {
+          console.log(this.teams)
+          var temp : Object[] = this.teams[x]['TeamMembers']
+          console.log(temp)
+        }
+      }
+
       // add team
       addTeam(form : NgForm) {
         console.log(form);
@@ -482,6 +522,7 @@ export class ProjectsComponent implements OnInit {
         let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
         this.pmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
           console.log(data);
+          this.getProAndTasks();
         },
         error => {
           //console.log(error);
@@ -522,6 +563,82 @@ export class ProjectsComponent implements OnInit {
           console.log(m)
           this.addTeamMember(m.ID, this.pid, m.role)
         });
+      }
+
+      // remove team member
+      removeProjectMember(userID : string) {
+        let req = {"userID": userID, "projectID" : this.pid};
+        this.pmService.removeTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
+          console.log(data);
+          this.getProAndTasks();
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
+
+      removeMember(m : any) {
+        console.log(m)
+        let index = this.removeMembers.findIndex(a => a == m)
+        if (index == -1)
+          this.removeMembers.push(m)
+        else
+          this.removeMembers.splice(index, 1)
+        console.log(this.removeMembers)
+      }
+
+      removeMembersFromProject() {
+        this.removeMembers.forEach((m : any) => {
+          console.log(m)
+          this.removeProjectMember(m.ID)
+        });
+        this.removeMembers= []
+      }
+
+      editRole(m : any, role : string) {
+        let index = this.editRoles.findIndex(a => a['ID'] == m['ID'])
+        if (index == -1)
+          this.editRoles.push(m)
+
+        console.log(this.editRoles)
+
+        index = this.editRoles.findIndex(a => a == m)
+        m['role'] = role
+        this.editRoles[index] = m
+        console.log(this.editRoles)
+      }
+
+      changeRole(uID : string, pID: string, role : string) {
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        this.pmService.changeRole(localStorage.getItem('token'), req).subscribe((data) => {
+          console.log(data);
+          this.getProAndTasks();
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
+
+      editMemberRoles() {
+        this.editRoles.forEach((m : any) => {
+          console.log(m)
+          this.changeRole(m.ID, this.pid, m.role)
+        });
+        this.editRoles = []
       }
 
 
