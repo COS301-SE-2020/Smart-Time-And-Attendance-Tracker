@@ -59,6 +59,6 @@ application.listen("3000"), ()=>{
     console.log("Server started");
 };  
 
-application.get('/calendar/index.html', (req, res) => {
+application.get('/calendar', (req, res) => {
     res.sendFile(__dirname + '/calendar/index.html');
   });
