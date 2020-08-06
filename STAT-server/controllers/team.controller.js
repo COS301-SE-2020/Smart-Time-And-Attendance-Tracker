@@ -234,6 +234,7 @@ module.exports.deleteTeam = (req, res) => {
  * @return {String} Array with teams and appropriate details
  */
 module.exports.getTeams = (req, res) => {
+    const allTeams =[];
     TeamModel.find({},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -246,43 +247,21 @@ module.exports.getTeams = (req, res) => {
                 return res.status(404).json({ message: 'No teams found' });
             else
             {
-                var allTeams =[];
-                var len = result.length;
-                console.log("res" + result.length);
-                for(i=0; i<len; i++) ///result array with team objects
+                for(a=0; a<result.length; a++) ///result array with team objects
                 {    
-                    console.log("i" + i);
-                   /* var teamLength =result[i].TeamMembers.length;
-                    console.log("i" + i);
-                    if(teamLength == 0)
-                    {
-                        var teamDetails ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
-                        var teamUsers = [];
-                        teamDetails["teamMembers"] =teamUsers;
-                        console.log("none");
-                        allTeams.push(teamDetails);
-                        console.log("inLen" + allTeams.length);
+                    UserHelper.getTeamUserDetails(result[a], (err,val,team)=> {
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else 
+                        {
+                            var teamDetails ={"ID": team._id, "teamName": team.TeamName, "teamMembers" : val};
+                            allTeams.push(teamDetails);
+                        } 
+            
                         if(allTeams.length == result.length)
                             return res.status(200).json({teams : allTeams });
-                    }
-                    else
-                    {  */  
-        
-                        UserHelper.getTeamUserDetails(result[i], (err,val,team)=> {
-                            if(err)
-                                return res.status(500).send({message: 'Internal Server Error: ' + err});
-                            else if(val)
-                            {
-                                var teamDetails ={"ID": team._id, "teamName": team.TeamName, "teamMembers" : val};
-                                allTeams.push(teamDetails);
-                            } 
-                            console.log("2inLen" + allTeams.length);
-                            if(allTeams.length == result.length)
-                                return res.status(200).json({teams : allTeams });
-                            
-                        });
-                   //}
-
+                        
+                    });
                 }
             }
         

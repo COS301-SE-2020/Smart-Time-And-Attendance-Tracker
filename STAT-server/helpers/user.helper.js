@@ -23,6 +23,7 @@
 *
 */
 const mongoose = require("mongoose");
+const { getRoles } = require("./role.helper");
 const UserModel = mongoose.model("User");
 
 
@@ -216,19 +217,20 @@ module.exports.getUserDetails = (val, done)=>{
 }
 
 module.exports.getTeamUserDetails = (team, done)=>{
-
-    var users = [];
-    var roleLen =  team.TeamMembers.length;
-    var inlen = roleLen;
-    if(roleLen == 0)
-    {
+    const roles = [];
+    const users = [];
+    var userLen =  team.TeamMembers.length;
+    var inlen = userLen;
+    if(userLen == 0)
         done(null, users, team);
-    }
     else
     {
-        for(i=0; i<roleLen;i++)
+        for(i=0; i<userLen;i++)
         {
-            var val =  team.TeamMembers[i].Role;
+            roles.push(team.TeamMembers[i].Role);
+        }
+        for(i=0; i<userLen;i++)
+        {
             UserModel.findOne({ _id:  team.TeamMembers[i]._id},(err, result) => {
                 if(err) 
                     done(err);
@@ -241,13 +243,13 @@ module.exports.getTeamUserDetails = (team, done)=>{
                         'email': result.Email,
                         'name': result.Name,
                         'surname': result.Surname,
-                        'role': val,
+                        'role': roles.pop(),
                         'profilePicture': result.ProfilePicture
                     }
                     users.push(text);
                 }
                 if(users.length== inlen)
-                    done(null, users, team);       
+                    done(null, users, team);     
             });
         }
     }

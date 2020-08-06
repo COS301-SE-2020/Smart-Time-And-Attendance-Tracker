@@ -298,7 +298,7 @@ module.exports.removeProject = (req, res) => {
  * @return {Http Response} - Success message with project ID or error message
  */
 module.exports.addProject = (req, res, next) => {
-    UserModel.updateOne({_id : req.body.userID},{ $push: { Projects: req.body.projectID} }, (err, result) =>{   
+    UserModel.updateOne({_id : req.body.userID},{ $addToSet: { Projects: req.body.projectID} }, (err, result) =>{   
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
