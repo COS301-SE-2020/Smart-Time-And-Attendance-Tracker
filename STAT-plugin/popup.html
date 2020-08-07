@@ -27,14 +27,22 @@
         <div id="select_task_form">
           <p class="text-danger h6" id="task_error"></p>
           <form class="form-group form-group-modified" action="" method="post">
+            <label for="task">Project</label>
+            <select class="form-control" id="projects">
+            </select>
+            <br/>
             <label for="task">Task</label>
             <select class="form-control" id="tasks">
             </select>
-            <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="select_task">Select Task</button>
+            <br>
+            <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="select_task">Select Project</button>
+            <br><br>
         </form>
       </div>
       <div id="selected_task">
+        <p class="lead" id="project"></p>
         <p class="lead" id="task"></p>
+        <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="reselect_task">Re-select Project</button>
       </div>
       <form class="form-group form-group-modified" action="" method="post">
         <!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>-->
@@ -50,9 +58,10 @@
     <p class="float-right lead" id="desc"></p>
       </div>
     </div>
-    <script src="background.js"></script>
-    <script src="popup.js"></script>
-    <script src="common.js"></script>
-    
+    <script src="./new/user.js"></script>
+    <script src="./new/common.js"></script>
+    <script src="./new/background.js"></script>
+    <script src="./new/popup.js"></script>
+
   </body>
 </html>

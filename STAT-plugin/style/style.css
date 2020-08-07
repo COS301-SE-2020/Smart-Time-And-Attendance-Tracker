@@ -17,7 +17,7 @@
 }
 
 #select_task_form {
-  display: none;
+  display: block;
 }
 
 #select_task {
