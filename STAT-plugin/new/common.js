@@ -236,8 +236,8 @@ function processProjects(responseText)
         document.getElementById("selected_task").style.display="block";
         
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
-        if(obj.taskName != "undefined")
-        document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
+        if(obj.taskName != "")
+          document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
     }
     else
     {
@@ -289,7 +289,7 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
         document.getElementById("task").innerHTML = "Task: "+ TaskName;
 
        text = '{'
-        + '"projectName": "'+ ProjectID+ '",'  
+        + '"projectName": "'+ ProjectName+ '",'  
         + '"taskName": "'+ TaskName + '"'  
         + '}';
     
