@@ -105,8 +105,8 @@ export class ProjectsComponent implements OnInit {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.allProjects = data['projects']
-      this.projects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
-      this.projects = this.projects.filter((x : any) => x['completed'] == false)
+      this.allProjects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
+      this.projects = this.allProjects.filter((x : any) => x['completed'] == false)
       this.getTasks()
       this.error = 'none'
     },
@@ -413,6 +413,7 @@ export class ProjectsComponent implements OnInit {
       document.getElementById('hide-comp').setAttribute('hidden', 'true')
       document.getElementById('show-comp').removeAttribute('hidden')
     }
+    console.log('COMP\n' + this.showComp)
   }
 
 

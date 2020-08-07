@@ -57,7 +57,9 @@
             <!-- PROJECT **************************** -->
               <mat-expansion-panel *ngFor="let p of projects" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
+
                   <mat-panel-title>
+                  <mat-icon *ngIf="p.completed == true" inline="true">check_circle</mat-icon>
                     {{p.projectName}}
                   <span class="tag numTasks">{{p.tasks.length}} tasks</span>
                   <button *ngIf="roles.includes('Team Leader')" 
