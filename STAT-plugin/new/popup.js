@@ -36,7 +36,7 @@ ReselectTask.onclick = function() {
 }
 
 projectsDropdown.onchange = function() {
-    //remove all chilren tasksDropdown
+    //remove all children tasksDropdown
     while(tasksDropdown.hasChildNodes())
     {
         tasksDropdown.removeChild(tasksDropdown.firstChild);

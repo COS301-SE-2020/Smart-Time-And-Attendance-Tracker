@@ -195,23 +195,7 @@ function getProjects() {
             console.log(http.responseText);
             
             processProjects(http.responseText, false);
-              // if(obj.projects[p].tasks.length != 0)
-              // {
-              //   for( t in obj.projects[p].tasks)
-              //   {
-              //     opt = document.createElement('option');
-              //     opt.appendChild( document.createTextNode("Project " +obj.projects[p].projectName + " - Task " + obj.projects[p].tasks[t].taskName) );
-              //     var val = '{'
-              //             + '"projectID": "'+ obj.projects[p].ID + '",'  
-              //             + '"projectName": "'+ obj.projects[p].projectName + '",'  
-              //             + '"taskID": "'+ obj.projects[p].tasks[t].ID + '",'  
-              //             + '"taskName": "'+ obj.projects[p].tasks[t].taskName + '"'  
-              //             + '}';
-              //     opt.value = val;
-              //     projectsDropdown.appendChild(opt); 
-              //   }
-              // }
-            //}
+            
         }
         else if(http.readyState == 4 && http.status != 200) {  //error in getting projects
             console.log(http.responseText);
@@ -236,9 +220,9 @@ function processProjects(responseText, display)
         projectsDropdown.removeChild(projectsDropdown.firstChild);
       }
       while(tasksDropdown.hasChildNodes())
-    {
-        tasksDropdown.removeChild(tasksDropdown.firstChild);
-    }
+      {
+          tasksDropdown.removeChild(tasksDropdown.firstChild);
+      }
       const obj = JSON.parse(user.getInstance().allProject);
       for( p in obj.projects)
       {
@@ -286,7 +270,6 @@ function processProjects(responseText, display)
     
     else
     {
-      alert("redis");
       const obj = JSON.parse(responseText);
       for( p in obj.projects)
       {
