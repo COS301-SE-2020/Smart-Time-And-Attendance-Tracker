@@ -34,7 +34,7 @@ function Update(t, tabID, url) {
     chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false"]);  //[time, url, timeEntryID, stop =="false"/"true"]
     setCookie("historyTime"+tabID, 0, 1);
     setTimeout (() => {
-      if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false")
+      if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && document.cookie.indexOf('token') > -1)
       {
         alert("made time entry");
         var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));

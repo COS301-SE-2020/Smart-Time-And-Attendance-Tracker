@@ -8,6 +8,7 @@ var userName="";
     ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
   if (document.cookie.indexOf('name') > -1 && document.cookie.indexOf('token') > -1) {
       //cookie exists - hide form
+      getTasks();
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("popup").style.display = "block";
       document.getElementById("userName").innerHTML=getCookie("name");
@@ -45,6 +46,8 @@ var userName="";
                 document.getElementById("errorMessage").innerHTML= "";
                 /////look for name 
                 getUserName();
+                /////get tasks to display
+                getTasks();
                 ///show start and stop buttons
                  setInterval(showTime, 1000);
                 ////start tracking
@@ -110,9 +113,6 @@ function getUserName(){
 var stopStartBtn = document.getElementById("start_stop");
 
 function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
-  //getTasks();
-  //alert(getTimeWithID(currentID));
-  alert("url: " + url);
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
   var text = '{ "description": "'+ url + '",'
@@ -181,7 +181,7 @@ function getTasks() {
   if(tasksDropdown.childElementCount == 0)
   {
     var http = new XMLHttpRequest();
-    var apiURL = 'http://localhost:3000/api/user/getTasks';
+    var apiURL = 'http://localhost:3000/api/user/getProjects';
 
     var text = '{ "token": "'+ getCookie("token") + '"' + '}';
     http.open('GET', apiURL, true);
@@ -191,16 +191,28 @@ function getTasks() {
     http.onreadystatechange = function() {
         if(http.readyState == 4 && http.status == 200) {
             const obj = JSON.parse(http.responseText);
-            for( t in obj.tasks)
+            for( p in obj.projects)
             {
               var opt = document.createElement('option');
-              opt.appendChild( document.createTextNode(obj.tasks[t].taskName) );
-              opt.value = obj.tasks[t].ID;
-              opt.name = obj.tasks[t].projectName;
+              opt.appendChild( document.createTextNode("Project " + obj.projects[p].projectName + " - Task un-specified"));
+              opt.value = "";
+              opt.name = obj.projects[p].projectName;
               tasksDropdown.appendChild(opt); 
+
+              if(obj.projects[p].tasks.length != 0)
+              {
+                for( t in obj.projects[p].tasks)
+                {
+                  opt = document.createElement('option');
+                  opt.appendChild( document.createTextNode("Project " +obj.projects[p].projectName + " - Task " + obj.projects[p].tasks[t].taskName) );
+                  opt.value = obj.projects[p].tasks[t].ID;
+                  opt.name = obj.projects[p].projectName;
+                  tasksDropdown.appendChild(opt); 
+                }
+              }
             }
         }
-        else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+        else if(http.readyState == 4 && http.status != 200) {  //error in getting projects
             console.log(http.responseText);
         }
     }

@@ -11,7 +11,7 @@ function showTime() {
         if(document.cookie.indexOf("token")>-1)
         {
             var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]) + parseInt(getCookie("historyTime"+currentID));
-            desc.innerHTML = FormatDuration(displayDuration) + "\n";            
+            desc.innerHTML = FormatDuration(displayDuration).slice(0,5) + "\n";            
         }
         else
             desc.innerHTML = "00:00:00\n";
