@@ -154,10 +154,10 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
   http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
-    alert(http.readyState + "  " + http.status);
+    //alert(http.readyState + "  " + http.status);
     if(http.readyState == 4 && http.status == 200) {
       const obj = JSON.parse(http.responseText);
-      alert("message :   " + obj.message);
+      //alert("message :   " + obj.message);
       if(stop)
       {
         stopStartBtn.name = "start";
@@ -169,7 +169,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
       }
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-      alert(http.responseText);              
+      //alert(http.responseText);              
     }
   }
   http.send(text);

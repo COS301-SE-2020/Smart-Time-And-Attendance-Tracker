@@ -11,11 +11,6 @@ setInterval(UpdateBadges, 1000);  //update badge every second
 chrome.tabs.onUpdated.addListener(HandleUpdate);
 chrome.tabs.onRemoved.addListener(HandleRemove);
 chrome.tabs.onReplaced.addListener(HandleReplace);
-var stopStartBtn = document.getElementById("start_stop");
-/*var startTimer = document.getElementById("start");
-
-stopTimer.style.display = "block";
-startTimer.style.display = "none";*/
 
 function Update(t, tabID, url) {
     if (!url) {
@@ -72,7 +67,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
   }
   
   function HandleReplace(addedtabID, removedtabID) {
-      console.log("replace");
+    console.log("replace");
     var t = new Date();
     var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
     if(currentDuration>60)
