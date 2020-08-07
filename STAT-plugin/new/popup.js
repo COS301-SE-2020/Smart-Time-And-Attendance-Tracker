@@ -23,13 +23,24 @@ function showTime() {
     });    
 }
 var SelectTask = document.getElementById("select_task");
+var ReselectTask = document.getElementById("reselect_task");
 var tasksDropdown = document.getElementById("tasks");
 var projectsDropdown = document.getElementById("projects");
 
 var stopStartBtn = document.getElementById("start_stop");
 
+ReselectTask.onclick = function() {
+    document.getElementById("select_task_form").style.display="block";
+    ReselectTask.style.display="none";
+    processProjects(user.getInstance().allProject, true);
+}
+
 projectsDropdown.onchange = function() {
-    
+    //remove all chilren tasksDropdown
+    while(tasksDropdown.hasChildNodes())
+    {
+        tasksDropdown.removeChild(tasksDropdown.firstChild);
+    }
     var userTasks = user.getInstance().getTasks(projectsDropdown.value);
 
     var opt = document.createElement('option');
@@ -58,7 +69,6 @@ SelectTask.onclick = function() {
         {
             if(chrome.extension.getBackgroundPage().History[currentID][0][2]!="")
             {
-                window.localStorage.setItem('currentlyTrackingDetails', projectsDropdown.value);
                 var ProjectName = projectsDropdown.options[projectsDropdown.selectedIndex].innerHTML;
                 var TaskName = tasksDropdown.options[tasksDropdown.selectedIndex].innerHTML;
                 if(tasksDropdown.value == "")
@@ -90,7 +100,7 @@ stopStartBtn.onclick = function(){
             var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]) + parseInt(getCookie("historyTime"+currentID)); 
             if(currentDuration>60)
             {
-                UpdateTimeEntry(now, currentID, currentDuration);
+                UpdateTimeEntry(now, currentID, currentDuration, true);
                 //startTimer.style.display = "block";
                 //stopTimer.style.display = "none";
             }
@@ -98,7 +108,6 @@ stopStartBtn.onclick = function(){
             {
                 document.getElementById("errorMessage").style.display="block";
                 document.getElementById("errorMessage").innerHTML= "Time < 60 seconds";
-
             }
         }
         else{

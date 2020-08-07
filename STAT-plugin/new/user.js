@@ -15,7 +15,6 @@ class User {
     }
     
     singletonMethod() {
-        console.log("Name " + this.getInstance().name + "   " + new Date());
         return 'singletonMethod';
     }
 
@@ -39,12 +38,12 @@ class User {
         this._name = n;
     }
 
-    get email() {
-        return this.getInstance().email;
+    get surname() {
+        return this._surname;
     }
 
-    set email(e) {
-        this.getInstance().email = e;
+    set surname(e) {
+        this._surname = e;
     }
 
     get allProject() {
@@ -66,8 +65,6 @@ class User {
         }
         return undefined;
     }
-
 }
-
 
 User.instance = undefined;

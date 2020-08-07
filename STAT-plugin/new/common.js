@@ -35,7 +35,7 @@ var userName="";
                 var data = JSON.parse(http.responseText);
                 ////set name and token into cookies
                 console.log(data);
-                window.localStorage.setItem('token', data.token);
+                localStorage.setItem('token', data.token);
                 setCookie("name", data.name, 1);
                 setCookie("email", data.email, 1);
                 console.log(data);
@@ -81,7 +81,7 @@ function getUserName(){
         var http = new XMLHttpRequest();
         var url = 'http://localhost:3000/api/user/getName';
         http.open('GET', url, true);
-        http.setRequestHeader('Authorization', `Bearer ${window.localStorage.getItem("token")}` );
+        http.setRequestHeader('Authorization', `Bearer ${localStorage.getItem("token")}` );
         http.onreadystatechange = function()
         {
             if(http.readyState == 4 && http.status == 200) {
@@ -123,13 +123,13 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
   http.open('POST', apiURL, true);
 
   http.setRequestHeader('Content-type', 'application/json');
-  http.setRequestHeader("authorization", "token "+ window.localStorage.getItem("token"));
+  http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
     if(http.readyState == 4 && http.status == 200) {
       const obj = JSON.parse(http.responseText);
       chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.timeEntryID;
       alert(obj.timeEntryID);
-      window.localStorage.setItem('currentlyTracking', obj.timeEntryID);
+      localStorage.setItem('currentlyTracking', obj.timeEntryID);
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
       AddTimeEntry(url, startTime, endTime, currentID, duration);
@@ -152,7 +152,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
   http.open('POST', apiURL, true);
   alert(text);
   http.setRequestHeader('Content-type', 'application/json');
-  http.setRequestHeader("authorization", "token "+ window.localStorage.getItem("token"));
+  http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
     alert(http.readyState + "  " + http.status);
     if(http.readyState == 4 && http.status == 200) {
@@ -187,14 +187,14 @@ function getProjects() {
     http.open('GET', apiURL, true);
 
     http.setRequestHeader('Content-type', 'application/json');
-    http.setRequestHeader("authorization", "token "+window.localStorage.getItem("token"));
+    http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
     http.onreadystatechange = function() {
         if(http.readyState == 4 && http.status == 200) {
             if(user.getInstance().allProject == undefined)
               user.getInstance().allProject = http.responseText;
             console.log(http.responseText);
             
-            processProjects(http.responseText);
+            processProjects(http.responseText, false);
               // if(obj.projects[p].tasks.length != 0)
               // {
               //   for( t in obj.projects[p].tasks)
@@ -221,26 +221,72 @@ function getProjects() {
   }
   else
   {
-    processProjects(user.getInstance().allProject)
+    processProjects(user.getInstance().allProject, false);
   }
 }
 
-function processProjects(responseText)
+function processProjects(responseText, display)
 {
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
     var currentID = tabs[0].id;
-    if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "")
+    if(display == true && user.getInstance().allProject)
+    {
+      while(projectsDropdown.hasChildNodes())
+      {
+        projectsDropdown.removeChild(projectsDropdown.firstChild);
+      }
+      while(tasksDropdown.hasChildNodes())
+    {
+        tasksDropdown.removeChild(tasksDropdown.firstChild);
+    }
+      const obj = JSON.parse(user.getInstance().allProject);
+      for( p in obj.projects)
+      {
+        var opt = document.createElement('option');
+        opt.appendChild( document.createTextNode(obj.projects[p].projectName));
+        var val = '{'
+          + '"projectID": "'+ obj.projects[p].ID + '",'  
+          + '"projectName": "'+ obj.projects[p].projectName + '",'  
+          + '"taskID": "",'
+          + '"taskName": ""' 
+          + '}';
+        opt.value = obj.projects[p].ID;
+        projectsDropdown.appendChild(opt); 
+      }
+
+      var userTasks = user.getInstance().getTasks(document.createTextNode(obj.projects[0].ID));
+
+      var opt = document.createElement('option');
+      for( t in userTasks)
+      {
+          opt = document.createElement('option');
+          opt.appendChild( document.createTextNode(userTasks[t].taskName) );
+          opt.value = userTasks[t].ID;
+          tasksDropdown.appendChild(opt); 
+      }
+      opt = document.createElement('option');
+      opt.appendChild( document.createTextNode("Un-specified") );
+      opt.value = "";
+      tasksDropdown.appendChild(opt); 
+
+
+      document.getElementById("select_task_form").style.display="block";
+    }
+    else if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "")
     {
         var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
         document.getElementById("select_task_form").style.display="none";
         document.getElementById("selected_task").style.display="block";
-        
+        document.getElementById("reselect_task").style.display="block";
+
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
         if(obj.taskName != "")
           document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
     }
+    
     else
     {
+      alert("redis");
       const obj = JSON.parse(responseText);
       for( p in obj.projects)
       {
@@ -255,6 +301,21 @@ function processProjects(responseText)
         opt.value = obj.projects[p].ID;
         projectsDropdown.appendChild(opt); 
       }
+      var userTasks = user.getInstance().getTasks(document.createTextNode(obj.projects[0].ID));
+
+      var opt = document.createElement('option');
+      for( t in userTasks)
+      {
+          opt = document.createElement('option');
+          opt.appendChild( document.createTextNode(userTasks[t].taskName) );
+          opt.value = userTasks[t].ID;
+          tasksDropdown.appendChild(opt); 
+      }
+      opt = document.createElement('option');
+      opt.appendChild( document.createTextNode("Un-specified") );
+      opt.value = "";
+      tasksDropdown.appendChild(opt); 
+
       document.getElementById("select_task_form").style.display="block";
     }
   });
@@ -277,22 +338,25 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
   http.open('POST', apiURL, true);
   http.setRequestHeader('Content-type', 'application/json');
-  http.setRequestHeader("authorization", "token "+ window.localStorage.getItem("token"));
+  http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
     if(http.readyState == 4 && http.status == 200) {
       const obj = JSON.parse(http.responseText);
       document.getElementById("select_task_form").style.display="none";
       document.getElementById("selected_task").style.display="block";
-      
+      document.getElementById("reselect_task").style.display="block";
+
       document.getElementById("project").innerHTML = "Project: " + ProjectName;
       if(TaskID != "")
         document.getElementById("task").innerHTML = "Task: "+ TaskName;
 
        text = '{'
         + '"projectName": "'+ ProjectName+ '",'  
-        + '"taskName": "'+ TaskName + '"'  
+        + '"projectID": "'+ ProjectID+ '",' 
+        + '"taskName": "'+ TaskName + '",'  
+        + '"taskID": "'+ TaskID+ '"' 
         + '}';
-    
+        localStorage.setItem('currentlyTrackingDetails', text);
         chrome.extension.getBackgroundPage().History[currentID][0][4] =text;
       
     }
