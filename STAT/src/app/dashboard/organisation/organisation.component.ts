@@ -24,6 +24,12 @@ export class OrganisationComponent implements OnInit {
   memberName : string
   mid : string
 
+  editMember : any
+  editRoles : string[] = []
+  removeRoles : string[] = []
+
+  roles : string[] = ['Data Analyst', 'System Administrator', 'Security Administrator', 'Team Leader', 'General Team Member']
+
   ngOnInit(): void {
     this.getAllUnauthenticatedUsers('n')
     this.getMembers()
@@ -74,7 +80,7 @@ export class OrganisationComponent implements OnInit {
     this.getMembers()
     },
     error => {
-      //console.log(error);
+      console.log(error);
       //console.log(error.error.message);
       let errorCode = error['status'];
       if (errorCode == '403')
@@ -86,14 +92,17 @@ export class OrganisationComponent implements OnInit {
     });
   }
 
-  editUser(id, name, surname, email)
+  editUser()
   {
-    let req = {"userID": id,
-                "name": name,
-                "surname": surname,
-                "email": email};
-    this.service.removeRole(localStorage.getItem('token'), req).subscribe((data) => {
-    this.getMembers()
+    console.log(this.editMember)
+    let req = {"userID": this.editMember.ID,
+                "name": this.editMember.name,
+                "surname": this.editMember.surname,
+                "email": this.editMember.email};
+    this.service.editUser(localStorage.getItem('token'), req).subscribe((data) => {
+      this.members = []
+      this.membersResult = []
+      this.changeRoles()
     },
     error => {
       //console.log(error);
@@ -106,6 +115,30 @@ export class OrganisationComponent implements OnInit {
         this.headerService.kickOut();
       }
     });
+  }
+
+  updateRoles(role : string) {
+    let index = this.editRoles.findIndex(a => a == role)
+    if (index == -1)
+      this.editRoles.push(role)
+    else {
+      this.editRoles.splice(index, 1)
+      this.removeRoles.push(role)
+    }
+  }
+
+  changeRoles() {
+    console.log('EDIT\n' + this.editRoles)
+    this.editRoles.forEach(r => {
+        this.addRole(this.editMember.ID, r)
+    });
+
+    console.log('REMOVE\n' + this.removeRoles)
+    this.removeRoles.forEach(r => {
+      this.removeRole(this.editMember.ID, r)
+    });
+
+    this.getMembers()
   }
 
   authenticateUser(id)
@@ -198,7 +231,17 @@ export class OrganisationComponent implements OnInit {
   getMembers() {
     this.service.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
       this.members = data['users'];
+      this.members.forEach((m : any) => {
+        let temp : string[] = m.role
+        let index = temp.findIndex(a => a == 'General Team Member')
+        if (index != -1) {
+          temp.splice(index, 1)
+          temp.push('General Team Member')
+        }
+        m.role = temp
+      });
       this.groupAndSort(this.members)
+      console.log(this.members)
     },
     error => {
       //console.log(error);
