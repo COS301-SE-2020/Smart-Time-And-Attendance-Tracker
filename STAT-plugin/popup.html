@@ -27,6 +27,10 @@
         <div id="select_task_form">
           <p class="text-danger h6" id="task_error"></p>
           <form class="form-group form-group-modified" action="" method="post">
+            <label for="task">Project</label>
+            <select class="form-control" id="projects">
+            </select>
+            <br/>
             <label for="task">Task</label>
             <select class="form-control" id="tasks">
             </select>
@@ -34,6 +38,7 @@
         </form>
       </div>
       <div id="selected_task">
+        <p class="lead" id="project"></p>
         <p class="lead" id="task"></p>
       </div>
       <form class="form-group form-group-modified" action="" method="post">
@@ -50,9 +55,10 @@
     <p class="float-right lead" id="desc"></p>
       </div>
     </div>
-    <script src="new/background.js"></script>
-    <script src="new/popup.js"></script>
-    <script src="new/common.js"></script>
-    
+    <script src="./new/user.js"></script>
+    <script src="./new/common.js"></script>
+    <script src="./new/background.js"></script>
+    <script src="./new/popup.js"></script>
+
   </body>
 </html>

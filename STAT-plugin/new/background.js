@@ -1,3 +1,4 @@
+
 var tabID_re = /tabID=([0-9]+)/;
 var match = tabID_re.exec(window.location.hash);
 
@@ -34,19 +35,14 @@ function Update(t, tabID, url) {
     chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false", ""]);  //[time, url, timeEntryID, stop =="false"/"true", project selected]
     setCookie("historyTime"+tabID, 0, 1);
     setTimeout (() => {
-      if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && document.cookie.indexOf('token') > -1)
+      if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && window.localStorage.hasOwnProperty('token'))
       {
-        alert("made time entry");
         var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
         AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
         
 
       }
-      if(chrome.extension.getBackgroundPage().History[tabID][0][4] != "")
-      {
-        //updateTask();
-      }
-    }, 60000);
+    }, 10000);
 
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
@@ -66,7 +62,6 @@ function HandleUpdate(tabID, changeInfo, tab) {
   }
   
   function HandleRemove(tabID, removeInfo) {    //working
-    save();
     setCookie("historyTime"+tabID, "", 1);
     delete chrome.extension.getBackgroundPage().History[tabID];
   }
@@ -83,7 +78,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
 
 
   function UpdateBadges() {
-    if (document.cookie.indexOf('token') != -1) {
+    if (window.localStorage.hasOwnProperty('token')) {
       chrome.tabs.query({ active: true }, function (tabs) {
         currentID = tabs[0].id;
         for(tabID in chrome.extension.getBackgroundPage().History) {
@@ -146,6 +141,4 @@ function HandleUpdate(tabID, changeInfo, tab) {
 
 
 
-  setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
-
-  var stopStartBtn = document.getElementById("start_stop");
+  //setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)

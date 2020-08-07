@@ -1,4 +1,8 @@
+var user = new User();
+
+user.getInstance().name = "hello"; 
 function showTime() {
+
     var currentID =0; //
     var now = new Date();
     var desc = document.getElementById("desc");
@@ -7,73 +11,71 @@ function showTime() {
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
         url = url.split("://")[1];
         url = url.split("/")[0];
+        setInterval(showTime, 1000);   //call showTime function every second
 
-        if(document.cookie.indexOf("token")>-1)
-        {
+        //if(window.localStorage.hasOwnProperty('token'))
+        //{
             var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]) + parseInt(getCookie("historyTime"+currentID));
             desc.innerHTML = FormatDuration(displayDuration).slice(0,5) + "\n";            
-        }
-        else
-            desc.innerHTML = "00:00:00\n";
+        //}
+        //else
+        //    desc.innerHTML = "00:00:00\n";
     });    
 }
 var SelectTask = document.getElementById("select_task");
-var projectsDropdown = document.getElementById("tasks");
+var tasksDropdown = document.getElementById("tasks");
+var projectsDropdown = document.getElementById("projects");
 
 var stopStartBtn = document.getElementById("start_stop");
-var pauseResumeBtn = document.getElementById("pause_resume");
+
+projectsDropdown.onchange = function() {
+    
+    var userTasks = user.getInstance().getTasks(projectsDropdown.value);
+
+    var opt = document.createElement('option');
+    for( t in userTasks)
+    {
+        opt = document.createElement('option');
+        opt.appendChild( document.createTextNode(userTasks[t].taskName) );
+        opt.value = userTasks[t].ID;
+        tasksDropdown.appendChild(opt); 
+    }
+    opt = document.createElement('option');
+    opt.appendChild( document.createTextNode("Un-specified") );
+    opt.value = "";
+    tasksDropdown.appendChild(opt); 
+
+}
 
 SelectTask.onclick = function() {
-    // var projectID = projectsDropdown.value.split("&")[0].split("+")[0];
-    // var projectName = projectsDropdown.value.split("&")[0].split("+")[1];
-    // var taskID = projectsDropdown.value.split("&")[1].split("+")[0];
-    // var taskName = projectsDropdown.value.split("&")[1].split("+")[1];
-
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
         url = url.split("://")[1];
         url = url.split("/")[0];
-        var now  = new Date();
 
         if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")   //timer is still running
         {
-            chrome.extension.getBackgroundPage().History[currentID][0][4] = projectsDropdown.value
-            window.localStorage.setItem('currentlyTrackingDetails', projectsDropdown.value);
-            var trackingDetails = JSON.parse(projectsDropdown.value)
-            //window.localStorage.setItem('currentlyTrackingDetails', chrome.extension.getBackgroundPage().History[tabID][0][2]);
-
-            alert("task " + trackingDetails.taskName);
-            //if(taskName !+ " " )
-            //if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
-            //updateTask()  
-            alert("project " + trackingDetails.projectName);
+            if(chrome.extension.getBackgroundPage().History[currentID][0][2]!="")
+            {
+                window.localStorage.setItem('currentlyTrackingDetails', projectsDropdown.value);
+                var ProjectName = projectsDropdown.options[projectsDropdown.selectedIndex].innerHTML;
+                var TaskName = tasksDropdown.options[tasksDropdown.selectedIndex].innerHTML;
+                if(tasksDropdown.value == "")
+                    updateTask(currentID, projectsDropdown.value, ProjectName, "", "")
+                else
+                    updateTask(currentID, projectsDropdown.value, ProjectName, tasksDropdown.value, TaskName)
+            }
         }
         else{
-            setCookie("historyTime"+currentID, "0", 1);        
-            setTimeout (() => {
-                if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false")
-                {
-                alert("made time entry");
-                AddTimeEntry(url, now , new Date(), currentID);
-                }
-            }, 60000);
-            console.log("Started tracking " + url);
-            //stopTimer.style.display = "block";
-            //startTimer.style.display = "none";
-            chrome.extension.getBackgroundPage().History[currentID][0][0] = 0;
-            chrome.extension.getBackgroundPage().History[currentID][0][3] = "false";
-            stopStartBtn.name = "stop";
-            stopStartBtn.innerHTML = "Stop";
+           
+           document.getElementById("task_error").innerHTML = "Sart timer to select task";
         }
     });  
 }
 
-
-
 //var startTimer = document.getElementById("start");
-setInterval(showTime, 60000);
-
+showTime();
 stopStartBtn.onclick = function(){
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
@@ -141,6 +143,8 @@ function displayButton() {
             //startTimer.style.display = "block";
             //stopTimer.style.display = "none";
         }
+        
     }); 
 }
 displayButton();
+
