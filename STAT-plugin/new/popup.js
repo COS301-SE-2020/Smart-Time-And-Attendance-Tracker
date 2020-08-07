@@ -18,13 +18,61 @@ function showTime() {
     });    
 }
 var SelectTask = document.getElementById("select_task");
-var tasksDropdown = document.getElementById("tasks");
+var projectsDropdown = document.getElementById("tasks");
 
 var stopStartBtn = document.getElementById("start_stop");
 var pauseResumeBtn = document.getElementById("pause_resume");
 
+SelectTask.onclick = function() {
+    // var projectID = projectsDropdown.value.split("&")[0].split("+")[0];
+    // var projectName = projectsDropdown.value.split("&")[0].split("+")[1];
+    // var taskID = projectsDropdown.value.split("&")[1].split("+")[0];
+    // var taskName = projectsDropdown.value.split("&")[1].split("+")[1];
+
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        currentID = tabs[0].id;
+        var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
+        url = url.split("://")[1];
+        url = url.split("/")[0];
+        var now  = new Date();
+
+        if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")   //timer is still running
+        {
+            chrome.extension.getBackgroundPage().History[currentID][0][4] = projectsDropdown.value
+            window.localStorage.setItem('currentlyTrackingDetails', projectsDropdown.value);
+            var trackingDetails = JSON.parse(projectsDropdown.value)
+            //window.localStorage.setItem('currentlyTrackingDetails', chrome.extension.getBackgroundPage().History[tabID][0][2]);
+
+            alert("task " + trackingDetails.taskName);
+            //if(taskName !+ " " )
+            //if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
+            //updateTask()  
+            alert("project " + trackingDetails.projectName);
+        }
+        else{
+            setCookie("historyTime"+currentID, "0", 1);        
+            setTimeout (() => {
+                if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false")
+                {
+                alert("made time entry");
+                AddTimeEntry(url, now , new Date(), currentID);
+                }
+            }, 60000);
+            console.log("Started tracking " + url);
+            //stopTimer.style.display = "block";
+            //startTimer.style.display = "none";
+            chrome.extension.getBackgroundPage().History[currentID][0][0] = 0;
+            chrome.extension.getBackgroundPage().History[currentID][0][3] = "false";
+            stopStartBtn.name = "stop";
+            stopStartBtn.innerHTML = "Stop";
+        }
+    });  
+}
+
+
+
 //var startTimer = document.getElementById("start");
-setInterval(showTime, 1000);
+setInterval(showTime, 60000);
 
 stopStartBtn.onclick = function(){
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {

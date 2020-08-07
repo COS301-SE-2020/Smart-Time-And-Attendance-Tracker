@@ -31,7 +31,7 @@ function Update(t, tabID, url) {
       chrome.extension.getBackgroundPage().History[tabID] = [];
     }
     const now = new Date();
-    chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false"]);  //[time, url, timeEntryID, stop =="false"/"true"]
+    chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false", ""]);  //[time, url, timeEntryID, stop =="false"/"true", project selected]
     setCookie("historyTime"+tabID, 0, 1);
     setTimeout (() => {
       if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && document.cookie.indexOf('token') > -1)
@@ -39,6 +39,12 @@ function Update(t, tabID, url) {
         alert("made time entry");
         var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
         AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
+        
+
+      }
+      if(chrome.extension.getBackgroundPage().History[tabID][0][4] != "")
+      {
+        //updateTask();
       }
     }, 60000);
 
@@ -89,6 +95,12 @@ function HandleUpdate(tabID, changeInfo, tab) {
           else{ //active tab
             if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false") {    //pause timer  => timer is not stoped
               chrome.extension.getBackgroundPage().History[tabID][0][0] = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0])+1;
+              
+            }
+            if(window.localStorage.getItem('currentlyTracking') !=  chrome.extension.getBackgroundPage().History[tabID][0][2])
+            {
+              window.localStorage.setItem('currentlyTracking', chrome.extension.getBackgroundPage().History[tabID][0][2]);
+
             }
           }
           var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));

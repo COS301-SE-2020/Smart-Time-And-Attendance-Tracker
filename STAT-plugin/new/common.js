@@ -8,7 +8,7 @@ var userName="";
     ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
   if (document.cookie.indexOf('name') > -1 && document.cookie.indexOf('token') > -1) {
       //cookie exists - hide form
-      getTasks();
+      getProjects();
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("popup").style.display = "block";
       document.getElementById("userName").innerHTML=getCookie("name");
@@ -34,10 +34,10 @@ var userName="";
                 ////set name and token into cookies
                 console.log(data);
                 setCookie("token", data.token, 1);
+                window.localStorage.setItem('token', data.token);
                 setCookie("name", data.name, 1);
                 setCookie("email", data.email, 1);
                 console.log(data);
-                getTasks();
                 setCookie("stop", "false", 1); 
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.email;
@@ -47,7 +47,7 @@ var userName="";
                 /////look for name 
                 getUserName();
                 /////get tasks to display
-                getTasks();
+                getProjects();
                 ///show start and stop buttons
                  setInterval(showTime, 1000);
                 ////start tracking
@@ -134,6 +134,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
     if(http.readyState == 4 && http.status == 200) {
       const obj = JSON.parse(http.responseText);
       chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.timeEntryID;
+      window.localStorage.setItem('currentlyTracking', obj.timeEntryID);
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
       AddTimeEntry(url, startTime, endTime, currentID, duration);
@@ -176,7 +177,7 @@ function UpdateTimeEntry(endTime,currentID, duration) {
   http.send(text);
 }
 
-function getTasks() {
+function getProjects() {
   tasksDropdown = document.getElementById("tasks");
   if(tasksDropdown.childElementCount == 0)
   {
@@ -195,8 +196,13 @@ function getTasks() {
             {
               var opt = document.createElement('option');
               opt.appendChild( document.createTextNode("Project " + obj.projects[p].projectName + " - Task un-specified"));
-              opt.value = "";
-              opt.name = obj.projects[p].projectName;
+              var val = '{'
+              + '"projectID": "'+ obj.projects[p].ID + '",'  
+              + '"projectName": "'+ obj.projects[p].projectName + '",'  
+              + '"taskID": "",'
+              + '"taskName": ""' 
+              + '}';
+              opt.value = val;
               tasksDropdown.appendChild(opt); 
 
               if(obj.projects[p].tasks.length != 0)
@@ -205,8 +211,13 @@ function getTasks() {
                 {
                   opt = document.createElement('option');
                   opt.appendChild( document.createTextNode("Project " +obj.projects[p].projectName + " - Task " + obj.projects[p].tasks[t].taskName) );
-                  opt.value = obj.projects[p].tasks[t].ID;
-                  opt.name = obj.projects[p].projectName;
+                  var val = '{'
+                          + '"projectID": "'+ obj.projects[p].ID + '",'  
+                          + '"projectName": "'+ obj.projects[p].projectName + '",'  
+                          + '"taskID": "'+ obj.projects[p].tasks[t].ID + '",'  
+                          + '"taskName": "'+ obj.projects[p].tasks[t].taskName + '"'  
+                          + '}';
+                  opt.value = val;
                   tasksDropdown.appendChild(opt); 
                 }
               }
