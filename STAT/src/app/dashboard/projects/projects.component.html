@@ -153,7 +153,7 @@
                             matTooltip="Add team"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
-                      <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="getAvailableMembers(p.projectMembers)">group_add</mat-icon>
+                      <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="pid = p.ID; getAvailableTeams(p.projectMembers)">group_add</mat-icon>
                     </button>
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-mini-fab
@@ -161,16 +161,16 @@
                             matTooltip="Edit team"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
-                      <mat-icon inline="true" (click)="open(editTeamModal); pid = p.ID; editTeamMembers = p.projectMembers">edit</mat-icon>
+                      <mat-icon inline="true" (click)="open(editTeamModal); pid = p.ID; editTeamMembers = p.projectMembers;">edit</mat-icon>
                     </button>
                 </mat-action-row>
 
                 <mat-menu #menu="matMenu" id="member-menu">
                   <mat-form-field appearance="standard" id="member-search-wrapper">
                     <mat-label>Search teams</mat-label>
-                    <input (click)="$event.stopPropagation()" [(ngModel)]="searchTeam" (keyup)="searchTeams(searchTeam)" matInput id="member-search" placeholder="Team name">
+                    <input (click)="$event.stopPropagation()" [(ngModel)]="searchTeam" (keyup)="getAvailableTeams(p.projectMembers); searchTeams(searchTeam);" matInput id="member-search" placeholder="Team name">
                   </mat-form-field>
-                  <button class="member-button" *ngFor="let t of availTeams" mat-menu-item (click)="addTeamMember(t.ID, p.ID, 'GENERAL')">
+                  <button class="member-button" *ngFor="let t of availTeams" mat-menu-item (click)="tid = t.ID; addTeam()">
                     <span>{{t.teamName}}</span>
                   </button>
                 </mat-menu>

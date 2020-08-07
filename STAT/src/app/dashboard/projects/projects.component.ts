@@ -492,6 +492,40 @@ export class ProjectsComponent implements OnInit {
         });
       }
 
+      // get all the teams where the members are not in the team already
+      getAvailableTeams(members : []) {
+        members.sort((a : any ,b : any) =>
+            a.ID.localeCompare(b.ID)
+          );
+
+        this.teams.forEach((t : any) =>
+          t.teamMembers.sort((a : any ,b : any) =>
+            a.ID.localeCompare(b.ID)
+          )
+        )
+
+        this.availTeams = []
+
+        console.log(this.availTeams)
+
+        this.teams.forEach((t : any) => {
+          let match = false
+          for (let i = 0; i < t.teamMembers.length; i++) {
+            if (members.findIndex(a => a['ID'] == t.teamMembers[i]['ID']) != -1)
+              match = true
+            else
+              match = false
+          }
+
+          if (!match)
+            this.availTeams.push(t)
+        });
+
+        
+        console.log(members)
+        console.log(this.availTeams)
+      }
+
       // get team members
       getTeamMembers() {
         this.teamMembers == []
@@ -504,10 +538,11 @@ export class ProjectsComponent implements OnInit {
       }
 
       // add team
-      addTeam(form : NgForm) {
-        console.log(form);
-        this.pmService.addTeam(localStorage.getItem('token'), form).subscribe((data) => {
+      addTeam() {
+        let req = { 'projectID' : this.pid, 'teamID' : this.tid}
+        this.pmService.addTeam(localStorage.getItem('token'), req).subscribe((data) => {
           console.log(data);
+          this.getProAndTasks()
         },
         error => {
           //console.log(error);
