@@ -62,6 +62,11 @@ function HandleUpdate(tabID, changeInfo, tab) {
   }
   
   function HandleRemove(tabID, removeInfo) {    //working
+    var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+    if(currentDuration>60)
+    {
+      UpdateTimeEntry(new Date(), tabID, currentDuration, true);
+    }
     setCookie("historyTime"+tabID, "", 1);
     delete chrome.extension.getBackgroundPage().History[tabID];
   }
@@ -69,6 +74,11 @@ function HandleUpdate(tabID, changeInfo, tab) {
   function HandleReplace(addedtabID, removedtabID) {
       console.log("replace");
     var t = new Date();
+    var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+    if(currentDuration>60)
+    {
+      UpdateTimeEntry(new Date(), tabID, currentDuration, true);
+    }
     setCookie("historyTime"+removedtabID, "", 1);
     delete chrome.extension.getBackgroundPage().History[removedtabID];
     chrome.tabs.get(addedtabID, function(tab) {
@@ -110,35 +120,33 @@ function HandleUpdate(tabID, changeInfo, tab) {
         chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabID), 'text': '00:00'});
       }
     }
-}
+  }
+
+  function syncDurationPeriodically() //sync every 10 minutes
+  {
+    for(tabID in chrome.extension.getBackgroundPage().History) {
+      if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
+      {
+        var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+        if(currentDuration>60)
+        {
+          UpdateTimeEntry(new Date(), tabID, currentDuration, false);
+        }
+      }
+    }
+  }
+  setInterval(syncDurationPeriodically, 60*1000*10); //calling function every minute 10 minutes
 
 
   function cacheDurationPeriodically()
   {
       //alert("TABS: ");
-      for(tabID in chrome.extension.getBackgroundPage().History) {
-        if(chrome.extension.getBackgroundPage().History[currentID][0][2] != "")
-        {
-            var now  = new Date();
-            //alert("tab ID " + tabID);
-            var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
-            duration = addTimes([duration, getCookie("historyTime"+tabID)]);
-           // alert("Saving data  " + duration);
-            setCookie("historyTime"+tabID, duration, 1);
+    for(tabID in chrome.extension.getBackgroundPage().History) {
+      if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
+      {
+          var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+          setCookie("historyTime"+tabID, currentDuration, 1);
       }
     }
   }
-/*
-  after next wednesday (in 2 weeks)
-  1 year training
-  weekly session 
-  6 months to 1 year project
-  150 people in company
-  */
-  
-  
-
-
-
-
-  //setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
+  setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
