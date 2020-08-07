@@ -478,31 +478,30 @@ module.exports.addRole = (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         else
         {
-             if( result.Role.includes(req.body.userRole)){
-                return res.status(200).json({message : "Role exist"});
-             }
-             else{
+            RoleHelper.getRoleID(req.body.userRole,(err,val)=>
+            {
+                    if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
 
-                RoleHelper.getRoleID(req.body.userRole,(err,val)=>
-                 {
-                     if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + err});
-
-                    else if(val == false) 
-                        return res.status(404).json({ message: 'Role not found' });
-                    else 
+                else if(val == false) 
+                    return res.status(404).json({ message: 'Role not found' });
+                else 
+                {
+                    if( result.Role.includes(val)){
+                        return res.status(200).json({message : "Role already exists"});
+                     }
+                    else
                     {
                         UserModel.updateOne({ _id: req.body.userID},{ $push: { Role: val } },
                             (err, result) => {
                             if (err) 
                                 return res.status(500).send({message: 'Internal Server Error: ' + err});
                             else
-                                return res.status(200).json({message : "Role successfully updated"});
-                        })
+                                return res.status(200).json({message : "Role successfully added"});
+                        });
                     }
-                });
-                    
-             }
+                }
+            });
 
         }
     })
@@ -536,27 +535,27 @@ module.exports.removeRole = (req, res) => {
         {
 
             RoleHelper.getRoleID(req.body.userRole,(err,val)=>
-                {
-                    if(err)
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+            {
+                if(err)
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
 
-                else if(val == false) 
-                    return res.status(404).json({ message: 'Role not found' });
-                else 
+            else if(val == false) 
+                return res.status(404).json({ message: 'Role not found' });
+            else 
+            {
+                if( result.Role.includes(val))
                 {
-                    if( result.Role.includes(val))
-                    {
-                        UserModel.updateOne({ _id: req.body.userID},{ $pull: { Role: val } },
-                            (err, result) => {
-                            if (err) 
-                                return res.status(500).send({message: 'Internal Server Error: ' + err});
-                            else
-                                return res.status(200).json({message : "Role successfully removed"});
-                        });
-                    }
-                    else
-                        return res.status(404).json({message : "User is not assigned this role"});
+                    UserModel.updateOne({ _id: req.body.userID},{ $pull: { Role: val } },
+                        (err, result) => {
+                        if (err) 
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+                        else
+                            return res.status(200).json({message : "Role successfully removed"});
+                    });
                 }
+                else
+                    return res.status(404).json({message : "User is not assigned this role"});
+            }
             });
             
         }
