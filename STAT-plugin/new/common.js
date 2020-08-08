@@ -144,6 +144,8 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
       }
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+      //maybe can be change to retry only when there is an internal server error
+
       setTimeout (() => { 
         if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false" && localStorage.hasOwnProperty('token'))
         {
@@ -151,7 +153,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
           AddTimeEntry(url, startTime , new Date(), currentID, duration);
           
         }
-      }, 60000);  //try again after 1 minute
+      }, 60 *1000);  //try again after 1 minute
     }
   }
   http.send(text);
@@ -378,7 +380,6 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
       document.getElementById("select_task_form").style.display="none";
       document.getElementById("selected_task").style.display="block";
       document.getElementById("reselect_task").style.display="block";
-      alert(text);
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
       const obj = JSON.parse(http.responseText);

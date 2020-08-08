@@ -135,7 +135,6 @@ stopStartBtn.onclick = function(){
             setTimeout (() => {
                 if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false")
                 {
-                alert("made time entry");
                 AddTimeEntry(url, now , new Date(), currentID);
                 }
             }, 60000);

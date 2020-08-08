@@ -128,7 +128,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
       }
     }
   }
-  setInterval(syncDurationPeriodically, 60*1000*10); //calling function every minute 10 minutes
+  setInterval(syncDurationPeriodically, 60*1000*5); //calling function every minute 5 minutes
 
 
   function cacheDurationPeriodically()
@@ -141,4 +141,4 @@ function HandleUpdate(tabID, changeInfo, tab) {
       }
     }
   }
-  setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
+  setInterval(cacheDurationPeriodically, 60 *1000); //calling function every minute (60 seconds)
