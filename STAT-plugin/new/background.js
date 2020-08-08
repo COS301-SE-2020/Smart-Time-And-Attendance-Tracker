@@ -37,7 +37,7 @@ function Update(t, tabID, url) {
         AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
         
       }
-    }, 10000);
+    }, 60000);
 
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
@@ -95,12 +95,10 @@ function HandleUpdate(tabID, changeInfo, tab) {
           else{ //active tab
             if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false") {    //pause timer  => timer is not stoped
               chrome.extension.getBackgroundPage().History[tabID][0][0] = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0])+1;
-              
             }
             if(localStorage.getItem('currentlyTracking') !=  chrome.extension.getBackgroundPage().History[tabID][0][2])
             {
               localStorage.setItem('currentlyTracking', chrome.extension.getBackgroundPage().History[tabID][0][2]);
-
             }
           }
           var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
@@ -135,7 +133,6 @@ function HandleUpdate(tabID, changeInfo, tab) {
 
   function cacheDurationPeriodically()
   {
-      //alert("TABS: ");
     for(tabID in chrome.extension.getBackgroundPage().History) {
       if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
       {
