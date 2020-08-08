@@ -105,6 +105,11 @@ function getUserName(){
 var stopStartBtn = document.getElementById("start_stop");
 
 function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
   var text = '{ "description": "'+ url + '",'
@@ -112,7 +117,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
           + '"endTime": "'+ endTime.getTime() + '",' 
           + '"device": "Browser",' 
           + '"activeTime":' + duration + ',' 
-          + '"date": "'+ new Date() + '"' 
+          + '"date": "'+  (mm + '/' + dd + '/' + yyyy) + '"' 
           + '}';
 
   http.open('POST', apiURL, true);
