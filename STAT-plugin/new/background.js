@@ -29,13 +29,13 @@ function Update(t, tabID, url) {
     const now = new Date();
     chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false", ""]);  //[time, url, timeEntryID, stop =="false"/"true", project selected]
     setCookie("historyTime"+tabID, 0, 1);
-    setTimeout (() => {
+    
+    setTimeout (() => { 
       if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
       {
         var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
         AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
         
-
       }
     }, 10000);
 

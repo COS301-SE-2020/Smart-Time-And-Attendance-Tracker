@@ -1,6 +1,5 @@
 var user = new User();
 
-user.getInstance().name = "hello"; 
 function showTime() {
 
     var currentID =0; //
@@ -67,14 +66,35 @@ SelectTask.onclick = function() {
 
         if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")   //timer is still running
         {
+            var ProjectName = projectsDropdown.options[projectsDropdown.selectedIndex].innerHTML;
+            var TaskName = tasksDropdown.options[tasksDropdown.selectedIndex].innerHTML;
             if(chrome.extension.getBackgroundPage().History[currentID][0][2]!="")
             {
-                var ProjectName = projectsDropdown.options[projectsDropdown.selectedIndex].innerHTML;
-                var TaskName = tasksDropdown.options[tasksDropdown.selectedIndex].innerHTML;
                 if(tasksDropdown.value == "")
                     updateTask(currentID, projectsDropdown.value, ProjectName, "", "")
                 else
                     updateTask(currentID, projectsDropdown.value, ProjectName, tasksDropdown.value, TaskName)
+            }
+            else
+            {
+                var text = '{'
+                + '"projectName": "'+ ProjectName+ '",'  
+                + '"projectID": "'+ projectsDropdown.value+ '",' 
+                + '"taskName": "'+ TaskName + '",'  
+                + '"taskID": "'+ tasksDropdown.value+ '",'
+                + '"processed": "false"' 
+                + '}';
+                chrome.extension.getBackgroundPage().History[currentID][0][4] = text;
+                //store in local storage
+                localStorage.setItem('currentlyTrackingDetails', text);
+
+                document.getElementById("select_task_form").style.display="none";
+                document.getElementById("selected_task").style.display="block";
+                document.getElementById("reselect_task").style.display="block";
+          
+                document.getElementById("project").innerHTML = "Project: " + ProjectName;
+                if(tasksDropdown.value != "")
+                  document.getElementById("task").innerHTML = "Task: "+ TaskName;
             }
         }
         else{
