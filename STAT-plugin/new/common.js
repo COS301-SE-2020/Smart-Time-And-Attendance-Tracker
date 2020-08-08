@@ -9,102 +9,97 @@ var userLogin = document.getElementById("login");
 document.getElementById("select_task_form").style.display="none";
 var userName="";
     ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
-  if (document.cookie.indexOf('name') > -1 && window.localStorage.hasOwnProperty('token')) {
-      //cookie exists - hide form
+  if (localStorage.hasOwnProperty('name') && localStorage.hasOwnProperty('token')) 
+  {
       getProjects();
-      
+
+      //cookie exists - hide form
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("popup").style.display = "block";
-      document.getElementById("userName").innerHTML=getCookie("name");
-      document.getElementById("userEmail").innerHTML=getCookie("email");
+      document.getElementById("userName").innerHTML = localStorage.getItem("name");
+      document.getElementById("userSurname").innerHTML = localStorage.getItem("surname");
       document.getElementById("errorMessage").innerHTML= "";
   }
-  else{  ///hide everything except the login form
+  else
+  {  ///hide everything except the login form
       document.getElementById("errorMessage").innerHTML= "Login to start tracking";
       document.getElementById("popup").style.display = "none";
   }
-  userLogin.onclick = function(){
-        console.log("sdvdsdfsdf");
-        var http = new XMLHttpRequest();
-        var url = 'http://localhost:3000/api/user/login';
-        http.open('POST', url, true);
-        http.setRequestHeader('Content-type', 'application/json');
-        http.onreadystatechange = function()
-        {
-            if(http.readyState == 4 && http.status == 200) {
-                var data = JSON.parse(http.responseText);
-                ////set name and token into cookies
-                console.log(data);
-                localStorage.setItem('token', data.token);
-                setCookie("name", data.name, 1);
-                setCookie("email", data.email, 1);
-                console.log(data);
-                setCookie("stop", "false", 1); 
-                document.getElementById("userName").innerHTML=data.name;
-                document.getElementById("userEmail").innerHTML=data.email;
-                document.getElementById("loginForm").style.display = "none";
-                document.getElementById("popup").style.display = "block";
-                document.getElementById("errorMessage").innerHTML= "";
-                /////look for name 
-                getUserName();
-                /////get tasks to display
-                getProjects();
+  userLogin.onclick = function() {
+    var http = new XMLHttpRequest();
+    var url = 'http://localhost:3000/api/user/login';
+    http.open('POST', url, true);
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange = function()
+    {
+      if(http.readyState == 4 && http.status == 200) 
+      {
+        var data = JSON.parse(http.responseText);
+        localStorage.setItem('token', data.token);
+               
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("errorMessage").innerHTML= "";
+        
+        getUserName();
+        
+        getProjects();
                 
-                 for(tabID in chrome.extension.getBackgroundPage().History) {
-                    alert("tab ID " + tabID);
-                    chrome.extension.getBackgroundPage().History[tabID][0][0] = 0;
-
-                    if(chrome.extension.getBackgroundPage().History[tabID][0][2] == "")
-                    {
-                      var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
-                      AddTimeEntry(url, now, new Date(), tabID, displayDuration);
-                    }
-                 }
+        for(tabID in chrome.extension.getBackgroundPage().History) 
+        {
+          chrome.extension.getBackgroundPage().History[tabID][0][0] = 0;
+          setTimeout (() => { 
+            if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token') && chrome.extension.getBackgroundPage().History[tabID][0][2] == "")
+            {
+              var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
+              AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
+              
             }
-            else {
-                   var data = JSON.parse(http.responseText);
-                   document.getElementById("errorMessage").innerHTML=data.message;
-                   console.log(data);
-            }
+          }, 10000);
         }
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
-        console.log(password);
-        console.log(email);
-        var userData = '{ "email": "'+ email + '",' + '"password": "'+ password + '"' +'}';
-        console.log(userData);
-        http.send(userData);
+      }
+      else 
+      {
+        var data = JSON.parse(http.responseText);
+        document.getElementById("errorMessage").innerHTML=data.message;
+        console.log(data);
+      }
+    }
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    var userData = '{ "email": "'+ email + '",' + '"password": "'+ password + '"' +'}';
+    console.log(userData);
+    http.send(userData);
 }
 
-/////get name and email
 function getUserName(){
-        var http = new XMLHttpRequest();
-        var url = 'http://localhost:3000/api/user/getName';
-        http.open('GET', url, true);
-        http.setRequestHeader('Authorization', `Bearer ${localStorage.getItem("token")}` );
-        http.onreadystatechange = function()
-        {
-            if(http.readyState == 4 && http.status == 200) {
-                var data = JSON.parse(http.responseText);
-                console.log(data);
-                //setCookie("token", data.token, 1);
-                setCookie("name", data.name, 1);
-                setCookie("email", data.surname, 1);
-                console.log(data);
-                //alert(http.responseText);
-                console.log("token");
-                document.getElementById("userName").innerHTML=data.name;
-                document.getElementById("userEmail").innerHTML=data.surname;
-            }
-            else {
-                   var data = JSON.parse(http.responseText);
-                   document.getElementById("errorMessage").style.display="block";
-                   document.getElementById("errorMessage").innerHTML=data.message;
+  var http = new XMLHttpRequest();
+  var url = 'http://localhost:3000/api/user/getName';
+  http.open('GET', url, true);
+  http.setRequestHeader('Authorization', `Bearer ${localStorage.getItem("token")}` );
+  http.onreadystatechange = function()
+  {
+    if(http.readyState == 4 && http.status == 200) 
+    {
+      var data = JSON.parse(http.responseText);
+      console.log(data);
+      localStorage.setItem('name', data.name);
+      localStorage.setItem('surname', data.surname);
+                
+      document.getElementById("userName").innerHTML = data.name;
+      document.getElementById("userSurname").innerHTML = data.surname;
+    }
+    else 
+    {
+      var data = JSON.parse(http.responseText);
+      document.getElementById("errorMessage").style.display = "block";
+      document.getElementById("errorMessage").innerHTML = data.message;
                    
-                   console.log(data);
-            }
-        }
-        http.send();
+      console.log(data);
+    }
+  }
+  http.send();
 }
 
 var stopStartBtn = document.getElementById("start_stop");
@@ -163,15 +158,13 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
           AddTimeEntry(url, startTime , new Date(), currentID, duration);
           
         }
-      }, 60000); //retry after 1 minute
+      }, 60000);  //try again after 1 minute
     }
   }
   http.send(text);
 }
 
 function UpdateTimeEntry(endTime,currentID, duration, stop) {
-  alert("updaing time entry  " + duration);
-  alert(chrome.extension.getBackgroundPage().History[currentID][0][2]);
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
   var text = '{'
@@ -181,7 +174,6 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
           + '}';
 
   http.open('POST', apiURL, true);
-  alert(text);
   http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
@@ -295,8 +287,7 @@ function processProjects(responseText, display)
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
         if(obj.taskName != "")
           document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
-        else
-          document.getElementById("task").innerHTML = "";
+        
     }
     else if(localStorage.getItem('currentlyTrackingDetails'))
     {
@@ -382,8 +373,6 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
       document.getElementById("project").innerHTML = "Project: " + ProjectName;
       if(TaskID != "")
         document.getElementById("task").innerHTML = "Task: "+ TaskName;
-      else
-        document.getElementById("task").innerHTML = "";
 
       document.getElementById("select_task_form").style.display="none";
       document.getElementById("selected_task").style.display="block";
