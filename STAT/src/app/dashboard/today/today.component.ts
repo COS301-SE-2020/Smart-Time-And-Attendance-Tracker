@@ -24,8 +24,8 @@ export class TodayComponent implements OnInit {
   startTime : number;
   timing :number;
   hours: number;
-  count = timer(60000);
-  sync = timer(600000);
+  count;
+  sync;
   projectName: string;
   projectID : string;
   
@@ -218,6 +218,7 @@ export class TodayComponent implements OnInit {
     if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
     {
       localStorage.removeItem('currentlyTracking');
+      localStorage.removeItem('currentlyTrackingDetails');
       this.updateEntry();
     }
      
@@ -226,6 +227,7 @@ export class TodayComponent implements OnInit {
   tracking()
   {
     console.log("tracking");
+    this.count = timer(60000);
     this.count.subscribe(x => {
       if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
       { 
@@ -235,7 +237,7 @@ export class TodayComponent implements OnInit {
         this.tracking();
       }
     });
-
+    this.sync = timer(600000);
     this.sync.subscribe(x => {
       if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
       { 
