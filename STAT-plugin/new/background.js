@@ -88,9 +88,9 @@ function HandleUpdate(tabID, changeInfo, tab) {
         currentID = tabs[0].id;
         for(tabID in chrome.extension.getBackgroundPage().History) {
           if(tabID != currentID){ //non-active tab
-            if(getCookie("historyTime"+tabID) != chrome.extension.getBackgroundPage().History[tabID][0][0]) {   //current time == saved time  ==> already saved
-              setCookie("historyTime"+tabID, chrome.extension.getBackgroundPage().History[tabID][0][0], 1); 
-            }
+           // if(getCookie("historyTime"+tabID) != chrome.extension.getBackgroundPage().History[tabID][0][0]) {   //current time == saved time  ==> already saved
+           //   setCookie("historyTime"+tabID, chrome.extension.getBackgroundPage().History[tabID][0][0], 1); 
+           // }
           }
           else{ //active tab
             if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false") {    //pause timer  => timer is not stoped
@@ -101,7 +101,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
               localStorage.setItem('currentlyTracking', chrome.extension.getBackgroundPage().History[tabID][0][2]);
             }
           }
-          var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
+          var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);// + parseInt(getCookie("historyTime"+tabID));
           console.log("Time:  "+ FormatDuration(displayDuration));
           chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabID), 'text': FormatDuration(displayDuration)});
         }
@@ -128,7 +128,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
       }
     }
   }
-  setInterval(syncDurationPeriodically, 60*1000*5); //calling function every minute 5 minutes
+  setInterval(syncDurationPeriodically, 60*1000*10); //calling function every minute 5 minutes
 
 
   function cacheDurationPeriodically()
@@ -137,7 +137,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
       if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
       {
           var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
-          setCookie("historyTime"+tabID, currentDuration, 1);
+          //setCookie("historyTime"+tabID, currentDuration, 1);
       }
     }
   }
