@@ -25,6 +25,10 @@ const TaskHelper = require("../helpers/task.helper");
 const ProjectHelper = require("../helpers/project.helper");
 const UserTimeEntryModel = mongoose.model("UserTimeEntry");
 const TimeEntryModel = mongoose.model("TimeEntry");
+const UserModel = mongoose.model("User");
+const TimeEntryHelper =  require('../helpers/timeEntry.helper');
+const UserHelper =require('../helpers/user.helper');
+
 
 module.exports.addTimeEntry = (req, res) => {  
     var timeEntry = new TimeEntryModel();
@@ -249,3 +253,266 @@ module.exports.deleteTimeEntry = (req, res) => {
         }
     });
 }
+
+
+
+/*
+   receives userID
+   returns all time entries and entry information in an array
+    ie - name, email
+*/
+module.exports.getUserEntries = (req, res) => {  
+
+    var count = true;
+    var count3 = 0;
+    UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
+        if (err) {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result){
+            return res.status(404).json({ message: 'User not found' }); 
+        }
+        else{
+            var timeEntries=[];
+            var times = result.TimeEntries.length
+            //return res.status(200).json({ message: 'talalala  ->  '+result.TimeEntries });
+           
+            if(times == 0){
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            }
+            else{
+                for(var a=0; a<times; a++){
+                    TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
+                        count3= count3+1; 
+                        if(err){
+                            return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                        }
+                        else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                        };
+                        if(count3 == times && count){
+                            return res.status(404).json({ message: 'No time entries for the given day were found' });
+                        } 
+                        else if(count3== times){
+                            return res.status(200).json({timeEntries}); 
+                        }
+                    });
+                }
+            }
+        }
+    });
+}
+
+
+/*
+   doesnt receive any parameters
+   returns an arrsy with all users + time entries for each user
+           - user basic infor 
+           - time entries and entry information
+    ie - name, email
+    {
+        "timeentries" : [
+                  {
+                      name, email
+                      time entries arrsy[]
+                  },
+        ]
+    }
+*/
+module.exports.getAllUsersEntries = (req, res) => {  
+
+    var count = true;
+    var count3 = 0;
+    var count4 =0;
+    var timeEntries=[];
+    UserModel.find({}, (err, result) => {
+        if (err) {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result){
+            return res.status(404).json({ message: 'No users in the database' }); 
+        }
+        else{
+            var finalobject=[];
+            var allcounts=result.length;
+            for(var y=0; y<result.length; y++){
+                count4=count4+1;
+               ///console.log(result[y]._id+" "+result[y].Name + " " + result[y].Surname+" "+result[y].Email+" "+result[y].Projects.length);
+               var userid=result[y]._id;
+               var name =result[y].Name;
+               var surname= result[y].Surname;
+               var email=result[y].Email;
+               var projects=result[y].Projects.length;
+                UserTimeEntryModel.findOne({  UserID :userid},(err, result) => {
+                    if (err) {
+                        //return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    }
+                    else if (!result){ ///no time entries for this user
+                        timeEntries=[];
+                        console.log("Sina any ");
+                        finalobject.push({ Name:name, Surname:surname, Email:email, Projects:projects, TimeEntries:timeEntries });
+                    }
+                    else{
+                        //console.log(result);
+                        timeEntries=[];
+                        //var userentries=result.length;
+                        var times = result.TimeEntries.length
+                        console.log("Niko nazo times  =  "+times)
+                        //return res.status(200).json({ message: 'talalala  ->  '+result.TimeEntries });
+                    
+                        if(times == 0){   ///sina
+                            timeEntries=[];
+                            console.log("Sina any ");
+                            finalobject.push({ Name:name, Surname:surname, Email:email, Projects:projects, TimeEntries:timeEntries });
+                        }
+                        else{
+                            for(var a=0; a<times; a++){
+                                TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
+                                    count3= count3+1; 
+                                    if(err){
+                                        return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                                    }
+                                    else if(val){
+                                            count = false;
+                                            console.log("Niko nazo gathee")
+                                            timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                                    };
+                                    if(count3 == times && count){
+                                            timeEntries=[];
+                                            console.log("Sina any ");
+                                            finalobject.push({ Name:name, Surname:surname, Email:email, Projects:projects, TimeEntries:timeEntries });
+                                    } 
+                                    else if(count3== times){  ///push data to final object, reset count and count3
+                                        //return res.status(200).json({timeEntries}); 
+                                        //console.log(name +" "+timeEntries)
+                                        count =true;
+                                        count3=0;
+                                        finalobject.push({ Name:name, Surname:surname, Email:email, Projects:projects, TimeEntries:timeEntries });
+                                        //console.log(finalobject);
+                                    };
+                                });
+                            }
+
+                          //return res.status(200).json({ Name:name, Surname:surname, Email:email, Projects:projects, TimeEntries:timeEntries });
+                          //console.log(name +" "+timeEntries)
+                        }
+
+                        if (count4 == allcounts) {
+                            console.log(finalobject);
+                            //return res.status(200).json({finalobject}); 
+                        }
+                    }
+                });
+            }
+             
+        }
+    }); 
+
+}
+
+
+
+// module.exports.getAllUsersEntries = (req, res) => {  
+
+//     var count = true;
+//     var count3 = 0;
+//     UserModel.find({}, (err, result) => {
+//         if (err) {
+//             return res.status(500).send({message: 'Internal Server Error: ' + err});
+//         }
+//         else if (!result){
+//             return res.status(404).json({ message: 'No users in the database' }); 
+//         }
+//         else{
+//             for(var y=0; y<result.length; y++){
+//                console.log(result[y]._id+" "+result[y].Name + " " + result[y].Surname+" "+result[y].Email+" "+result[y].Projects.length);
+//                var userid=result[y]._id;
+//                var name =result[y].Name;
+//                var surname= result[y].Surname;
+//                var email=result[y].Email;
+//                var projects=result[y].Projects.length;
+        
+//             }
+//         }
+//     }); 
+
+// }
+
+
+
+/*m   INCOMPLETE  -  RETURNS ONLY USERS WHO HAVE A TIME ENTRY  -- USES HELPERS
+module.exports.getAllUsersEntries = (req, res) => {  
+
+    var count = true;
+    var count3 = 0;
+    UserTimeEntryModel.find({},(err, result) => {
+        if (err) {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result){
+            return res.status(404).json({ message: 'No time entries' }); 
+        }
+        else{
+            var timeEntries=[];
+            //var times = result.TimeEntries.length
+            console.log(result)
+            //return res.status(200).json({ message: 'talalala  ->  '+result });
+           for (let index = 0; index < result.length; index++) {
+               var times=result[index].TimeEntries.length
+               var userentries=result[index].TimeEntries;
+               UserHelper.getUserDetails(result[index].UserID,(err, result) => {
+                    if (err) { ////add internal array to json object
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    }
+                    else{  //requests for user timeentries
+                            for (let index2 = 0; index2 < times; index2++) {
+                                TimeEntryHelper.getTimeEntry( userentries[index],(err, result) => {
+                                    if (err) { ////solve
+                                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                    }
+                                    else{
+                                           console.log(result);
+                                    }
+                                })
+                            }
+                       }
+                })
+            }
+*/
+
+
+
+
+          /*  if(times == 0){
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            }
+            else{
+                for(var a=0; a<times; a++){
+                    TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
+                        count3= count3+1; 
+                        if(err){
+                            return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                        }
+                        else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                        };
+                        if(count3 == times && count){
+                            return res.status(404).json({ message: 'No time entries for the given day were found' });
+                        } 
+                        else if(count3== times){
+                            return res.status(200).json({timeEntries}); 
+                        }
+                    });
+                }
+            }
+        }
+    });
+
+}*/
+
+
