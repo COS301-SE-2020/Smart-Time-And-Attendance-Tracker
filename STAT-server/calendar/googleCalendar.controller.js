@@ -59,10 +59,12 @@ module.exports.getEvents = (req, response) => {
     auth.setCredentials(credentials);
 
     //Get events on calendar
+    var date=new Date();
+    //date.setDate(date.getDate() - 7)
     const calendar = google.calendar({version: 'v3', auth});
     calendar.events.list({
       calendarId: 'primary',
-      timeMin: (new Date()).toISOString(),
+      timeMin: (new Date( date.setDate(date.getDate() - 7) )).toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
     }, (err, res) => {
