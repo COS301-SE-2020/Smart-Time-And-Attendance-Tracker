@@ -1,3 +1,24 @@
+/**
+  * @file STAT-server/config/passportConfig.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file validates login.
+  * @date 14 June 2020
+ */
+
+/**
+* Filename:             STAT-server/config/passportConfig.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   14 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:         This file validates login.
+*
+*/
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");

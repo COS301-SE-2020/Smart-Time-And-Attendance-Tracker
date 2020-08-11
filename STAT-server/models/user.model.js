@@ -1,14 +1,14 @@
 /**
   * @file STAT-server/models/user.model.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file contains the User model in our database
-  * @date 11June 2020
+  * @date 11 June 2020
  */
 
 /**
 * Filename:             STAT-server/models/user.model.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
 * File Creation Date:   11 June 2020
 *
@@ -52,7 +52,7 @@ var UserSchema = new mongoose.Schema({
         type: Array,
         required : "Role required.",
     },
-    Team:[
+    Projects:[
         { 
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'Team' 
@@ -78,7 +78,7 @@ UserSchema.methods.verifyPassword = function(password){
  * @returns {string} Returns a token.
  */
 UserSchema.methods.generateJWT = function() {
-    return jwt.sign({id: this._id}, //,authenticate: this.Authenticate, roles: this.Role},
+    return jwt.sign({id: this._id}, 
         process.env.JWT_SECRET,
         {
             expiresIn: process.env.JWT_EXP

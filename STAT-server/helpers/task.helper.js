@@ -1,6 +1,6 @@
 /**
   * @file STAT-server/helper/task.helper.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles some of the requests regarding Task model in our database. 
   * This is a helper file to handle Task related requests.
   * @date 15 July 2020
@@ -9,7 +9,7 @@
 /**
 * Filename:             STAT-server/helper/task.helper.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
 * File Creation Date:   15 July 2020
 *
@@ -26,9 +26,9 @@ const TaskModel = mongoose.model("Task");
 
 /**
  * 
- * @param {*} req Request body - Task name, due date of Task, time spent on Task, start date of Task and Monetary Value
- * @param {*} res Success or error message
- * @param {*} next 
+ * @param {HTTP Request} req Request body - Task name, due date of Task, time spent on Task, start date of Task and Monetary Value
+ * @param {HTTP Response} res Success or error message
+ * @param {Function} next Next function to be called
  */
 module.exports.add = (req, res, next) => {
     var task = new TaskModel();
@@ -49,7 +49,7 @@ module.exports.add = (req, res, next) => {
 
 /**
  * 
- * @param {*} id ID of task
+ * @param {String} id ID of task
  * @param {*} done 
  * @return {String} - Name of Task.
  */
@@ -67,7 +67,7 @@ module.exports.getName = (id, done)=>{
 
 /**
  * 
- * @param {*} id ID of task
+ * @param {String} id ID of task
  * @param {*} done 
  * @return {Array} - Name of Task, Id of Task, status of Task, due date oF Task.
  */
@@ -91,19 +91,31 @@ module.exports.getTaskName = (id, done)=>{
 }
 
 /**
- * 
- * @param {*} ids ID of tasks
- * @param {*} done 
+ * Deletes all tasks in the array.
+ * @param {Array} ids ID of tasks
+ * @param {Function} done 
  * @returns {String} error message else void
  */
 module.exports.deleteTask= (ids, done) => {      
-       
-    TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
-        if(err) 
-            done(err);
-        else
-            done(null);
-    });            
+    if(ids.length == 1)
+    {
+        TaskModel.deleteOne({_id: ids[0]},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        });            
+    
+    }
+    else
+    {
+        TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        }); 
+    }           
 
 }
 
