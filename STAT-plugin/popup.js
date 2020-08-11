@@ -15,7 +15,7 @@ function showTime() {
         if(document.cookie.indexOf("token")>-1)
         {
             if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
-            { 
+            {
                 //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
                 description = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
                 desc.innerHTML = addTimes([description, getCookie("historyTime"+currentID)]);
@@ -32,7 +32,7 @@ function showTime() {
         {
             desc.innerHTML = "00:00:00\n";
         }
-    });    
+    });
 }
 var SelectTask = document.getElementById("select_task");
 tasksDropdown = document.getElementById("tasks");
@@ -54,7 +54,7 @@ SelectTask.onclick = function() {
             UpdateTask(currentID, tasksDropdown);
         });
     }
-    
+
 }
 
 stopStartBtn.onclick = function(){
@@ -75,11 +75,11 @@ stopStartBtn.onclick = function(){
             chrome.extension.getBackgroundPage().History[currentID][0][0] = addTimes([description, getCookie("historyTime"+currentID)]);
             //startTimer.style.display = "block";
             //stopTimer.style.display = "none";
-            setCookie("stop", "true", 1); 
+            setCookie("stop", "true", 1);
             stopStartBtn.name = "start";
             stopStartBtn.innerHTML = "Start";
-            chrome.extension.getBackgroundPage().History[currentID][0][2] = "";            
-        });   
+            chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
+        });
     }
     else{
         var now  = new Date();
@@ -93,10 +93,10 @@ stopStartBtn.onclick = function(){
             chrome.extension.getBackgroundPage().History[currentID][0][0] = now;
             //stopTimer.style.display = "block";
             //startTimer.style.display = "none";
-            setCookie("stop", "false", 1); 
+            setCookie("stop", "false", 1);
             stopStartBtn.name = "stop";
             stopStartBtn.innerHTML = "Stop";
-        });   
+        });
     }
 }
 
@@ -113,7 +113,7 @@ startTimer.onclick = function(){
         chrome.extension.getBackgroundPage().History[currentID][0][0] = now;
         stopTimer.style.display = "block";
         startTimer.style.display = "none";
-    });   
+    });
 }
 */
 //setInterval(showTime, 1000);    //calling function every second
@@ -124,7 +124,7 @@ function displayButton() {
     //alert(stopStartBtn.name + "  " + stopStartBtn.value + "  " + stopStartBtn.innerHTML);
 
         if(getCookie("stop") == "false")
-        { 
+        {
             stopStartBtn.name = "stop";
             stopStartBtn.innerHTML = "Stop";
             //stopTimer.style.display = "block";
@@ -137,6 +137,6 @@ function displayButton() {
             //startTimer.style.display = "block";
             //stopTimer.style.display = "none";
         }
-    }); 
+    });
 }
 displayButton();

@@ -23,7 +23,7 @@ function Update(t, tabId, url) {
     console.log("url " + url);
     if (tabId in chrome.extension.getBackgroundPage().History) {
         if (url == chrome.extension.getBackgroundPage().History[tabId][0][1]) {
-         
+
             return;
         }
     }
@@ -34,7 +34,7 @@ function Update(t, tabId, url) {
     AddTimeEntry(url, t, t, tabId);
     //alert(chrome.extension.getBackgroundPage().History[tabId][0][2]);
     chrome.extension.getBackgroundPage().History[tabId][0][0] = now;
-    setCookie("stop", "false", 1); 
+    setCookie("stop", "false", 1);
     stopStartBtn.name = "stop";
     stopStartBtn.innerHTML = "Stop";
 
@@ -45,22 +45,22 @@ function Update(t, tabId, url) {
     while (chrome.extension.getBackgroundPage().History[tabId].length > history_limit) {
       chrome.extension.getBackgroundPage().History[tabId].pop();
     }
-    
+
     chrome.browserAction.setBadgeText({ 'tabId': tabId, 'text': '0:00'});
     chrome.browserAction.setPopup({ 'tabId': tabId, 'popup': "popup.html#tabId=" + tabId});
 }
 
 function HandleUpdate(tabId, changeInfo, tab) {
     Update(new Date(), tabId, changeInfo.url);
-    
+
   }
-  
+
   function HandleRemove(tabId, removeInfo) {    //working
     save();
     setCookie("historyTime"+tabId, "", 1);
     delete chrome.extension.getBackgroundPage().History[tabId];
   }
-  
+
   function HandleReplace(addedTabId, removedTabId) {
       console.log("replace");
     var t = new Date();
@@ -74,15 +74,15 @@ function HandleUpdate(tabId, changeInfo, tab) {
 
   function UpdateBadges() {
     var now = new Date();
-    var description = ""; 
+    var description = "";
     if (document.cookie.indexOf('token') != -1) {
       pause();
       for (tabId in chrome.extension.getBackgroundPage().History) {
-        description = ""; 
+        description = "";
         description = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabId][0][0]);
         description = addTimes([description, getCookie("historyTime"+tabId)]);
-        description = description.slice(0, -3);   
-        chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});     
+        description = description.slice(0, -3);
+        chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabId), 'text': description});
       }
     }
     else
@@ -112,12 +112,12 @@ function HandleUpdate(tabId, changeInfo, tab) {
 /*
   after next wednesday (in 2 weeks)
   1 year training
-  weekly session 
+  weekly session
   6 months to 1 year project
   150 people in company
   */
-  
-  
+
+
 
 
 
@@ -135,10 +135,10 @@ function HandleUpdate(tabId, changeInfo, tab) {
             var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
             duration = addTimes([duration, getCookie("historyTime"+tabID)])
             chrome.extension.getBackgroundPage().History[tabID][0][0] = duration;
-            setCookie("historyTime"+tabID, duration, 1); 
+            setCookie("historyTime"+tabID, duration, 1);
           }
           else{ //already paused
-           
+
           }
         }
         else{ //active tab
