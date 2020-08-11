@@ -63,6 +63,7 @@ router.post("/userTimeEntry/updateTimeEntry", jwtHelper.verifyJWTtoken,userHelpe
 router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getDailyTimeEntries);
 router.get("/userTimeEntry/getUserEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getUserEntries);
 router.get("/userTimeEntry/getAllUsersEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getAllUsersEntries);
+router.get("/userTimeEntry/getAllUsersEntriesProject", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getAllUsersEntriesProject);
 
 
 
