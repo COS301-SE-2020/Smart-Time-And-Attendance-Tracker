@@ -7,7 +7,7 @@
       <link rel="stylesheet" href="style\style.css">
   </head>
   <body>
-    <div class="container justify-content-center">
+<!--    <div class="container justify-content-center">-->
       <div class="jumbotron jumbotron-fluid align-self-center col-10 m-3 mx-auto p-5" id="loginForm">
         <div class="logo mb-4 mt-3">
           <img src="images/STAT-logo.png" id="logo" class="img-fluid align-self-center" alt="STAT logo">
@@ -23,10 +23,12 @@
           <button class="btn btn-md mt-3 py-1" type="button" name="login" id="login">Login</button>
         </form>
       </div>
-<<<<<<< HEAD
     </div>
-    <div class="jumbotron" id="popup">
-      <h1 class="display-4-modified" id="userName">Name</h1>
+    <div class="jumbotron jumbotron-fluid align-self-center col-10 m-3 mx-auto p-5" id="popup">
+      <div class="logo mb-4 mt-3">
+        <img src="images/STAT-logo.png" id="logo" class="img-fluid align-self-center" alt="STAT logo">
+      </div>
+      <h1 class="display-4-modified mb-3" id="userName">Name</h1>
       <p class="lead" id="userSurname">Surname</p>
       <hr class="my-4">
       <div class="flex-column row"></div>
@@ -36,75 +38,40 @@
             <label for="task">Project</label>
             <select class="form-control" id="projects">
             </select>
-            <br/>
+            <br>
+
             <label for="task">Task</label>
             <select class="form-control" id="tasks">
             </select>
             <br>
-            <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="select_task">Select Project</button>
-            <br><br>
+            
+            <button class="btn btn-md mt-3 py-1" type="button" name="button" id="select_task">Select Project</button>
+            <br>
+
         </form>
       </div>
       <div id="selected_task">
         <p class="lead" id="project"></p>
         <p class="lead" id="task"></p>
-        <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="reselect_task">Re-select Project</button>
+        <button class="btn btn-md mt-3 py-1" type="button" name="button" id="reselect_task">Re-select Project</button>
       </div>
       <form class="form-group form-group-modified" action="" method="post">
         <!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>-->
-        <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="stop" value="stop" id="start_stop">Stop</button><br>
+        <button class="py-1 btn btn-md mt-3 py-1" type="button" name="stop" value="stop" id="start_stop">Stop</button><br>
         <!--
           Can be implemented for next phase ==> nice to have feature
           <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="pause_resume">pause</button>
         --> 
       </form>
-=======
-      <div class="jumbotron jumbotron-fluid align-self-center col-10 m-3 mx-auto p-5" id="popup">
-        <div class="logo mb-4 mt-3">
-          <img src="images/STAT-logo.png" id="logo" class="img-fluid align-self-center" alt="STAT logo">
-        </div>
-        <h1 class="display-4-modified mb-3" id="userName">Name Surname</h1>
-        <p class="lead" id="userEmail">email123@mail.com</p>
-        <hr class="my-4">
-        <div class="flex-column row"></div>
-          <div id="select_task_form">
-            <p class="text-danger h6" id="task_error"></p>
-            <form class="form-group form-group-modified" action="" method="post">
-              <label for="task">Task</label>
-              <select class="form-control" id="task">
-              </select>
-              <button class="btn btn-md mt-3 py-1" type="button" name="button" id="select_task">Select Task</button>
-          </form>
-        </div>
-        <div id="selected_task">
-          <p class="lead" id="task"></p>
-        </div>
-        <form class="form-group form-group-modified" action="" method="post">
-          <!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>-->
-          <button class="py-1 btn btn-md mt-3 py-1" type="button" name="stop" value="stop" id="start_stop">Stop</button><br>
-          <!--
-            Can be implemented for next phase ==> nice to have feature
-            <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="pause_resume">pause</button>
-          -->
-        </form>
-      </div>
->>>>>>> plugin-styling
+      
+      <hr class="my-4">
+      <p class="float-right lead" id="desc"></p>
     </div>
-  <hr class="my-4">
-  <div>
-    <p class="float-right lead" id="desc"></p>
-      </div>
-    </div>
-<<<<<<< HEAD
+<!--    </div>-->
     <script src="./new/user.js"></script>
     <script src="./new/common.js"></script>
     <script src="./new/background.js"></script>
     <script src="./new/popup.js"></script>
-=======
-    <script src="background.js"></script>
-    <script src="popup.js"></script>
-    <script src="common.js"></script>
->>>>>>> plugin-styling
 
   </body>
 </html>

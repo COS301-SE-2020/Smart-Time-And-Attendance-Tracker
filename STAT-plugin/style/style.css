@@ -95,6 +95,10 @@ p {
   padding: 1.5em;
 }
 
+#popup, #login {
+  width:250px;
+}
+
 #selected_task {
   display: none;
 }
