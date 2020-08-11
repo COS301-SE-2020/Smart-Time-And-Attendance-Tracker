@@ -59,18 +59,22 @@ a:hover
 
 a.mat-raised-button
   background-color: $color-white
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)
   color: $color-grey !important
-  font-weight: bold
+  font-family: Roboto, "Helvetica Neue", sans-serif
+  font-size: 0.9em
+  font-weight: 500
   margin: 0.5em
+  padding-bottom: 0.1em
+  padding-top: 0.1em
   right: 0em
-  width: 6em
+  width: 6.5em
   float: right
 
 // -------------------------------------------------------------------------------------------- B ----------
 
 body
-  background-color: rgba(245, 245, 245, 1)
-  background-image: url("../../../../assets/images/bg.jpg")
+  background-color: white
   color: white
   margin: 0em auto
   padding-bottom: 0em
@@ -137,12 +141,13 @@ div
   text-align: left
   width: 48%
 
-  // >
-    // img
-    //   display: inline-block
-    //   margin: 1.5em auto
-    //   height: auto
-    //   width: 30%
+  >
+    img
+      display: block
+      margin: 3em auto
+      height: auto
+      height: 12em
+      width: auto
 
 #feature-cards
   display: flex
@@ -155,14 +160,15 @@ div
   text-align: center
 
 #features
-  
+
   mat-card
     background-color: $color-white
     border-radius: 2px
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
     display: inline-block
     margin: 1em 0
     padding: 1.5em
-    padding: 1.5em
+    padding-bottom: 2.25em
 
     &:nth-child(even)
       margin-left: 1.5em
@@ -172,7 +178,7 @@ div
 
     mat-card-content
       font-size: 0.9em
-      
+
 
 footer
   background-color: $color-white
@@ -190,11 +196,11 @@ footer
 
 
   #footer-logo
-    img 
+    img
       height: 6em
       width: auto
       filter: invert(0.7)
-  
+
   div
     margin: 0
     display: flex
@@ -379,8 +385,8 @@ section
       margin-bottom: 1.5em
 
 #splash
-  background-image: url("../../../../assets/images/bg.jpg")
-  background-size: auto
+  background-image: url("../../../../assets/splash.png")
+  background-size: 100% auto
   background-position: center
   background-repeat: no-repeat
   color: $color-black !important
@@ -398,7 +404,7 @@ section
       margin: 0 0.5em
       width: fit-content
 
-    a 
+    a
       border-radius: 50%
       text-decoration: none
       color: $color-white
@@ -421,10 +427,10 @@ section
   font-size: 0.8em
   justify-content: center
 
-  p 
+  p
     text-align: center
 
-  .avatar 
+  .avatar
     border-radius: 50%
     padding: 1.5em
     width: 80%
@@ -470,4 +476,3 @@ section
 
     .social-icons a:hover
       color: $color-blue
-
