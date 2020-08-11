@@ -13,7 +13,7 @@
         
       function checkAuth() {
         const http = new XMLHttpRequest();
-        var apiURL = "http://localhost:3000/api/googleCalendar/getCredentials";
+        var apiURL = "http://localhost:3000/api/tracker/getCalendarCredentials?"+ "calendar=google";
         http.open("POST",apiURL , true);
         http.setRequestHeader('Content-type', 'application/json');
         http.onreadystatechange = function() {
@@ -41,7 +41,7 @@
 
       function handleAuthClick(event) {
         const http = new XMLHttpRequest();
-        var apiURL = "http://localhost:3000/api/googleCalendar/getCredentials";
+        var apiURL = "http://localhost:3000/api/tracker/getCalendarCredentials";
         http.open("POST",apiURL , true);
         http.setRequestHeader('Content-type', 'application/json');
         http.onreadystatechange = function() {
@@ -58,7 +58,8 @@
       
       function makeApiCall(authResult) {
         const http = new XMLHttpRequest();
-        var apiURL = "http://localhost:3000/api/googleCalendar/getEvents?" 
+        var apiURL = "http://localhost:3000/api/tracker/getCalendarEvents?" 
+                    + "calendar=google"
                     + "accessToken=" + authResult.access_token 
                     + "&expiryDate=" + authResult.expires_at 
                     + "&tokenType=" + authResult.token_type ;
@@ -99,16 +100,13 @@
                 }*/
 
 
-                var entryObject = '{ "Description": "'+ "Calendar entry" + '",'
-                + '"StartTime": "'+ moment(response.Events[i].StartTime).format("X") + '",' 
-                + '"EndTime": "'+ moment(response.Events[i].EndTime).format("X") + '",' 
-                + '"TaskName": "'+ response.Events[i].Event + '",' 
-                + '"Device": "Website",' 
-                + '"ProjectName": "Un-specified",'
-                + '"TaskID": "Un-specified",'
-                + '"ProjectID": "Un-specified",' 
-                + '"ActiveTime":'+duration +',' 
-                + '"Date": "'+moment(response.Events[i].StartTime).format("L") + '"' 
+                var entryObject = '{ "description": "'+ response.Events[i].Event + '",'
+                + '"startTime": "'+ moment(response.Events[i].StartTime).format("X") + '",' 
+                + '"endTime": "'+ moment(response.Events[i].EndTime).format("X") + '",' 
+                + '"taskName": "'+ response.Events[i].Event + '",' 
+                + '"device": "Google calendar",'  
+                + '"activeTime":'+duration +',' 
+                + '"date": "'+moment(response.Events[i].StartTime).format("L") + '"' 
                 + '}';
 
 

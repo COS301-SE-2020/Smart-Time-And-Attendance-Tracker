@@ -1,14 +1,14 @@
 /**
-  * @file STAT-server/calendar/googleCalendar.controller.js
-  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
-  * @fileoverview This file handles some of the requests regarding Google Calendar API. 
+  * @file STAT-server/tracker/calendar/googleCalendar.manager.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles the requests regarding Google Calendar API. 
   * @date 27 July 2020
  */
 
 /**
-* Filename:             STAT-server/calendar/googleCalendar.controller.js
+* Filename:             STAT-server/tracker/calendar/googleCalendar.manager.js
 *
-* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
 * File Creation Date:   27 July 2020
 *
@@ -16,7 +16,7 @@
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:          This file handles some of the requests regarding Google Calendar API. 
+* Description:          This file handles the requests regarding Google Calendar API. 
 *
 */
 const fs = require('fs');
@@ -104,8 +104,7 @@ module.exports.getEvents = (req, response) => {
  module.exports.getCredentials = (req, response) => {
   fs.readFile(CREDENTIAL_PATH, (err, content) => {
     if (err) {
-      response.status(400).json({message: 'Error loading credentials. ' + err});
-      return;
+      return response.status(400).json({message: 'Error loading credentials. ' + err});
     }
     // Authorize a client with credentials, then call the Google Calendar API.
     const credentials = JSON.parse(content);
