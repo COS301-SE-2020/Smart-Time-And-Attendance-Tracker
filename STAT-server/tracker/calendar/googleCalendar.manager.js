@@ -32,10 +32,9 @@ const CREDENTIAL_PATH = './config/credentials.json';
 /**
  * Gets all the events from your calender
  * @param {HTTP-Request} req 
- * @param {HTTP-Response} res 
  * @param {Function} done Return to this function when done
  */
-module.exports.getEvents = (req, response, done) => {  
+module.exports.getEvents = (req, done) => {  
   fs.readFile(CREDENTIAL_PATH, (err, content) => {
 
     if (err) {
@@ -51,10 +50,10 @@ module.exports.getEvents = (req, response, done) => {
     );
 
     let credentials = {
-      access_token: req.query.accessToken,
-      token_type: req.query.tokenType, 
-      refresh_token: req.query.accessToken,
-      expiry_date: req.query.expiryDate
+      access_token: req.body.accessToken,
+      token_type: req.body.tokenType, 
+      refresh_token: req.body.accessToken,
+      expiry_date: req.body.expiryDate
     };
     auth.setCredentials(credentials);
 
@@ -95,12 +94,10 @@ module.exports.getEvents = (req, response, done) => {
 }
 
 /**
- * 
- * @param {HTTP-Request} req HTTP Request Body - authentication code
- * @param {HTTP-Response} response 
+ * This function gets the appropriate credentials for the Google API authentication
  * @param {Function} done Return to this function when done
  */
- module.exports.getCredentials = (req, response,done) => {
+ module.exports.getCredentials = (done) => {
   fs.readFile(CREDENTIAL_PATH, (err, content) => {
     if (err) {
       done(err);

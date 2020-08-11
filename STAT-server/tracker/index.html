@@ -13,13 +13,14 @@
         
       function checkAuth() {
         const http = new XMLHttpRequest();
-        var apiURL = "http://localhost:3000/api/tracker/getCalendarCredentials?"+ "calendar=google";
-        http.open("POST",apiURL , true);
+        var apiURL = "http://localhost:3000/api/calendar/getCredentials?"+ "calendar=google";
+        http.open("GET",apiURL , true);
         http.setRequestHeader('Content-type', 'application/json');
         http.onreadystatechange = function() {
           if(this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
             gapi.client.setApiKey(response.apiKey);
+            console.log("hello");
             gapi.auth.authorize({client_id: response.clientId, scope: response.scopes, immediate: true}, handleAuthResult);
           }
           else if(this.readyState == 4)
@@ -31,6 +32,7 @@
       function handleAuthResult(authResult) {
         var authorizeButton = document.getElementById('authorize-button');
         if (authResult && !authResult.error) { 
+          console.log(authResult);
           authorizeButton.style.visibility = 'hidden';
           makeApiCall(authResult);
         } else {
@@ -41,8 +43,8 @@
 
       function handleAuthClick(event) {
         const http = new XMLHttpRequest();
-        var apiURL = "http://localhost:3000/api/tracker/getCalendarCredentials";
-        http.open("POST",apiURL , true);
+        var apiURL = "http://localhost:3000/api/calendar/getCredentials?calendar=google";
+        http.open("GET",apiURL , true);
         http.setRequestHeader('Content-type', 'application/json');
         http.onreadystatechange = function() {
           if(this.readyState == 4 && this.status == 200) {
@@ -58,13 +60,10 @@
       
       function makeApiCall(authResult) {
         const http = new XMLHttpRequest();
-        var apiURL = "http://localhost:3000/api/tracker/getCalendarEvents?" 
-                    + "calendar=google"
-                    + "accessToken=" + authResult.access_token 
-                    + "&expiryDate=" + authResult.expires_at 
-                    + "&tokenType=" + authResult.token_type ;
+        var apiURL = "http://localhost:3000/api/calendar/getEvents" ;
+        var params =  {calendar :"google", accessToken: authResult.access_token ,expiryDate: authResult.expires_at,tokenType: authResult.token_type };
 
-        http.open("GET",apiURL , true);
+        http.open("POST",apiURL , true);
         http.setRequestHeader('Content-type', 'application/json');
         http.onreadystatechange = function() {
           if(this.readyState == 4 && this.status == 200) {
@@ -110,7 +109,7 @@
                 + '}';
 
 
-                addTimeEntry(entryObject);
+                //addTimeEntry(entryObject);
                // console.log(entryObject);
               
                 document.getElementById('events').appendChild(li);
@@ -122,7 +121,7 @@
           else if(this.readyState == 4)
             document.getElementById('error').innerHTML = response.message;
         }
-        http.send();  
+        http.send(JSON.stringify(params));  
       }
 
       

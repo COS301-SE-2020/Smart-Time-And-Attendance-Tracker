@@ -19,7 +19,7 @@
 * Description:          This file handles the requests regarding Calendar applications. 
 *
 */
-const googleCalendar = require('googleCalendar.manager');
+const googleCalendar = require('./googleCalendar.manager');
 
 /**
  * This function gets credentials for the appropriate calendar application
@@ -31,14 +31,14 @@ module.exports.getCredentials = (req, res) => {
         return res.status(400).send({message: 'No calendar application specified'});
     else
     {
-        if((req.query.calendar).toLower() == "google")
+        if((req.query.calendar).toLowerCase() == "google")
         {
             googleCalendar.getCredentials((err,val)=>
             {
                 if(err)
-                    return response.status(500).json({message: 'Internal server error: ' + err});
+                    return res.status(500).json({message: 'Internal server error: ' + err});
                 else 
-                    return response.status(200).json(val);
+                    return res.status(200).json(val);
             });
         }
         else
@@ -52,13 +52,14 @@ module.exports.getCredentials = (req, res) => {
  * @param {HTTP Response} res 
  */
 module.exports.getEvents = (req, res) => {  
-    if(!req.query.hasOwnProperty('calendar'))
+    console.log(req);
+    if(!req.body.hasOwnProperty('calendar'))
         return res.status(400).send({message: 'No calendar application specified'});
     else
     {
-        if((req.query.calendar).toLower() == "google")
+        if((req.body.calendar).toLowerCase() == "google")
         {
-            googleCalendar.getEvents((err,val)=>
+            googleCalendar.getEvents(req,(err,val)=>
             {
                 if(err)
                     return res.status(500).json({message: 'Internal server error: ' + err});
@@ -71,7 +72,7 @@ module.exports.getEvents = (req, res) => {
                         if(err)
                             return res.status(500).json({message: 'Internal server error: ' + err});
                         else
-                        return response.status(200).json({ events: val});
+                            return response.status(200).json({ events: val});
                     });
 
                 }
@@ -88,5 +89,6 @@ module.exports.getEvents = (req, res) => {
  */
 removeDuplicateEvents = (events) =>
 {
+    console.log(events);
 
 }

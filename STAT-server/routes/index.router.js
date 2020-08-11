@@ -42,7 +42,7 @@ router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 router.get("/user/isAuthenticated",jwtHelper.verifyJWTtoken, user.isAuthenticated);
 router.get("/user/getProjects",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getProjects);
-router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
+//router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
@@ -92,7 +92,7 @@ router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
 //calendar 
-router.get("/calender/getEvents", calendar.getEvents);
-router.post("/calendar/getCredentials", calendar.getCredentials);
+router.post("/calendar/getEvents", calendar.getEvents);
+router.get("/calendar/getCredentials", calendar.getCredentials);
 
 module.exports = router;

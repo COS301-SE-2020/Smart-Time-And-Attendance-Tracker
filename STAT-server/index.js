@@ -53,6 +53,7 @@ application.listen("3000"), ()=>{
     console.log("Server started");
 };  
 
+
 application.get('/calendar', (req, res) => {
-    res.sendFile(__dirname + '/calendar/index.html');
+    res.sendFile(__dirname + '/tracker/index.html');
   });
