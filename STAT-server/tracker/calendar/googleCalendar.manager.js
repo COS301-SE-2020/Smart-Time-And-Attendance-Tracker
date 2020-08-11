@@ -33,13 +33,13 @@ const CREDENTIAL_PATH = './config/credentials.json';
  * Gets all the events from your calender
  * @param {HTTP-Request} req 
  * @param {HTTP-Response} res 
+ * @param {Function} done Return to this function when done
  */
-module.exports.getEvents = (req, response) => {  
+module.exports.getEvents = (req, response, done) => {  
   fs.readFile(CREDENTIAL_PATH, (err, content) => {
 
     if (err) {
-      response.status(400).json({message: 'Error loading credentials. ' + err});
-      return;
+      done(err);
     }
     // Authorize a client with credentials, then call the Google Calendar API.
     const calendarCredentials = JSON.parse(content);
@@ -69,8 +69,7 @@ module.exports.getEvents = (req, response) => {
       orderBy: 'startTime',
     }, (err, res) => {
       if (err) {
-        response.status(400).json({message: 'The API returned an error: ' + err});
-        return;
+        done(err);
       }
       const events = res.data.items;
       if (events.length) {
@@ -80,17 +79,16 @@ module.exports.getEvents = (req, response) => {
           const start = event.start.dateTime || event.start.date;
           const end = event.end.dateTime || event.end.date;
           var EventItem= {
-              'Event': event.summary,
-              'StartTime': start,
-              'EndTime': end
+              'event': event.summary,
+              'startTime': start,
+              'endTime': end
           }
           EventList.push(EventItem);
         });
-        response.status(200).json({message: 'Upcoming events:' , Events: EventList});
+        done(null, EventList);
       } 
       else {
-        response.status(200).json({message: 'No upcoming events found.'});
-        return 
+        done(null, false);
       }
     });  
   });
@@ -100,14 +98,16 @@ module.exports.getEvents = (req, response) => {
  * 
  * @param {HTTP-Request} req HTTP Request Body - authentication code
  * @param {HTTP-Response} response 
+ * @param {Function} done Return to this function when done
  */
- module.exports.getCredentials = (req, response) => {
+ module.exports.getCredentials = (req, response,done) => {
   fs.readFile(CREDENTIAL_PATH, (err, content) => {
     if (err) {
-      return response.status(400).json({message: 'Error loading credentials. ' + err});
+      done(err);
     }
     // Authorize a client with credentials, then call the Google Calendar API.
     const credentials = JSON.parse(content);
-    response.status(200).json({clientId: credentials.web.client_id, apiKey: credentials.web.api_key, scopes: SCOPES });    
+    returnBody = {clientId: credentials.web.client_id, apiKey: credentials.web.api_key, scopes: SCOPES };
+    done(null, returnBody);    
   });
 }
