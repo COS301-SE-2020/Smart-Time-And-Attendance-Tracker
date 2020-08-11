@@ -29,7 +29,7 @@ export class MainComponent implements OnInit {
     });
 
 
-    this.active = 'today';
+    this.active = 'history';
   }
 
   // set active tab after component initialisation
