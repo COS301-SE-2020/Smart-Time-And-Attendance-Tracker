@@ -180,7 +180,6 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
       {
         stopStartBtn.name = "start";
         stopStartBtn.innerHTML = "Start";
-        setCookie("historyTime"+currentID, duration, 1);        
         chrome.extension.getBackgroundPage().History[currentID][0][2] = "";  
         chrome.extension.getBackgroundPage().History[currentID][0][3] = "true"; 
         chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
@@ -389,52 +388,3 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   http.send(text);
 
 }
-
-function getCookie(cname) {
-    //alert(cname.includes("historyTime"));
-    if(document.cookie.includes(cname) == false && cname.includes("historyTime"))
-      return "0:0:0";
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
-  }
-  
-  function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
-
-  function getMinutesFromSeconds(t)
-  {
-    var minutes = parseInt(t/60);
-    
-    return minutes;
-  }
-  function FormatDuration(d) {
-    if (d < 0) {
-      return "?";
-    }
-    // 2hr 1min 5sec  == 7265
-      var hours = parseInt(d/3600);
-      if(hours<10) hours="0"+ hours;
-
-      var minutes = d%3600;
-      minutes = parseInt(minutes/60);
-      if(minutes<10) minutes="0"+ minutes;
-
-      var seconds = d%3600;
-      seconds = seconds%60;
-      if(seconds<10) seconds="0"+ seconds;
-      return hours + ":" + minutes + ":" + seconds;
-  }

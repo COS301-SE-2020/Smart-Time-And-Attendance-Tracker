@@ -31,11 +31,14 @@ function Update(t, tabID, url) {
     setCookie("historyTime"+tabID, 0, 1);
     
     setTimeout (() => { 
-      if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
+      if(chrome.extension.getBackgroundPage().History[tabID])
       {
-        var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
-        AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
-        
+        if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
+        {
+          var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
+          AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
+          
+        }
       }
     }, 60000);
 
@@ -57,24 +60,25 @@ function HandleUpdate(tabID, changeInfo, tab) {
   }
   
   function HandleRemove(tabID, removeInfo) {    //working
-    var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
-    if(currentDuration>60)
+    if(chrome.extension.getBackgroundPage().History[tabID])
     {
-      UpdateTimeEntry(new Date(), tabID, currentDuration, true);
+      var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+      if(currentDuration>60)
+      {
+        UpdateTimeEntry(new Date(), tabID, currentDuration, true);
+      }
     }
-    setCookie("historyTime"+tabID, "", 1);
     delete chrome.extension.getBackgroundPage().History[tabID];
   }
   
   function HandleReplace(addedtabID, removedtabID) {
     console.log("replace");
     var t = new Date();
-    var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+    var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[addedtabID][0][0]); 
     if(currentDuration>60)
     {
-      UpdateTimeEntry(new Date(), tabID, currentDuration, true);
+      UpdateTimeEntry(new Date(), addedtabID, currentDuration, true);
     }
-    setCookie("historyTime"+removedtabID, "", 1);
     delete chrome.extension.getBackgroundPage().History[removedtabID];
     chrome.tabs.get(addedtabID, function(tab) {
       Update(t, addedtabID, tab.url);
@@ -128,17 +132,4 @@ function HandleUpdate(tabID, changeInfo, tab) {
       }
     }
   }
-  setInterval(syncDurationPeriodically, 60*1000*10); //calling function every minute 5 minutes
-
-
-  function cacheDurationPeriodically()
-  {
-    for(tabID in chrome.extension.getBackgroundPage().History) {
-      if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
-      {
-          var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
-          //setCookie("historyTime"+tabID, currentDuration, 1);
-      }
-    }
-  }
-  setInterval(cacheDurationPeriodically, 60 *1000); //calling function every minute (60 seconds)
+  setInterval(syncDurationPeriodically, 60*1000*10); //calling function every minute 10 minutes

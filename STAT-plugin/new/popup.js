@@ -131,11 +131,14 @@ stopStartBtn.onclick = function(){
             }
         }
         else{
-            setCookie("historyTime"+currentID, "0", 1);        
+            //setCookie("historyTime"+currentID, "0", 1);        
             setTimeout (() => {
-                if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false")
+                if(chrome.extension.getBackgroundPage().History[currentID])
                 {
-                AddTimeEntry(url, now , new Date(), currentID);
+                    if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false")
+                    {
+                        AddTimeEntry(url, now , new Date(), currentID);
+                    }
                 }
             }, 60000);
             console.log("Started tracking " + url);
