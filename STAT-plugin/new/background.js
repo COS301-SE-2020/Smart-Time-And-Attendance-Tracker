@@ -28,19 +28,23 @@ function Update(t, tabID, url) {
     }
     const now = new Date();
     chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false", ""]);  //[time, url, timeEntryID, stop =="false"/"true", project selected]
-    setCookie("historyTime"+tabID, 0, 1);
+    
     
     setTimeout (() => { 
       if(chrome.extension.getBackgroundPage().History[tabID])
       {
         if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
         {
-          var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
+          //alert( "make time entry");
+          var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);
           AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
           
         }
       }
-    }, 60000);
+      else{
+        //alert( "prob");
+      }
+    }, 60*1000);
 
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
@@ -62,7 +66,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
   function HandleRemove(tabID, removeInfo) {    //working
     if(chrome.extension.getBackgroundPage().History[tabID])
     {
-      var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+      var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);// + parseInt(getCookie("historyTime"+tabID)); 
       if(currentDuration>60)
       {
         UpdateTimeEntry(new Date(), tabID, currentDuration, true);
@@ -124,7 +128,7 @@ function HandleUpdate(tabID, changeInfo, tab) {
     for(tabID in chrome.extension.getBackgroundPage().History) {
       if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
       {
-        var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID)); 
+        var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);// + parseInt(getCookie("historyTime"+tabID)); 
         if(currentDuration>60)
         {
           UpdateTimeEntry(new Date(), tabID, currentDuration, false);

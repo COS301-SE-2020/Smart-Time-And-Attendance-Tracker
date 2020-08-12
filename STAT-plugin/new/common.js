@@ -3,23 +3,30 @@ var user = new User();
 
 var userLogin = document.getElementById("login");
 document.getElementById("select_task_form").style.display="none";
-var userName="";
-    ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
-  if (localStorage.hasOwnProperty('name') && localStorage.hasOwnProperty('token')) 
-  {
-      getProjects();
 
-      //cookie exists - hide form
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("popup").style.display = "block";
-      document.getElementById("userName").innerHTML = localStorage.getItem("name");
-      document.getElementById("userSurname").innerHTML = localStorage.getItem("surname");
-      document.getElementById("errorMessage").innerHTML= "";
-  }
-  else
-  {  ///hide everything except the login form
-      document.getElementById("errorMessage").innerHTML= "Login to start tracking";
-      document.getElementById("popup").style.display = "none";
+processDisplay();
+    ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
+  function processDisplay()
+  {
+    if(!user.getInstance().allProject)
+        getProjects();
+      else
+        processProjects(user.getInstance().allProject, false);
+    if (localStorage.hasOwnProperty('name') && localStorage.hasOwnProperty('token')) 
+    {
+      
+        //cookie exists - hide form
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("userName").innerHTML = localStorage.getItem("name");
+        document.getElementById("userSurname").innerHTML = localStorage.getItem("surname");
+        document.getElementById("errorMessage").innerHTML= "";
+    }
+    else
+    {  ///hide everything except the login form
+        document.getElementById("errorMessage").innerHTML= "Login to start tracking";
+        document.getElementById("popup").style.display = "none";
+    }
   }
   userLogin.onclick = function() {
     var http = new XMLHttpRequest();
@@ -102,6 +109,7 @@ var stopStartBtn = document.getElementById("start_stop");
 
 function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
   var today = new Date();
+  //alert(today);
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0
   var yyyy = today.getFullYear();
@@ -125,6 +133,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
       var obj = JSON.parse(http.responseText);
       chrome.extension.getBackgroundPage().History[currentID][0][2] = obj.timeEntryID;
       localStorage.setItem('currentlyTracking', obj.timeEntryID);
+      //alert(obj.timeEntryID);
 
       //updating tasks
       if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "" || localStorage.hasOwnProperty('currentlyTrackingDetails'))
@@ -143,13 +152,19 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
         }
       }
     }
+    else if(http.readyState == 4 && http.status == 403) //login again => token expired
+    {
+      alert("token expired");
+      localStorage.removeItem('token');
+      processDisplay();
+    }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
       //maybe can be change to retry only when there is an internal server error
 
       setTimeout (() => { 
         if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false" && localStorage.hasOwnProperty('token'))
         {
-          var duration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]) + parseInt(getCookie("historyTime"+currentID));
+          var duration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]);
           AddTimeEntry(url, startTime , new Date(), currentID, duration);
           
         }
@@ -160,6 +175,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
 }
 
 function UpdateTimeEntry(endTime,currentID, duration, stop) {
+  alert("currentID  " + currentID)
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
   var text = '{'
@@ -185,8 +201,14 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
         chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
       }
     }
+    else if(http.readyState == 4 && http.status == 403) //login again => token expired
+    {
+      alert("token expired");
+      localStorage.removeItem('token');
+      processDisplay();
+    }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-      //alert(http.responseText);              
+      alert(http.responseText);              
     }
   }
   http.send(text);
@@ -212,6 +234,12 @@ function getProjects() {
             processProjects(http.responseText, false);
             
         }
+        else if(http.readyState == 4 && http.status == 403) //login again => token expired
+        {
+          alert("token expired");
+          localStorage.removeItem('token');
+          processDisplay();
+        }
         else if(http.readyState == 4 && http.status != 200) {  //error in getting projects
             console.log(http.responseText);
         }
@@ -226,10 +254,12 @@ function getProjects() {
 
 function processProjects(responseText, display)
 {
+  alert("1");
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
     var currentID = tabs[0].id;
     if(display == true && user.getInstance().allProject)
     {
+      alert("2.1");
       while(projectsDropdown.hasChildNodes())
       {
         projectsDropdown.removeChild(projectsDropdown.firstChild);
@@ -273,18 +303,20 @@ function processProjects(responseText, display)
     }
     else if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "")
     {
+      alert("2.2");
         var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
-        document.getElementById("select_task_form").style.display="none";
-        document.getElementById("selected_task").style.display="block";
-        document.getElementById("reselect_task").style.display="block";
-
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
         if(obj.taskName != "")
           document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
+
+          document.getElementById("select_task_form").style.display="none";
+          document.getElementById("selected_task").style.display="block";
+          document.getElementById("reselect_task").style.display="block";
         
     }
     else if(localStorage.getItem('currentlyTrackingDetails'))
     {
+      alert("2.3");
       chrome.extension.getBackgroundPage().History[currentID][0][4] = localStorage.getItem('currentlyTrackingDetails');
       var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
       document.getElementById("select_task_form").style.display="none";
@@ -299,6 +331,7 @@ function processProjects(responseText, display)
     }
     else
     {
+      alert("2.4");
       const obj = JSON.parse(responseText);
       for( p in obj.projects)
       {
@@ -380,6 +413,12 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
       document.getElementById("selected_task").style.display="block";
       document.getElementById("reselect_task").style.display="block";
     }
+    else if(http.readyState == 4 && http.status == 403) //login again => token expired
+    {
+      alert("token expired");
+      localStorage.removeItem('token');
+      processDisplay();
+    }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
       const obj = JSON.parse(http.responseText);
       document.getElementById("task_error").innerHTML = obj.message;      
@@ -388,3 +427,28 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   http.send(text);
 
 }
+
+  function getMinutesFromSeconds(t)
+  {
+    var minutes = parseInt(t/60);
+    
+    return minutes;
+  }
+
+  function FormatDuration(d) {
+    if (d < 0) {
+      return "?";
+    }
+    // 2hr 1min 5sec  == 7265
+      var hours = parseInt(d/3600);
+      if(hours<10) hours="0"+ hours;
+
+      var minutes = d%3600;
+      minutes = parseInt(minutes/60);
+      if(minutes<10) minutes="0"+ minutes;
+
+      var seconds = d%3600;
+      seconds = seconds%60;
+      if(seconds<10) seconds="0"+ seconds;
+      return hours + ":" + minutes + ":" + seconds;
+  }

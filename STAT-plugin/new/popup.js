@@ -14,7 +14,7 @@ function showTime() {
 
         //if(window.localStorage.hasOwnProperty('token'))
         //{
-            var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]) + parseInt(getCookie("historyTime"+currentID));
+            var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]);// + parseInt(getCookie("historyTime"+currentID));
             desc.innerHTML = FormatDuration(displayDuration).slice(0,5) + "\n";            
         //}
         //else
@@ -117,7 +117,7 @@ stopStartBtn.onclick = function(){
         if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
         {
             console.log("Stopeed tracking " + url);
-            var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]) + parseInt(getCookie("historyTime"+currentID)); 
+            var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]);
             if(currentDuration>60)
             {
                 UpdateTimeEntry(now, currentID, currentDuration, true);
@@ -126,8 +126,13 @@ stopStartBtn.onclick = function(){
             }
             else
             {
-                document.getElementById("errorMessage").style.display="block";
-                document.getElementById("errorMessage").innerHTML= "Time < 60 seconds";
+                //document.getElementById("errorMessage").style.display="block";
+                //document.getElementById("errorMessage").innerHTML= "Time < 60 seconds";
+                stopStartBtn.name = "start";
+                stopStartBtn.innerHTML = "Start";
+                chrome.extension.getBackgroundPage().History[currentID][0][2] = "";  
+                chrome.extension.getBackgroundPage().History[currentID][0][3] = "true"; 
+                chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
             }
         }
         else{
