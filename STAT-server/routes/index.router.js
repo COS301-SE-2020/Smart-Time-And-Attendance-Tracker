@@ -64,7 +64,7 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 router.get("/userTimeEntry/getUserEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getUserEntries);
 router.get("/userTimeEntry/getAllUsersEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getAllUsersEntries);
 router.get("/userTimeEntry/getAllUsersEntriesProject", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getAllUsersEntriesProject);
-
+router.post("/userTimeEntry/addTimeEntryImports", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.addTimeEntryImports);
 
 
 // team  
