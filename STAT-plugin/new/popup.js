@@ -123,16 +123,16 @@ stopStartBtn.onclick = function(){
                 UpdateTimeEntry(now, currentID, currentDuration, true);
                 //startTimer.style.display = "block";
                 //stopTimer.style.display = "none";
+                hideProjects();
             }
             else
             {
-                //document.getElementById("errorMessage").style.display="block";
-                //document.getElementById("errorMessage").innerHTML= "Time < 60 seconds";
                 stopStartBtn.name = "start";
                 stopStartBtn.innerHTML = "Start";
                 chrome.extension.getBackgroundPage().History[currentID][0][2] = "";  
                 chrome.extension.getBackgroundPage().History[currentID][0][3] = "true"; 
                 chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
+                hideProjects();
             }
         }
         else{
@@ -153,6 +153,7 @@ stopStartBtn.onclick = function(){
             chrome.extension.getBackgroundPage().History[currentID][0][3] = "false";
             stopStartBtn.name = "stop";
             stopStartBtn.innerHTML = "Stop";
+            getProjects();
         }
     });   
     
@@ -176,6 +177,7 @@ function displayButton() {
         {
             stopStartBtn.name = "start";
             stopStartBtn.innerHTML = "Start";
+            hideProjects();
             //startTimer.style.display = "block";
             //stopTimer.style.display = "none";
         }
@@ -184,3 +186,8 @@ function displayButton() {
 }
 displayButton();
 
+function hideProjects() 
+{
+    document.getElementById("select_task_form").style.display="none";
+    document.getElementById("reselect_task").style.display="none";
+}

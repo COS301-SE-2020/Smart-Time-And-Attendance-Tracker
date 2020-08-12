@@ -8,13 +8,16 @@ processDisplay();
     ///////check if name and token exist - if not keep showing form -if they do, hide form and move on
   function processDisplay()
   {
-    if(!user.getInstance().allProject)
-        getProjects();
-      else
-        processProjects(user.getInstance().allProject, false);
+    if(!user.getInstance().allProject && localStorage.hasOwnProperty('token'))
+      getProjects();
+    else
+      processProjects(user.getInstance().allProject, false);
     if (localStorage.hasOwnProperty('name') && localStorage.hasOwnProperty('token')) 
     {
-      
+        if(!user.getInstance().allProject && localStorage.hasOwnProperty('token'))
+          getProjects();
+        else
+          processProjects(user.getInstance().allProject, false);
         //cookie exists - hide form
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("popup").style.display = "block";
@@ -236,7 +239,7 @@ function getProjects() {
         }
         else if(http.readyState == 4 && http.status == 403) //login again => token expired
         {
-          alert("token expired");
+          alert("token -- expired");
           localStorage.removeItem('token');
           processDisplay();
         }
@@ -254,12 +257,12 @@ function getProjects() {
 
 function processProjects(responseText, display)
 {
-  alert("1");
+  //alert("1");
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
     var currentID = tabs[0].id;
     if(display == true && user.getInstance().allProject)
     {
-      alert("2.1");
+      //alert("2.1");
       while(projectsDropdown.hasChildNodes())
       {
         projectsDropdown.removeChild(projectsDropdown.firstChild);
@@ -303,7 +306,7 @@ function processProjects(responseText, display)
     }
     else if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "")
     {
-      alert("2.2");
+      //alert("2.2");
         var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
         if(obj.taskName != "")
@@ -316,7 +319,7 @@ function processProjects(responseText, display)
     }
     else if(localStorage.getItem('currentlyTrackingDetails'))
     {
-      alert("2.3");
+      //alert("2.3");
       chrome.extension.getBackgroundPage().History[currentID][0][4] = localStorage.getItem('currentlyTrackingDetails');
       var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
       document.getElementById("select_task_form").style.display="none";
@@ -324,14 +327,14 @@ function processProjects(responseText, display)
       document.getElementById("reselect_task").style.display="block";
 
       document.getElementById("project").innerHTML = "Project: " + obj.projectName;
-      if(obj.taskName != "")
+      if(obj.taskName != "" && obj.taskName  != "Un-specified")
         document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
       else
         document.getElementById("task").innerHTML = "";
     }
     else
     {
-      alert("2.4");
+      //alert("2.4");
       const obj = JSON.parse(responseText);
       for( p in obj.projects)
       {
