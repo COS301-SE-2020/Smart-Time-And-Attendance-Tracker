@@ -309,7 +309,7 @@ function processProjects(responseText, display)
       //alert("2.2");
         var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
-        if(obj.taskName != "")
+        if(obj.taskName != "" && TaskName != "Un-specified")
           document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
 
           document.getElementById("select_task_form").style.display="none";

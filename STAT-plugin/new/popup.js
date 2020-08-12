@@ -93,7 +93,7 @@ SelectTask.onclick = function() {
                 document.getElementById("reselect_task").style.display="block";
           
                 document.getElementById("project").innerHTML = "Project: " + ProjectName;
-                if(tasksDropdown.value != "")
+                if(TaskName != "Un-specified")
                   document.getElementById("task").innerHTML = "Task: "+ TaskName;
             }
         }
