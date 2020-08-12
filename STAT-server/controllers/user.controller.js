@@ -91,6 +91,7 @@ module.exports.register = (req, res, next) => {
                     user.Password = req.body.password;
                     user.Role = [5]; 
                     user.Authenticate = false; 
+                    user.Removed = false; 
                     user.ProfilePicture = "none";
                     user.save((err, doc) => {
                         if(!err)
@@ -222,33 +223,69 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
  * @return {Http Response} - Array with all authenticated users objects
  */
 module.exports.getAllUsers = (req, res, next) => {
-    UserModel.find({  Authenticate : true},(err, result) => {
-        if (err) 
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
-            return res.status(404).json({ message: 'No users found' }); 
-        else
-        {
-            users=[];
-            for(var a=0; a<result.length; a++)
-            {
-                RoleHelper.getRoles(result[a],(err,val,user)=>
-                {
-                    if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+    if(!req.query.hasOwnProperty('removed'))
+        req.query.removed = false;
 
-                    else
-                        users.push({'ID' : user._id, 'email' : user.Email, 'name' : user.Name, 'surname' : user.Surname, 'profilePicture': user.ProfilePicture, 'role':val});
-                    
-                    if(users.length == result.length)
-                            return res.status(200).json({users});
-                    
-            
-                });
-             
+    if(req.query.removed)
+    {
+        UserModel.find({  Authenticate : true},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            else if (!result)
+                return res.status(404).json({ message: 'No users found' }); 
+            else
+            {
+                users=[];
+                for(var a=0; a<result.length; a++)
+                {
+                    RoleHelper.getRoles(result[a],(err,val,user)=>
+                    {
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+
+                        else
+                            users.push({'ID' : user._id, 'email' : user.Email, 'name' : user.Name, 'surname' : user.Surname, 'profilePicture': user.ProfilePicture, 'role':val, removed :user.Removed});
+                        
+                        if(users.length == result.length)
+                                return res.status(200).json({users});
+                        
+                
+                    });
+                
+                }
             }
-        }
-    });
+        });
+    }
+    else
+    {
+        UserModel.find({  Authenticate : true, Removed : false},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            else if (!result)
+                return res.status(404).json({ message: 'No users found' }); 
+            else
+            {
+                users=[];
+                for(var a=0; a<result.length; a++)
+                {
+                    RoleHelper.getRoles(result[a],(err,val,user)=>
+                    {
+                        if(err)
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
+
+                        else
+                            users.push({'ID' : user._id, 'email' : user.Email, 'name' : user.Name, 'surname' : user.Surname, 'profilePicture': user.ProfilePicture, 'role':val, 'removed': false});
+                        
+                        if(users.length == result.length)
+                                return res.status(200).json({users});
+                        
+                
+                    });
+                
+                }
+            }
+        });
+    }
 }
 
 /**
@@ -339,7 +376,8 @@ module.exports.remove = (req, res, next) => {
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                         else
                         {
-                            UserModel.deleteOne({ _id: req.body.userID},(err, result) => {
+                            UserModel.updateOne({ _id: req.body.userID},{Authenticate: false, Removed : true, DateOfRemoval :new Date().getTime()},
+                                (err, result) => {
                                 if (err) 
                                     return res.status(500).send({message: 'Internal Server Error: ' + err});
                                 else
