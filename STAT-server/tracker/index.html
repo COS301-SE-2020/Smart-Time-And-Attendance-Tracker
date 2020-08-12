@@ -20,7 +20,6 @@
           if(this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
             gapi.client.setApiKey(response.apiKey);
-            console.log("hello");
             gapi.auth.authorize({client_id: response.clientId, scope: response.scopes, immediate: true}, handleAuthResult);
           }
           else if(this.readyState == 4)
@@ -32,7 +31,6 @@
       function handleAuthResult(authResult) {
         var authorizeButton = document.getElementById('authorize-button');
         if (authResult && !authResult.error) { 
-          console.log(authResult);
           authorizeButton.style.visibility = 'hidden';
           makeApiCall(authResult);
         } else {

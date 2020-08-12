@@ -96,7 +96,7 @@ module.exports.createTeam = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else
             return res.status(200).send({teamID :doc._id,  message: 'Team created'});
-    })
+    });
 }
 
 /**

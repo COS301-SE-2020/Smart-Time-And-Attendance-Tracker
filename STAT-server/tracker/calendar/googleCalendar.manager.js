@@ -60,10 +60,13 @@ module.exports.getEvents = (req, done) => {
     //Get events on calendar
     var date=new Date();
     //date.setDate(date.getDate() - 7)
+    console.log( date.toISOString());
+    console.log((new Date( date.setDate(date.getDate() - 7) )).toISOString());
     const calendar = google.calendar({version: 'v3', auth});
     calendar.events.list({
       calendarId: 'primary',
       timeMin: (new Date( date.setDate(date.getDate() - 7) )).toISOString(),
+      //timeMax:date.toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
     }, (err, res) => {
@@ -72,6 +75,7 @@ module.exports.getEvents = (req, done) => {
       }
       const events = res.data.items;
       if (events.length) {
+        console.log(events);
         var EventList = [];
         
         events.map((event, i) => {
@@ -80,7 +84,8 @@ module.exports.getEvents = (req, done) => {
           var EventItem= {
               'event': event.summary,
               'startTime': start,
-              'endTime': end
+              'endTime': end,
+              'id': event.id
           }
           EventList.push(EventItem);
         });

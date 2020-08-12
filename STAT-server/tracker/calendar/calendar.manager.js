@@ -20,7 +20,8 @@
 *
 */
 const googleCalendar = require('./googleCalendar.manager');
-
+const mongoose = require("mongoose");
+const calendarModel = mongoose.model("calendarEvents");
 /**
  * This function gets credentials for the appropriate calendar application
  * @param {HTTP Request} req Request - ID of user
@@ -52,7 +53,6 @@ module.exports.getCredentials = (req, res) => {
  * @param {HTTP Response} res 
  */
 module.exports.getEvents = (req, res) => {  
-    console.log(req);
     if(!req.body.hasOwnProperty('calendar'))
         return res.status(400).send({message: 'No calendar application specified'});
     else
@@ -89,6 +89,27 @@ module.exports.getEvents = (req, res) => {
  */
 removeDuplicateEvents = (events) =>
 {
-    console.log(events);
+    for(a in events)
+    {
+        calendarModel.findOne({ID :a.id}, {StartTime: 1},(err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            else if (!result)
+            {
+                var entry = new calendarModel();
+                entry.ID= a.id;
+                entry.Endtime = a.endTime;
+
+                entry.save((err, doc) => {
+                    if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                });
+            }
+            else
+            {
+                
+            }
+        });
+    }
 
 }
