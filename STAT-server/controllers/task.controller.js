@@ -33,7 +33,7 @@ module.exports.startTask = (req, res) => {
     TaskModel.updateOne({ _id: req.body.taskID},{Status: 'In Progress'},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
-        else if (!result)
+        else if (result.n ==0)
            return res.status(404).send({message: 'Task not found'});
         else
             return res.status(200).json({message: 'Task status updated to "In Progress"'});
@@ -53,7 +53,7 @@ module.exports.completeTask = (req, res) => {
     TaskModel.updateOne({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
-        else if (!result)
+        else if (result.n ==0)
             return res.status(404).send({message: 'Task not found'});
         else
             return res.status(200).json({message: 'Task status updated to "Completed"'});
@@ -141,7 +141,7 @@ module.exports.deleteTask= (req, res) => {
 TaskModel.deleteOne({_id: req.query.taskID},(err,val)=>{
     if(err)
         return res.status(500).send({message: 'Internal Server Error: ' + err});
-    else if (!val) 
+    else if (val.n==0) 
         return res.status(404).json({ message: 'Task not found' });
     else 
         return res.status(200).json({ message: 'Task successfully deleted '});

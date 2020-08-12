@@ -121,7 +121,7 @@ module.exports.changePass = (req, res, next) => {
     UserModel.updateOne({ _id: req.ID},{Password: req.body.pass},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n ==0)
             return res.status(404).json({ message: 'User not found' }); 
         else
             return res.status(200).json({message: 'Password changed'});
@@ -301,7 +301,7 @@ module.exports.authenticate = (req, res, next) => {
     UserModel.updateOne({ _id: req.body.userID},{Authenticate: true},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n ==0)
             return res.status(404).json({ message: 'User not found' }); 
         else
             return res.status(200).json({message: 'User authenticated'});
@@ -320,7 +320,7 @@ module.exports.removeProject = (req, res) => {
     UserModel.updateOne({_id : (req.body.userID)},{ $pull: {Projects : req.body.projectID } }, function(err, result) {                
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n ==0)
             return res.status(404).json({ message: 'User not found' }); 
         else
             return res.status(200).json({message: 'User successfully removed from project'});
@@ -338,7 +338,7 @@ module.exports.addProject = (req, res, next) => {
     UserModel.updateOne({_id : req.body.userID},{ $addToSet: { Projects: req.body.projectID} }, (err, result) =>{   
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n ==0)
             return res.status(404).json({ message: 'User not found' }); 
         else;
             return res.status(200).json({ projectID: req.body.projectID, message: 'User successfully added to project' });
