@@ -39,7 +39,7 @@ module.exports.uncomplete = (req, res) => {
     ProjectModel.updateOne({ _id: req.body.projectID},{Completed: false},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).json({ message: 'Project not found' }); 
         else
             return res.status(200).json({message: 'Project marked as uncompleted'});
@@ -136,7 +136,7 @@ module.exports.addTask = (req, res) => {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
 
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: "Project not found"});
 
         else 
@@ -211,7 +211,7 @@ module.exports.deleteTask = (req, res, next) => {
     ProjectModel.updateOne({_id: req.query.projectID},{ $pull: { 'Tasks':   req.query.taskID}},(err,val)=>{
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!val) 
+        else if (val.n == 0) 
             return res.status(404).json({ message: 'Project not found' });
         else 
         {
@@ -231,7 +231,7 @@ module.exports.complete = (req, res) => {
     ProjectModel.updateOne({_id : req.body.projectID}, {Completed: true},(err, result)=> {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
              return res.status(404).send({message: "Project not found"});
         else 
             return res.status(200).json({ projectID: req.body.ProjectID, message: 'Project marked as completed' });
@@ -254,7 +254,7 @@ module.exports.addTeam = (req, res) => {
     ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Project not found'});
         else
         {
@@ -315,7 +315,7 @@ module.exports.removeTeam = (req, res) => {
     ProjectModel.findOne({_id : req.body.projectID}, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Project not found'});
         else
         {
@@ -366,7 +366,7 @@ module.exports.addMember = (req, res, next) => {
     ProjectModel.updateOne({_id : req.body.projectID },{ $addToSet: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Project not found'});
         else {
             next();
@@ -390,7 +390,7 @@ module.exports.removeMember = (req, res, next) => {
     ProjectModel.updateOne({_id : req.body.projectID },{ $pull: { TeamMembers: { _id: req.body.userID} } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Project not found'});
         else {
             next();
@@ -418,7 +418,7 @@ module.exports.addRole = (req, res) => {
     ProjectModel.updateOne({_id : (req.body.projectID)},{ $pull: { TeamMembers: { _id: req.body.userID} } },function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Project not found'});
         else {
             ProjectModel.updateOne({_id : (req.body.projectID)},{ $push: { TeamMembers: { _id: req.body.userID,  Role: req.body.userRole} } },function(err, result) {
