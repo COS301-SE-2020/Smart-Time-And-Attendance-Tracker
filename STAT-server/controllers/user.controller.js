@@ -228,7 +228,7 @@ module.exports.getAllUsers = (req, res, next) => {
 
     if(req.query.removed)
     {
-        UserModel.find({  Authenticate : true},(err, result) => {
+        UserModel.find({$or: [{Authenticate : true},{Removed: true}]},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + err});
             else if (!result)
@@ -258,7 +258,7 @@ module.exports.getAllUsers = (req, res, next) => {
     }
     else
     {
-        UserModel.find({  Authenticate : true, Removed : false},(err, result) => {
+        UserModel.find({ Authenticate : true},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + err});
             else if (!result)
