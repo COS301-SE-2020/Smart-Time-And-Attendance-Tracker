@@ -237,14 +237,14 @@ module.exports.deleteTimeEntry = (req, res) => {
     UserTimeEntryModel.updateOne({  UserID : req.ID},{ $pull: { 'TimeEntries':  req.query.timeEntryID}},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).json({ message: 'No time entries for the given user were found' }); 
         else
         {        
             TimeEntryModel.deleteOne({_id : req.query.timeEntryID},(errs,vals) =>{
                 if(errs)
                     return res.status(500).send({message: 'Internal Server Error: ' + errs});
-                else if (!vals) 
+                else if (vals.n == 0) 
                     return res.status(404).json({ message: 'Time entry not found' });
                 else 
                     return res.status(200).json({ message: 'Time entry deleted' });

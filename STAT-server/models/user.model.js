@@ -61,6 +61,12 @@ var UserSchema = new mongoose.Schema({
     Authenticate:{
         type: Boolean,  
         required : "Authentication required."
+    },
+    Removed:{
+        type: Boolean
+    },
+    DateOfRemoval:{
+        type: Number
     }
 });
 
