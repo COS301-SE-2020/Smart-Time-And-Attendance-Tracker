@@ -61,6 +61,10 @@ router.delete("/userTimeEntry/deleteTimeEntry",  jwtHelper.verifyJWTtoken, userH
 router.post("/userTimeEntry/addTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.addTimeEntry);
 router.post("/userTimeEntry/updateTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.updateTimeEntry);
 router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getDailyTimeEntries);
+router.get("/userTimeEntry/getUserEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getUserEntries);
+router.get("/userTimeEntry/getAllUsersEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getAllUsersEntries);
+router.get("/userTimeEntry/getAllUsersEntriesProject", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getAllUsersEntriesProject);
+router.post("/userTimeEntry/addTimeEntryImports", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.addTimeEntryImports);
 
 
 // team  
