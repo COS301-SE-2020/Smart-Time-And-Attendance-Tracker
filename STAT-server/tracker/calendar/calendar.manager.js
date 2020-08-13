@@ -67,13 +67,14 @@ module.exports.getEvents = (req, res) => {
                     return res.status(404).json({message: 'No events found'});
                 else
                 {
-                    removeDuplicateEvents(val, (err,val)=>
+                    console.log(val);
+                   /* removeDuplicateEvents(val, (err,val)=>
                     {
                         if(err)
                             return res.status(500).json({message: 'Internal server error: ' + err});
                         else
                             return response.status(200).json({ events: val});
-                    });
+                    });*/
 
                 }
             });

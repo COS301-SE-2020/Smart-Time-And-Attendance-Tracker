@@ -66,7 +66,7 @@ module.exports.getEvents = (req, done) => {
     calendar.events.list({
       calendarId: 'primary',
       timeMin: (new Date( date.setDate(date.getDate() - 7) )).toISOString(),
-      //timeMax:date.toISOString(),
+      timeMax:date.toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
     }, (err, res) => {
@@ -75,7 +75,6 @@ module.exports.getEvents = (req, done) => {
       }
       const events = res.data.items;
       if (events.length) {
-        console.log(events);
         var EventList = [];
         
         events.map((event, i) => {
