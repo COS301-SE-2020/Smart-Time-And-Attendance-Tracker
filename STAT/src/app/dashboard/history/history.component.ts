@@ -7,11 +7,17 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./history.component.sass']
 })
 export class HistoryComponent implements OnInit {
-  displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value', 'member'];
+  displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+
+  roles : string;
 
   constructor() { }
   ngOnInit(): void {
+    this.roles = localStorage.getItem('roles');
+
+    if (this.roles == "Data Analyst")
+      this.displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value', 'member'];
   }
 }
 

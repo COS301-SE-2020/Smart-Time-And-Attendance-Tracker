@@ -2,34 +2,16 @@
   <section>
     <h2>History</h2>
     <div class="row p-0 mb-4">
-      <form class="col-10 header-row" action="index.html" method="post">
+      <form class="col-12 header-row" action="index.html" method="post">
         <mat-form-field appearance="standard" class="col-6">
-          <mat-label>Search</mat-label>
+          <mat-label *ngIf="roles.includes('Data Analyst')">Search</mat-label>
+          <mat-label  *ngIf="!roles.includes('Data Analyst')">Search projects</mat-label>
           <input matInput type="search" type="text">
         </mat-form-field>
-        <button mat-mini-fab id="sort-menu" class="mx-1"
-                matTooltip="Sort"
-                matTooltipClass="action-tooltip"
-                matTooltipPosition="right"
-                [matMenuTriggerFor]="sortMenu">
-          <mat-icon>sort</mat-icon>
-        </button>
-        <mat-menu #sortMenu="matMenu">
-          <button mat-menu-item>Oldest first</button>
-          <button mat-menu-item>Newest first</button>
-        </mat-menu>
-        <button mat-mini-fab id="export-menu" class="mx-1"
-                matTooltip="Export"
-                matTooltipClass="action-tooltip"
-                matTooltipPosition="right"
-                [matMenuTriggerFor]="exportMenu">
-          <mat-icon>import_export</mat-icon>
-        </button>
-        <mat-menu #exportMenu="matMenu">
-          <button mat-menu-item>JSON</button>
-          <button mat-menu-item>PDF</button>
-          <button mat-menu-item>Excel</button>
-        </mat-menu>
+        <mat-radio-group *ngIf="roles.includes('Data Analyst')" aria-label="Select search type">
+          <mat-radio-button  checked value="searchProjects" class="mx-2">Projects</mat-radio-button>
+          <mat-radio-button value="searchUsers" class="mx-2">Users</mat-radio-button>
+        </mat-radio-group>
         <br>
         <mat-form-field appearance="standard" class="col-3">
           <mat-label>From:</mat-label>
@@ -39,21 +21,20 @@
           <mat-label>To:</mat-label>
           <input matInput type="date">
         </mat-form-field>
-      </form>
+        <mat-form-field class="col-3">
+          <mat-select multiple appearance="standard" placeholder="Show fields" name="item">
+            <mat-option checked>Start time</mat-option>
+            <mat-option checked>End time</mat-option>
+            <mat-option checked>Active time</mat-option>
+            <mat-option checked>Description</mat-option>
+            <mat-option checked>Project</mat-option>
+            <mat-option checked>Task</mat-option>
+            <mat-option checked>Value</mat-option>
+            <mat-option *ngIf="roles.includes('Data Analyst')" checked>Member</mat-option>
+          </mat-select>
+        </mat-form-field>      </form>
       <div class="col-10 header-row">
         <!--<mat-form-field class="col-3">
-          <mat-select multiple appearance="standard" placeholder="Show fields" name="item">
-            <mat-option>Start time</mat-option>
-            <mat-option>End time</mat-option>
-            <mat-option>Active time</mat-option>
-            <mat-option>Description</mat-option>
-            <mat-option>Project</mat-option>
-            <mat-option>Task</mat-option>
-            <mat-option>Value</mat-option>
-            <mat-option>Member</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-3">
           <mat-select appearance="standard" placeholder="Active time" name="item">
             <mat-option>Less than 1h</mat-option>
             <mat-option>Less than 2h</mat-option>
@@ -72,6 +53,31 @@
           </mat-select>
         </mat-form-field>-->
       </div>
+    </div>
+    <div class="col-12 justify-content-end">
+      <button mat-mini-fab id="sort-menu" class="mx-1"
+              matTooltip="Sort"
+              matTooltipClass="action-tooltip"
+              matTooltipPosition="right"
+              [matMenuTriggerFor]="sortMenu">
+        <mat-icon>sort</mat-icon>
+      </button>
+      <mat-menu #sortMenu="matMenu">
+        <button mat-menu-item>Oldest first</button>
+        <button mat-menu-item>Newest first</button>
+      </mat-menu>
+      <button mat-mini-fab id="export-menu" class="mx-1"
+              matTooltip="Export"
+              matTooltipClass="action-tooltip"
+              matTooltipPosition="right"
+              [matMenuTriggerFor]="exportMenu">
+        <mat-icon>import_export</mat-icon>
+      </button>
+      <mat-menu #exportMenu="matMenu">
+        <button mat-menu-item>JSON</button>
+        <button mat-menu-item>PDF</button>
+        <button mat-menu-item>Excel</button>
+      </mat-menu>
     </div>
     <div id="history" class="scroll">
       <div>
