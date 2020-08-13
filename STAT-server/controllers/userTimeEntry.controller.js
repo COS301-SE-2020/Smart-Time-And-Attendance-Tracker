@@ -132,7 +132,7 @@ module.exports.addTimeEntry = (req, res) => {
 module.exports.importTimeEntry = (req, res) => { 
     if(!req.body.hasOwnProperty('userID'))
         return res.status(400).send({message: 'No user ID given'});
-         
+
     var timeEntry = new TimeEntryModel();
     timeEntry.Date = req.body.date;
     timeEntry.StartTime = req.body.startTime;
@@ -437,8 +437,7 @@ module.exports.getUserTimeEntries = (req, res) => {
         }
         else{
             var timeEntries=[];
-            var times = result.TimeEntries.length
-            //return res.status(200).json({ message: 'talalala  ->  '+result.TimeEntries });
+            var times = result.TimeEntries.length;
            
             if(times == 0){
                 return res.status(404).json({ message: 'No time entries for the given user were found' });
@@ -509,14 +508,13 @@ module.exports.getAllUsersTimeEntries = (req, res) => {
                 var name =myDoc.name;
                 var surname=myDoc.surname;
                 var email=myDoc.email;
-                var role =myDoc.role;
 
                 UserTimeEntryModel.findOne({  UserID :userid},(err, result) => {
                     if (err) {
                         return res.status(500).send({message: 'Internal Server Error: ' + err});
                     }
                     else if (!result){ ///no time entries for this user
-                        finalobject.push({ name:name, surname:surname, email:email, role: role, timeEntries:[] });
+                        finalobject.push({ name:name, surname:surname, email:email, timeEntries:[] });
     
                         if (count4 == allcounts && finalobject.length == allcounts)  {
                             return res.status(200).json({results: finalobject}); 
@@ -525,46 +523,34 @@ module.exports.getAllUsersTimeEntries = (req, res) => {
                     }
                     else{
                         timeEntries=[];
-                        var times = result.TimeEntries.length
-    
-                        if(times == 0){   ///sina --Look at this- 
-                            finalobject.push({ name:name, surname:surname, email:email, role: role, timeEntries:[] });
+                        if(result.TimeEntries.length == 0){   ///sina --Look at this- 
+                            finalobject.push({ name:name, surname:surname, email:email, timeEntries:[] });
                             if (count4 == allcounts && finalobject.length == allcounts)  {
                                 return res.status(200).json({finalobject}); 
                              }
                         }
                         else{
-                            ///
-                            timeEntries=[];
-                            console.log("user "+ userid+ "num "+ result.TimeEntries.length)
-                            result.TimeEntries.forEach( function(myEntry){
-                                  
-                                TimeEntryModel.findOne({_id: myEntry},(err,val)=>{   
-                                    count3= count3+1; 
-                                    if(err){
-                                        return res.status(500).send({message: 'Internal Server Error: ' + error});
-                                    }
-                                    else if(val){
-                                            timeEntries.push({timeEntryID: val._id, date:val.Date, description: val.Description, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
-                                    };
-                                    console.log(name);
-                                    if(count3== times){  ///push data to final object, reset count and count3
-                                        count3=0;
-                                        console.log("hello");
-                                        console.log(timeEntries.length);
-                                        finalobject.push({ name:name, surname:surname, email:email, role: role,timeEntries: timeEntries });
-      
-
-                                       if (count4 == allcounts && finalobject.length == allcounts)  {
-                                        return res.status(200).json({results: finalobject}); 
-                                     }
-
-                                    };
-                                });
+                               
+                            TimeEntryHelper.getAllTimeEntries(result.TimeEntries,myDoc,(err,val,user)=>{   
+                                if(err){
+                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                                }
+                                else if(val){
+                                    console.log(user.name);
+                                    console.log(val.length);
+                                    finalobject.push({ name:user.name, surname:user.surname, email: user.email, timeEntries: val });
+                                    console.log(user.name);
+                                    console.log(val.length);
+                                }
+                                
+                                if (count4 == allcounts && finalobject.length == allcounts)  {
+                                    console.log("hello");
+                                return res.status(200).json({results: finalobject}); 
+                                }
                             });
                            
                         }
-                       }
+                    }
                  });
               
                  if (count4 == allcounts && finalobject.length == allcounts)  {

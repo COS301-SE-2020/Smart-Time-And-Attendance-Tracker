@@ -301,8 +301,7 @@ module.exports.getAllUsers = (done)=>{
                 'ID': a._id,
                 'email': a.Email,
                 'name': a.Name,
-                'surname': a.Surname,
-                'role': a.Role
+                'surname': a.Surname
             }
             users.push(text)
             });
