@@ -12,6 +12,39 @@
             <mat-icon inline="true">add</mat-icon>
           </button>
         </h2>
+
+        <div id="members-div" class="info row">
+          <div class="col-8">
+            <mat-form-field appearance="standard" class="col-12">
+              <mat-label>Search Projects</mat-label>
+              <input matInput type="search" type="text" placeholder="Project details" name="searchProjects" [(ngModel)]="searchProj" (keyup)="searchProjects(searchProj)">
+            </mat-form-field>
+          </div>      
+          
+          <div *ngIf="!projects" id="total-projects" class="col-auto">
+            <b>-</b><br>PROJECTS<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+          <div *ngIf="projects && projects?.length == 1" id="total-projects" class="col-auto">
+            <b>1</b><br>PROJECT<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+          <div *ngIf="projects && (projects.length == 0 || projects.length > 1)" id="total-projects" class="col-auto">
+            <b>{{projects.length}}</b><br>PROJECTS<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+
+        </div>
+
         <div class="scroll">
             <mat-spinner *ngIf="!projects && !error" class="req-spinner"></mat-spinner>
 
@@ -24,7 +57,9 @@
             <!-- PROJECT **************************** -->
               <mat-expansion-panel *ngFor="let p of projects" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
+
                   <mat-panel-title>
+                  <mat-icon *ngIf="p.completed == true" inline="true">check_circle</mat-icon>
                     {{p.projectName}}
                   <span class="tag numTasks">{{p.tasks.length}} tasks</span>
                   <button *ngIf="roles.includes('Team Leader')" 
@@ -94,37 +129,57 @@
 
                 <!-- team -->
                 <mat-action-row>
-                  <img
-                    matTooltip={{name}} 
-                    matTooltipClass="pro-tooltip"
-                    matTooltipPosition="below"
-                    src="../../../assets/profilePicDefault.jpg" 
-                    class="profile-pic" alt="Profile Picture">
-                  <img
-                    matTooltip="Zac Efron" 
-                    matTooltipClass="pro-tooltip"
-                    matTooltipPosition="below"
-                    src="../../../assets/proPic1.jpg" 
-                    class="profile-pic" alt="Profile Picture">
-                  <img
-                    matTooltip="Henry Cavill" 
-                    matTooltipClass="pro-tooltip"
-                    matTooltipPosition="below"
-                    src="../../../assets/proPic2.jpg" 
-                    class="profile-pic" alt="Profile Picture">
+                  <span *ngFor="let m of p.projectMembers" class="proj-member">
+                    <div *ngIf="m.profilePicture == 'none'" class="pro-pic proj"
+                          matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]" 
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
+                    <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg"
+                          matTooltip="{{m.name}} {{m.surname}}" 
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="below">
+                  </span>
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-mini-fab
                             class="start-tracking addMember" 
                             matTooltip="Add team member"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
-                      <mat-icon inline="true">add</mat-icon>
+                      <mat-icon inline="true" (click)="open(addMemberModal); pid = p.ID; getAvailableMembers(p.projectMembers)">add</mat-icon>
+                    </button>
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-mini-fab
+                            class="start-tracking addMember" 
+                            matTooltip="Add team"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="below">
+                      <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="pid = p.ID; getAvailableTeams(p.projectMembers)">group_add</mat-icon>
+                    </button>
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-mini-fab
+                            class="start-tracking addMember" 
+                            matTooltip="Edit team"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="below">
+                      <mat-icon inline="true" (click)="open(editTeamModal); pid = p.ID; editTeamMembers = p.projectMembers;">edit</mat-icon>
                     </button>
                 </mat-action-row>
+
+                <mat-menu #menu="matMenu" id="member-menu">
+                  <mat-form-field appearance="standard" id="member-search-wrapper">
+                    <mat-label>Search teams</mat-label>
+                    <input (click)="$event.stopPropagation()" [(ngModel)]="searchTeam" (keyup)="getAvailableTeams(p.projectMembers); searchTeams(searchTeam);" matInput id="member-search" placeholder="Team name">
+                  </mat-form-field>
+                  <button class="member-button" *ngFor="let t of availTeams" mat-menu-item (click)="tid = t.ID; addTeam()">
+                    <span>{{t.teamName}}</span>
+                  </button>
+                </mat-menu>
               </mat-expansion-panel>
             <!-- END PROJECT **************************************** -->
 
             </mat-accordion>
+
+            
         </div>
     </section>
 
@@ -407,3 +462,132 @@
 </ng-template>
 
 <!-- ****************************************** -->
+
+<!-- ****************************************** ADD MEMBER ****************************************** -->
+<ng-template #addMemberModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Add a member
+        <br><h4>Please select a member to add</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="add-member">
+          <mat-form-field color="accent" appearance="standard" class="col-12">
+            <mat-label>Members</mat-label>
+            <mat-select  placeholder="Search members" [multiple]="true" #multiSelect>
+              <mat-option placeholder="Search members">
+                <ngx-mat-select-search name="searchMember" ng-reflect-placeholder="Search" placeholder="Search" [showToggleAllCheckbox]="true" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option class="member-button" *ngFor="let m of members" (click)="addMember(m)">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-divider></mat-divider>
+          <ul *ngIf="addMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of addMembers">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.role}}
+                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Add member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.role"
+                    (keyup)="addRole(m, m.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="member" (click)="typeRole($event)">
+                    member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); addMembersToProject()">Add members</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- ****************************************** EDIT TEAM ****************************************** -->
+<ng-template #editTeamModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit team
+        <br><h4>Please edit the team details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="add-member">
+          <p>REMOVE</p>
+          <ul *ngIf="editTeamMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of editTeamMembers" class="editing">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.role}}
+                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Edit member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.role"
+                    (keyup)="editRole(m, m.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="member" (click)="typeRole($event)">
+                    member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-checkbox class="example-margin" (click)="removeMember(m)"></mat-checkbox>
+
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); removeMembersFromProject(); editMemberRoles();">Save changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click');">Cancel</button>
+    </div>
+  </div>
+</ng-template>
