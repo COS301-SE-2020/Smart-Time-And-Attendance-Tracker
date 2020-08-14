@@ -29,10 +29,9 @@ const UserHelper =require('../helpers/user.helper');
 /**
  * This function gets a projectsproject.
  * @param {String} id ID of project
- * @param {String} teamID 
  * @param {Function} done 
  */
-module.exports.getProject = (id, teamID, done)=>{
+module.exports.getProject = (id, done)=>{
     ProjectModel.findOne({_id: id},(err, result) => {
         if(err) 
             done(err);

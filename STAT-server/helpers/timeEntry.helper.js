@@ -45,13 +45,12 @@ module.exports.getTimeEntry = (id, done)=>{
 }
 
 /**
- * 
+ * Returns info for all the time entries of the user.
  * @param {Array} ids IDs of time entries.
  * @param {Object} user The user who's time entries are being fetched.
  * @param {*} done 
  * @returns {Object} Time Entry document(object).
  */
-
 
 module.exports.getAllTimeEntries = async (ids)=> {
     return new Promise(function(resolve, reject) { 
@@ -81,4 +80,38 @@ module.exports.getAllTimeEntries = async (ids)=> {
         }).catch((err) => reject(err));
     });
 }
-   
+ /**
+ * Returns info for all the time entries of the user made for a specific project.
+ * @param {Array} ids IDs of time entries.
+ * @param {Object} user The user who's time entries are being fetched.
+ * @param {*} done 
+ * @returns {Object} Time Entry document(object).
+ */
+
+module.exports.getAllTimeEntriesForProject = async (ids, project)=> {
+    return new Promise(function(resolve, reject) { 
+        entries = [];
+        ids.forEach((id) => { 
+            entries.push(
+                    TimeEntryModel.findOne({_id: id, ProjectID: project}).then((result) => {
+                        if(result){
+                            var text = {
+                                'timeEntryID': result._id,
+                                'date': result.Date,
+                                'description': result.Description,
+                                'startTime': result.StartTime,
+                                'endTime': result.EndTime,
+                                'duration':result.Duration, 
+                                'task': result.TaskName, 
+                                'activeTime': result.ActiveTime, 
+                                'monetaryValue':result.MonetaryValue
+                                } 
+                            return text;
+                        }
+                    }).catch((err) => reject(err)));
+        });
+        Promise.all(entries).then((result) => {
+            resolve(result);  
+        }).catch((err) => reject(err));
+    });
+}
