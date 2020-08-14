@@ -28,8 +28,7 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     });
 
-
-    this.active = 'organisation';
+    this.active = 'history';
   }
 
   // set active tab after component initialisation
