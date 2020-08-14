@@ -28,13 +28,12 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     });
 
-
     this.active = 'history';
   }
 
   // set active tab after component initialisation
   ngAfterViewInit(): void {
-    const navItem = document.getElementById('today');
+    const navItem = document.getElementById('organisation');
     navItem.classList.add('active');
   }
 

@@ -12,8 +12,14 @@
       </button>
     </h2>
     <div class="info row">
-      <div id="numTeams">
-        <b>3</b><br>TEAMS
+      <div *ngIf="!teams" id="numTeams" class="col-auto">
+        <b>-</b><br>TEAMS
+      </div>
+      <div *ngIf="teams && teams?.length == 1" id="numTeams" class="col-auto">
+        <b>{{teams.length}}</b><br>TEAM
+      </div>
+      <div *ngIf="teams && (teams.length == 0 || teams.length > 1)" id="numTeams" class="col-auto">
+        <b>{{teams.length}}</b><br>TEAMS
       </div>
       <!--<div id="numAssigned">
         <b>2</b><br>ASSIGNED
@@ -22,12 +28,15 @@
         <b>1</b><br>WAITING
       </div>-->
     </div>
+
+
     <div class="scroll">
+      <mat-spinner *ngIf="!teams" class="req-spinner"></mat-spinner>
       <mat-accordion>
-        <mat-expansion-panel expanded>
+        <mat-expansion-panel *ngFor="let t of teams">
           <mat-expansion-panel-header>
-            Team A
-            <span class="tag numMembers">3 members</span>
+            {{t.teamName}}
+            <span class="tag numMembers">{{t.teamMembers.length}} members</span>
             <button mat-button class="teams-btn"
                     matTooltip="Edit"
                     matTooltipClass="teams-tooltip"
@@ -39,20 +48,17 @@
                     matTooltip="Delete"
                     matTooltipClass="teams-tooltip"
                     matTooltipPosition="above"
-                    (click)="open(deleteTeamModal)">
+                    (click)="open(deleteTeamModal); tid = t.ID; teamName = t.teamName">
                     <mat-icon inline="true">delete</mat-icon>
             </button>
           </mat-expansion-panel-header>
+          <i *ngIf="t.teamMembers.length == 0">This team has no members.</i>
           <ul class="members">
-            <li>
-              <div>
-                <img
-                  matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="../../../assets/profilePicDefault.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
+            <li *ngFor="let m of t.teamMembers">
+              <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+              <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="assets/proPic3.jpg">
               <div class="col-10">
-                <p>Jaymie Farsee
+                <p>{{m.name}} {{m.surname}}
                   <span class="member-edit">
                     <button mat-button class="teams-btn"
                             matTooltip="Edit"
@@ -63,82 +69,25 @@
                     <button mat-button class="teams-btn"
                             matTooltip="remove"
                             matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
+                            matTooltipPosition="above"
+                            (click)="open(removeMemberModal); tid = t.ID; mid = m.ID; memberName = m.name + ' ' + m.surname">
                             <mat-icon inline="true">remove_circle</mat-icon>
                     </button>
                   </span>
-                  <span class="member-role tag">Team lead</span>
+                  <span class="member-role tag">{{m.role}}</span>
                 </p>
-                <p>jafar@yahoo.co.uk</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Zac Efron" matTooltipPosition="below"
-                  src="../../../assets/proPic1.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Zac Efron
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">UI/UX designer</span>
-                </p>
-                <p>zefron@gmail.com</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="../../../assets/proPic2.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Henry Cavill
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Programmer</span>
-                </p>
-                <p>henrycav@hotmail.co.us</p>
+                <p>{{m.email}}</p>
               </div>
               <mat-divider></mat-divider>
             </li>
           </ul>
           <span class="float-right">
-            <button mat-button (click)="open(addMemberModal)">
+            <button mat-button (click)="open(addMemberModal); tid = t.ID; getAvailableMembers(t.teamMembers)">
               <mat-icon inline="true">add</mat-icon>New member
             </button>
           </span>
         </mat-expansion-panel>
-        <!-- *************************************************** TEAM ***** -->
+        <!-- *************************************************** TEAM ***** 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             Team B
@@ -252,122 +201,8 @@
               <mat-icon inline="true">add</mat-icon>New member
             </button>
           </span>
-        </mat-expansion-panel>
-        <!-- *************************************************** TEAM ***** -->
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Team C
-            <span class="tag numMembers">3 members</span>
-            <button mat-button class="teams-btn"
-                    matTooltip="Edit"
-                    matTooltipClass="teams-tooltip"
-                    matTooltipPosition="above"
-                    (click)="open(editTeamModal)">
-                    <mat-icon inline="true">edit</mat-icon>
-            </button>
-            <button mat-button class="teams-btn"
-                    matTooltip="Delete"
-                    matTooltipClass="teams-tooltip"
-                    matTooltipPosition="above"
-                    (click)="open(deleteTeamModal)">
-                    <mat-icon inline="true">delete</mat-icon>
-            </button>
-          </mat-expansion-panel-header>
-          <ul class="members">
-            <li>
-              <div>
-                <img
-                  matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="../../../assets/profilePicDefault.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Jaymie Farsee
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Team lead</span>
-                </p>
-                <p>jafar@yahoo.co.uk</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Zac Efron" matTooltipPosition="below"
-                  src="../../../assets/proPic1.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Zac Efron
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">UI/UX designer</span>
-                </p>
-                <p>zefron@gmail.com</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="../../../assets/proPic2.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Henry Cavill
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Programmer</span>
-                </p>
-                <p>henrycav@hotmail.co.us</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-          </ul>
-          <span class="float-right">
-            <button mat-button (click)="open(addMemberModal)">
-              <mat-icon inline="true">add</mat-icon>New member
-            </button>
-          </span>
-        </mat-expansion-panel>
+        </mat-expansion-panel>-->
+  
       </mat-accordion>
     </div>
   </section>
@@ -376,7 +211,7 @@
 
 <!-- ****************************************** MODALS ****************************************** -->
 
-
+<!-- ****************************************** ADD MEMBER ****************************************** -->
 <ng-template #addMemberModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
@@ -388,31 +223,66 @@
       </button>
     </div>
     <div class="modal-body">
-      <form method="post">
         <div class="add-member">
-          <mat-form-field appearance="standard" class="col-5">
-            <mat-label>Member</mat-label>
-            <mat-select matInput name="organisation-members">
-              <mat-option value="jaymie-farsee">Jaymie Farsee</mat-option>
-              <mat-option value="zac-efron">Zac Efron</mat-option>
-              <mat-option value="henry-cavill">Henry Cavill</mat-option>
+          <mat-form-field color="accent" appearance="standard" class="col-12">
+            <mat-label>Members</mat-label>
+            <mat-select  placeholder="Search members" [multiple]="true" #multiSelect>
+              <mat-option placeholder="Search members">
+                <ngx-mat-select-search name="searchMember" ng-reflect-placeholder="Search" placeholder="Search" [showToggleAllCheckbox]="true" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option class="member-button" *ngFor="let m of members" (click)="addMember(m)">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+              </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="standard" class="col-5 offset-1">
-            <mat-label>Role</mat-label>
-            <mat-select matInput>
-            </mat-select>
-          </mat-form-field>
+          
+          <mat-divider></mat-divider>
+          <ul *ngIf="addMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of addMembers">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.role}}
+                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Add member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.role"
+                    (keyup)="addRole(m, m.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="member" (click)="typeRole($event)">
+                    member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
         </div>
-      </form>
     </div>
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click')">Add members</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); addMembersToTeam()">Add members</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
   </div>
 </ng-template>
 
+
+<!-- ****************************************** ADD TEAM ****************************************** -->
 <ng-template #addTeamModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
@@ -425,43 +295,72 @@
     </div>
 
     <div class="modal-body">
-      <form>
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Team Name</mat-label>
-          <input matInput formControlName="name" placeholder="Team A" name = "name" required>
+          <input matInput [(ngModel)]="teamName" placeholder="Team A" name = "name" required>
           <mat-error>Please enter a value</mat-error>
         </mat-form-field>
         <mat-divider></mat-divider>
         <h3>Add team members</h3>
-        <ul class="create-team-members">
-          <li>
-            <mat-form-field appearance="standard" class="col-6">
-              <mat-label>Team member</mat-label>
-              <mat-select matInput name="organisation-members">
-                <mat-option value="jaymie-farsee">Jaymie Farsee</mat-option>
-                <mat-option value="zac-efron">Zac Efron</mat-option>
-                <mat-option value="henry-cavill">Henry Cavill</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="standard" class="col-6">
-              <mat-label>Role</mat-label>
-              <mat-select  value="Leader" matInput name="organisation-members">
-                <mat-option value="Leader">Leader</mat-option>
-                <mat-option value="Designer">Designer</mat-option>
-                <mat-option value="Programmer">Programmer</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </li>
-        </ul>
-      </form>
+        <div class="add-member">
+          <mat-form-field color="accent" appearance="standard" class="col-12">
+            <mat-label>Members</mat-label>
+            <mat-select  placeholder="Search members" [multiple]="true" #multiSelect>
+              <mat-option placeholder="Search members">
+                <ngx-mat-select-search name="searchMember" placeholder="Search" [showToggleAllCheckbox]="true" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option class="member-button" *ngFor="let m of allMembers" (click)="addMember(m)">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-divider></mat-divider>
+          <ul *ngIf="addMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of addMembers">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.teamRole}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Add member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.teamRole"
+                    (keyup)="addRole(m, m.teamRole)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="member" (click)="typeRole($event)">
+                    member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
+        </div>
     </div>
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click')">Create Team</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); createTeam(teamName)">Create Team</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
   </div>
 </ng-template>
 
+<!-- ****************************************** EDIT TEAM ****************************************** -->
 <ng-template #editTeamModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
@@ -524,10 +423,11 @@
   </div>
 </ng-template>
 
+<!-- ****************************************** DELETE TEAM ****************************************** -->
 <ng-template #deleteTeamModal let-modal>
   <div class="modal-content">
     <div class="modal-header">
-      <h2> Delete team
+      <h2> Delete {{teamName}}
         <br>
       </h2>
       <button (click)="modal.dismiss('Cross click')">
@@ -538,7 +438,28 @@
       Are you sure you want to delete this team?
     </div>
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click')">Yes</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteTeam(tid)">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ****************************************** REMOVE MEMBER ****************************************** -->
+<ng-template #removeMemberModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Remove {{memberName}}
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to remove this member from the team?
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); removeTeamMember(tid, mid)">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
   </div>

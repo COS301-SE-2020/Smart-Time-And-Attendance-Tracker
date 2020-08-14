@@ -3,6 +3,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-today',
@@ -10,9 +11,9 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
   styleUrls: ['./today.component.sass']
 })
 export class TodayComponent implements OnInit {
-  
 
-  constructor(private modalService: NgbModal, public service : TrackingService, public amService : AccountManagementService) { }
+
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public service : TrackingService, public amService : AccountManagementService) { }
 
   panelOpenState = false;
   closeResult: string;
@@ -45,7 +46,7 @@ export class TodayComponent implements OnInit {
   date5 : Date = new Date()
 
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.manualTrackingForm = new FormGroup({
       Description : new FormControl(''),
       Project : new FormControl('',[Validators.required]),
@@ -101,7 +102,7 @@ export class TodayComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -125,10 +126,16 @@ export class TodayComponent implements OnInit {
       this.reload()
     },
     error => {
-      console.log(error);
-      //console.log(error.error.message);  
-    
-    }); 
+      //console.log(error);
+      //console.log(error.error.message);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   // calculate monetary value for manual entry
@@ -156,13 +163,13 @@ export class TodayComponent implements OnInit {
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
         console.log(data);
         this.service.EntryID = data['TimeEntryID'];
-        //this.reload()        
+        //this.reload()
       },
       error => {
         console.log(error);
-        //console.log(error.error.message);  
-      
-      }); 
+        //console.log(error.error.message);
+
+      });
   }*/
 
   //Update a time entry. Parameters are the new end time and active time
@@ -170,15 +177,15 @@ export class TodayComponent implements OnInit {
   {
       endTime =  new Date().getTime();
       activeTime = 10;
-      let values = {"TimeEntryID" : this.service.EntryID, "EndTime": endTime, "ActiveTime" : activeTime};  
+      let values = {"TimeEntryID" : this.service.EntryID, "EndTime": endTime, "ActiveTime" : activeTime};
       this.service.updateTimeEntry(values, localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
     },
     error => {
       console.log(error);
-      //console.log(error.error.message);  
-    
-    }); 
+      //console.log(error.error.message);
+
+    });
   }*/
 
   // edit tracking entry
@@ -194,9 +201,15 @@ export class TodayComponent implements OnInit {
       console.log(data)
     },
     error => {
-      console.log(error);
-    
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   // get tasks
@@ -218,7 +231,7 @@ export class TodayComponent implements OnInit {
         this.hourlyRate = this.projects.find((p : any) => p.ID == projectID)['hourlyRate']
       }
     }
-    
+
     return this.tasks;
   }
 
@@ -240,7 +253,16 @@ export class TodayComponent implements OnInit {
         this.week['5days'] = data['timeEntries']
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+
+      // should this still happen if error 403 ?????????????????????????????????????????????????
       if (date == this.formatDate(this.date))
         this.week['today'] = 'no entries'
       if (date == this.formatDate(this.date1))
@@ -253,7 +275,7 @@ export class TodayComponent implements OnInit {
         this.week['4days'] = 'no entries'
       if (date == this.formatDate(this.date5))
         this.week['5days'] = 'no entries'
-    }); 
+    });
   }
 
   getWeek(date : String) {
@@ -274,12 +296,12 @@ export class TodayComponent implements OnInit {
     var d = date.getDate().toString();
 
     let toReturn = new String(y + '-');
-    
+
     if (m.length == 1)
       toReturn += ('0' + m + '-')
     else
       toReturn += (m + '-')
-      
+
     if (d.length == 1)
       toReturn += ('0' + d)
     else

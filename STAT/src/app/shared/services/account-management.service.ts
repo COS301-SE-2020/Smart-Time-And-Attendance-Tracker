@@ -25,12 +25,11 @@ export class AccountManagementService {
   public signUp(values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
-
     return this.http.post(this.ROOT_URL+'user/register', JSON.stringify(values), {
       headers: headers
     });
   }
-  // sign in 
+  // sign in
   public signIn(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json');
@@ -54,6 +53,28 @@ export class AccountManagementService {
       headers: headers
     });
   }
+  //Get user's projects and tasks
+  public getProjectsAndTasks(token){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.get(this.ROOT_URL+ 'user/getProjects', {
+      headers: headers
+    });
+  }
+  //Get time entries for the day
+  public getTimeEntries(date, token){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+          let parameters = new HttpParams();
+          parameters = parameters.append('date', date);
+    return this.http.get(this.ROOT_URL+ 'userTimeEntry/getDailyTimeEntries',{
+      params: parameters,
+      headers: headers
+    });
+  }
+
+  /*** organisation management ***/
+
   //Authenticate user (security admin)
   public authenticate(token,userID){
     const headers = new HttpHeaders()
@@ -66,7 +87,7 @@ export class AccountManagementService {
   public reject(token, userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID),{
+    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID), {
       headers: headers
     });
   }
@@ -86,30 +107,42 @@ export class AccountManagementService {
       headers: headers
     });
   }
-  //Get user's projects and tasks
-  public getProjectsAndTasks(token){
+  //Remove user from organisation
+  public removeUser(token, userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.get(this.ROOT_URL+ 'user/getTasks', {
+    return this.http.post(this.ROOT_URL+ 'user/removeUser', JSON.stringify(userID), {
       headers: headers
     });
   }
-  //Get time entries for the day
-  public getTimeEntries(date, token){
+  //Add organisation role (security admin)
+  public addRole(token, userID){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-          let parameters = new HttpParams();
-          parameters = parameters.append('date', date);
-    return this.http.get(this.ROOT_URL+ 'userTimeEntry/getDailyTimeEntries',{ 
-      params: parameters,
+    return this.http.post(this.ROOT_URL+ 'user/addRole', JSON.stringify(userID), {
       headers: headers
     });
   }
+  //Remove organisation role (security admin)
+  public removeRole(token, values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/removeRole', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  //Edit user details (security admin)
+  public editUser(token, values){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/editUser', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+
   // edit profile
-
   // edit settings
-
   // sign out
-
   // delete account
-}
+
+} // end service

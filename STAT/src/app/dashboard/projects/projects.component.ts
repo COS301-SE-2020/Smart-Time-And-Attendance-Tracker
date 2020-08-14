@@ -3,6 +3,8 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
+import { TeamManagementService } from 'src/app/shared/services/team-management.service';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-projects',
@@ -11,11 +13,12 @@ import { ProjectManagementService } from 'src/app/shared/services/project-manage
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService) { }
 
   panelOpenState = false
   name = "John Doe"
   roles : string
+  allProjects : Object[]
   projects : Object[]
   tasks : Object[] = []
   tasksNum : number
@@ -34,6 +37,25 @@ export class ProjectsComponent implements OnInit {
   tname : string
   projectToEdit : any
   taskToEdit : any
+
+  searchProj : string = null
+  showComp : boolean = false
+  searchMem : string = null
+  searchTeam : string = null
+  availTeams : any[] = []
+
+  allMembers : []
+  members : any[]
+  availMembers : any[] = []
+  addMembers : Object[] = []
+  role : string = null
+
+  teams : Object[]
+  teamMembers : Object[]
+
+  editTeamMembers : Object[]
+  removeMembers : Object[] = []
+  editRoles : Object[] = []
 
   error : string = null
 
@@ -63,9 +85,15 @@ export class ProjectsComponent implements OnInit {
     });
 
     this.getProAndTasks()
+    this.getMembers()
+    this.getTeam()
   }
 
-  
+
+  stopPropagation(event){
+    event.stopPropagation();
+    // console.log("Clicked!");
+  }
 
   /********
   API CALLS
@@ -76,15 +104,23 @@ export class ProjectsComponent implements OnInit {
   {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
-      this.projects = data['projects']
-      this.projects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
+      this.allProjects = data['projects']
+      this.allProjects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
+      this.projects = this.allProjects.filter((x : any) => x['completed'] == false)
       this.getTasks()
       this.error = 'none'
     },
     error => {
-      console.log(error);
-      this.error = error.statusText
-    }); 
+      //console.log(error);
+      //this.error = error.statusText
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   // add project
@@ -95,8 +131,15 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
   //add task
   addTask(form : NgForm) {
@@ -107,8 +150,15 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   // edit project (projectID must be added to body)
@@ -119,10 +169,16 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
-
   // edit task (taskID must be added to body)
   editTask(form : NgForm) {
     console.log(form)
@@ -131,22 +187,35 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
     });
   }
 
   // delete project
   deleteProject(projectID : String) {
     this.pmService.deleteProject(localStorage.getItem('token'),projectID).subscribe((data) => {
-      console.log('ID' + projectID)
+      //console.log('ID' + projectID)
       console.log(data);
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
-
   // delete task
   deleteTask(taskID : String, projectID : String) {
     this.pmService.deleteTask(localStorage.getItem('token'),taskID,projectID).subscribe((data) => {
@@ -154,8 +223,15 @@ export class ProjectsComponent implements OnInit {
       this.getProAndTasks()
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   //mark project as completed
@@ -166,8 +242,15 @@ export class ProjectsComponent implements OnInit {
 
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
   //mark task as started
@@ -178,20 +261,32 @@ export class ProjectsComponent implements OnInit {
 
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
-
   //mark task as completed
   completeTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.completeTask(localStorage.getItem('token'),req).subscribe((data) => {
       console.log(data);
-
     },
     error => {
-      console.log(error);
-    }); 
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
   //get tasks
   getTasks() {
@@ -264,12 +359,12 @@ export class ProjectsComponent implements OnInit {
     var d = date.getDate().toString();
 
     let toReturn = new String(y + '/');
-    
+
     if (m.length == 1)
       toReturn += ('0' + m + '/')
     else
       toReturn += (m + '/')
-      
+
     if (d.length == 1)
       toReturn += ('0' + d)
     else
@@ -277,6 +372,323 @@ export class ProjectsComponent implements OnInit {
 
     return toReturn
   }
+
+  // search projects
+  searchProjects(text : string) {
+    // only search upcoming projects
+    if (this.searchProj && !this.showComp) {
+      this.projects = this.allProjects.filter((x : any) =>
+        x['projectName'].toLowerCase().includes(text.toLowerCase()) &&
+        x['completed'] == false
+      )
+
+    // search all projects - including completed ones
+    } else if (this.searchProj && this.showComp) {
+      this.projects = this.allProjects.filter((x : any) =>
+        x['projectName'].toLowerCase().includes(text.toLowerCase())
+      )
+
+    // show all projects - including completed ones
+    } else if (!this.searchProj && this.showComp) {
+      this.projects = this.allProjects
+
+    // default - all projects in progress
+    } else if (!this.searchProj && !this.showComp) {
+      this.projects = this.allProjects.filter((x : any) =>
+        x['completed'] == false
+      )
+    }
+
+  }
+
+  // toggle completed projects visibility
+  completed() {
+    this.showComp = !this.showComp
+    if (this.showComp) { // show all
+      this.projects = this.allProjects
+      document.getElementById('show-comp').setAttribute('hidden', 'true')
+      document.getElementById('hide-comp').removeAttribute('hidden')
+    } else { // show in progress
+      this.projects = this.allProjects.filter((x : any) => x['completed'] == false)
+      document.getElementById('hide-comp').setAttribute('hidden', 'true')
+      document.getElementById('show-comp').removeAttribute('hidden')
+    }
+    console.log('COMP\n' + this.showComp)
+  }
+
+
+      /*** TEAM MANAGEMENT ***/
+
+      // get members
+      getMembers() {
+        this.amService.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
+          this.allMembers = data['users'];
+          // sort alphabetically
+          this.allMembers.sort((a : any ,b : any) =>
+            a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
+          );
+          this.members = this.allMembers
+          console.log(this.allMembers)
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
+
+      // search members
+      searchMembers(text : string) {
+        console.log(this.searchMem)
+        if (!this.searchMem)
+          this.members = this.availMembers
+        this.members = this.availMembers.filter((x : any) =>
+          x['name'].toLowerCase().includes(text.toLowerCase()) ||
+          x['surname'].toLowerCase().includes(text.toLowerCase()) ||
+          x['email'].toLowerCase().includes(text.toLowerCase())
+        )
+      }
+
+      // get all the members that are not in the team already
+      getAvailableMembers(members : []) {
+        
+        this.availMembers = this.allMembers.filter((m1 : any) => !members.some((m2 : any) => m1.ID === m2.ID))
+
+        for (let i = 0; i < this.availMembers.length; i++)
+          this.availMembers[i]['role'] = ''
+        this.members = this.availMembers
+        console.log(members)
+        console.log(this.members)
+      }
+
+      // get teams
+      getTeam() {
+        console.log('here')
+        this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
+          console.log(data)
+          this.teams = data['teams']
+          this.teams.sort((a : any ,b : any) =>
+              a.teamName.localeCompare(b.teamName)
+          );
+          this.availTeams = this.teams
+          console.log(this.teams)
+          this.getTeamMembers();
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+          this.error = error.statusText
+        });
+      }
+
+      // get all the teams where the members are not in the team already
+      getAvailableTeams(members : []) {
+        members.sort((a : any ,b : any) =>
+            a.ID.localeCompare(b.ID)
+          );
+
+        this.teams.forEach((t : any) =>
+          t.teamMembers.sort((a : any ,b : any) =>
+            a.ID.localeCompare(b.ID)
+          )
+        )
+
+        this.availTeams = []
+
+        console.log(this.availTeams)
+
+        this.teams.forEach((t : any) => {
+          let match = false
+          for (let i = 0; i < t.teamMembers.length; i++) {
+            if (members.findIndex(a => a['ID'] == t.teamMembers[i]['ID']) != -1)
+              match = true
+            else
+              match = false
+          }
+
+          if (!match)
+            this.availTeams.push(t)
+        });
+
+        
+        console.log(members)
+        console.log(this.availTeams)
+      }
+
+      // get team members
+      getTeamMembers() {
+        this.teamMembers == []
+
+        for (let x = 0; x < this.teams.length; x++) {
+          console.log(this.teams)
+          var temp : Object[] = this.teams[x]['TeamMembers']
+          console.log(temp)
+        }
+      }
+
+      // add team
+      addTeam() {
+        let req = { 'projectID' : this.pid, 'teamID' : this.tid}
+        this.pmService.addTeam(localStorage.getItem('token'), req).subscribe((data) => {
+          console.log(data);
+          this.getProAndTasks()
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
+
+      // add team member
+      addTeamMember(uID : string, pID: string, role : string) {
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        this.pmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
+          console.log(data);
+          this.getProAndTasks();
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
+
+      addMember(m : any) {
+        console.log(m)
+        let index = this.addMembers.findIndex(a => a == m)
+        if (index == -1)
+          this.addMembers.push(m)
+        else
+          this.addMembers.splice(index, 1)
+        console.log(this.addMembers)
+      }
+
+      addRole(m : any, role : string) {
+        let index = this.addMembers.findIndex(a => a == m)
+        m['role'] = role
+        this.addMembers[index] = m
+        console.log(this.addMembers)
+      }
+
+      typeRole(event) {
+        this.role = event.target.value
+        console.log(this.role)
+      }
+
+      addMembersToProject() {
+        this.addMembers.forEach((m : any) => {
+          console.log(m)
+          this.addTeamMember(m.ID, this.pid, m.role)
+        });
+      }
+
+      // remove team member
+      removeProjectMember(userID : string) {
+        let req = {"userID": userID, "projectID" : this.pid};
+        this.pmService.removeTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
+          console.log(data);
+          this.getProAndTasks();
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
+
+      removeMember(m : any) {
+        console.log(m)
+        let index = this.removeMembers.findIndex(a => a == m)
+        if (index == -1)
+          this.removeMembers.push(m)
+        else
+          this.removeMembers.splice(index, 1)
+        console.log(this.removeMembers)
+      }
+
+      removeMembersFromProject() {
+        this.removeMembers.forEach((m : any) => {
+          console.log(m)
+          this.removeProjectMember(m.ID)
+        });
+        this.removeMembers= []
+      }
+
+      editRole(m : any, role : string) {
+        let index = this.editRoles.findIndex(a => a['ID'] == m['ID'])
+        if (index == -1)
+          this.editRoles.push(m)
+
+        console.log(this.editRoles)
+
+        index = this.editRoles.findIndex(a => a == m)
+        m['role'] = role
+        this.editRoles[index] = m
+        console.log(this.editRoles)
+      }
+
+      changeRole(uID : string, pID: string, role : string) {
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        this.pmService.changeRole(localStorage.getItem('token'), req).subscribe((data) => {
+          console.log(data);
+          this.getProAndTasks();
+        },
+        error => {
+          //console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+          {
+            //console.log("Your session has expired. Please sign in again.");
+            // kick user out
+            this.headerService.kickOut();
+          }
+        });
+      }
+
+      editMemberRoles() {
+        this.editRoles.forEach((m : any) => {
+          console.log(m)
+          this.changeRole(m.ID, this.pid, m.role)
+        });
+        this.editRoles = []
+      }
+
+      // search teams
+      searchTeams(text : string) {
+        if (!this.searchTeam)
+          this.availTeams = this.teams
+        this.availTeams = this.teams.filter((x : any) =>
+          x['teamName'].toLowerCase().includes(text.toLowerCase())
+        )
+      }
+
 
   // reset forms
   resetProjectForm() {
@@ -301,6 +713,7 @@ export class ProjectsComponent implements OnInit {
     this.taskToEdit.dueDate = new Date(t.dueDate).toISOString().substring(0,10)
   }
 
+
   /****
   MODAL
   ****/
@@ -313,7 +726,7 @@ export class ProjectsComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';

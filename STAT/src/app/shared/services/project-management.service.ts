@@ -38,7 +38,7 @@ export class ProjectManagementService {
     let parameters = new HttpParams();
     parameters = parameters.append('taskID', task);
     parameters = parameters.append('projectID', project);
-    return this.http.delete(this.ROOT_URL+'task', {
+    return this.http.delete(this.ROOT_URL+'task?', {
       headers: headers,
       params: parameters
     });
@@ -49,7 +49,7 @@ export class ProjectManagementService {
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
     parameters = parameters.append('projectID', project);
-    return this.http.delete(this.ROOT_URL+'project', {
+    return this.http.delete(this.ROOT_URL+'project?', {
       headers: headers,
       params: parameters
     });
@@ -62,7 +62,7 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-  //add a project
+  //edit a project
   public editProject(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
@@ -70,7 +70,6 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-
   //mark project as completed
   public completeProject(token, values) {
     const headers = new HttpHeaders()
@@ -79,7 +78,6 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-
   //mark task as completed
   public completeTask(token, values) {
     const headers = new HttpHeaders()
@@ -88,7 +86,6 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-
   //mark task as started
   public startTask(token, values) {
     const headers = new HttpHeaders()
@@ -97,4 +94,40 @@ export class ProjectManagementService {
       headers: headers
     });
   }
-}
+
+  /*** organisation management ***/
+
+  // add team to project
+  addTeam(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'project/addTeam', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  // add member to project team
+  addTeamMember(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'project/addMember', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  // remove member from project team
+  removeTeamMember(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'project/removeMember', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  // change role in project
+  changeRole(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'project/changeRole', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+
+} // end service
