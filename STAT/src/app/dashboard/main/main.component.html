@@ -36,6 +36,14 @@
                   </a>
                 </li>
                 <li>
+                  <a id="history" (click)="setActive('history')">
+                    <span class="icon">
+                      <mat-icon>history</mat-icon>
+                    </span>
+                    <span class="list">History</span>
+                  </a>
+                </li>
+                <li>
                   <a id="teams" (click)="setActive('teams')">
                     <span class="icon">
                       <mat-icon>group</mat-icon>
@@ -94,6 +102,7 @@
           <app-projects *ngIf="active=='projects'"></app-projects>
           <app-organisation *ngIf="active=='organisation'"></app-organisation>
           <app-teams *ngIf="active=='teams'"></app-teams>
+          <app-history *ngIf="active=='history'"></app-history>
         </div>
 
     </div>

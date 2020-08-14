@@ -1,0 +1,257 @@
+<div class="row">
+  <section>
+    <h2>History</h2>
+    <div class="row p-0 mb-4">
+      <form class="col-12 header-row" action="index.html" method="post">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label *ngIf="roles.includes('Data Analyst')">Search</mat-label>
+          <mat-label  *ngIf="!roles.includes('Data Analyst')">Search projects</mat-label>
+          <input matInput type="search" type="text">
+        </mat-form-field>
+        <mat-radio-group *ngIf="roles.includes('Data Analyst')" aria-label="Select search type">
+          <mat-radio-button  checked value="searchProjects" class="mx-2">Projects</mat-radio-button>
+          <mat-radio-button value="searchUsers" class="mx-2">Users</mat-radio-button>
+        </mat-radio-group>
+        <br>
+        <mat-form-field appearance="standard" class="col-3">
+          <mat-label>From:</mat-label>
+          <input matInput type="date">
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-3">
+          <mat-label>To:</mat-label>
+          <input matInput type="date">
+        </mat-form-field>
+        <mat-form-field class="col-3">
+          <mat-select multiple appearance="standard" placeholder="Show fields" name="item">
+            <mat-option checked>Start time</mat-option>
+            <mat-option checked>End time</mat-option>
+            <mat-option checked>Active time</mat-option>
+            <mat-option checked>Description</mat-option>
+            <mat-option checked>Project</mat-option>
+            <mat-option checked>Task</mat-option>
+            <mat-option checked>Value</mat-option>
+            <mat-option *ngIf="roles.includes('Data Analyst')" checked>Member</mat-option>
+          </mat-select>
+        </mat-form-field>      </form>
+      <div class="col-10 header-row">
+        <!--<mat-form-field class="col-3">
+          <mat-select appearance="standard" placeholder="Active time" name="item">
+            <mat-option>Less than 1h</mat-option>
+            <mat-option>Less than 2h</mat-option>
+            <mat-option>Less than 4h</mat-option>
+            <mat-option>Less than 6h</mat-option>
+            <mat-option>More than 6h</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-3">
+          <mat-select appearance="standard" placeholder="Monetary value" name="item">
+            <mat-option>Less than R 100.00</mat-option>
+            <mat-option>Less than R 500.00</mat-option>
+            <mat-option>Less than R 1,000.00</mat-option>
+            <mat-option>Less than R 5,000.00</mat-option>
+            <mat-option>More than R 5,000.00</mat-option>
+          </mat-select>
+        </mat-form-field>-->
+      </div>
+    </div>
+    <div class="col-12 justify-content-end">
+      <button mat-mini-fab id="sort-menu" class="mx-1"
+              matTooltip="Sort"
+              matTooltipClass="action-tooltip"
+              matTooltipPosition="right"
+              [matMenuTriggerFor]="sortMenu">
+        <mat-icon>sort</mat-icon>
+      </button>
+      <mat-menu #sortMenu="matMenu">
+        <button mat-menu-item>Oldest first</button>
+        <button mat-menu-item>Newest first</button>
+      </mat-menu>
+      <button mat-mini-fab id="export-menu" class="mx-1"
+              matTooltip="Export"
+              matTooltipClass="action-tooltip"
+              matTooltipPosition="right"
+              [matMenuTriggerFor]="exportMenu">
+        <mat-icon>import_export</mat-icon>
+      </button>
+      <mat-menu #exportMenu="matMenu">
+        <button mat-menu-item>JSON</button>
+        <button mat-menu-item>PDF</button>
+        <button mat-menu-item>Excel</button>
+      </mat-menu>
+    </div>
+    <div id="history" class="scroll">
+      <div>
+        <mat-accordion>
+          <mat-expansion-panel expanded class="pb-3">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Month 2020
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table #table [dataSource]="dataSource" class="col-12">
+              <!-- date -->
+              <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef> Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+              </ng-container>
+              <!-- startTime -->
+              <ng-container matColumnDef="startTime">
+                  <th mat-header-cell *matHeaderCellDef> Start </th>
+                  <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+              </ng-container>
+              <!-- endTime -->
+              <ng-container matColumnDef="endTime">
+                  <th mat-header-cell *matHeaderCellDef> End </th>
+                  <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+              </ng-container>
+              <!-- active time -->
+              <ng-container matColumnDef="activeTime">
+                  <th mat-header-cell *matHeaderCellDef> Active time </th>
+                  <td mat-cell *matCellDef="let element"> {{element.activeTime}} </td>
+              </ng-container>
+              <!-- description -->
+              <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef> Description </th>
+                  <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+              <!-- project -->
+              <ng-container matColumnDef="project">
+                  <th mat-header-cell *matHeaderCellDef> Project </th>
+                  <td mat-cell *matCellDef="let element"> {{element.project}} </td>
+              </ng-container>
+              <!-- task -->
+              <ng-container matColumnDef="task">
+                  <th mat-header-cell *matHeaderCellDef> Task </th>
+                  <td mat-cell *matCellDef="let element"> {{element.task}} </td>
+              </ng-container>
+              <!-- value -->
+              <ng-container matColumnDef="value">
+                  <th mat-header-cell *matHeaderCellDef> Value </th>
+                  <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+              </ng-container>
+              <!-- member -->
+              <ng-container matColumnDef="member">
+                  <th mat-header-cell *matHeaderCellDef> Member </th>
+                  <td mat-cell *matCellDef="let element"> {{element.member}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="pb-3">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Month 2020
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table #table [dataSource]="dataSource" class="col-12">
+              <!-- date -->
+              <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef> Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+              </ng-container>
+              <!-- startTime -->
+              <ng-container matColumnDef="startTime">
+                  <th mat-header-cell *matHeaderCellDef> Start </th>
+                  <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+              </ng-container>
+              <!-- endTime -->
+              <ng-container matColumnDef="endTime">
+                  <th mat-header-cell *matHeaderCellDef> End </th>
+                  <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+              </ng-container>
+              <!-- active time -->
+              <ng-container matColumnDef="activeTime">
+                  <th mat-header-cell *matHeaderCellDef> Active time </th>
+                  <td mat-cell *matCellDef="let element"> {{element.activeTime}} </td>
+              </ng-container>
+              <!-- description -->
+              <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef> Description </th>
+                  <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+              <!-- project -->
+              <ng-container matColumnDef="project">
+                  <th mat-header-cell *matHeaderCellDef> Project </th>
+                  <td mat-cell *matCellDef="let element"> {{element.project}} </td>
+              </ng-container>
+              <!-- task -->
+              <ng-container matColumnDef="task">
+                  <th mat-header-cell *matHeaderCellDef> Task </th>
+                  <td mat-cell *matCellDef="let element"> {{element.task}} </td>
+              </ng-container>
+              <!-- value -->
+              <ng-container matColumnDef="value">
+                  <th mat-header-cell *matHeaderCellDef> Value </th>
+                  <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+              </ng-container>
+              <!-- member -->
+              <ng-container matColumnDef="member">
+                  <th mat-header-cell *matHeaderCellDef> Member </th>
+                  <td mat-cell *matCellDef="let element"> {{element.member}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="pb-3">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Month 2020
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table #table [dataSource]="dataSource" class="col-12">
+              <!-- date -->
+              <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef> Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+              </ng-container>
+              <!-- startTime -->
+              <ng-container matColumnDef="startTime">
+                  <th mat-header-cell *matHeaderCellDef> Start </th>
+                  <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+              </ng-container>
+              <!-- endTime -->
+              <ng-container matColumnDef="endTime">
+                  <th mat-header-cell *matHeaderCellDef> End </th>
+                  <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+              </ng-container>
+              <!-- active time -->
+              <ng-container matColumnDef="activeTime">
+                  <th mat-header-cell *matHeaderCellDef> Active time </th>
+                  <td mat-cell *matCellDef="let element"> {{element.activeTime}} </td>
+              </ng-container>
+              <!-- description -->
+              <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef> Description </th>
+                  <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+              <!-- project -->
+              <ng-container matColumnDef="project">
+                  <th mat-header-cell *matHeaderCellDef> Project </th>
+                  <td mat-cell *matCellDef="let element"> {{element.project}} </td>
+              </ng-container>
+              <!-- task -->
+              <ng-container matColumnDef="task">
+                  <th mat-header-cell *matHeaderCellDef> Task </th>
+                  <td mat-cell *matCellDef="let element"> {{element.task}} </td>
+              </ng-container>
+              <!-- value -->
+              <ng-container matColumnDef="value">
+                  <th mat-header-cell *matHeaderCellDef> Value </th>
+                  <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+              </ng-container>
+              <!-- member -->
+              <ng-container matColumnDef="member">
+                  <th mat-header-cell *matHeaderCellDef> Member </th>
+                  <td mat-cell *matCellDef="let element"> {{element.member}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </section>
+</div>
