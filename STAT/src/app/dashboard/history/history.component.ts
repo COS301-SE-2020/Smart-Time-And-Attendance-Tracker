@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { HistoryService } from 'src/app/shared/services/history.service';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-history',
@@ -12,12 +14,82 @@ export class HistoryComponent implements OnInit {
 
   roles : string;
 
-  constructor() { }
+  constructor(public headerService : HeaderService, public historyService : HistoryService) { }
   ngOnInit(): void {
     this.roles = localStorage.getItem('roles');
 
     if (this.roles == "Data Analyst")
       this.displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value', 'member'];
+  }
+
+  // get own time entries
+  getOwn() {
+    this.historyService.getOwnEntries(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  // get user time entries
+  getUser(userID : string) {
+    this.historyService.getUserEntries(localStorage.getItem('token'), userID).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  // get all user time entries
+  getAllUser() {
+    this.historyService.getAllUserEntries(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  // get all project time entries
+  getAllProject(projectID : string) {
+    this.historyService.getAllProjectEntries(localStorage.getItem('token'), projectID).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  // import time entry
+  import(values : any) {
+    this.historyService.import(localStorage.getItem('token'), values).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
   }
 }
 
