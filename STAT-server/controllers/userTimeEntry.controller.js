@@ -388,7 +388,6 @@ module.exports.getOwnTimeEntries = (req, res) => {
         else{
             var timeEntries=[];
             var times = result.TimeEntries.length
-            //return res.status(200).json({ message: 'talalala  ->  '+result.TimeEntries });
            
             if(times == 0){
                 return res.status(404).json({ message: 'No time entries for the given user were found' });
@@ -403,7 +402,7 @@ module.exports.getOwnTimeEntries = (req, res) => {
                         }
                         else if(val){
                             count = false;
-                            timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
                         };
                         if(count3 == times && count){
                             return res.status(404).json({ message: 'No time entries for the given day were found' });
@@ -454,7 +453,7 @@ module.exports.getUserTimeEntries = (req, res) => {
                         }
                         else if(val){
                             count = false;
-                            timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            timeEntries.push({timeEntryID: val._id, date:val.Date,  startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration,description: val.Description, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
                         };
                         if(count3 == times && count){
                             return res.status(404).json({ message: 'No time entries for the given day were found' });
