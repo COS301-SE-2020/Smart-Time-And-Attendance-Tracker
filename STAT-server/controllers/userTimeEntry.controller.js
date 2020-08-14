@@ -29,6 +29,8 @@ const UserModel = mongoose.model("User");
 const TimeEntryHelper =  require('../helpers/timeEntry.helper');
 const UserHelper =require('../helpers/user.helper');
 const ProjectModel = mongoose.model("Project");
+var Promise = require('promise');
+var async = require("async");
 
 /**
  * This function adds a time entry to the database.
@@ -488,11 +490,11 @@ module.exports.getUserTimeEntries = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} 
  */  
-module.exports.getAllUsersTimeEntries = (req, res) => {  
+module.exports.getAllUsersTimeEntries = async function(req, res) {  
     var count3 = 0;
     var count4 =0;
     var timeEntries=[];
-    UserHelper.getAllUsers((err, result) => {
+    UserHelper.getAllUsers(async (err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -502,14 +504,14 @@ module.exports.getAllUsersTimeEntries = (req, res) => {
         else{
             var finalobject=[];
             var allcounts=result.length;
-            result.forEach( function(myDoc){ 
+            result.forEach( async function(myDoc){ 
                 count4=count4+1;
                 var userid=myDoc.ID;
                 var name =myDoc.name;
                 var surname=myDoc.surname;
                 var email=myDoc.email;
 
-                UserTimeEntryModel.findOne({  UserID :userid},(err, result) => {
+                UserTimeEntryModel.findOne({  UserID :userid},async (err, result) => {
                     if (err) {
                         return res.status(500).send({message: 'Internal Server Error: ' + err});
                     }
@@ -531,32 +533,24 @@ module.exports.getAllUsersTimeEntries = (req, res) => {
                         }
                         else{
                                
-                            TimeEntryHelper.getAllTimeEntries(result.TimeEntries,myDoc,(err,val,user)=>{   
-                                if(err){
-                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-                                }
-                                else if(val){
-                                    console.log(user.name);
-                                    console.log(val.length);
-                                    finalobject.push({ name:user.name, surname:user.surname, email: user.email, timeEntries: val });
-                                    console.log(user.name);
-                                    console.log(val.length);
-                                }
+                            try {
+                                const  val = await TimeEntryHelper.getAllTimeEntries(result.TimeEntries);
+                                var filtered = val.filter(function (el) {
+                                    return el != null;
+                                  });
+                                finalobject.push({ name:name, surname:surname, email: email, timeEntries: filtered });
                                 
                                 if (count4 == allcounts && finalobject.length == allcounts)  {
-                                    console.log("hello");
-                                return res.status(200).json({results: finalobject}); 
+                                return res.status(200).json({results: finalobject});
                                 }
-                            });
+                            } catch (error) {
+                                return res.status(500).send({message: 'Internal Server Error: ' + err})
+                         
                            
+                                }
                         }
                     }
-                 });
-              
-                 if (count4 == allcounts && finalobject.length == allcounts)  {
-                    return res.status(200).json({results: finalobject}); 
-                 }
-
+                });
             });
         }
     });
@@ -573,12 +567,12 @@ module.exports.getAllUsersTimeEntries = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} 
  */ 
-module.exports.getAllProjectMembersTimeEntries = (req, res) => {  
+module.exports.getAllProjectMembersTimeEntries = async (req, res) => {  
+    if(!req.query.hasOwnProperty("projectID"))
+        return res.status(400).send({message: 'No project ID provided'});
     var projectID=req.query.projectID;
-    var count3 = 0;
     var count4 =0;
-    var timeEntries=[];
-    ProjectHelper.getProject(req.query.projectID, (err, result) => {
+    ProjectHelper.getProject(projectID, (err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -587,7 +581,6 @@ module.exports.getAllProjectMembersTimeEntries = (req, res) => {
         }
         else{
             var finalobject={};
-            var TeamMembers=[];
             finalobject.projectName=result.ProjectName;
             finalobject.dueDate=result.DueDate;
             finalobject.hourlyRate=result.HourlyRate;
@@ -595,79 +588,69 @@ module.exports.getAllProjectMembersTimeEntries = (req, res) => {
             finalobject.TeamMembers=[]
 
             var allcounts=result.TeamMembers.length;
-            result.TeamMembers.forEach( function(myDoc){ 
-            count4=count4+1;
+            result.TeamMembers.forEach( async function(myDoc){ 
+                count4=count4+1;
 
-            UserHelper.getUserDetails(myDoc._id,(err, result) => {
-                if (err) { 
-                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-                }
-                else{
+                UserHelper.getUserDetails(myDoc._id, async(err, result) => {
+                    if (err) { 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    }
+                    else{
 
-                    var name =result.name;
-                    var surname=result.surname;
-                    var email=result.email;
-                    var role = result.role;
+                        var name =result.name;
+                        var surname=result.surname;
+                        var email=result.email;
+                        var role = result.role;
 
-                    UserTimeEntryModel.findOne({  UserID : result.ID},(err, result) => {
-                
-                        if (err) {
-                            return res.status(500).send({message: 'Internal Server Error: ' + err});
-                        }
-                        else if (!result){ ///no time entries for this user
-                            finalobject.TeamMembers.push({ name:name, surname:surname, email:email, role: role,timeEntries: [] });
-                            if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
-                                return res.status(200).json({results: finalobject}); 
-                                }
-    
-                        }
-                        else{
-
-                            var times = result.TimeEntries.length
-                        
-                            if(times == 0){   ///sina --Look at this- 
-
-                                finalobject.TeamMembers.push({name:name, surname:surname, email:email, role: role,timeEntries: []});
+                        UserTimeEntryModel.findOne({  UserID : result.ID},async (err, result) => {
+                    
+                            if (err) {
+                                return res.status(500).send({message: 'Internal Server Error: ' + err});
+                            }
+                            else if (!result){ ///no time entries for this user
+                                finalobject.TeamMembers.push({ name:name, surname:surname, email:email, role: role,timeEntries: [] });
                                 if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
-
                                     return res.status(200).json({results: finalobject}); 
                                     }
+        
                             }
                             else{
-                                ///
-                                timeEntries=[];
-                                result.TimeEntries.forEach( function(myEntry){
-                                        
-                                    TimeEntryModel.findOne({_id: myEntry, ProjectID:projectID},(err,val)=>{  
-                                        count3= count3+1; 
-                                        if(err){
-                                            return res.status(500).send({message: 'Internal Server Error: ' + error});
-    
-                                        }
-                                        else if(val){
-                                                timeEntries.push({timeEntryID: val._id, date:val.Date, description: val.Description, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
-                                        };
-                                        if(count3== times){  ///push data to final object, reset count and count3
-                                            count3=0;
-                                            finalobject.TeamMembers.push({  name:name, surname:surname, email:email, role: role,timeEntries: timeEntries });
-    
-                                            if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
-                                            return res.status(200).json({results: finalobject}); 
-                                            }
-    
-                                        };
-                                    });
-                                });
-                            }
-                            }
-                        });
-                    
-                        if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
-                        return res.status(200).json({results: finalobject}); 
-                        }
 
-                    }
-               });
+                                var times = result.TimeEntries.length
+                            
+                                if(times == 0){   ///sina --Look at this- 
+
+                                    finalobject.TeamMembers.push({name:name, surname:surname, email:email, role: role,timeEntries: []});
+                                    if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
+
+                                        return res.status(200).json({results: finalobject}); 
+                                        }
+                                }
+                                else{
+                                    ///
+                                    timeEntries=[];
+                                    try {
+                                        const  val = await TimeEntryHelper.getAllTimeEntriesForProject(result.TimeEntries, projectID);
+                                        var filtered = val.filter(function (el) {
+                                            return el != null;
+                                          });
+                                        finalobject.TeamMembers.push({ name:name, surname:surname, email: email, timeEntries: filtered });
+                                        
+                                        if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
+                                            return res.status(200).json({results: finalobject}); 
+                                        }
+                                    } 
+                                    catch (error) {
+                                        return res.status(500).send({message: 'Internal Server Error: ' + err})
+                                   
+                                        }
+                                   
+                                    }
+                                }
+                            });
+
+                        }
+                });
             });
         }
     });

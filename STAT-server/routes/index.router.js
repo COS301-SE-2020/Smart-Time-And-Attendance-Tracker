@@ -23,8 +23,8 @@
 
 
 const express = require('express');
-const router = express.Router();
-
+const asyncify = require('express-asyncify')
+const router = asyncify(express.Router());
 const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
@@ -64,7 +64,7 @@ router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHe
 router.get("/userTimeEntry/getOwnTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getOwnTimeEntries);
 router.get("/userTimeEntry/getUserTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, userTimeEntry.getUserTimeEntries);
 router.get("/userTimeEntry/getAllUsersTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsersTimeEntries, userTimeEntry.getAllUsersTimeEntries);
-router.get("/userTimeEntry/getAllProjectMembersTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsers, userTimeEntry.getAllProjectMembersTimeEntries);
+router.get("/userTimeEntry/getProjectTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsers, userTimeEntry.getAllProjectMembersTimeEntries);
 router.post("/userTimeEntry/importTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, userTimeEntry.importTimeEntry);
 
 
