@@ -9,25 +9,50 @@ import { HeaderService } from 'src/app/shared/services/header.service';
   styleUrls: ['./history.component.sass']
 })
 export class HistoryComponent implements OnInit {
-  displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value'];
+  allColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value'];
+  displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value']
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   roles : string;
+
+  tableData : any[] = []
 
   constructor(public headerService : HeaderService, public historyService : HistoryService) { }
   ngOnInit(): void {
     this.roles = localStorage.getItem('roles');
 
-    if (this.roles == "Data Analyst")
-      this.displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value', 'member'];
+    if (this.roles.indexOf("Data Analyst") != -1)
+      this.allColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value', 'member'];
+      this.displayedColumns = this.allColumns
+
+    // if general user
+    if (this.roles.indexOf("General Team Member") == -1)
+      this.getOwn();
+    else
+      this.getAllUser();
   }
 
   // get own time entries
   getOwn() {
     this.historyService.getOwnEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
+      this.tableData = data['timeEntries']
+      this.tableData.sort((a : any ,b : any) =>
+        a.date.localeCompare(b.date) || a.timeEntryID.localeCompare(b.timeEntryID)
+      );
+      this.tableData = this.tableData.reverse()
+      console.log(this.tableData)
+
+      this.tableData.forEach((element : any) => {
+        element.startTime = this.formatTime(element.startTime)
+        element.endTime = this.formatTime(element.endTime)
+        element.month = this.getMonth(element.date)
+        element.date = this.formatDate(element.date)
+      });
+      this.groupAndSort(this.tableData)
     },
     error => {
+      console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -90,6 +115,59 @@ export class HistoryComponent implements OnInit {
         this.headerService.kickOut();
       }
     });
+  }
+
+  // get correct time format
+  formatTime(d : Date) {
+    d = new Date(d)
+    let hours = d.getHours().toString()
+    let mins = d.getMinutes().toString()
+
+    if (hours.length < 2)
+      hours = "0" + hours
+
+    if (mins.length < 2)
+      mins = "0" + mins
+
+    return hours + ":" + mins
+  }
+
+  getMonth(d : Date) {
+    const options = {
+      year: "numeric",
+      month:"long"
+    }
+    return new Date(d).toLocaleDateString('en-US', options)
+  }
+
+  formatDate(d : Date) {
+    const options = {
+      month:"short",
+      day:"2-digit"
+    }
+    return new Date(d).toLocaleDateString('en-US', options)
+  }
+
+
+  // group and sort members
+  groupAndSort(data : any[]) {
+    // group by month
+    let grouped = data.reduce((r : any, e : any) => {
+      // get first letter of name of current element
+      let month = e.month;
+
+      // if there is no property in accumulator with this letter create it
+      if (!r[month]) r[month] = { month, records: [e] }
+
+      // if there is push current element to children array for that letter
+      else r[month].records.push(e);
+
+      // return accumulator
+      return r;
+    }, {});
+
+    this.tableData = Object.values(grouped)
+    console.log(this.tableData)
   }
 }
 
