@@ -29,6 +29,8 @@ const UserModel = mongoose.model("User");
 const TimeEntryHelper =  require('../helpers/timeEntry.helper');
 const UserHelper =require('../helpers/user.helper');
 const ProjectModel = mongoose.model("Project");
+var Promise = require('promise');
+var async = require("async");
 
 /**
  * This function adds a time entry to the database.
@@ -488,11 +490,11 @@ module.exports.getUserTimeEntries = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} 
  */  
-module.exports.getAllUsersTimeEntries = (req, res) => {  
+module.exports.getAllUsersTimeEntries = async function(req, res) {  
     var count3 = 0;
     var count4 =0;
     var timeEntries=[];
-    UserHelper.getAllUsers((err, result) => {
+    UserHelper.getAllUsers(async (err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -502,14 +504,14 @@ module.exports.getAllUsersTimeEntries = (req, res) => {
         else{
             var finalobject=[];
             var allcounts=result.length;
-            result.forEach( function(myDoc){ 
+            result.forEach( async function(myDoc){ 
                 count4=count4+1;
                 var userid=myDoc.ID;
                 var name =myDoc.name;
                 var surname=myDoc.surname;
                 var email=myDoc.email;
 
-                UserTimeEntryModel.findOne({  UserID :userid},(err, result) => {
+                UserTimeEntryModel.findOne({  UserID :userid},async (err, result) => {
                     if (err) {
                         return res.status(500).send({message: 'Internal Server Error: ' + err});
                     }
@@ -531,32 +533,25 @@ module.exports.getAllUsersTimeEntries = (req, res) => {
                         }
                         else{
                                
-                            TimeEntryHelper.getAllTimeEntries(result.TimeEntries,myDoc,(err,val,user)=>{   
-                                if(err){
-                                    return res.status(500).send({message: 'Internal Server Error: ' + err});
-                                }
-                                else if(val){
-                                    console.log(user.name);
-                                    console.log(val.length);
-                                    finalobject.push({ name:user.name, surname:user.surname, email: user.email, timeEntries: val });
-                                    console.log(user.name);
-                                    console.log(val.length);
-                                }
+                            try {
+                                const  val = await TimeEntryHelper.getAllTimeEntries(result.TimeEntries);
+                                var filtered = val.filter(function (el) {
+                                    return el != null;
+                                  });
+                                finalobject.push({ name:name, surname:surname, email: email, timeEntries: filtered });
                                 
                                 if (count4 == allcounts && finalobject.length == allcounts)  {
                                     console.log("hello");
-                                return res.status(200).json({results: finalobject}); 
+                                return res.status(200).json({results: finalobject});
                                 }
-                            });
+                            } catch (error) {
+                                return res.status(500).send({message: 'Internal Server Error: ' + err})
+                         
                            
+                                }
                         }
                     }
-                 });
-              
-                 if (count4 == allcounts && finalobject.length == allcounts)  {
-                    return res.status(200).json({results: finalobject}); 
-                 }
-
+                });
             });
         }
     });

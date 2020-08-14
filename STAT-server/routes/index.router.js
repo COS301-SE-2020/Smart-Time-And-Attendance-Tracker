@@ -23,8 +23,8 @@
 
 
 const express = require('express');
-const router = express.Router();
-
+const asyncify = require('express-asyncify')
+const router = asyncify(express.Router());
 const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');

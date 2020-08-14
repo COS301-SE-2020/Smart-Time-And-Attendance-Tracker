@@ -1,3 +1,4 @@
+
 /**
   * @file STAT-server/helper/timeEntry.helper.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
@@ -23,7 +24,8 @@
 */
 const mongoose = require("mongoose");
 const TimeEntryModel = mongoose.model("TimeEntry");
-
+var Promise = require('promise');
+var async = require("async");
 /**
  * 
  * @param {String} id ID of time entry.
@@ -49,34 +51,34 @@ module.exports.getTimeEntry = (id, done)=>{
  * @param {*} done 
  * @returns {Object} Time Entry document(object).
  */
-module.exports.getAllTimeEntries = (ids, user, done)=>{
-    entries = [];
-    len = ids.length;
-    console.log('len' + ids.length);
-    for(i=0; i< ids.length; i++){
-        TimeEntryModel.find({_id: ids[0]},(err, result) => {
-        if(err) 
-            done(err);
-        else if (!result)
-            len = len -1;
-        else if(result)
-        {
-            var text = {
-                'timeEntryID': result._id,
-                'date': result.Date,
-                'description': result.Description,
-                'startTime': result.StartTime,
-                'endTime': result.EndTime,
-                'duration':result.Duration, 
-                'project': result.ProjectName,
-                'task': result.TaskName, 
-                'activeTime': result.ActiveTime, 
-                'monetaryValue':result.MonetaryValue
-                }
-                entries.push(text)
-            }
-            if(entries.length == len)
-                done(null, entries,user);        
+
+
+module.exports.getAllTimeEntries = async (ids)=> {
+    return new Promise(function(resolve, reject) { 
+        entries = [];
+        ids.forEach((id) => { 
+            entries.push(
+                    TimeEntryModel.findOne({_id: id}).then((result) => {
+                        if(result){
+                            var text = {
+                                'timeEntryID': result._id,
+                                'date': result.Date,
+                                'description': result.Description,
+                                'startTime': result.StartTime,
+                                'endTime': result.EndTime,
+                                'duration':result.Duration, 
+                                'project': result.ProjectName,
+                                'task': result.TaskName, 
+                                'activeTime': result.ActiveTime, 
+                                'monetaryValue':result.MonetaryValue
+                                } 
+                            return text;
+                        }
+                    }).catch((err) => reject(err)));
         });
-    }
+        Promise.all(entries).then((result) => {
+            resolve(result);  
+        }).catch((err) => reject(err));
+    });
 }
+   
