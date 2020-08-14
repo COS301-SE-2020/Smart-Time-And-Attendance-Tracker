@@ -32,6 +32,7 @@ processDisplay();
     }
   }
   userLogin.onclick = function() {
+    document.getElementById("errorMessage").innerHTML= "Loading...";
     var http = new XMLHttpRequest();
     var url = 'http://localhost:3000/api/user/login';
     http.open('POST', url, true);
@@ -57,14 +58,14 @@ processDisplay();
           setTimeout (() => { 
             if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token') && chrome.extension.getBackgroundPage().History[tabID][0][2] == "")
             {
-              var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
+              var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);
               AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
               
             }
           }, 60000);
         }
       }
-      else 
+      else if( http.readyState == 4 && http.status != 200)
       {
         var data = JSON.parse(http.responseText);
         document.getElementById("errorMessage").innerHTML=data.message;
@@ -157,7 +158,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
     }
     else if(http.readyState == 4 && http.status == 403) //login again => token expired
     {
-      alert("token expired");
+      //alert("token expired");
       localStorage.removeItem('token');
       processDisplay();
     }
@@ -206,7 +207,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
     }
     else if(http.readyState == 4 && http.status == 403) //login again => token expired
     {
-      alert("token expired");
+      //alert("token expired");
       localStorage.removeItem('token');
       processDisplay();
     }
@@ -300,22 +301,30 @@ function processProjects(responseText, display)
       opt.appendChild( document.createTextNode("Un-specified") );
       opt.value = "";
       tasksDropdown.appendChild(opt); 
-
-
-      document.getElementById("select_task_form").style.display="block";
+      
+      if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
+      {
+        document.getElementById("loading_projects").style.display="none";
+        document.getElementById("select_task_form").style.display="block";
+      }
     }
     else if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "")
     {
       //alert("2.2");
         var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
-        if(obj.taskName != "" && TaskName != "Un-specified")
+        if(obj.taskName != "" && obj.taskName != "Un-specified")
           document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
 
+          if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
+          {
+            document.getElementById("reselect_task").style.display="block";
+          }
           document.getElementById("select_task_form").style.display="none";
+          document.getElementById("loading_projects").style.display="none";
           document.getElementById("selected_task").style.display="block";
-          document.getElementById("reselect_task").style.display="block";
-        
+          
+
     }
     else if(localStorage.getItem('currentlyTrackingDetails'))
     {
@@ -324,8 +333,13 @@ function processProjects(responseText, display)
       var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
       document.getElementById("select_task_form").style.display="none";
       document.getElementById("selected_task").style.display="block";
-      document.getElementById("reselect_task").style.display="block";
+      document.getElementById("loading_projects").style.display="none";
 
+      if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
+      {
+        document.getElementById("reselect_task").style.display="block";
+      }
+      
       document.getElementById("project").innerHTML = "Project: " + obj.projectName;
       if(obj.taskName != "" && obj.taskName  != "Un-specified")
         document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
@@ -363,11 +377,16 @@ function processProjects(responseText, display)
       opt.appendChild( document.createTextNode("Un-specified") );
       opt.value = "";
       tasksDropdown.appendChild(opt); 
+      document.getElementById("loading_projects").style.display="none";
 
-      document.getElementById("select_task_form").style.display="block";
+      if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
+      {
+        document.getElementById("select_task_form").style.display="block";
+      }
     }
   });
 }
+
 function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   var taskDetails = "";
   if(TaskID != "")
@@ -415,10 +434,11 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
       document.getElementById("select_task_form").style.display="none";
       document.getElementById("selected_task").style.display="block";
       document.getElementById("reselect_task").style.display="block";
+      document.getElementById("loading_projects").style.display="none";
     }
     else if(http.readyState == 4 && http.status == 403) //login again => token expired
     {
-      alert("token expired");
+      //alert("token expired");
       localStorage.removeItem('token');
       processDisplay();
     }
@@ -430,6 +450,25 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   http.send(text);
 
 }
+
+var LogoutBtn = document.getElementById("logout_btn");
+
+LogoutBtn.onclick = function() {
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("errorMessage").innerHTML= "Login to start tracking";
+  document.getElementById("popup").style.display = "none";
+  localStorage.removeItem("name");
+  localStorage.removeItem("surname");
+  localStorage.removeItem("token");
+  localStorage.removeItem("currentlyTracking");
+  user.getInstance().allProject = "";
+  
+  document.getElementById("desc").innerHTML = "0:00";
+  for(tabID in chrome.extension.getBackgroundPage().History) 
+    chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabID), 'text': FormatDuration("0:00")});
+
+}
+
 
   function getMinutesFromSeconds(t)
   {

@@ -21,6 +21,8 @@ function showTime() {
         //    desc.innerHTML = "00:00:00\n";
     });    
 }
+window.addEventListener('online', () => console.log('came online'));
+window.addEventListener('offline', () => console.log('came offline'));
 var SelectTask = document.getElementById("select_task");
 var ReselectTask = document.getElementById("reselect_task");
 var tasksDropdown = document.getElementById("tasks");
@@ -29,7 +31,6 @@ var projectsDropdown = document.getElementById("projects");
 var stopStartBtn = document.getElementById("start_stop");
 
 ReselectTask.onclick = function() {
-    document.getElementById("select_task_form").style.display="block";
     ReselectTask.style.display="none";
     processProjects(user.getInstance().allProject, true);
 }
@@ -123,7 +124,7 @@ stopStartBtn.onclick = function(){
                 UpdateTimeEntry(now, currentID, currentDuration, true);
                 //startTimer.style.display = "block";
                 //stopTimer.style.display = "none";
-                hideProjects();
+                
             }
             else
             {
@@ -132,8 +133,9 @@ stopStartBtn.onclick = function(){
                 chrome.extension.getBackgroundPage().History[currentID][0][2] = "";  
                 chrome.extension.getBackgroundPage().History[currentID][0][3] = "true"; 
                 chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
-                hideProjects();
+                
             }
+            hideProjects();
         }
         else{
             //setCookie("historyTime"+currentID, "0", 1);        
@@ -178,6 +180,7 @@ function displayButton() {
             stopStartBtn.name = "start";
             stopStartBtn.innerHTML = "Start";
             hideProjects();
+            console.log("sToP!!!!!!!!");
             //startTimer.style.display = "block";
             //stopTimer.style.display = "none";
         }

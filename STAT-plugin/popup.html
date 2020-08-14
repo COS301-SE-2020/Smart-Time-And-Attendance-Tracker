@@ -33,6 +33,7 @@
       <hr class="my-4">
       <div class="flex-column row"></div>
       <p class="text-danger h6" id="task_error"></p>
+      <p class= "lead" id="loading_projects">Loading Projects...</p>
         <div id="select_task_form">
           <form class="form-group form-group-modified" action="" method="post">
             <label for="task">Project</label>
@@ -58,6 +59,8 @@
       <form class="form-group form-group-modified" action="" method="post">
         <!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>-->
         <button class="py-1 btn btn-md mt-3 py-1" type="button" name="stop" value="stop" id="start_stop">Stop</button><br>
+        
+        <button class="py-1 btn btn-md mt-3 py-1" type="button" name="logout" value="logout" id="logout_btn">Logout</button><br>
         <!--
           Can be implemented for next phase ==> nice to have feature
           <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="pause_resume">pause</button>
