@@ -70,7 +70,7 @@
       <button mat-mini-fab id="sort-menu" class="mx-1"
               matTooltip="Sort"
               matTooltipClass="action-tooltip"
-              matTooltipPosition="right"
+              matTooltipPosition="above"
               [matMenuTriggerFor]="sortMenu">
         <mat-icon>sort</mat-icon>
       </button>
@@ -81,18 +81,34 @@
       <button mat-mini-fab id="export-menu" class="mx-1"
               matTooltip="Export"
               matTooltipClass="action-tooltip"
-              matTooltipPosition="right"
+              matTooltipPosition="above"
               [matMenuTriggerFor]="exportMenu">
         <mat-icon>import_export</mat-icon>
       </button>
       <mat-menu #exportMenu="matMenu">
-        <button mat-menu-item>JSON</button>
+        <button mat-menu-item (click)="exportToJSON()">JSON</button>
+        <button mat-menu-item>PDF</button>
+        <button mat-menu-item>Excel</button>
+      </mat-menu>
+      <button mat-mini-fab id="download-menu" class="mx-1"
+              matTooltip="Download"
+              matTooltipClass="action-tooltip"
+              matTooltipPosition="above"
+              [matMenuTriggerFor]="downloadMenu">
+        <mat-icon>download</mat-icon>
+      </button>
+      <mat-menu #downloadMenu="matMenu">
+        <button mat-menu-item (click)="downloadJSON()">JSON</button>
         <button mat-menu-item>PDF</button>
         <button mat-menu-item>Excel</button>
       </mat-menu>
     </div>
+
+
     <div id="history" class="scroll">
-      <div>
+      <mat-spinner *ngIf="!tableData"></mat-spinner>
+
+      <div>       
         <mat-accordion>
           <mat-expansion-panel *ngFor="let t of tableData" class="pb-3">
             <mat-expansion-panel-header>

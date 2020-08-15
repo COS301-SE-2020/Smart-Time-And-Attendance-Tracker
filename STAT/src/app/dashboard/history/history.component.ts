@@ -52,6 +52,7 @@ export class HistoryComponent implements OnInit {
 
   // get own time entries
   getOwn() {
+    this.tableData = []
     this.historyService.getOwnEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.tableData = data['timeEntries']
@@ -70,6 +71,7 @@ export class HistoryComponent implements OnInit {
 
   // get user time entries
   getUser(userID : string) {
+    this.tableData = []
     this.historyService.getUserEntries(localStorage.getItem('token'), userID).subscribe((data) => {
       console.log(data);
       this.tableData = data['timeEntries']
@@ -92,6 +94,7 @@ export class HistoryComponent implements OnInit {
 
   // get all user time entries
   getAllUser() {
+    this.tableData = []
     this.historyService.getAllUserEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       let res : any[] = data['results']
@@ -115,9 +118,9 @@ export class HistoryComponent implements OnInit {
 
   // get all project time entries
   getAllProject(projectID : string) {
+    this.tableData = []
     this.historyService.getAllProjectEntries(localStorage.getItem('token'), projectID).subscribe((data) => {
       console.log(data);
-      this.tableData = []
       let res : any[] = data['results']['TeamMembers']
       console.log(res)
       res.forEach((element : any) => {
@@ -308,7 +311,6 @@ export class HistoryComponent implements OnInit {
     }
 
     this.formatTableData()
-    console.log('HERE\n' + this.tableData)
   }
 
   sort(type : string) {
@@ -320,6 +322,26 @@ export class HistoryComponent implements OnInit {
       this.tableData = this.tableData.reverse()
     }
     console.log(this.tableData)
+  }
+
+  exportToJSON() {
+    let dataStr = JSON.stringify(this.tableData, null, 4);
+    var x = window.open();
+    x.document.open();
+    x.document.write('<html><body><pre>' + dataStr + '</pre></body></html>');
+    x.document.close();
+  }
+
+  downloadJSON() {
+    let dataStr = JSON.stringify(this.tableData, null, 4);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    let exportFileDefaultName = 'TrackingEntries.json';
+
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
   }
 }
 
