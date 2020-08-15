@@ -92,7 +92,7 @@ router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
 //calendar 
-router.post("/calendar/getEvents", calendar.getEvents);
-router.get("/calendar/getCredentials", calendar.getCredentials);
+router.post("/calendar/syncEvents",jwtHelper.verifyJWTtoken,calendar.getLastSynced, calendar.syncEvents );
+router.get("/calendar/getCredentials", jwtHelper.verifyJWTtoken,calendar.getCredentials);
 
 module.exports = router;

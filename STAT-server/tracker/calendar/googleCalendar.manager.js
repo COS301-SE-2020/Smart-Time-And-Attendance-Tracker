@@ -58,16 +58,21 @@ module.exports.getEvents = (req, done) => {
     auth.setCredentials(credentials);
 
     //Get events on calendar
-    var minDate=new Date();
+    if(req.lastSynced == null)
+    {
+      var minDate=new Date()
+      var min = (new Date( minDate.setDate(minDate.getDate() - 7) )).toISOString();
+    }
+    else
+      var min = req.lastSynced;
+    
     var maxDate=new Date();
-    //date.setDate(date.getDate() - 7)
-    ///console.log( date.toISOString());
-    //console.log((new Date( date.setDate(date.getDate() - 7) )).toISOString());
+    var max = maxDate.toISOString();
     const calendar = google.calendar({version: 'v3', auth});
     calendar.events.list({
       calendarId: 'primary',
-      timeMin: (new Date( minDate.setDate(minDate.getDate() - 7) )).toISOString(),
-      timeMax:maxDate.toISOString(),
+      timeMin: min,
+      timeMax: max,
       singleEvents: true,
       orderBy: 'startTime',
     }, (err, res) => {
@@ -82,17 +87,17 @@ module.exports.getEvents = (req, done) => {
           const start = event.start.dateTime || event.start.date;
           const end = event.end.dateTime || event.end.date;
           var EventItem= {
-              'event': event.summary,
-              'startTime': start,
-              'endTime': end,
-              'id': event.id
+              'description': event.summary,
+              'startTime': new Date(start).getTime(),
+              'endTime': new Date(end).getTime(),
+              'device': 'Google calendar'
           }
           EventList.push(EventItem);
         });
-        done(null, EventList);
+        done(null, EventList,max);
       } 
       else {
-        done(null, false);
+        done(null, false,max);
       }
     });  
   });

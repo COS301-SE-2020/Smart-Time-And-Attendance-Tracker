@@ -21,22 +21,16 @@
 */
 const mongoose = require("mongoose")
 
-var CalendarEventsSchema = new mongoose.Schema({
+var userCalendarSyncingSchema = new mongoose.Schema({
     UserID:{
         type: mongoose.Schema.Types.ObjectId,
         required : "ID required.",
         unique: true
     },
-    Events:[
-        { 
-            ID : {
-                type: String
-            },
-            EndTime: {
-                type: Number
-            },
-        }
-    ]
+    LastSynced:
+    {
+        type: String
+    }
 });
 
-mongoose.model("calendarEvents", CalendarEventsSchema);
+mongoose.model("userCalendarSyncing", userCalendarSyncingSchema);

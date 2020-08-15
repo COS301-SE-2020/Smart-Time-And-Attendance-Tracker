@@ -21,7 +21,8 @@
 */
 const googleCalendar = require('./googleCalendar.manager');
 const mongoose = require("mongoose");
-const calendarModel = mongoose.model("calendarEvents");
+const calendarModel = mongoose.model("userCalendarSyncing");
+const trackerManager = require('../tracker.manager'); 
 /**
  * This function gets credentials for the appropriate calendar application
  * @param {HTTP Request} req Request - ID of user
@@ -52,29 +53,36 @@ module.exports.getCredentials = (req, res) => {
  * @param {HTTP Request} req Request - ID of user
  * @param {HTTP Response} res 
  */
-module.exports.getEvents = (req, res) => {  
+module.exports.syncEvents = async(req, res) => {  
     if(!req.body.hasOwnProperty('calendar'))
         return res.status(400).send({message: 'No calendar application specified'});
     else
     {
         if((req.body.calendar).toLowerCase() == "google")
         {
-            googleCalendar.getEvents(req,(err,val)=>
+            googleCalendar.getEvents(req, async(err,entries,date)=>
             {
                 if(err)
                     return res.status(500).json({message: 'Internal server error: ' + err});
-                else if(val == false)
+                else if(entries == false)
                     return res.status(404).json({message: 'No events found'});
                 else
                 {
-                    console.log(val);
-                   /* removeDuplicateEvents(val, (err,val)=>
+                    updateLastSynced(req.ID, date, async (err,val)=>
                     {
                         if(err)
                             return res.status(500).json({message: 'Internal server error: ' + err});
                         else
-                            return response.status(200).json({ events: val});
-                    });*/
+                        {
+                            try {
+                                const  final = await trackerManager.addTimeEntries(entries, req.ID);
+                                return res.status(200).json({message: 'Calendar successfully synced'});
+                            } catch (error) {
+                                return res.status(500).send({message: 'Internal Server Error: ' + err})
+                            }
+
+                        }
+                    });
 
                 }
             });
@@ -84,33 +92,57 @@ module.exports.getEvents = (req, res) => {
     }
 }
 /**
- * This function checks the database for duplicate events, adds new events and removes events older than a week
+ * This function gets the last synced time.
  * @param {HTTP Request} req Request - ID of user
  * @param {HTTP Response} res 
+ * @param {Function} next The next function on the route 
  */
-removeDuplicateEvents = (events) =>
+module.exports.getLastSynced = (req,res,next) =>
 {
-    for(a in events)
-    {
-        calendarModel.findOne({ID :a.id}, {StartTime: 1},(err, result) => {
-            if (err) 
-                return res.status(500).send({message: 'Internal Server Error: ' + err});
-            else if (!result)
-            {
-                var entry = new calendarModel();
-                entry.ID= a.id;
-                entry.Endtime = a.endTime;
+    calendarModel.findOne({UserID :req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+        {
+            var entry = new calendarModel();
+            entry.UserID= req.ID;
+            entry.LastSynced = null;
+            entry.save((err, doc) => {
+                if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                else
+                {
+                    req.lastSynced = null;
+                    next();
+                }
+            });
+        }
+        else
+        {
+            req.lastSynced = result.LastSynced;
+            next();
+        }
 
-                entry.save((err, doc) => {
-                    if(err)
-                        return res.status(500).send({message: 'Internal Server Error: ' + err});
-                });
-            }
-            else
-            {
-                
-            }
-        });
-    }
+    });
+
+}
+
+/**
+ * This function updates the last synced time.
+ * @param {String} id ID of user
+ * @param {String} date New date
+ * @param {Function} done Function to return to after execution
+ */
+updateLastSynced = (id,date,done) =>
+{
+    calendarModel.updateOne({UserID :id},{LastSynced: date},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (result.n==0)
+            return res.status(404).send({message: 'User not found'});
+        else
+            done();
+
+    });
 
 }
