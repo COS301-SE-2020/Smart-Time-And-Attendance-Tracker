@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { HistoryService } from 'src/app/shared/services/history.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
+import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 
 @Component({
   selector: 'app-history',
@@ -26,7 +27,7 @@ export class HistoryComponent implements OnInit {
   members : any[] = []
   mSelected : string = null
 
-  constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService) { }
+  constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
   ngOnInit(): void {
     this.roles = localStorage.getItem('roles');
 
@@ -39,10 +40,11 @@ export class HistoryComponent implements OnInit {
       this.getOwn();
     else if (this.roles.indexOf("Data Analyst") != -1) {
       this.getAllUser()
-      this.getProjects()
+      this.getProjectsDA()
+      this.getMembers()
     } else {
       this.getAllUser()
-      this.getProjects()
+      this.getProjectsTL()
     }
   }
 
@@ -151,7 +153,7 @@ export class HistoryComponent implements OnInit {
     });
   }
 
-  getProjects() {
+  getProjectsTL() {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.projects = data['projects']
@@ -162,6 +164,34 @@ export class HistoryComponent implements OnInit {
             this.members.push(m)
         });
       });
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  getProjectsDA() {
+    this.pmService.getProjects(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+      this.projects = data['projects']
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  getMembers() {
+    this.amService.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data)
+      this.members = data['users']
     },
     error => {
       let errorCode = error['status'];

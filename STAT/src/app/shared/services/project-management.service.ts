@@ -130,4 +130,13 @@ export class ProjectManagementService {
     });
   }
 
+  // get projects
+  getProjects(token) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.get(this.ROOT_URL+ 'project/getProjects', {
+      headers: headers
+    });
+  }
+
 } // end service
