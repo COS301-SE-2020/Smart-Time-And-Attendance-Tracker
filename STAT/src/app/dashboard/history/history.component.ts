@@ -26,6 +26,7 @@ export class HistoryComponent implements OnInit {
   pSelected : string = null
   members : any[] = []
   mSelected : string = null
+  toggle : boolean = false
 
   constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
   ngOnInit(): void {
