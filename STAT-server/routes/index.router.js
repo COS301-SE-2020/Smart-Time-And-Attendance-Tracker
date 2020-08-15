@@ -31,7 +31,7 @@ const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
-const googleCalendar = require('../calendar/googleCalendar.controller');
+const calendar = require('../tracker/calendar/calendar.manager');
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
 
@@ -42,7 +42,7 @@ router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 router.get("/user/isAuthenticated",jwtHelper.verifyJWTtoken, user.isAuthenticated);
 router.get("/user/getProjects",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getProjects);
-router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
+//router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsers,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);

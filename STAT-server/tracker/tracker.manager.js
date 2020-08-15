@@ -1,7 +1,7 @@
 /**
   * @file STAT-server/tracker/tracker.manager.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
-  * @fileoverview This file handles the requests regarding Calendar applications.  
+  * @fileoverview This file processes time entry requests.  
   * @date 11 August 2020
  */
 
@@ -16,7 +16,7 @@
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:          This file handles the requests regarding Calendar applications. 
+* Description:          This file processes time entry requests. 
 *
 */
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
