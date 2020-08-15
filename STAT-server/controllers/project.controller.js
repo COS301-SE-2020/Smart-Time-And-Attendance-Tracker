@@ -27,10 +27,43 @@ const ProjectModel = mongoose.model("Project");
 const TaskHelper = require("../helpers/task.helper");
 const TeamHelper = require("../helpers/team.helper");
 const UserHelper = require("../helpers/user.helper");
-
+/**
+ * This function returns all the projects.
+ * @param {HTTP Request} req Request body - ID of Project
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.getProjects = (req, res) => {
+    ProjectModel.find({},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'Project collection not found' });
+        
+        else
+        {
+            if(result.length == 0)
+                return res.status(404).json({ message: 'No projects found' });
+            else
+            {
+                projects = [];
+                for(a=0; a<result.length; a++) 
+                {    
+                    projects.push({projectID: result[a]._id, projectName: result[a].ProjectName});
+            
+                    if(projects.length == result.length)
+                        return res.status(200).json({projects : projects });
+                        
+                    
+                }
+            }
+        
+        }
+    });
+}
 
 /**
- * Thos function changes the status of the project to incomplete.
+ * This function changes the status of the project to incomplete.
  * @param {HTTP Request} req Request body - ID of Project
  * @param {HTTP Response} res 
  * @returns {String} Success or error message.
