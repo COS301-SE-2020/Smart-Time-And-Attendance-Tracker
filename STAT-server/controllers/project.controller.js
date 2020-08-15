@@ -49,7 +49,7 @@ module.exports.getProjects = (req, res) => {
                 projects = [];
                 for(a=0; a<result.length; a++) 
                 {    
-                    projects.push({projectID: result[a]._id, projectName: result[a].ProjectName});
+                    projects.push({ID: result[a]._id, projectName: result[a].ProjectName});
             
                     if(projects.length == result.length)
                         return res.status(200).json({projects : projects });
