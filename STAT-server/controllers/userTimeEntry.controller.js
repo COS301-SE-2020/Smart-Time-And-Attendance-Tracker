@@ -126,6 +126,66 @@ module.exports.addTimeEntry = (req, res) => {
 }
 
 /**
+ * This function adds entries passed from the trackerManager
+ * @param {JSON Object} entry Time entry to add
+ * @param {String} id The user's ID.
+ */
+module.exports.addTimeEntryFromManager = async(entry, id) => { 
+    return new Promise(function(resolve, reject) { 
+    
+        var timeEntry = new TimeEntryModel();
+        timeEntry.Date = entry.date;
+        timeEntry.StartTime = entry.startTime;
+        timeEntry.EndTime = entry.endTime;
+        timeEntry.TaskID = null;
+        timeEntry.TaskName = 'Unspecified';
+        timeEntry.ProjectID = null;
+        timeEntry.ProjectName = 'Unspecified';
+        timeEntry.ActiveTime = entry.activeTime;
+        timeEntry.MonetaryValue = 0;
+        timeEntry.Description = entry.description;
+        timeEntry.Device = entry.device;
+
+        timeEntry.save((error, timeEntryDoc) => {
+            if(!error)
+            {
+                UserTimeEntryModel.findOne({UserID : id}, function(err, result) {
+                    if(err) 
+                        reject(err);
+
+                    else if (!result)
+                    {
+                        var userTimeEntry = new UserTimeEntryModel();
+                        userTimeEntry.UserID = req.ID;
+                        userTimeEntry.TimeEntries = [timeEntryDoc];
+                        userTimeEntry.save((err, doc) => {
+                        if(!err)
+                            resolve();
+                        else 
+                            reject(err);
+                        });
+                    }
+                    else {
+                        result.TimeEntries.push(timeEntryDoc);
+                        result.save((err, doc) => {
+                            if(!err)
+                                resolve();
+                            else
+                                reject(err);
+                        });
+                    }
+                });
+            }
+
+            else 
+                reject(error);
+        });     
+    });
+}
+//Update the time enty
+//Request body - Has values to update
+//Response - Success or error message       
+/**
  * This function imports a time entry to the database.
  * @param {HTTP Request} req Receives all entry details plus the user id as part of the body
  * @param {HTTP Response} res 
@@ -225,7 +285,7 @@ module.exports.importTimeEntry = (req, res) => {
  * @param {HTTP Request} req 
  * @param {HTTP Response} res 
  * @returns {JSON Object} success or error message
- */     
+ */    
 module.exports.updateTimeEntry = (req, res) => {  
     if(!req.body.hasOwnProperty('timeEntryID'))
         return res.status(400).send({message: 'No time entry ID given'});

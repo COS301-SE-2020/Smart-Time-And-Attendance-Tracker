@@ -68,7 +68,7 @@ module.exports.login = (req, res, next) => {
  * @param {*} res HTTP response 
  * @return {Http Response} - If registration is a success a token is returned, otherwise an error message is returned
  */
-module.exports.register = (req, res, next) => {
+module.exports.register = (req, res) => {
     if(!( req.body.name &&  req.body.surname && req.body.email && req.body.password && req.body.passwordConf)) 
     {
         return res.status(400).send({message: "Missing credentials"});
@@ -116,7 +116,7 @@ module.exports.register = (req, res, next) => {
  * @param {*} req HTTP request 
  * @param {*} res HTTP response 
  * @return {Http Response} - If changing password is a success a success message is returned, otherwise a error message is returned
- */
+ 
 module.exports.changePass = (req, res, next) => {
     UserModel.updateOne({ _id: req.ID},{Password: req.body.pass},(err, result) => {
         if (err) 
@@ -128,7 +128,7 @@ module.exports.changePass = (req, res, next) => {
                
     });
    
-}   
+} */  
 
 /**
  * This function returns the name and surname of the user.
@@ -138,7 +138,7 @@ module.exports.changePass = (req, res, next) => {
  * fecthing the user's details from the database.
  */
 module.exports.getName = (req, res, next) => {
-    UserModel.findOne({ _id: req.ID},(err, result) => {
+    UserModel.findOne({ _id: req.ID},{Name: 1, Surname: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -155,8 +155,8 @@ module.exports.getName = (req, res, next) => {
  * @param {*} res HTTP response 
  * @return {Http Response} - Returns roles pf the user if no error occured, otherwise an error message is returned.
  */
-module.exports.getRoles = (req, res, next) => {
-    UserModel.findOne({ _id: req.ID},(err, result) => {
+module.exports.getRoles = (req, res) => {
+    UserModel.findOne({ _id: req.ID},{Role: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -198,8 +198,8 @@ module.exports.getRoles = (req, res, next) => {
  * @param {*} res HTTP response 
  * @return {Http Response} - Array with all unauthenticated users objects
  */
-module.exports.getUnauthenticatedUsers = (req, res, next) => {
-    UserModel.find({  Authenticate : false},(err, result) => {
+module.exports.getUnauthenticatedUsers = (req, res) => {
+    UserModel.find({ Authenticate : false},{_id: 1, Name: 1, Surname: 1, Email: 1, ProfilePicture: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -208,7 +208,7 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
         {
             UnauthenticatedUsers=[];
             for(var a=0; a<result.length; a++){
-                UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname});
+                UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname, profilePicture: user.ProfilePicture});
             }
             return res.status(200).json({unauthenticatedUsers: UnauthenticatedUsers});
         }
@@ -222,13 +222,14 @@ module.exports.getUnauthenticatedUsers = (req, res, next) => {
  * @param {*} res HTTP response 
  * @return {Http Response} - Array with all authenticated users objects
  */
-module.exports.getAllUsers = (req, res, next) => {
+
+module.exports.getAllUsers = (req, res) => {
     if(!req.query.hasOwnProperty('removed'))
         req.query.removed = false;
 
     if(req.query.removed)
     {
-        UserModel.find({$or: [{Authenticate : true},{Removed: true}]},(err, result) => {
+        UserModel.find({$or: [{Authenticate : true},{Removed: true}]},{_id: 1, Name: 1, Surname: 1, Email: 1, ProfilePicture: 1, Role:1},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + err});
             else if (!result)
@@ -248,8 +249,7 @@ module.exports.getAllUsers = (req, res, next) => {
                         
                         if(users.length == result.length)
                                 return res.status(200).json({users});
-                        
-                
+
                     });
                 
                 }
@@ -356,7 +356,7 @@ module.exports.remove = (req, res, next) => {
     if(!req.body.hasOwnProperty('userID'))
         return res.status(400).send({message: 'No user ID given'});
 
-    UserModel.findOne({ _id: req.body.userID},(err, result) => {
+    UserModel.findOne({ _id: req.body.userID},{Projects: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -397,11 +397,9 @@ module.exports.remove = (req, res, next) => {
  * This function checks if the user is authenticated
  * @param {HTTP Request} req Request - ID of user
  * @param {HTTP Response} res 
- * @param {Function} next The next function to call
- * @return {Http Response} - Value of Authenticated attribute or an error message
  */
-module.exports.isAuthenticated = (req, res, next) => {
-    UserModel.findOne({ _id: req.ID},(err, result) => {
+module.exports.isAuthenticated = (req, res) => {
+    UserModel.findOne({ _id: req.ID},{Authenticate: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -419,10 +417,10 @@ module.exports.isAuthenticated = (req, res, next) => {
  * @param {HTTP Response} res 
  * @return {Http Response} - Array with all projects and tasks objects
  */
-module.exports.getProjects = (req, res, next) => {
+module.exports.getProjects = (req, res) => {
     let count = 0;
     let projectsOfUser = [];
-    UserModel.findOne({ _id: req.ID},(err, result) => {
+    UserModel.findOne({ _id: req.ID},{Projects: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -463,7 +461,7 @@ module.exports.getProjects = (req, res, next) => {
  * @return {Http Response} - Success or error message
  */
 module.exports.edit = (req, res) => {
-    UserModel.findOne({ _id: req.body.userID},(err, result) => {
+    UserModel.findOne({ _id: req.body.userID},{Name: 1, Surname: 1, Email: 1},(err, result) => {
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if(!result)
@@ -509,7 +507,7 @@ module.exports.addRole = (req, res) => {
     if(!req.body.hasOwnProperty('userRole'))
         return res.status(400).send({message: 'No role given'});
 
-    UserModel.findOne({ _id: req.body.userID},(err, result) => {
+    UserModel.findOne({ _id: req.body.userID},{Role:1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -564,7 +562,7 @@ module.exports.removeRole = (req, res) => {
     if(!req.body.hasOwnProperty('userRole'))
         return res.status(400).send({message: 'No role given'});
 
-    UserModel.findOne({ _id: req.body.userID},(err, result) => {
+    UserModel.findOne({ _id: req.body.userID},{Role:1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)

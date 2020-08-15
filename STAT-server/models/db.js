@@ -36,3 +36,4 @@ const Team = require("./team.model")
 const Role = require("./role.model")
 const TimeEntry = require("./timeEntry.model");
 const UserTimeEntry = require("./userTimeEntry.model");
+const Calendar = require("./calendarEvents.model");

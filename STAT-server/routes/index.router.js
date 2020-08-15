@@ -97,7 +97,7 @@ router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
 //calendar api
-router.get("/googleCalendar/getEvents", googleCalendar.getEvents);
-router.post("/googleCalendar/getCredentials", googleCalendar.getCredentials);
+router.post("/calendar/syncEvents",jwtHelper.verifyJWTtoken,calendar.getLastSynced, calendar.syncEvents );
+router.get("/calendar/getCredentials", jwtHelper.verifyJWTtoken,calendar.getCredentials);
 
 module.exports = router;
