@@ -26,7 +26,7 @@ export class HistoryComponent implements OnInit {
       this.displayedColumns = this.allColumns
 
     // if general user
-    if (this.roles.indexOf("General Team Member") == -1)
+    if (this.roles.indexOf("General Team Member") != -1)
       this.getOwn();
     else
       this.getAllUser();
@@ -37,19 +37,7 @@ export class HistoryComponent implements OnInit {
     this.historyService.getOwnEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.tableData = data['timeEntries']
-      this.tableData.sort((a : any ,b : any) =>
-        a.date.localeCompare(b.date) || a.timeEntryID.localeCompare(b.timeEntryID)
-      );
-      this.tableData = this.tableData.reverse()
-      console.log(this.tableData)
-
-      this.tableData.forEach((element : any) => {
-        element.startTime = this.formatTime(element.startTime)
-        element.endTime = this.formatTime(element.endTime)
-        element.month = this.getMonth(element.date)
-        element.date = this.formatDate(element.date)
-      });
-      this.groupAndSort(this.tableData)
+      this.formatTableData()
     },
     error => {
       console.log(error)
@@ -79,6 +67,14 @@ export class HistoryComponent implements OnInit {
   getAllUser() {
     this.historyService.getAllUserEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
+      let res : any[] = data['results']
+      res.forEach((element : any) => {
+        element.timeEntries.forEach((entry : any) => {
+          entry.member = element.name + " " + element.surname
+          this.tableData.push(entry)
+        });
+      });
+      this.formatTableData()
     },
     error => {
       let errorCode = error['status'];
@@ -148,6 +144,29 @@ export class HistoryComponent implements OnInit {
     return new Date(d).toLocaleDateString('en-US', options)
   }
 
+  sameFormat(d : Date) {
+    return new Date(d)
+  }
+
+  formatTableData() {
+    this.tableData.forEach((element : any) => {
+      element.date = this.sameFormat(element.date)
+    });
+
+    this.tableData.sort((a : any ,b : any) =>
+      a.date - b.date || a.timeEntryID.localeCompare(b.timeEntryID)
+    );
+    this.tableData = this.tableData.reverse()
+    console.log(this.tableData)
+
+    this.tableData.forEach((element : any) => {
+      element.startTime = this.formatTime(element.startTime)
+      element.endTime = this.formatTime(element.endTime)
+      element.month = this.getMonth(element.date)
+      element.fDate = this.formatDate(element.date)
+    });
+    this.groupAndSort(this.tableData)
+  }
 
   // group and sort members
   groupAndSort(data : any[]) {
