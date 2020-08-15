@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { HistoryService } from 'src/app/shared/services/history.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
+import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({
   selector: 'app-history',
@@ -20,7 +21,12 @@ export class HistoryComponent implements OnInit {
   dateFrom : Date = null
   dateTo : Date = null
 
-  constructor(public headerService : HeaderService, public historyService : HistoryService) { }
+  projects : any[] = []
+  pSelected : string = null
+  members : any[] = []
+  mSelected : string = null
+
+  constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService) { }
   ngOnInit(): void {
     this.roles = localStorage.getItem('roles');
 
@@ -31,8 +37,13 @@ export class HistoryComponent implements OnInit {
     // if general user
     if (this.roles.indexOf("General Team Member") != -1)
       this.getOwn();
-    else
-      this.getAllUser();
+    else if (this.roles.indexOf("Data Analyst") != -1) {
+      this.getAllUser()
+      this.getProjects()
+    } else {
+      this.getAllUser()
+      this.getProjects()
+    }
   }
 
   // get own time entries
@@ -94,8 +105,22 @@ export class HistoryComponent implements OnInit {
   getAllProject(projectID : string) {
     this.historyService.getAllProjectEntries(localStorage.getItem('token'), projectID).subscribe((data) => {
       console.log(data);
+      this.tableData = []
+      let res : any[] = data['results']['TeamMembers']
+      console.log(res)
+      res.forEach((element : any) => {
+        element.timeEntries.forEach((entry : any) => {
+          entry.member = element.name + " " + element.surname
+          entry.project = this.pSelected
+          this.tableData.push(entry)
+        });
+      });
+      this.allData = this.tableData
+      console.log(this.tableData)
+      this.formatTableData()
     },
     error => {
+      console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -108,6 +133,20 @@ export class HistoryComponent implements OnInit {
   import(values : any) {
     this.historyService.import(localStorage.getItem('token'), values).subscribe((data) => {
       console.log(data);
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  getProjects() {
+    this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+      this.projects = data['projects']
     },
     error => {
       let errorCode = error['status'];

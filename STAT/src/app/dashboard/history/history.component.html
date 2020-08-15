@@ -4,9 +4,13 @@
     <div class="row p-0 mb-4">
       <div class="col-12 header-row">
         <mat-form-field appearance="standard" class="col-6">
-          <mat-label *ngIf="roles.includes('Data Analyst')">Search</mat-label>
+          <!--<mat-label *ngIf="roles.includes('Data Analyst')">Search</mat-label>
           <mat-label  *ngIf="!roles.includes('Data Analyst')">Search projects</mat-label>
-          <input matInput type="search" type="text">
+          <input matInput type="search" type="text">-->
+          <mat-label>View Project Entries</mat-label>
+          <mat-select [(ngModel)]="pSelected">
+            <mat-option *ngFor="let p of projects" [value]="p.projectName" (click)="getAllProject(p.ID)">{{p.projectName}}</mat-option>
+          </mat-select>
         </mat-form-field>
         <mat-radio-group *ngIf="roles.includes('Data Analyst')" aria-label="Select search type">
           <mat-radio-button  checked value="searchProjects" class="mx-2">Projects</mat-radio-button>

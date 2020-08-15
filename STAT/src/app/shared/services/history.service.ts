@@ -48,7 +48,7 @@ export class HistoryService {
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
     parameters = parameters.append('projectID', projectID);
-    return this.http.get(this.ROOT_URL+ 'userTimeEntry/getAllProjectMembersTimeEntries', {
+    return this.http.get(this.ROOT_URL+ 'userTimeEntry/getProjectTimeEntries', {
       params: parameters,
       headers: headers
     });
