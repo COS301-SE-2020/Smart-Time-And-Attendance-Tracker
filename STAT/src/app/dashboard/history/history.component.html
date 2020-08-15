@@ -75,8 +75,8 @@
         <mat-icon>sort</mat-icon>
       </button>
       <mat-menu #sortMenu="matMenu">
-        <button mat-menu-item>Oldest first</button>
-        <button mat-menu-item>Newest first</button>
+        <button mat-menu-item (click)="sort('o')">Oldest first</button>
+        <button mat-menu-item (click)="sort('n')">Newest first</button>
       </mat-menu>
       <button mat-mini-fab id="export-menu" class="mx-1"
               matTooltip="Export"

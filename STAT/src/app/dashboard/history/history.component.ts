@@ -27,6 +27,7 @@ export class HistoryComponent implements OnInit {
   members : any[] = []
   mSelected : string = null
   toggle : boolean = false
+  sorted : string = 'newest'
 
   constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
   ngOnInit(): void {
@@ -308,6 +309,17 @@ export class HistoryComponent implements OnInit {
 
     this.formatTableData()
     console.log('HERE\n' + this.tableData)
+  }
+
+  sort(type : string) {
+    if (type == 'o' && this.sorted == 'newest') {
+      this.sorted = 'oldest'
+      this.tableData = this.tableData.reverse()
+    } else if (type == 'n' && this.sorted == 'oldest') {
+      this.sorted = 'newest'
+      this.tableData = this.tableData.reverse()
+    }
+    console.log(this.tableData)
   }
 }
 
