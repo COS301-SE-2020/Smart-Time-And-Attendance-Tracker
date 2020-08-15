@@ -290,53 +290,77 @@ module.exports.updateTimeEntry = (req, res) => {
     if(!req.body.hasOwnProperty('timeEntryID'))
         return res.status(400).send({message: 'No time entry ID given'});
 
-    TimeEntryModel.findOne({ _id: req.body.timeEntryID},(err, result) => {
+    UserTimeEntryModel.findOne({UserID: req.ID, TimeEntries: req.body.timeEntryID },(err, result) => {
         if(err)
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if(!result)
-            return res.status(404).json({message: 'Time entry not found'});
+            return res.status(404).json({message: 'Time entry does not belong to user'});
         else
         {
-            if(req.body.hasOwnProperty('taskName'))
-                 result.TaskName = req.body.taskName;
+            TimeEntryModel.findOne({ _id: req.body.timeEntryID},(err, result) => {
+                if(err)
+                    return res.status(500).send({message: 'Internal Server Error: ' + err});
+                else if(!result)
+                    return res.status(404).json({message: 'Time entry not found'});
+                else
+                {
+                    if(req.body.hasOwnProperty('projectID'))
+                    {
+                        if(req.body.projectID == null)
+                        {
+                            result.TaskID = null;
+                            result.TaskName = "Unspecified";
+                            result.ProjectName = "Unspecified";
+                        }
+                        else if(req.body.hasOwnProperty('projectName'))
+                            result.ProjectName =  req.body.projectName;
 
-            if(req.body.hasOwnProperty('taskID'))
-                result.TaskID =  req.body.taskID;
+                        result.ProjectID =  req.body.projectID;
+                    }
 
-            if(req.body.hasOwnProperty('projectName'))
-                result.ProjectName =  req.body.projectName;
+                    if(req.body.hasOwnProperty('taskID') )
+                    {
+                        if(req.body.taskID == null)
+                        {
+                            result.TaskName = "Unspecified";
+                        }
+                        else if(req.body.hasOwnProperty('taskName'))
+                            result.TaskName = req.body.taskName;
 
-            if(req.body.hasOwnProperty('projectID'))
-                result.ProjectID =  req.body.projectID;
+                        result.TaskID =  req.body.taskID;
+                    }
 
-            if(req.body.hasOwnProperty('startTime'))
-                result.StartTime =  req.body.startTime;
+                    if(req.body.hasOwnProperty('startTime'))
+                        result.StartTime =  req.body.startTime;
 
-            if(req.body.hasOwnProperty('endTime'))
-                result.EndTime =  req.body.endTime;
+                    if(req.body.hasOwnProperty('endTime'))
+                        result.EndTime =  req.body.endTime;
+                        
+                    if(req.body.hasOwnProperty('activeTime'))
+                        result.ActiveTime =  req.body.activeTime;
+
+                    if(req.body.hasOwnProperty('date'))
+                        result.Date =  req.body.date;
+
+                    if(req.body.hasOwnProperty('description'))
+                        result.Description =  req.body.description;
+                        
+                    if(req.body.hasOwnProperty('monetaryValue'))
+                        result.MonetaryValue =  req.body.monetaryValue;
                 
-            if(req.body.hasOwnProperty('activeTime'))
-                result.ActiveTime =  req.body.activeTime;
-
-            if(req.body.hasOwnProperty('date'))
-                result.Date =  req.body.date;
-
-            if(req.body.hasOwnProperty('description'))
-                result.Description =  req.body.description;
-                
-            if(req.body.hasOwnProperty('monetaryValue'))
-                result.MonetaryValue =  req.body.monetaryValue;
-        
-                TimeEntryModel.updateOne({ _id: req.body.timeEntryID},{TaskName: result.TaskName, TaskID:result.TaskID,
-                    ProjectName : result.ProjectName, ProjectID: result.ProjectID, StartTime: result.StartTime,EndTime: result.EndTime,
-                    ActiveTime: result.ActiveTime, Date: result.Date, Description: result.Description, MonetaryValue: result.MonetaryValue },(err, result) => {
-                    if (err) 
-                        return res.status(500).send({message: 'Internal Server Error: ' + err});
-                    else
-                        return res.status(200).json({message: 'Time entry successfully updated'});
-                
-                });
+                        TimeEntryModel.updateOne({ _id: req.body.timeEntryID},{TaskName: result.TaskName, TaskID:result.TaskID,
+                            ProjectName : result.ProjectName, ProjectID: result.ProjectID, StartTime: result.StartTime,EndTime: result.EndTime,
+                            ActiveTime: result.ActiveTime, Date: result.Date, Description: result.Description, MonetaryValue: result.MonetaryValue },(err, result) => {
+                            if (err) 
+                                return res.status(500).send({message: 'Internal Server Error: ' + err});
+                            else
+                                return res.status(200).json({message: 'Time entry successfully updated'});
+                        
+                        });
+                    
+                }
            
+            });
         }
     });
 
