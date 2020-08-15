@@ -27,22 +27,21 @@ const TaskHelper =require('../helpers/task.helper');
 const UserHelper =require('../helpers/user.helper');
 
 /**
- * This function assigns a team to a project.
+ * This function gets a projectsproject.
  * @param {String} id ID of project
- * @param {String} teamID ID of team
  * @param {Function} done 
  */
-/*module.exports.addTeam = (id, teamID, done)=>{
-    ProjectModel.updateOne({_id: id},{Team: teamID},(err, result) => {
+module.exports.getProject = (id, done)=>{
+    ProjectModel.findOne({_id: id},(err, result) => {
         if(err) 
             done(err);
         else if (!result)
             done(null,false);
         else if(result)
-           done(null, true);
+           done(null, result);
         
     });
-}*/
+}
 
 /**
  * This function removes a user from all projects they work on.

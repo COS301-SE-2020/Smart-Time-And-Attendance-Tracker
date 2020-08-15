@@ -67,7 +67,7 @@ module.exports.editTeam = (req, res, next) => {
     TeamModel.updateOne({_id : (req.body.teamID)},{ TeamName: req.body.teamName }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else 
             return res.status(200).json({ teamID: result._id, message: 'Team name successfully edited' });   
@@ -118,7 +118,7 @@ module.exports.addTeamMember = (req, res, next) => {
     TeamModel.updateOne({_id : (req.body.teamID)},{ $addToSet: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else 
             return res.status(200).json({ teamID: result._id, message: 'Member successfully added to team' });     
@@ -143,7 +143,7 @@ module.exports.removeTeamMember = (req, res) => {
     TeamModel.updateOne({_id : (req.body.teamID)},{ $pull: { TeamMembers: { _id: req.body.userID} } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else 
             return res.status(200).json({ teamID: result._id, message: 'Member successfully removed from team' });   
@@ -174,7 +174,7 @@ module.exports.addRole = (req, res) => {  / ////optimize
     TeamModel.updateOne({_id : (req.body.teamID)},{ $pull: { TeamMembers: { _id: req.body.userID} } },function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else {
            TeamModel.updateOne({_id : (req.body.teamID)},{ $push: { TeamMembers: { _id: req.body.userID,  Role: req.body.userRole} } },function(err, result) {
@@ -202,7 +202,7 @@ module.exports.deleteTeam = (req, res) => {
    TeamModel.deleteOne({_id: req.query.teamID},(err,val)=>{
     if(err)
         return res.status(500).send({message: 'Internal Server Error: ' + err});
-    else if (!val) 
+    else if (val.n == 0) 
         return res.status(404).json({ message: 'Team not found' });
     else 
         return res.status(200).json({ message: 'Team successfully deleted ' });

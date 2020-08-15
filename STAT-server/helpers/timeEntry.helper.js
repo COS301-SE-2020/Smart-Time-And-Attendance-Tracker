@@ -1,3 +1,4 @@
+
 /**
   * @file STAT-server/helper/timeEntry.helper.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
@@ -23,7 +24,8 @@
 */
 const mongoose = require("mongoose");
 const TimeEntryModel = mongoose.model("TimeEntry");
-
+var Promise = require('promise');
+var async = require("async");
 /**
  * 
  * @param {String} id ID of time entry.
@@ -41,7 +43,6 @@ module.exports.getTimeEntry = (id, done)=>{
         
     });
 }
-
 
 /**
  * Returns info for all the time entries of the user.

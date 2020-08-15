@@ -77,6 +77,77 @@ module.exports.isTeamLeader = (req, res, next) => {
     });  
 }
 
+/**
+ * checks to see if user has a role of "Data Analyst".
+ * @param {HTTP Request} req ID of user.
+ * @param {HTTP Response} res 
+ * @param {Function} next Next function to be called.
+ */
+module.exports.isDataAnalyst = (req, res, next) => {
+
+    UserModel.findOne({ _id: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            if(result.Role.includes(1))
+                next();
+            else
+                return res.status(403).json({ message: "Access denied"});
+        }
+    });  
+}
+
+/**
+ * Checks to see if user has a role of either "Team Leader", "Data Analyst" or "System Administator".
+ * @param {HTTP Request} req ID of user.
+ * @param {HTTP Response} res 
+ * @param {Function} next Next function to be called.
+ */
+module.exports.isAllowedToGetUsers = (req, res, next) => {
+
+    UserModel.findOne({ _id: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            if(result.Role.includes(4)||result.Role.includes(3) || result.Role.includes(1) )
+                next();
+            else
+                return res.status(403).json({ message: "Access denied"});
+        }
+    });  
+}
+
+/**
+ * Checks to see if user has a role of either "Data Analyst" or "System Administator".
+ * @param {HTTP Request} req ID of user.
+ * @param {HTTP Response} res 
+ * @param {Function} next Next function to be called.
+ */
+module.exports.isAllowedToGetUsersTimeEntries = (req, res, next) => {
+
+    UserModel.findOne({ _id: req.ID},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            if(result.Role.includes(3) || result.Role.includes(1) )
+                next();
+            else
+                return res.status(403).json({ message: "Access denied"});
+        }
+    });  
+}
 
 /**
  * checks to see if user is authenticated.
@@ -212,6 +283,29 @@ module.exports.getUserDetails = (val, done)=>{
                 'profilePicture': result.ProfilePicture
             }
             done(null, text);
+        }        
+    });
+}
+
+module.exports.getAllUsers = (done)=>{
+    users = []
+    UserModel.find({Authenticate : true},{_id: 1, Email:1, Name:1, Surname:1, Role:1},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+        {
+            result.forEach( function(a){ 
+            var text = {
+                'ID': a._id,
+                'email': a.Email,
+                'name': a.Name,
+                'surname': a.Surname
+            }
+            users.push(text)
+            });
+            done(null, users);
         }        
     });
 }

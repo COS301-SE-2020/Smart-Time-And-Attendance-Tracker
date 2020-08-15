@@ -23,15 +23,15 @@
 
 
 const express = require('express');
-const router = express.Router();
-
+const asyncify = require('express-asyncify')
+const router = asyncify(express.Router());
 const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
-const calendar = require('../tracker/calendar/calendar.manager');
+const googleCalendar = require('../calendar/googleCalendar.controller');
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
 
@@ -42,9 +42,9 @@ router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 router.get("/user/isAuthenticated",jwtHelper.verifyJWTtoken, user.isAuthenticated);
 router.get("/user/getProjects",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getProjects);
-//router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
+router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
-router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getAllUsers);
+router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsers,user.getAllUsers);
 router.post("/user/authenticateUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.authenticate);
 router.post("/user/removeUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.remove);
 router.post("/user/editUser",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.edit);
@@ -61,6 +61,11 @@ router.delete("/userTimeEntry/deleteTimeEntry",  jwtHelper.verifyJWTtoken, userH
 router.post("/userTimeEntry/addTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.addTimeEntry);
 router.post("/userTimeEntry/updateTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.updateTimeEntry);
 router.get("/userTimeEntry/getDailyTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getDailyTimeEntries);
+router.get("/userTimeEntry/getOwnTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, userTimeEntry.getOwnTimeEntries);
+router.get("/userTimeEntry/getUserTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, userTimeEntry.getUserTimeEntries);
+router.get("/userTimeEntry/getAllUsersTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsersTimeEntries, userTimeEntry.getAllUsersTimeEntries);
+router.get("/userTimeEntry/getProjectTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsers, userTimeEntry.getAllProjectMembersTimeEntries);
+router.post("/userTimeEntry/importTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, userTimeEntry.importTimeEntry);
 
 
 // team  
@@ -91,7 +96,7 @@ router.post("/task/complete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,ta
 router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project.deleteTask, task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
-//calendar 
+//calendar api
 router.post("/calendar/syncEvents",jwtHelper.verifyJWTtoken,calendar.getLastSynced, calendar.syncEvents );
 router.get("/calendar/getCredentials", jwtHelper.verifyJWTtoken,calendar.getCredentials);
 
