@@ -58,15 +58,16 @@ module.exports.getEvents = (req, done) => {
     auth.setCredentials(credentials);
 
     //Get events on calendar
-    var date=new Date();
+    var minDate=new Date();
+    var maxDate=new Date();
     //date.setDate(date.getDate() - 7)
-    console.log( date.toISOString());
-    console.log((new Date( date.setDate(date.getDate() - 7) )).toISOString());
+    ///console.log( date.toISOString());
+    //console.log((new Date( date.setDate(date.getDate() - 7) )).toISOString());
     const calendar = google.calendar({version: 'v3', auth});
     calendar.events.list({
       calendarId: 'primary',
-      timeMin: (new Date( date.setDate(date.getDate() - 7) )).toISOString(),
-      //timeMax:date.toISOString(),
+      timeMin: (new Date( minDate.setDate(minDate.getDate() - 7) )).toISOString(),
+      timeMax:maxDate.toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
     }, (err, res) => {
