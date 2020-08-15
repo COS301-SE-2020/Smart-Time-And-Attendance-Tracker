@@ -95,47 +95,47 @@
             </mat-expansion-panel-header>
             <table mat-table #table [dataSource]="t.records" class="col-12">
               <!-- date -->
-              <ng-container matColumnDef="date">
+              <ng-container matColumnDef="Date">
                   <th mat-header-cell *matHeaderCellDef> Date </th>
                   <td mat-cell *matCellDef="let element"> {{element.fDate}} </td>
               </ng-container>
               <!-- startTime -->
-              <ng-container matColumnDef="startTime">
+              <ng-container matColumnDef="Start Time">
                   <th mat-header-cell *matHeaderCellDef> Start </th>
                   <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
               </ng-container>
               <!-- endTime -->
-              <ng-container matColumnDef="endTime">
+              <ng-container matColumnDef="End Time">
                   <th mat-header-cell *matHeaderCellDef> End </th>
                   <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
               </ng-container>
               <!-- active time -->
-              <ng-container matColumnDef="activeTime">
+              <ng-container matColumnDef="Active Time">
                   <th mat-header-cell *matHeaderCellDef> Active</th>
                   <td mat-cell *matCellDef="let element"> {{element.activeTime}} </td>
               </ng-container>
               <!-- description -->
-              <ng-container class="description-col" matColumnDef="description">
+              <ng-container class="description-col" matColumnDef="Description">
                   <th mat-header-cell *matHeaderCellDef> Description </th>
                   <td mat-cell *matCellDef="let element"> {{element.description}} </td>
               </ng-container>
               <!-- project -->
-              <ng-container matColumnDef="project">
+              <ng-container matColumnDef="Project">
                   <th mat-header-cell *matHeaderCellDef> Project </th>
                   <td mat-cell *matCellDef="let element"> {{element.project}} </td>
               </ng-container>
               <!-- task -->
-              <ng-container matColumnDef="task">
+              <ng-container matColumnDef="Task">
                   <th mat-header-cell *matHeaderCellDef> Task </th>
                   <td mat-cell *matCellDef="let element"> {{element.task}} </td>
               </ng-container>
               <!-- value -->
-              <ng-container matColumnDef="value">
+              <ng-container matColumnDef="Monetary Value">
                   <th mat-header-cell *matHeaderCellDef> Value </th>
                   <td mat-cell *matCellDef="let element"> {{element.monetaryValue}} </td>
               </ng-container>
               <!-- member -->
-              <ng-container matColumnDef="member">
+              <ng-container matColumnDef="Member">
                   <th mat-header-cell *matHeaderCellDef> Member </th>
                   <td mat-cell *matCellDef="let element"> {{element.member}} </td>
               </ng-container>

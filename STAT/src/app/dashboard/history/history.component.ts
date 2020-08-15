@@ -9,9 +9,8 @@ import { HeaderService } from 'src/app/shared/services/header.service';
   styleUrls: ['./history.component.sass']
 })
 export class HistoryComponent implements OnInit {
-  allColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value'];
-  displayedColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value']
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  allColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value'];
+  displayedColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value']
 
   roles : string;
 
@@ -22,7 +21,7 @@ export class HistoryComponent implements OnInit {
     this.roles = localStorage.getItem('roles');
 
     if (this.roles.indexOf("Data Analyst") != -1)
-      this.allColumns = ['date', 'startTime', 'endTime', 'activeTime', 'description', 'project', 'task', 'value', 'member'];
+      this.allColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value', 'Member'];
       this.displayedColumns = this.allColumns
 
     // if general user
@@ -202,7 +201,3 @@ export interface Element {
   member : string;
 }
 
-const ELEMENT_DATA: Element[] = [
-  {date : '10 Month', startTime : '00:00', endTime : '01:05', activeTime : '3h 42m', description : 'Firefox', project : 'Avengers Assemble', task : 'Look awesome', value : 'R 23.14', member : 'Sebastian Stan'},
-  {date : '10 Month', startTime : '00:00', endTime : '19:33', activeTime : '1h 35m', description : 'Google Chrome', project : 'Capstone', task : 'History screen', value : 'R 0.00', member : 'Zac Efron'}
-];
