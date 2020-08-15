@@ -68,6 +68,14 @@ export class HistoryComponent implements OnInit {
   getUser(userID : string) {
     this.historyService.getUserEntries(localStorage.getItem('token'), userID).subscribe((data) => {
       console.log(data);
+      this.tableData = data['timeEntries']
+
+      this.tableData.forEach((element : any) => {
+        element.member = this.mSelected
+      });
+
+      this.allData = this.tableData
+      this.formatTableData()
     },
     error => {
       let errorCode = error['status'];
