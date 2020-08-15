@@ -343,6 +343,77 @@ export class HistoryComponent implements OnInit {
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
   }
+
+  /*downloadCSV() {
+    let dataStr : any = this.tableData
+    let keys = Object.keys(dataStr[0]['records'][0]);
+    console.log(keys)
+
+    let columnDelimiter = ',';
+    let lineDelimiter = '\n';
+
+    let csvColumnHeader = keys.join(columnDelimiter);
+    let csvStr = csvColumnHeader + lineDelimiter;
+
+    dataStr.forEach(item => {
+      item.records.forEach(element => {
+        keys.forEach((key, index) => {
+          if( (index > 0) && (index < keys.length-1) ) {
+              csvStr += columnDelimiter;
+          }
+          csvStr += element[key];
+        });
+        csvStr += lineDelimiter;
+      });
+    });
+
+    dataStr = encodeURIComponent(csvStr)
+
+    let dataUri = 'data:text/csv;charset=utf-8,'+ csvStr;
+
+    let exportFileDefaultName = 'TrackingEntries.csv';
+
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+
+  }*/
+
+  /*downloadCSV() {
+    let dataStr = JSON.stringify(this.tableData, null, 4);
+    const json2csv = require('json2csv').parse
+    var csv = json2csv(dataStr, {flatten : true})
+
+    let dataUri = 'data:text/csv;charset=utf-8,'+ csv;
+
+    let exportFileDefaultName = 'TrackingEntries.csv';
+
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  }*/
+
+  downloadCSV() {
+    const { Parser, transforms: { unwind } } = require('json2csv');
+
+    const fields = ['month', 'records.date', 'records.startTime', 'records.endTime', 'records.activeTime', 
+                    'records.project', 'records.task', 'records.monetaryValue', 'records.member'];
+    const transforms = [unwind({ paths: ['records'] })];
+    
+    const json2csvParser = new Parser({ fields, transforms });
+    const csv = json2csvParser.parse(this.tableData);
+
+    let dataUri = 'data:text/csv;charset=utf-8,'+ csv;
+
+    let exportFileDefaultName = 'TrackingEntries.csv';
+
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  }
 }
 
 export interface Element {

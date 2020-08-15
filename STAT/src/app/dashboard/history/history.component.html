@@ -83,7 +83,7 @@
               matTooltipClass="action-tooltip"
               matTooltipPosition="above"
               [matMenuTriggerFor]="exportMenu">
-        <mat-icon>import_export</mat-icon>
+        <mat-icon>fact_check</mat-icon>
       </button>
       <mat-menu #exportMenu="matMenu">
         <button mat-menu-item (click)="exportToJSON()">JSON</button>
@@ -95,12 +95,12 @@
               matTooltipClass="action-tooltip"
               matTooltipPosition="above"
               [matMenuTriggerFor]="downloadMenu">
-        <mat-icon>download</mat-icon>
+        <mat-icon>get_app</mat-icon>
       </button>
       <mat-menu #downloadMenu="matMenu">
         <button mat-menu-item (click)="downloadJSON()">JSON</button>
         <button mat-menu-item>PDF</button>
-        <button mat-menu-item>Excel</button>
+        <button mat-menu-item (click)="downloadCSV()">Excel</button>
       </mat-menu>
     </div>
 
