@@ -14,7 +14,11 @@ export class HistoryComponent implements OnInit {
 
   roles : string;
 
-  tableData : any[] = []
+  allData : Object[] = []
+  tableData : Object[] = []
+
+  dateFrom : Date = null
+  dateTo : Date = null
 
   constructor(public headerService : HeaderService, public historyService : HistoryService) { }
   ngOnInit(): void {
@@ -36,6 +40,7 @@ export class HistoryComponent implements OnInit {
     this.historyService.getOwnEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.tableData = data['timeEntries']
+      this.allData = this.tableData
       this.formatTableData()
     },
     error => {
@@ -73,6 +78,7 @@ export class HistoryComponent implements OnInit {
           this.tableData.push(entry)
         });
       });
+      this.allData = this.tableData
       this.formatTableData()
     },
     error => {
@@ -164,20 +170,21 @@ export class HistoryComponent implements OnInit {
       element.month = this.getMonth(element.date)
       element.fDate = this.formatDate(element.date)
     });
+
     this.groupAndSort(this.tableData)
   }
 
-  // group and sort members
+  // group and sort entries
   groupAndSort(data : any[]) {
     // group by month
     let grouped = data.reduce((r : any, e : any) => {
-      // get first letter of name of current element
+      // get month and year of current element
       let month = e.month;
 
-      // if there is no property in accumulator with this letter create it
+      // if there is no property in accumulator with this month create it
       if (!r[month]) r[month] = { month, records: [e] }
 
-      // if there is push current element to children array for that letter
+      // if there is push current element to children array for that month
       else r[month].records.push(e);
 
       // return accumulator
@@ -186,6 +193,36 @@ export class HistoryComponent implements OnInit {
 
     this.tableData = Object.values(grouped)
     console.log(this.tableData)
+  }
+
+  filterDateRange() {
+
+    console.log(this.dateTo)
+    console.log(this.dateFrom)
+
+    this.tableData = []
+
+    console.log(this.allData)
+
+    if (this.dateFrom == null) {  
+      this.allData.forEach((entry : any) => {
+        if (entry.date <= new Date(this.dateTo))
+          this.tableData.push(entry)
+      })
+    } else if (this.dateTo == null) {
+      this.allData.forEach((entry : any) => {
+        if (entry.date >= new Date(this.dateFrom))
+          this.tableData.push(entry)
+      })
+    } else {
+      this.allData.forEach((entry : any) => {
+        if (entry.date >= new Date(this.dateFrom) && entry.date <= new Date(this.dateTo))
+          this.tableData.push(entry)
+      })
+    }
+
+    this.formatTableData()
+    console.log('HERE\n' + this.tableData)
   }
 }
 

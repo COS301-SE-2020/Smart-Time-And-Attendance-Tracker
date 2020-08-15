@@ -15,11 +15,11 @@
         <br>
         <mat-form-field appearance="standard" class="col-3">
           <mat-label>From:</mat-label>
-          <input matInput type="date">
+          <input matInput type="date" [(ngModel)]="dateFrom" (change)="filterDateRange()" [max]="dateTo">
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-3">
           <mat-label>To:</mat-label>
-          <input matInput type="date">
+          <input matInput type="date" [(ngModel)]="dateTo" (change)="filterDateRange()" [min]="dateFrom">
         </mat-form-field>
         <mat-form-field class="col-3" appearance="standard">
           <mat-label>Show Fields</mat-label>
