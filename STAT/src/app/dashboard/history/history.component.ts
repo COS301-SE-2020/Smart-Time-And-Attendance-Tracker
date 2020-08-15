@@ -147,6 +147,13 @@ export class HistoryComponent implements OnInit {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.projects = data['projects']
+      this.members = []
+      this.projects.forEach((element : any) => {
+        element.projectMembers.forEach((m : any) => {
+          if (this.members.findIndex((a : any) => a.ID === m.ID) == -1)
+            this.members.push(m)
+        });
+      });
     },
     error => {
       let errorCode = error['status'];
