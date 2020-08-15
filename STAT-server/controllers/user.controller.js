@@ -199,7 +199,7 @@ module.exports.getRoles = (req, res) => {
  * @return {Http Response} - Array with all unauthenticated users objects
  */
 module.exports.getUnauthenticatedUsers = (req, res) => {
-    UserModel.find({ Authenticate : false},{_id: 1, Name: 1, Surname: 1, Email: 1, ProfilePicture: 1},(err, result) => {
+    UserModel.find({ Authenticate : false, Removed :false},{_id: 1, Name: 1, Surname: 1, Email: 1, ProfilePicture: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
@@ -208,7 +208,7 @@ module.exports.getUnauthenticatedUsers = (req, res) => {
         {
             UnauthenticatedUsers=[];
             for(var a=0; a<result.length; a++){
-                UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname, profilePicture: user.ProfilePicture});
+                UnauthenticatedUsers.push({ID : result[a]._id, email : result[a].Email, name : result[a].Name, surname : result[a].Surname, profilePicture: result[a].ProfilePicture});
             }
             return res.status(200).json({unauthenticatedUsers: UnauthenticatedUsers});
         }
