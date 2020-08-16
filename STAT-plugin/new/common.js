@@ -463,7 +463,7 @@ LogoutBtn.onclick = function() {
   localStorage.removeItem("currentlyTracking");
   user.getInstance().allProject = "";
   
-  document.getElementById("desc").innerHTML = "0:00";
+  document.getElementById("timer").innerHTML = "0:00";
   for(tabID in chrome.extension.getBackgroundPage().History) 
     chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabID), 'text': FormatDuration("0:00")});
 

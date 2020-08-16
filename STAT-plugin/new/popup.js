@@ -4,7 +4,7 @@ function showTime() {
 
     var currentID =0; //
     var now = new Date();
-    var desc = document.getElementById("desc");
+    var desc = document.getElementById("timer");
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
