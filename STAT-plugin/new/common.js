@@ -12,7 +12,7 @@ processDisplay();
       getProjects();
     else
       processProjects(user.getInstance().allProject, false);
-    if (localStorage.hasOwnProperty('name') && localStorage.hasOwnProperty('token')) 
+    if (localStorage.hasOwnProperty('name') && localStorage.hasOwnProperty('token'))
     {
         if(!user.getInstance().allProject && localStorage.hasOwnProperty('token'))
           getProjects();
@@ -39,28 +39,28 @@ processDisplay();
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange = function()
     {
-      if(http.readyState == 4 && http.status == 200) 
+      if(http.readyState == 4 && http.status == 200)
       {
         var data = JSON.parse(http.responseText);
         localStorage.setItem('token', data.token);
-               
+
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("popup").style.display = "block";
         document.getElementById("errorMessage").innerHTML= "";
-        
+
         getUserName();
-        
+
         getProjects();
-                
-        for(tabID in chrome.extension.getBackgroundPage().History) 
+
+        for(tabID in chrome.extension.getBackgroundPage().History)
         {
           chrome.extension.getBackgroundPage().History[tabID][0][0] = 0;
-          setTimeout (() => { 
+          setTimeout (() => {
             if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token') && chrome.extension.getBackgroundPage().History[tabID][0][2] == "")
             {
               var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);
               AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
-              
+
             }
           }, 60000);
         }
@@ -87,22 +87,22 @@ function getUserName(){
   http.setRequestHeader('Authorization', `Bearer ${localStorage.getItem("token")}` );
   http.onreadystatechange = function()
   {
-    if(http.readyState == 4 && http.status == 200) 
+    if(http.readyState == 4 && http.status == 200)
     {
       var data = JSON.parse(http.responseText);
       console.log(data);
       localStorage.setItem('name', data.name);
       localStorage.setItem('surname', data.surname);
-                
+
       document.getElementById("userName").innerHTML = data.name;
-      document.getElementById("userSurname").innerHTML = data.surname;
+      document.getElementById("userEmail").innerHTML = data.surname;
     }
-    else 
+    else if (http.readyState == 4 && http.status != 200) 
     {
       var data = JSON.parse(http.responseText);
       document.getElementById("errorMessage").style.display = "block";
       document.getElementById("errorMessage").innerHTML = data.message;
-                   
+
       console.log(data);
     }
   }
@@ -121,11 +121,11 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
   var text = '{ "description": "'+ url + '",'
-          + '"startTime": "'+ startTime.getTime() + '",' 
-          + '"endTime": "'+ endTime.getTime() + '",' 
-          + '"device": "Browser",' 
-          + '"activeTime":' + getMinutesFromSeconds(duration) + ',' 
-          + '"date": "'+  (mm + '/' + dd + '/' + yyyy) + '"' 
+          + '"startTime": "'+ startTime.getTime() + '",'
+          + '"endTime": "'+ endTime.getTime() + '",'
+          + '"device": "Browser",'
+          + '"activeTime":' + getMinutesFromSeconds(duration) + ','
+          + '"date": "'+  (mm + '/' + dd + '/' + yyyy) + '"'
           + '}';
 
   http.open('POST', apiURL, true);
@@ -143,9 +143,9 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
       if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "" || localStorage.hasOwnProperty('currentlyTrackingDetails'))
       {
         //if in local storage only
-        if(localStorage.hasOwnProperty('currentlyTrackingDetails') && chrome.extension.getBackgroundPage().History[currentID][0][4] == "") 
+        if(localStorage.hasOwnProperty('currentlyTrackingDetails') && chrome.extension.getBackgroundPage().History[currentID][0][4] == "")
           chrome.extension.getBackgroundPage().History[currentID][0][4] = localStorage.getItem('currentlyTrackingDetails');
-       
+
         obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
         if(obj.processed == "false")
         {
@@ -165,12 +165,12 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
       //maybe can be change to retry only when there is an internal server error
 
-      setTimeout (() => { 
+      setTimeout (() => {
         if(chrome.extension.getBackgroundPage().History[currentID][0][3] == "false" && localStorage.hasOwnProperty('token'))
         {
           var duration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]);
           AddTimeEntry(url, startTime , new Date(), currentID, duration);
-          
+
         }
       }, 60 *1000);  //try again after 1 minute
     }
@@ -183,9 +183,9 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
   var text = '{'
-          + '"timeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'  
-          + '"endTime": "'+ endTime.getTime() + '",'  
-          + '"activeTime":'+ getMinutesFromSeconds(duration) 
+          + '"timeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'
+          + '"endTime": "'+ endTime.getTime() + '",'
+          + '"activeTime":'+ getMinutesFromSeconds(duration)
           + '}';
 
   http.open('POST', apiURL, true);
@@ -200,8 +200,8 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
       {
         stopStartBtn.name = "start";
         stopStartBtn.innerHTML = "Start";
-        chrome.extension.getBackgroundPage().History[currentID][0][2] = "";  
-        chrome.extension.getBackgroundPage().History[currentID][0][3] = "true"; 
+        chrome.extension.getBackgroundPage().History[currentID][0][2] = "";
+        chrome.extension.getBackgroundPage().History[currentID][0][3] = "true";
         chrome.extension.getBackgroundPage().History[currentID][0][0] = "0";
       }
     }
@@ -212,7 +212,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
       processDisplay();
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-      alert(http.responseText);              
+      alert(http.responseText);
     }
   }
   http.send(text);
@@ -234,9 +234,9 @@ function getProjects() {
             if(user.getInstance().allProject == undefined)
               user.getInstance().allProject = http.responseText;
             console.log(http.responseText);
-            
+
             processProjects(http.responseText, false);
-            
+
         }
         else if(http.readyState == 4 && http.status == 403) //login again => token expired
         {
@@ -278,13 +278,13 @@ function processProjects(responseText, display)
         var opt = document.createElement('option');
         opt.appendChild( document.createTextNode(obj.projects[p].projectName));
         var val = '{'
-          + '"projectID": "'+ obj.projects[p].ID + '",'  
-          + '"projectName": "'+ obj.projects[p].projectName + '",'  
+          + '"projectID": "'+ obj.projects[p].ID + '",'
+          + '"projectName": "'+ obj.projects[p].projectName + '",'
           + '"taskID": "",'
-          + '"taskName": ""' 
+          + '"taskName": ""'
           + '}';
         opt.value = obj.projects[p].ID;
-        projectsDropdown.appendChild(opt); 
+        projectsDropdown.appendChild(opt);
       }
 
       var userTasks = user.getInstance().getTasks(document.createTextNode(obj.projects[0].ID));
@@ -295,13 +295,13 @@ function processProjects(responseText, display)
           opt = document.createElement('option');
           opt.appendChild( document.createTextNode(userTasks[t].taskName) );
           opt.value = userTasks[t].ID;
-          tasksDropdown.appendChild(opt); 
+          tasksDropdown.appendChild(opt);
       }
       opt = document.createElement('option');
       opt.appendChild( document.createTextNode("Un-specified") );
       opt.value = "";
-      tasksDropdown.appendChild(opt); 
-      
+      tasksDropdown.appendChild(opt);
+
       if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
       {
         document.getElementById("loading_projects").style.display="none";
@@ -323,7 +323,7 @@ function processProjects(responseText, display)
           document.getElementById("select_task_form").style.display="none";
           document.getElementById("loading_projects").style.display="none";
           document.getElementById("selected_task").style.display="block";
-          
+
 
     }
     else if(localStorage.getItem('currentlyTrackingDetails'))
@@ -339,7 +339,7 @@ function processProjects(responseText, display)
       {
         document.getElementById("reselect_task").style.display="block";
       }
-      
+
       document.getElementById("project").innerHTML = "Project: " + obj.projectName;
       if(obj.taskName != "" && obj.taskName  != "Un-specified")
         document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
@@ -355,13 +355,13 @@ function processProjects(responseText, display)
         var opt = document.createElement('option');
         opt.appendChild( document.createTextNode(obj.projects[p].projectName));
         var val = '{'
-          + '"projectID": "'+ obj.projects[p].ID + '",'  
-          + '"projectName": "'+ obj.projects[p].projectName + '",'  
+          + '"projectID": "'+ obj.projects[p].ID + '",'
+          + '"projectName": "'+ obj.projects[p].projectName + '",'
           + '"taskID": "",'
-          + '"taskName": ""' 
+          + '"taskName": ""'
           + '}';
         opt.value = obj.projects[p].ID;
-        projectsDropdown.appendChild(opt); 
+        projectsDropdown.appendChild(opt);
       }
       var userTasks = user.getInstance().getTasks(document.createTextNode(obj.projects[0].ID));
 
@@ -371,12 +371,12 @@ function processProjects(responseText, display)
           opt = document.createElement('option');
           opt.appendChild( document.createTextNode(userTasks[t].taskName) );
           opt.value = userTasks[t].ID;
-          tasksDropdown.appendChild(opt); 
+          tasksDropdown.appendChild(opt);
       }
       opt = document.createElement('option');
       opt.appendChild( document.createTextNode("Un-specified") );
       opt.value = "";
-      tasksDropdown.appendChild(opt); 
+      tasksDropdown.appendChild(opt);
       document.getElementById("loading_projects").style.display="none";
 
       if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
@@ -392,13 +392,13 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   if(TaskID != "")
   {
     taskDetails = ','
-      + '"taskID": "'+TaskID+ '",'  
+      + '"taskID": "'+TaskID+ '",'
       + '"taskName": "'+ TaskName+ '"';
   }
   var text = '{'
-    + '"timeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2]+ '",'  
-    + '"projectID": "'+ ProjectID+ '",'  
-    + '"projectName": "'+ ProjectName + '"'  
+    + '"timeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2]+ '",'
+    + '"projectID": "'+ ProjectID+ '",'
+    + '"projectName": "'+ ProjectName + '"'
     + taskDetails + '}';
 
   var http = new XMLHttpRequest();
@@ -409,20 +409,20 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   http.onreadystatechange = function() {
     if(http.readyState == 4 && http.status == 200) {
       text = '{'
-        + '"projectName": "'+ ProjectName+ '",'  
-        + '"projectID": "'+ ProjectID+ '",' 
-        + '"taskName": "'+ TaskName + '",'  
+        + '"projectName": "'+ ProjectName+ '",'
+        + '"projectID": "'+ ProjectID+ '",'
+        + '"taskName": "'+ TaskName + '",'
         + '"taskID": "'+ TaskID+ '",'
-        + '"processed": "true"'  
+        + '"processed": "true"'
         + '}';
       chrome.extension.getBackgroundPage().History[currentID][0][4] =text;
-        
+
       text = '{'
-        + '"projectName": "'+ ProjectName+ '",'  
-        + '"projectID": "'+ ProjectID+ '",' 
-        + '"taskName": "'+ TaskName + '",'  
+        + '"projectName": "'+ ProjectName+ '",'
+        + '"projectID": "'+ ProjectID+ '",'
+        + '"taskName": "'+ TaskName + '",'
         + '"taskID": "'+ TaskID+ '",'
-        + '"processed": "false"'  
+        + '"processed": "false"'
         + '}';
       localStorage.setItem('currentlyTrackingDetails', text);
 
@@ -444,7 +444,7 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
       const obj = JSON.parse(http.responseText);
-      document.getElementById("task_error").innerHTML = obj.message;      
+      document.getElementById("task_error").innerHTML = obj.message;
     }
   }
   http.send(text);
@@ -462,9 +462,9 @@ LogoutBtn.onclick = function() {
   localStorage.removeItem("token");
   localStorage.removeItem("currentlyTracking");
   user.getInstance().allProject = "";
-  
+
   document.getElementById("timer").innerHTML = "0:00";
-  for(tabID in chrome.extension.getBackgroundPage().History) 
+  for(tabID in chrome.extension.getBackgroundPage().History)
     chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabID), 'text': FormatDuration("0:00")});
 
 }
@@ -473,7 +473,7 @@ LogoutBtn.onclick = function() {
   function getMinutesFromSeconds(t)
   {
     var minutes = parseInt(t/60);
-    
+
     return minutes;
   }
 

@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="container justify-content-center">
-    <div class="jumbotron jumbotron-fluid align-self-center col-12 mx-auto" id="loginForm">
+      <div class="jumbotron jumbotron-fluid align-self-center col-12 mx-auto" id="loginForm">
         <div class="logo col-12 mb-4">
           <img src="images/STAT-logo.png" id="logo" class="img-fluid align-self-center" alt="STAT logo">
         </div>
@@ -31,8 +31,8 @@
           <button class="btn btn-md mt-3 mx-auto py-1" type="button" name="login" id="login">Log in</button>
         </form>
       </div>
-    <div class="jumbotron jumbotron-fluid align-self-center col-12 mx-auto" id="popup">
-      <button class="btn btn-md mt-1 py-1" type="button" name="logout" value="logout" id="logout_btn">Log out</button>
+      <div class="jumbotron jumbotron-fluid align-self-center col-12 mx-auto" id="popup">
+        <button class="btn btn-md mt-1 py-1" type="button" name="logout" value="logout" id="logout_btn">Log out</button>
         <div class="logo col-12 mb-4">
           <img src="images/STAT-logo.png" id="logo" class="img-fluid align-self-center" alt="STAT logo">
         </div>
@@ -42,35 +42,38 @@
         <!--<div class="flex-column row"></div>-->
         <h6 class="text-danger h6" id="task_error"></h6>
         <div class="col-12 lead" id="loading_projects">Loading Projects...</div>
-        <div id="select_task_form">
+        <div id="select_task_form" class="col-12 mx-auto">
           <form class="col-12 form-group form-group-modified mx-auto" action="" method="post">
-            <label for="task">Project</label>
-            <select class="col-12 mx-auto form-control" id="projects">
+            <label for="task" class="col-10">Project</label>
+            <select class="col-10 mx-auto form-control" id="projects">
             </select>
             <br>
-            <label for="task">Task</label>
-            <select class="col-12 mx-auto form-control" id="tasks">
+            <label for="task" class="col-10">Task</label>
+            <select class="col-10 mx-auto form-control" id="tasks">
             </select>
             <br>
-            <button class="btn btn-md mt-3 py-1" type="button" name="button" id="select_task">Select Project</button>
+            <button class="btn btn-md mt-3 py-1" type="button" name="button" id="select_task">Save</button>
             <br>
           </form>
         </div>
-        <div id="selected_task" class="col-12">
-          <p class="lead" id="project"></p>
-          <p class="lead" id="task"></p>
-          <button class="btn btn-md mt-3 mx-auto py-2" type="button" name="button" id="reselect_task">Re-select Project</button>
+        <div id="selected_task" class="col-12 mx-auto">
+          <p class="lead col-12 mx-auto" id="project"></p>
+          <p class="lead col-12 mx-auto" id="task"></p>
+          <button class="btn btn-md mt-3 mx-auto py-2" type="button" name="button" id="reselect_task">Edit</button>
         </div>
-        <form class="col-12 form-group form-group-modified" action="" method="post">
-        <!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
-          <br>-->
-          <button class="btn btn-md mt-4 py-1" type="button" name="stop" value="stop" id="start_stop">Stop</button>
-        <!--
+        <!--<p class="col-12 mx-auto p-0 m-1">
+          <span class="float-left w-auto">Time elapsed: </span>
+          <span class="float-right lead" id="timer"></span>
+        </p>
+        <hr class="mt-2">
+        <form class="col-12 form-group form-group-modified mx-auto" action="" method="post">
+          <button class="btn btn-md mt-4 py-1 float-left" type="button" name="stop" value="stop" id="start_stop">Stop</button>
+        --><!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
+            <br>
             Can be implemented for next phase ==> nice to have feature
             <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="pause_resume">pause</button>
-          -->
-        </form>
-       <p class="float-right lead" id="timer"></p>
+          --><!--
+        </form>-->
       </div>
     </div>
 
