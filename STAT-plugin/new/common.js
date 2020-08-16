@@ -22,7 +22,7 @@ processDisplay();
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("popup").style.display = "block";
         document.getElementById("userName").innerHTML = localStorage.getItem("name");
-        document.getElementById("userSurname").innerHTML = localStorage.getItem("surname");
+        document.getElementById("userEmail").innerHTML = localStorage.getItem("surname");
         document.getElementById("errorMessage").innerHTML= "";
     }
     else
