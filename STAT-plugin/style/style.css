@@ -1,22 +1,7 @@
-@font-face {
-  font-family: 'Chivo';
-  src: url('fonts/chivo/Chivo-Black.ttf');
-}
-
-@font-face {
-  font-family: 'Montsserat';
-  src: url('fonts/montserrat/Montsserat-Black.ttf');
-}
-
-@font-face {
-  font-family: 'OpenSans';
-  src: url('fonts/open-sans/OpenSans-Regular.ttf');
-}
-
 * {
-  color: #CEDEDA !important;
-  font-family: 'OpenSans', Arial !important;
-  font-size: 0.95em;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1em;
+  width: 25em;
 }
 
 button {
@@ -24,11 +9,23 @@ button {
   border: 0px !important;
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   color: white !important;
-  font-family: 'Montsserat', Arial !important;
   font-size: 0.8em !important;
   font-weight: bold !important;
   margin: 0em auto;
   text-transform: uppercase;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+.container {
+  padding-bottom: 2em;
+  padding-top: 2em;
 }
 
 .display-4-modified {
@@ -37,9 +34,22 @@ button {
   line-height: 1.2;
 }
 
+#logout_btn {
+  background-color: #3F51B5 !important;
+  position: fixed;
+  right: 0.5em;
+  top: 0.6em;
+}
+
+#errorMessage, #task_error {
+  color: red !important;
+  font-size: 0.8em;
+}
+
 form {
   align-items: center;
   justify-content: center;
+  margin-bottom: 0em !important;
   text-align: center;
 }
 
@@ -54,9 +64,17 @@ form {
 
 h1 {
   color: black !important;
-  font-family: 'Montsserat', Arial !important;
-  font-size: 2em !important;
+  font-family: 'Righteous', sans-serif;
+  font-size: 1.75em !important;
   font-weight: bolder !important;
+}
+
+h6 {
+  font-size: 1em;
+}
+
+hr {
+  width: 100% !important;
 }
 
 input {
@@ -64,25 +82,33 @@ input {
   border-bottom: 1px solid #CED4DA !important;
   border-radius: 0px !important;
   font-size: 0.8em !important;
-  margin: 0em auto;
   text-align: left;
 }
 
 .jumbotron {
   background-color: rgba(0,0,0,0);
-  border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  margin: 0em;
+  padding-bottom: 0em;
+  padding-top: 0em;
   text-align: center;
+  width: 100% !important;
 }
 
 label {
+  color: #495057 !important;
+  display: inline-flex !important;
+  font-size: 0.8em;
+  margin-bottom: 0em !important;
+  padding: 0em !important;
+}
+
+#loading_projects {
   color: #CED4DA !important;
-  display: block;
-  font-size: 0.7em;
+  font-size: 1.2em;
 }
 
 #logo {
-  height: 5em;
+  height: 3.5em;
   width: auto;
 }
 
@@ -95,8 +121,12 @@ p {
   padding: 1.5em;
 }
 
-#popup, #login {
-  width:250px;
+#popup, #login, #start_stop, #logout_btn {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  padding-bottom: 0.5em !important;
+  padding-top: 0.5em !important;
+  width: 7em;
 }
 
 #selected_task {
