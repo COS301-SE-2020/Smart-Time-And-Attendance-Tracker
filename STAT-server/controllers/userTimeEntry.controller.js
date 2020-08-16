@@ -467,7 +467,7 @@ module.exports.getOwnTimeEntries = (req, res) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else if (!result){
-            return res.status(404).json({ message: 'User not found' }); 
+            return res.status(404).json({ message: 'No time entries for the given user were found' }); 
         }
         else{
             var timeEntries=[];
@@ -518,7 +518,7 @@ module.exports.getUserTimeEntries = (req, res) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else if (!result){
-            return res.status(404).json({ message: 'User not found' }); 
+            return res.status(404).json({ message: 'No time entries for the given user were found' }); 
         }
         else{
             var timeEntries=[];
