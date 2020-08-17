@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, HostListener } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -107,7 +107,25 @@ export class AccountManagementService {
     return this.http.get(this.ROOT_URL+ 'user/getAllUsers', {
       headers: headers
     });
+
   }
+  public saveSharedLocalStorage(iframe, saveKey, data)
+  { console.log("save"+ saveKey);
+    iframe.contentWindow.postMessage({
+      action: 'save',
+      key: saveKey,
+      value: data
+  });
+}
+public getSharedLocalStorage(iframe,getKey)
+  {
+    console.log("get"+ getKey);
+    iframe.contentWindow.postMessage({
+      action: 'get',
+      key: getKey
+  });
+}
+
 
   // edit profile
   // edit settings

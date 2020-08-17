@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
@@ -7,6 +7,7 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 import { timer } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-today',
@@ -15,9 +16,7 @@ import { formatDate } from '@angular/common';
 })
 export class TodayComponent implements OnInit {
 
-
-
-  constructor(private modalService: NgbModal, public headerService : HeaderService, public service : TrackingService, public amService : AccountManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public service : TrackingService, public amService : AccountManagementService, public sanitizer: DomSanitizer) { }
 
   stop =false;
   currentTime : number;
@@ -59,6 +58,7 @@ export class TodayComponent implements OnInit {
   date4 : Date = new Date()
   date5 : Date = new Date()
 
+  @ViewChild('iframe') iframe: ElementRef;
 
   ngOnInit(): void {
     this.manualTrackingForm = new FormGroup({
@@ -86,7 +86,6 @@ export class TodayComponent implements OnInit {
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
 
-
     // set dates
     this.date1.setDate(this.date.getDate()-1)
     this.date2.setDate(this.date.getDate()-2)
@@ -96,6 +95,14 @@ export class TodayComponent implements OnInit {
 
     this.reload()
 
+  }
+  ngAfterViewInit(): void {
+    console.log("hi");
+    //this.iframe.nativeElement.setAttribute('src', './iframe.html');
+    this.amService.saveSharedLocalStorage(this.iframe.nativeElement, "token", "test");
+    this.amService.saveSharedLocalStorage(this.iframe.nativeElement, "name", "test");
+    this.amService.saveSharedLocalStorage(this.iframe.nativeElement, "surname","test");
+    console.log("hello");
   }
 
   // reload page data
