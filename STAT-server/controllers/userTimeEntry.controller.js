@@ -474,27 +474,61 @@ module.exports.getOwnTimeEntries = (req, res) => {
             var times = result.TimeEntries.length
            
             if(times == 0){
-                return res.status(404).json({ message: 'No time entries for the given user were found' });
+                return res.status(404).json({ message: 'No time entries were found' });
             }
             else{
-                for(var a=0; a<times; a++){
-                    TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
-                        count3= count3+1; 
-                        if(err){
-                            return res.status(500).send({message: 'Internal Server Error: ' + error});
+                if(req.query.hasOwnProperty("minDate"))
+                {
+                    var min = new Date(req.query.minDate).getTime();
+                    if(req.query.hasOwnProperty("maxDate"))
+                    {
+                        var max = new Date(req.query.maxDate);
+                        max.setDate(max.getDate() + 1);
+                        max = max.getTime()
+                    }
+                    else
+                     var max = new Date().getTime(); 
+                
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a], StartTime: {$gte: min,$lte: max}},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
 
-                        }
-                        else if(val){
-                            count = false;
-                            timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
-                        };
-                        if(count3 == times && count){
-                            return res.status(404).json({ message: 'No time entries for the given day were found' });
-                        } 
-                        else if(count3== times){
-                            return res.status(200).json({timeEntries}); 
-                        }
-                    });
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
+                }
+                else{
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -528,25 +562,60 @@ module.exports.getUserTimeEntries = (req, res) => {
                 return res.status(404).json({ message: 'No time entries for the given user were found' });
             }
             else{
-                for(var a=0; a<times; a++){
-                    TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
-                        count3= count3+1; 
-                        if(err){
-                            return res.status(500).send({message: 'Internal Server Error: ' + error});
+                if(req.query.hasOwnProperty("minDate"))
+                {
+                    var min = new Date(req.query.minDate).getTime();
+                    if(req.query.hasOwnProperty("maxDate"))
+                    {
+                        var max = new Date(req.query.maxDate);
+                        max.setDate(max.getDate() + 1);
+                        max = max.getTime()
+                    }
+                    else
+                        var max = new Date().getTime(); 
+                
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a], StartTime: {$gte: min,$lte: max}},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
 
-                        }
-                        else if(val){
-                            count = false;
-                            timeEntries.push({timeEntryID: val._id, date:val.Date,  startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration,description: val.Description, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
-                        };
-                        if(count3 == times && count){
-                            return res.status(404).json({ message: 'No time entries for the given day were found' });
-                        } 
-                        else if(count3== times){
-                            return res.status(200).json({timeEntries}); 
-                        }
-                    });
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
                 }
+                else{
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
+                }
+                
             }
         }
     });
@@ -574,7 +643,6 @@ module.exports.getUserTimeEntries = (req, res) => {
  * @returns {JSON Object} 
  */  
 module.exports.getAllUsersTimeEntries = async function(req, res) {  
-    var count3 = 0;
     var count4 =0;
     var timeEntries=[];
     UserHelper.getAllUsers(async (err, result) => {
@@ -608,7 +676,7 @@ module.exports.getAllUsersTimeEntries = async function(req, res) {
                     }
                     else{
                         timeEntries=[];
-                        if(result.TimeEntries.length == 0){   ///sina --Look at this- 
+                        if(result.TimeEntries.length == 0){  
                             finalobject.push({ name:name, surname:surname, email:email, timeEntries:[] });
                             if (count4 == allcounts && finalobject.length == allcounts)  {
                                 return res.status(200).json({finalobject}); 
@@ -617,7 +685,7 @@ module.exports.getAllUsersTimeEntries = async function(req, res) {
                         else{
                                
                             try {
-                                const  val = await TimeEntryHelper.getAllTimeEntries(result.TimeEntries);
+                                const  val = await TimeEntryHelper.getAllTimeEntries(result.TimeEntries,req.query);
                                 var filtered = val.filter(function (el) {
                                     return el != null;
                                   });
@@ -626,11 +694,10 @@ module.exports.getAllUsersTimeEntries = async function(req, res) {
                                 if (count4 == allcounts && finalobject.length == allcounts)  {
                                 return res.status(200).json({results: finalobject});
                                 }
-                            } catch (error) {
+                            } 
+                            catch (error) {
                                 return res.status(500).send({message: 'Internal Server Error: ' + err})
-                         
-                           
-                                }
+                           }
                         }
                     }
                 });
@@ -701,7 +768,7 @@ module.exports.getAllProjectMembersTimeEntries = async (req, res) => {
 
                                 var times = result.TimeEntries.length
                             
-                                if(times == 0){   ///sina --Look at this- 
+                                if(times == 0){  
 
                                     finalobject.TeamMembers.push({name:name, surname:surname, email:email, role: role,timeEntries: []});
                                     if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
@@ -713,7 +780,7 @@ module.exports.getAllProjectMembersTimeEntries = async (req, res) => {
                                     ///
                                     timeEntries=[];
                                     try {
-                                        const  val = await TimeEntryHelper.getAllTimeEntriesForProject(result.TimeEntries, projectID);
+                                        const  val = await TimeEntryHelper.getAllTimeEntriesForProject(result.TimeEntries, projectID,req.query);
                                         var filtered = val.filter(function (el) {
                                             return el != null;
                                           });

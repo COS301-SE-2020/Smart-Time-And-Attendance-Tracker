@@ -52,10 +52,47 @@ module.exports.getTimeEntry = (id, done)=>{
  * @returns {Object} Time Entry document(object).
  */
 
-module.exports.getAllTimeEntries = async (ids)=> {
+module.exports.getAllTimeEntries = async (ids,req)=> {
     return new Promise(function(resolve, reject) { 
         entries = [];
-        ids.forEach((id) => { 
+        if(req.hasOwnProperty("minDate"))
+        {
+            var min = new Date(req.minDate).getTime();
+            if(req.hasOwnProperty("maxDate"))
+            {
+                var max = new Date(req.maxDate);
+                max.setDate(max.getDate() + 1);
+                max = max.getTime()
+            }
+            else
+                var max = new Date().getTime(); 
+
+             ids.forEach((id) => { 
+                entries.push(
+                        TimeEntryModel.findOne({_id: id,  StartTime: {$gte: min,$lte: max}}).then((result) => {
+                            if(result){
+                                var text = {
+                                    'timeEntryID': result._id,
+                                    'date': result.Date,
+                                    'description': result.Description,
+                                    'startTime': result.StartTime,
+                                    'endTime': result.EndTime,
+                                    'duration':result.Duration, 
+                                    'project': result.ProjectName,
+                                    'task': result.TaskName, 
+                                    'activeTime': result.ActiveTime, 
+                                    'monetaryValue':result.MonetaryValue
+                                    } 
+                                return text;
+                            }
+                        }).catch((err) => reject(err)));
+            });
+            Promise.all(entries).then((result) => {
+                resolve(result);  
+            }).catch((err) => reject(err));
+        }
+        else{
+            ids.forEach((id) => { 
             entries.push(
                     TimeEntryModel.findOne({_id: id}).then((result) => {
                         if(result){
@@ -78,6 +115,8 @@ module.exports.getAllTimeEntries = async (ids)=> {
         Promise.all(entries).then((result) => {
             resolve(result);  
         }).catch((err) => reject(err));
+            
+        }
     });
 }
  /**
@@ -88,10 +127,47 @@ module.exports.getAllTimeEntries = async (ids)=> {
  * @returns {Object} Time Entry document(object).
  */
 
-module.exports.getAllTimeEntriesForProject = async (ids, project)=> {
+module.exports.getAllTimeEntriesForProject = async (ids, project,req)=> {
     return new Promise(function(resolve, reject) { 
         entries = [];
-        ids.forEach((id) => { 
+        if(req.hasOwnProperty("minDate"))
+        {
+            var min = new Date(req.minDate).getTime();
+            if(req.hasOwnProperty("maxDate"))
+            {
+                var max = new Date(req.maxDate);
+                max.setDate(max.getDate() + 1);
+                max = max.getTime()
+            }
+            else
+                var max = new Date().getTime(); 
+
+             ids.forEach((id) => { 
+                entries.push(
+                        TimeEntryModel.findOne({_id: id, ProjectID: project,  StartTime: {$gte: min,$lte: max}}).then((result) => {
+                            if(result){
+                                var text = {
+                                    'timeEntryID': result._id,
+                                    'date': result.Date,
+                                    'description': result.Description,
+                                    'startTime': result.StartTime,
+                                    'endTime': result.EndTime,
+                                    'duration':result.Duration, 
+                                    'project': result.ProjectName,
+                                    'task': result.TaskName, 
+                                    'activeTime': result.ActiveTime, 
+                                    'monetaryValue':result.MonetaryValue
+                                    } 
+                                return text;
+                            }
+                        }).catch((err) => reject(err)));
+            });
+            Promise.all(entries).then((result) => {
+                resolve(result);  
+            }).catch((err) => reject(err));
+        }
+        else{
+            ids.forEach((id) => { 
             entries.push(
                     TimeEntryModel.findOne({_id: id, ProjectID: project}).then((result) => {
                         if(result){
@@ -102,6 +178,7 @@ module.exports.getAllTimeEntriesForProject = async (ids, project)=> {
                                 'startTime': result.StartTime,
                                 'endTime': result.EndTime,
                                 'duration':result.Duration, 
+                                'project': result.ProjectName,
                                 'task': result.TaskName, 
                                 'activeTime': result.ActiveTime, 
                                 'monetaryValue':result.MonetaryValue
@@ -113,5 +190,7 @@ module.exports.getAllTimeEntriesForProject = async (ids, project)=> {
         Promise.all(entries).then((result) => {
             resolve(result);  
         }).catch((err) => reject(err));
+            
+        }
     });
 }
