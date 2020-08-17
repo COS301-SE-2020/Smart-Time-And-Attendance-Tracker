@@ -4,6 +4,7 @@ import { HistoryService } from 'src/app/shared/services/history.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
+import { Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-history',
@@ -14,7 +15,7 @@ export class HistoryComponent implements OnInit {
   allColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value'];
   displayedColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value']
 
-  roles : string;
+  roles : string = localStorage.getItem('roles')
 
   allData : Object[] = []
   tableData : Object[] = []
@@ -28,23 +29,26 @@ export class HistoryComponent implements OnInit {
   mSelected : string = null
   toggle : boolean = false
   sorted : string = 'newest'
+  historyType : string
 
   constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
   ngOnInit(): void {
-    this.roles = localStorage.getItem('roles');
 
     if (this.roles.indexOf("Data Analyst") != -1)
       this.allColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value', 'Member'];
       this.displayedColumns = this.allColumns
 
     // if general user
-    if (this.roles.indexOf("General Team Member") != -1)
+    if (this.roles.indexOf("General Team Member") != -1) {
+      this.historyType = 'general'
       this.getOwn();
-    else if (this.roles.indexOf("Data Analyst") != -1) {
-      this.getAllUser()
+    } else if (this.roles.indexOf("Data Analyst") != -1) {
+      this.historyType = 'general'
+      this.getOwn()
       this.getProjectsDA()
       this.getMembers()
     } else {
+      this.historyType = 'tl'
       this.getAllUser()
       this.getProjectsTL()
     }
@@ -53,7 +57,12 @@ export class HistoryComponent implements OnInit {
   // get own time entries
   getOwn() {
     this.tableData = []
-    this.historyService.getOwnEntries(localStorage.getItem('token')).subscribe((data) => {
+
+    let req = {}
+    if (this.dateFrom != null && this.dateTo != null)
+      req = {'minDate' : this.dateFrom, 'maxDate' : this.dateTo}
+
+    this.historyService.getOwnEntries(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
       this.tableData = data['timeEntries']
       this.allData = this.tableData
@@ -71,8 +80,15 @@ export class HistoryComponent implements OnInit {
 
   // get user time entries
   getUser(userID : string) {
+    this.historyType = 'user'
     this.tableData = []
-    this.historyService.getUserEntries(localStorage.getItem('token'), userID).subscribe((data) => {
+    let req
+    if (this.dateFrom != null && this.dateTo != null)
+      req = {'userID' : userID, 'minDate' : this.dateFrom, 'maxDate' : this.dateTo}
+    else
+      req = {'userID' : userID
+    }
+    this.historyService.getUserEntries(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
       this.tableData = data['timeEntries']
 
@@ -84,6 +100,7 @@ export class HistoryComponent implements OnInit {
       this.formatTableData()
     },
     error => {
+      console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -118,8 +135,16 @@ export class HistoryComponent implements OnInit {
 
   // get all project time entries
   getAllProject(projectID : string) {
+    this.historyType = 'project'
     this.tableData = []
-    this.historyService.getAllProjectEntries(localStorage.getItem('token'), projectID).subscribe((data) => {
+    let req
+    if (this.dateFrom != null && this.dateTo != null)
+      req = {'projectID' : projectID, 'minDate' : this.dateFrom, 'maxDate' : this.dateTo}
+    else
+      req = {'projectID' : projectID
+    }
+
+    this.historyService.getAllProjectEntries(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
       let res : any[] = data['results']['TeamMembers']
       console.log(res)
@@ -313,6 +338,25 @@ export class HistoryComponent implements OnInit {
     this.formatTableData()
   }
 
+  getHistory() {
+    switch (this.historyType) {
+      case 'general':
+        this.getOwn()
+        break
+      case 'da':
+        this.getAllUser()
+        break
+      case 'tl':
+        this.getAllUser()
+        break
+      case 'user':
+        this.getUser(this.mSelected)
+        break
+      case 'project':
+        this.getAllProject(this.pSelected)
+    }
+  }
+
   sort(type : string) {
     if (type == 'o' && this.sorted == 'newest') {
       this.sorted = 'oldest'
@@ -344,7 +388,7 @@ export class HistoryComponent implements OnInit {
     linkElement.click();
   }
 
-  /*downloadCSV() {
+  downloadCSV() {
     let dataStr : any = this.tableData
     let keys = Object.keys(dataStr[0]['records'][0]);
     console.log(keys)
@@ -378,7 +422,7 @@ export class HistoryComponent implements OnInit {
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
 
-  }*/
+  }
 
   /*downloadCSV() {
     let dataStr = JSON.stringify(this.tableData, null, 4);
@@ -395,7 +439,7 @@ export class HistoryComponent implements OnInit {
     linkElement.click();
   }*/
 
-  downloadCSV() {
+  /*downloadCSV() {
     const { Parser, transforms: { unwind } } = require('json2csv');
 
     const fields = ['month', 'records.date', 'records.startTime', 'records.endTime', 'records.activeTime', 
@@ -413,7 +457,7 @@ export class HistoryComponent implements OnInit {
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
-  }
+  }*/
 }
 
 export interface Element {

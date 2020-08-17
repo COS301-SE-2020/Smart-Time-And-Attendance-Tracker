@@ -13,20 +13,30 @@ export class HistoryService {
   constructor(public http: HttpClient) { }
 
   // get own time entries
-  getOwnEntries(token) {
+  getOwnEntries(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    let parameters = new HttpParams();
+    if (values.minDate) {
+      parameters = parameters.append('minDate', values.minDate);
+      parameters = parameters.append('maxDate', values.maxDate);
+    }
     return this.http.get(this.ROOT_URL+ 'userTimeEntry/getOwnTimeEntries', {
+      params: parameters,
       headers: headers
     });
   }
 
   // get user time entries
-  getUserEntries(token, userID) {
+  getUserEntries(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
-    parameters = parameters.append('userID', userID);
+    parameters = parameters.append('userID', values.userID);
+    if (values.minDate) {
+      parameters = parameters.append('minDate', values.minDate);
+      parameters = parameters.append('maxDate', values.maxDate);
+    }
     return this.http.get(this.ROOT_URL+ 'userTimeEntry/getUserTimeEntries',{
       params: parameters,
       headers: headers
@@ -43,11 +53,15 @@ export class HistoryService {
   }
 
   // get all project time entries
-  getAllProjectEntries(token, projectID) {
+  getAllProjectEntries(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
-    parameters = parameters.append('projectID', projectID);
+    parameters = parameters.append('projectID', values.projectID);
+    if (values.minDate) {
+      parameters = parameters.append('minDate', values.minDate);
+      parameters = parameters.append('maxDate', values.maxDate);
+    }
     return this.http.get(this.ROOT_URL+ 'userTimeEntry/getProjectTimeEntries', {
       params: parameters,
       headers: headers
