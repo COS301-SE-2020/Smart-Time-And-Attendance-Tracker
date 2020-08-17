@@ -6,6 +6,7 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 import { Breakpoints } from '@angular/cdk/layout';
 import { ValueTransformer } from '@angular/compiler/src/util';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-history',
@@ -176,6 +177,10 @@ export class HistoryComponent implements OnInit {
     document.getElementById('json-input').click();
   }
 
+  openCSV() {
+    document.getElementById('csv-input').click();
+  }
+
   readJSON(event) {
     var file = event.srcElement.files[0];
     var imports = []
@@ -216,6 +221,54 @@ export class HistoryComponent implements OnInit {
     reader.onloadend = () => {
       imports.forEach(element => {
         this.import(element)
+      });
+    }
+  }
+
+  readCSV(event) {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    let data
+    if (target.files.length !== 1) {
+      throw new Error('Cannot use multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.readAsBinaryString(target.files[0]);
+    reader.onload = (e: any) => {
+      /* create workbook */
+      const binarystr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
+
+      /* selected the first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* save data */
+      data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
+      console.log(data); // Data will be logged in array format containing objects
+    };
+
+    reader.onloadend = () => {
+      data.forEach(element => {
+        console.log(element)
+        let date = new Date(Math.round((element.date - 25569)*86400*1000))
+        let sDate = date.getFullYear() + "/"
+        if (date.getMonth() + 1 < 10)
+          sDate += "0" + (date.getMonth()+1) + "/"
+        else
+          sDate += (date.getMonth()+1) + "/"
+
+        if (date.getDate() < 10)
+          sDate += "0" + date.getDate()
+        else
+          sDate += date.getDate()
+
+        console.log(sDate)
+        element.date = sDate
+        let start = new Date(sDate + " " + element.startTime)
+        element.startTime = start.getTime()
+        let end = new Date(sDate + " " + element.endTime)
+        element.endTime = end.getTime()
+        console.log(element)
       });
     }
   }

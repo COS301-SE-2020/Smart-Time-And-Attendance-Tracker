@@ -22,9 +22,10 @@
         </button>
       <mat-menu #importMenu="matMenu">
         <button mat-menu-item (click)="openJSON()">JSON</button>
-        <button mat-menu-item>Excel</button>
+        <button mat-menu-item (click)="openCSV()">Excel</button>
       </mat-menu>
       <input id="json-input" type="file" style="display: none;" accept="application/json" (change)="readJSON($event)" />
+      <input id="csv-input" type="file" style="display: none;" accept=".csv, .xlsx" (change)="readCSV($event)" />
       <button mat-mini-fab id="export-menu" class="mx-1"
               matTooltip="Export"
               matTooltipClass="action-tooltip"
