@@ -21,9 +21,10 @@
         <mat-icon>note_add</mat-icon>
         </button>
       <mat-menu #importMenu="matMenu">
-        <button mat-menu-item>JSON</button>
+        <button mat-menu-item (click)="openJSON()">JSON</button>
         <button mat-menu-item>Excel</button>
       </mat-menu>
+      <input id="json-input" type="file" style="display: none;" accept="application/json" (change)="readJSON($event)" />
       <button mat-mini-fab id="export-menu" class="mx-1"
               matTooltip="Export"
               matTooltipClass="action-tooltip"

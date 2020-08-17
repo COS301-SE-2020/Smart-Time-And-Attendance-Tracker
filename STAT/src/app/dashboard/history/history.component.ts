@@ -5,6 +5,7 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 import { Breakpoints } from '@angular/cdk/layout';
+import { ValueTransformer } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-history',
@@ -30,6 +31,8 @@ export class HistoryComponent implements OnInit {
   toggle : boolean = false
   sorted : string = 'newest'
   historyType : string
+
+  imports : any[] = []
 
   constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
   ngOnInit(): void {
@@ -169,12 +172,61 @@ export class HistoryComponent implements OnInit {
     });
   }
 
+  openJSON() {
+    document.getElementById('json-input').click();
+  }
+
+  readJSON(event) {
+    var file = event.srcElement.files[0];
+    var imports = []
+    if (file) {
+      var reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      let data
+      reader.onload = function (evt : any) {
+        data = JSON.parse(evt.target.result)
+        console.log(data)
+        let values
+        data.forEach((element : any) => {
+          let start : any = new Date(element.date + " " + element.startTime)
+          start = start.getTime()
+          let end : any = new Date(element.date + " " + element.endTime)
+          end = end.getTime()
+
+          values = { 'userID' : element.userID, 'date' : element.date, 'startTime' : start, 
+                    'endTime' : end, 'description' : element.description, 'device' : element.device}
+
+          if (element.taskID)
+            values = Object.assign(values, { 'taskID' : element.taskID, 'taskName' : element.taskName})
+          if (element.projectID)
+            values = Object.assign(values, { 'projectID' : element.projectID, 'projectName' : element.projectName})
+          if (element.activeTime)
+            values = Object.assign(values, { 'activeTime' : element.activeTime})
+          if (element.monetaryValue)
+            values = Object.assign(values, { 'monetaryValue' : element.monetaryValue})
+
+          imports.push(values)
+        });
+      }
+      reader.onerror = function (evt) {
+          console.log('error reading file');
+      }
+    }
+    
+    reader.onloadend = () => {
+      imports.forEach(element => {
+        this.import(element)
+      });
+    }
+  }
+
   // import time entry
   import(values : any) {
     this.historyService.import(localStorage.getItem('token'), values).subscribe((data) => {
       console.log(data);
     },
     error => {
+      console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
