@@ -179,7 +179,6 @@ export class TodayComponent implements OnInit {
     setTimeout (() => {
       if(this.stop == false)
       {
-        console.log("start");
         now = new Date();
         form['endTime']=  now.getTime();
 
@@ -224,7 +223,7 @@ export class TodayComponent implements OnInit {
   }
   tracking()
   {
-    //this.service.getSharedLocalStorage(this.iframe.nativeElement, "token").subscribe(x=>(console.log)(x));
+    //console.log(this.service.getSharedLocalStorage(this.iframe.nativeElement, "token"));
 
     console.log("tracking");
     this.count = timer(60000);

@@ -56,7 +56,7 @@ export class TrackingService {
     });
   }
   public saveSharedLocalStorage(iframe, saveKey, data)
-  { console.log("save"+ saveKey);
+  { 
     iframe.contentWindow.postMessage({
       action: 'save',
       key: saveKey,
@@ -65,10 +65,10 @@ export class TrackingService {
 }
 public getSharedLocalStorage(iframe,getKey)
   {
-    console.log("get"+ getKey);
-    iframe.contentWindow.postMessage({
+    console.log("gettttt"+ getKey);
+      return iframe.contentWindow.postMessage({
       action: 'get',
       key: getKey
-  }).subscribe((value)=> {return value;});
+  });
 }
 }

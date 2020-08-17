@@ -5,7 +5,6 @@
 </head>
 <body>
     <script>
-  console.log("ifreme");
   window.addEventListener("message", messageHandler, false);
 
   function messageHandler(event) {
@@ -24,11 +23,8 @@
             value: window.localStorage.getItem(key)
           }, '*')
         }
-        else if(action == 'returnData'){
-          return value;
-        }
       }
-
+      
     </script>
  
 </html>
