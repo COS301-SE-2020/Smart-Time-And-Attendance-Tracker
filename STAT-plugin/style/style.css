@@ -59,7 +59,11 @@ form {
 
 .form-group-modified {
   margin-bottom: 1rem;
-  /*padding-bottom: 1.5em;*/
+  padding-bottom: 0.5em;
+}
+
+p.lead {
+  font-size: 1em;
 }
 
 h1 {

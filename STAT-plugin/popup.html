@@ -42,38 +42,38 @@
         <!--<div class="flex-column row"></div>-->
         <h6 class="text-danger h6" id="task_error"></h6>
         <div class="col-12 lead" id="loading_projects">Loading Projects...</div>
-        <div id="select_task_form" class="col-12 mx-auto">
-          <form class="col-12 form-group form-group-modified mx-auto" action="" method="post">
-            <label for="task" class="col-10">Project</label>
-            <select class="col-10 mx-auto form-control" id="projects">
-            </select>
-            <br>
-            <label for="task" class="col-10">Task</label>
-            <select class="col-10 mx-auto form-control" id="tasks">
-            </select>
-            <br>
-            <button class="btn btn-md mt-3 py-1" type="button" name="button" id="select_task">Save</button>
-            <br>
-          </form>
-        </div>
         <div id="selected_task" class="col-12 mx-auto">
           <p class="lead col-12 mx-auto" id="project"></p>
           <p class="lead col-12 mx-auto" id="task"></p>
           <button class="btn btn-md mt-3 mx-auto py-2" type="button" name="button" id="reselect_task">Edit</button>
         </div>
-        <!--<p class="col-12 mx-auto p-0 m-1">
-          <span class="float-left w-auto">Time elapsed: </span>
-          <span class="float-right lead" id="timer"></span>
+        <div id="select_task_form" class="col-12 mx-auto">
+          <form class="col-12 form-group form-group-modified mx-auto" action="" method="post">
+            <label for="projects" class="col-10">Project</label>
+            <select class="col-10 mx-auto form-control" id="projects">
+            </select>
+            <br>
+            <label for="tasks" class="col-10">Task</label>
+            <select class="col-10 mx-auto form-control" id="tasks">
+            </select>
+            <br>
+            <button class="btn btn-md mt-3 py-2" type="button" name="button" id="select_task">Save</button>
+            <br>
+          </form>
+        </div>
+        <hr class="my-4">
+        <p class="col-12 mx-auto">
+          <span class="col-4 p-0 m-1">Time elapsed: </span>
+          <span class="col-6 p-0 m-1 lead" id="timer"></span>
         </p>
-        <hr class="mt-2">
         <form class="col-12 form-group form-group-modified mx-auto" action="" method="post">
-          <button class="btn btn-md mt-4 py-1 float-left" type="button" name="stop" value="stop" id="start_stop">Stop</button>
-        --><!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
+          <button class="btn btn-md mx-auto py-1" type="button" name="stop" value="stop" id="start_stop">Stop</button>
+          <!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
             <br>
             Can be implemented for next phase ==> nice to have feature
             <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="pause_resume">pause</button>
-          --><!--
-        </form>-->
+          -->
+        </form>
       </div>
     </div>
 
