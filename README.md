@@ -67,7 +67,7 @@ STAT produces graphs that allow you to view how time is being or was spent durin
 Authentication requests are automatically sent to your administrator each time a new user registers, which allows you to control who has access to your system by accepting and rejecting requests. You can also control what information and functionality each user has using STAT's role assignment functionality.
 
 **Import/Export Functionality**\
-STAT accepts tracking data in various formats so you can track how you spend your time any way you want and when you import CVS or JSON data, STAT automatically creates the time entries for you. You can even export all of your tracking data as a JSON, CVS, or PDF file.
+STAT accepts tracking data in various formats so you can track how you spend your time any way you want. When you import CVS or JSON data, STAT automatically creates the time entries for you. You can even export all of your tracking data to a JSON, CVS, or PDF file.
 
 ## Demo 1
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
