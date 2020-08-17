@@ -63,8 +63,8 @@ export class TodayComponent implements OnInit {
   ngOnInit(): void {
     this.manualTrackingForm = new FormGroup({
       description : new FormControl(''),
-      project : new FormControl('',[Validators.required]),
-      taskID : new FormControl('', [Validators.required]),
+      project : new FormControl(''),
+      taskID : new FormControl(''),
       //MonetaryValue : new FormControl('', [Validators.required]),
       date : new FormControl('', [Validators.required]),
       startTime : new FormControl('', [Validators.required]),
@@ -95,14 +95,6 @@ export class TodayComponent implements OnInit {
 
     this.reload()
 
-  }
-  ngAfterViewInit(): void {
-    console.log("hi");
-    //this.iframe.nativeElement.setAttribute('src', './iframe.html');
-    this.amService.saveSharedLocalStorage(this.iframe.nativeElement, "token", "test");
-    this.amService.saveSharedLocalStorage(this.iframe.nativeElement, "name", "test");
-    this.amService.saveSharedLocalStorage(this.iframe.nativeElement, "surname","test");
-    console.log("hello");
   }
 
   // reload page data
@@ -195,7 +187,6 @@ export class TodayComponent implements OnInit {
         form['activeTime'] = 1;
         form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
 
-
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
           this.service.EntryID = data['timeEntryID'];
           localStorage.setItem('currentlyTracking', data['timeEntryID']);
@@ -233,6 +224,8 @@ export class TodayComponent implements OnInit {
   }
   tracking()
   {
+    //this.service.getSharedLocalStorage(this.iframe.nativeElement, "token").subscribe(x=>(console.log)(x));
+
     console.log("tracking");
     this.count = timer(60000);
     this.count.subscribe(x => {

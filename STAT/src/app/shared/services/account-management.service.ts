@@ -109,22 +109,6 @@ export class AccountManagementService {
     });
 
   }
-  public saveSharedLocalStorage(iframe, saveKey, data)
-  { console.log("save"+ saveKey);
-    iframe.contentWindow.postMessage({
-      action: 'save',
-      key: saveKey,
-      value: data
-  });
-}
-public getSharedLocalStorage(iframe,getKey)
-  {
-    console.log("get"+ getKey);
-    iframe.contentWindow.postMessage({
-      action: 'get',
-      key: getKey
-  });
-}
 
 
   // edit profile

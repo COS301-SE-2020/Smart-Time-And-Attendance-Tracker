@@ -5,7 +5,8 @@
 </head>
 <body>
     <script>
-    window.addEventListener("message", messageHandler, false);
+  console.log("ifreme");
+  window.addEventListener("message", messageHandler, false);
 
   function messageHandler(event) {
         console.log(event);
@@ -15,7 +16,6 @@
         console.log(action);
         if (action == 'save'){
           window.localStorage.setItem(key, JSON.stringify(value));
-          console.log( null);
         } 
         else if (action == 'get') {
           event.source.postMessage({
@@ -23,10 +23,9 @@
             key:key,
             value: window.localStorage.getItem(key)
           }, '*')
-          console.log( null);
         }
         else if(action == 'returnData'){
-          console.log( value);
+          return value;
         }
       }
 
