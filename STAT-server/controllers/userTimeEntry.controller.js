@@ -398,7 +398,7 @@ module.exports.getDailyTimeEntries = (req, res) => {
                         count3= count3+1; 
                         
                         if(err)
-                            return res.status(500).send({message: 'Internal Server Error: ' + error});
+                            return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                         else if(val)
                         {
