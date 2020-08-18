@@ -7,6 +7,9 @@ import { ProjectManagementService } from 'src/app/shared/services/project-manage
 import { Breakpoints } from '@angular/cdk/layout';
 import { ValueTransformer } from '@angular/compiler/src/util';
 import * as XLSX from 'xlsx';
+import { element } from 'protractor';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
 @Component({
   selector: 'app-history',
@@ -41,20 +44,19 @@ export class HistoryComponent implements OnInit {
     if (this.roles.indexOf("Data Analyst") != -1)
       this.allColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value', 'Member'];
       this.displayedColumns = this.allColumns
-
-    // if general user
-    if (this.roles.indexOf("General Team Member") != -1) {
-      this.historyType = 'general'
-      this.getOwn();
-    } else if (this.roles.indexOf("Data Analyst") != -1) {
-      this.historyType = 'general'
-      this.getOwn()
+      
+    if (this.roles.indexOf("Data Analyst") != -1) {
+      this.historyType = 'da'
+      this.getAllUser()
       this.getProjectsDA()
       this.getMembers()
-    } else {
+    } else if (this.roles.indexOf("Team Leader") != -1) {
       this.historyType = 'tl'
-      this.getAllUser()
+      this.getOwn()
       this.getProjectsTL()
+    } else {
+      this.historyType = 'general'
+      this.getOwn();
     }
   }
 
@@ -542,6 +544,26 @@ export class HistoryComponent implements OnInit {
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
 
+  }
+
+  exportPDF() {
+    
+    var doc = new jsPDF("l");
+    var cols = ["Date", "Start time", "End time", "Active time", "Project", "Task", "Monetary Value", "Member"]
+    var rows = [];
+
+    this.tableData.forEach((element : any) => {
+      element.records.forEach((record : any) => {
+        var temp = [record.fDate, record.startTime, record.endTime, record.activeTime, record.project,
+                    record.task, record.monetaryValue, record.member]
+        rows.push(temp)
+      })
+    })
+
+    autoTable(doc, {head : [cols], body : rows})
+
+    doc.output('dataurlnewwindow');
+    //doc.save('Test.pdf');
   }
 
   /*downloadCSV() {

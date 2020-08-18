@@ -35,7 +35,7 @@
       </button>
       <mat-menu #exportMenu="matMenu">
         <button mat-menu-item (click)="exportToJSON()">JSON</button>
-        <button mat-menu-item>PDF</button>
+        <button mat-menu-item (click)="exportPDF()">PDF</button>
         <button mat-menu-item>Excel</button>
       </mat-menu>
       <button mat-mini-fab id="download-menu" class="mx-1"
@@ -57,13 +57,13 @@
         <mat-form-field *ngIf="toggle == false" appearance="standard" class="col-6">
           <mat-label>View Project Entries</mat-label>
           <mat-select [(ngModel)]="pSelected">
-            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getAllProject(p.ID)">{{p.projectName}}</mat-option>
+            <mat-option *ngFor="let p of projects" [value]="p.projectName" (click)="getAllProject(p.ID)">{{p.projectName}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="toggle == true" appearance="standard" class="col-6">
           <mat-label>View Member Entries</mat-label>
           <mat-select [(ngModel)]="mSelected">
-            <mat-option *ngFor="let m of members" [value]="m.ID" (click)="getUser(m.ID)">{{m.name}} {{m.surname}}</mat-option>
+            <mat-option *ngFor="let m of members" [value]="m.name + ' ' + m.surname" (click)="getUser(m.ID)">{{m.name}} {{m.surname}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-radio-group aria-label="Select search type">
