@@ -264,13 +264,28 @@ export class HistoryComponent implements OnInit {
 
         console.log(sDate)
         element.date = sDate
-        let start = new Date(sDate + " " + element.startTime)
+        let start = new Date(sDate + " " + this.formatCSVTime(element.startTime))
         element.startTime = start.getTime()
-        let end = new Date(sDate + " " + element.endTime)
+        let end = new Date(sDate + " " + this.formatCSVTime(element.endTime))
         element.endTime = end.getTime()
         console.log(element)
+
+        this.import(element)
       });
     }
+  }
+
+  formatCSVTime(time) {
+    var result
+    var hours = parseInt(time.substr(0, 2));
+    if(time.indexOf('am') != -1 && hours == 12) {
+      result = time.replace('12', '0');
+    }
+    if(time.indexOf('pm')  != -1 && hours < 12) {
+        result = time.replace(hours, (hours + 12));
+    }
+    result = result.replace(/(am|pm)/, '');
+    return result
   }
 
   // import time entry
