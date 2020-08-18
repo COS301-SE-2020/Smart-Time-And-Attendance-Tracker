@@ -1,7 +1,7 @@
 <div class="row">
   <section>
     <h2>Calendar
-      <button id="manual-sync"
+      <button id="authorize-button"
               mat-mini-fab
               matTooltip="Sync calendar"
               matTooltipClass="action-tooltip"
@@ -9,7 +9,7 @@
         <mat-icon inline="true">sync</mat-icon>
       </button>
     </h2>
-    <div id="calendar" class="justify-content-center">
+    <div *ngIf="authorised" id="calendar" class="justify-content-center">
       <div id="frame-border">
         <div id="frame-background">
           <iframe src="https://calendar.google.com/calendar/embed?src=teamvisionary2020%40gmail.com"
