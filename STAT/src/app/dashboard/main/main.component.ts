@@ -9,12 +9,11 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 export class MainComponent implements OnInit {
 
   isAuth : boolean
-  roles : any
+  roles = this.service.roles
   // active tab
   active : string;
 
   constructor(public service : AccountManagementService) {
-    this.roles =  this.service.roles
     this.isAuth = true
   }
 
