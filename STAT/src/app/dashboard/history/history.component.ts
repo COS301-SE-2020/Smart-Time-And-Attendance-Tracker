@@ -510,42 +510,6 @@ export class HistoryComponent implements OnInit {
     linkElement.click();
   }
 
-  downloadCSV() {
-    let dataStr : any = this.tableData
-    let keys = Object.keys(dataStr[0]['records'][0]);
-    console.log(keys)
-
-    let columnDelimiter = ',';
-    let lineDelimiter = '\n';
-
-    let csvColumnHeader = keys.join(columnDelimiter);
-    let csvStr = csvColumnHeader + lineDelimiter;
-
-    dataStr.forEach(item => {
-      item.records.forEach(element => {
-        keys.forEach((key, index) => {
-          if( (index > 0) && (index < keys.length-1) ) {
-              csvStr += columnDelimiter;
-          }
-          csvStr += element[key];
-        });
-        csvStr += lineDelimiter;
-      });
-    });
-
-    dataStr = encodeURIComponent(csvStr)
-
-    let dataUri = 'data:text/csv;charset=utf-8,'+ csvStr;
-
-    let exportFileDefaultName = 'TrackingEntries.csv';
-
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-
-  }
-
   exportPDF() {
     
     var doc = new jsPDF("l");
@@ -584,26 +548,20 @@ export class HistoryComponent implements OnInit {
     doc.save('TrackingEntries.pdf');
   }
 
-  /*downloadCSV() {
-    let dataStr = JSON.stringify(this.tableData, null, 4);
-    const json2csv = require('json2csv').parse
-    var csv = json2csv(dataStr, {flatten : true})
-
-    let dataUri = 'data:text/csv;charset=utf-8,'+ csv;
-
-    let exportFileDefaultName = 'TrackingEntries.csv';
-
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-  }*/
-
-  /*downloadCSV() {
+  downloadCSV() {
     const { Parser, transforms: { unwind } } = require('json2csv');
 
-    const fields = ['month', 'records.date', 'records.startTime', 'records.endTime', 'records.activeTime', 
-                    'records.project', 'records.task', 'records.monetaryValue', 'records.member'];
+    const fields = [
+      { label : 'Month', value : 'records.month'}, 
+      { label : 'Date', value : 'records.date'}, 
+      { label : 'Start Time', value : 'records.startTime'}, 
+      { label : 'End Time', value : 'records.endTime'}, 
+      { label : 'Active Time', value : 'records.activeTime'}, 
+      { label : 'Project', value : 'records.project'}, 
+      { label : 'Task', value : 'records.task'}, 
+      { label : 'Monetary Value', value : 'records.monetaryValue'}, 
+      { label : 'Member', value : 'records.member'}
+    ];
     const transforms = [unwind({ paths: ['records'] })];
     
     const json2csvParser = new Parser({ fields, transforms });
@@ -617,7 +575,37 @@ export class HistoryComponent implements OnInit {
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
-  }*/
+  }
+
+  exportCSV() {
+    const { Parser, transforms: { unwind } } = require('json2csv');
+
+    const fields = [
+      { label : 'Month', value : 'records.month'}, 
+      { label : 'Date', value : 'records.date'}, 
+      { label : 'Start Time', value : 'records.startTime'}, 
+      { label : 'End Time', value : 'records.endTime'}, 
+      { label : 'Active Time', value : 'records.activeTime'}, 
+      { label : 'Project', value : 'records.project'}, 
+      { label : 'Task', value : 'records.task'}, 
+      { label : 'Monetary Value', value : 'records.monetaryValue'}, 
+      { label : 'Member', value : 'records.member'}
+    ];
+    const transforms = [unwind({ paths: ['records'] })];
+    
+    const json2csvParser = new Parser({ fields, transforms });
+    const csv = json2csvParser.parse(this.tableData);
+
+    let dataUri = 'data:text/csv;charset=utf-8,'+ csv;
+
+    let exportFileDefaultName = 'TrackingEntries.csv';
+    
+
+    var x = window.open();
+    x.document.open();
+    x.document.write('<html><body><pre>' + csv + '</pre></body></html>');
+    x.document.close();
+  }
 }
 
 export interface Element {
