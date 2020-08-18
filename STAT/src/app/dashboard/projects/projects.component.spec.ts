@@ -21,7 +21,6 @@ describe('ProjectsComponent', () => {
   let tasks;
   let upcoming;
   let roles;
-  let roles2;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -86,7 +85,7 @@ describe('ProjectsComponent', () => {
   }));
 
   it('the add project button should not show if the user is not a Team Leader', async(() => {
-    this.roles=['General Team Member'];
+    roles=[];
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css("#addPro")).nativeElement).toBeFalsy();
   }));
@@ -116,7 +115,6 @@ describe('Integration tests:', () => {
     let tasks;
     let pmService;
     let roles;
-    let roles2;
   
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -157,7 +155,6 @@ describe('Integration tests:', () => {
         'taskStatus': "In Progress" }]
   
         roles = ['Team Leader'];
-        roles2 = ['General Team Member'];
   
         component = fixture.componentInstance;
         component.projects = projects
