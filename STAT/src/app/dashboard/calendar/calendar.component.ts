@@ -47,9 +47,10 @@ export class CalendarComponent implements OnInit {
               console.log(response);
               var response = JSON.parse(this.responseText);
             }
-            else if(this.readyState == 4)
+            else if(this.readyState == 4) {
               //document.getElementById('error').innerHTML = response.message;
-              console.log(response.message);
+              //console.log(response.message);
+            }
           }
           http.send(JSON.stringify(params));
 
@@ -57,9 +58,6 @@ export class CalendarComponent implements OnInit {
           authorizeButton.style.visibility = '';
           authorizeButton.onclick = this.handleAuthClick;
         }
-
-        // makeApiCall
-
       }
       else if(this.readyState == 4) {}
         //document.getElementById('error').innerHTML = response.message;
