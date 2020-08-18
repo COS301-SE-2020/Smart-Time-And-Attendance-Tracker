@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialComponentsModule } from 'src/app/material-components/material-components.module';
 import { MatCardModule } from '@angular/material/card';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 describe('Unit tests', () => {
   describe('HistoryComponent', () => {
@@ -28,21 +28,23 @@ describe('Unit tests', () => {
             FormsModule,
             ReactiveFormsModule,
             MaterialComponentsModule,
-            MatCardModule
+            MatCardModule,
+            BrowserAnimationsModule
           ],
         providers: [
           MaterialComponentsModule,
-          MatCardModule
+          MatCardModule,
+          BrowserAnimationsModule
         ]
       })
-      .compileComponents();
-    }));
-
-    beforeEach(() => {
-      fixture = TestBed.createComponent(HistoryComponent);
+      .compileComponents().then(()=>
+      {
+        fixture = TestBed.createComponent(HistoryComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
-    });
+      });
+    }));
+
 
     it('should be created', () => {
       expect(component).toBeTruthy();

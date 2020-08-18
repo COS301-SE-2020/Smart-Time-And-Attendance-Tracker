@@ -124,7 +124,7 @@
                   </li>
                 </ul>
                 <span *ngIf="roles.includes('Team Leader')" class="float-right">
-                  <button mat-button (click)="open(addTaskModal); pid = p.ID"><mat-icon inline="true">add</mat-icon>New task</button>
+                  <button id= 'addTask' mat-button (click)="open(addTaskModal); pid = p.ID"><mat-icon inline="true">add</mat-icon>New task</button>
                 </span>
 
                 <!-- team -->

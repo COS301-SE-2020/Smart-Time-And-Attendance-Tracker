@@ -67,19 +67,19 @@ describe('TodayComponent', () => {
     expect(component.open).toHaveBeenCalledTimes(1);
   }));
 
-  /*it("should call the addManualEntry method when the 'Create an Entry' button is pressed", async(() => {
+  it("should call the addManualEntry method when the 'Create an Entry' button is pressed", async(() => {
     component.autoTracking=false;
     spyOn(component,'addManualEntry');
     el = fixture.debugElement.query(By.css("#m-tracking")).nativeElement;
     el.click();
     expect(component.addManualEntry).toHaveBeenCalledTimes(1);
-  }));*/
+  }));
 
 
   // **************************
     // INVALID MANUAL TRACKING FORM TESTS
     // **************************
-    /*describe('Manual Tracking Form', () => {
+    describe('Manual Tracking Form', () => {
       it('should be invalid with empty details', async(() => {
         component.autoTracking=false;
         component.manualTrackingForm.controls['Description'].setValue('');
@@ -110,13 +110,13 @@ describe('TodayComponent', () => {
         expect(component.manualTrackingForm.controls.password.hasError('StartTime')).toBeFalsy();
         expect(component.manualTrackingForm.controls.passwordConf.hasError('EndTime')).toBeFalsy();
       }));
-    });*/
+    });
     // ****************************************** END
 
     // **************************
     // INVALID AUTOMATIC TRACKING FORM TESTS
     // **************************
-    /*describe('Automatic Tracking Form', () => {
+    describe('Automatic Tracking Form', () => {
       component = fixture.componentInstance;
       fixture.detectChanges();
       component.autoTracking=true;
@@ -138,11 +138,11 @@ describe('TodayComponent', () => {
         expect(component.automaticTrackingForm.controls.password.hasError('TaskID')).toBeFalsy();
       }));
 
-    });*/
+    });
     // ****************************************** END
 });
 });
-/*describe('Integration tests:', () => {
+describe('Integration tests:', () => {
   describe('TodayComponent', () => {
 
     let component: TodayComponent;
@@ -204,4 +204,4 @@ describe('TodayComponent', () => {
 
     });
 });
-});*/
+});

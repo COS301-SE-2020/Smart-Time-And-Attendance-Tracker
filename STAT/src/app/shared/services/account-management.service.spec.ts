@@ -174,7 +174,7 @@ describe('Unit tests:', () => {
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
     });
-    /*it('should return an error object from the API via POST when no userID is provided', async() => {
+    it('should return an error object from the API via POST when no userID is provided', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id ="";
       const res ={ message: "User not found" };
@@ -187,7 +187,7 @@ describe('Unit tests:', () => {
       const req2 = HttpMock.expectOne(ROOT_URL+'user/authenticateUser');
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
-    });*/
+    });
   });
   //////////////////////////////////////////
   describe('reject()', () => {
@@ -219,7 +219,7 @@ describe('Unit tests:', () => {
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
     });
-   /* it('should return an error object from the API via POST when no userID is provided', async() => {
+    it('should return an error object from the API via POST when no userID is provided', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id ="";
       const res ={ message: "User not found" };
@@ -232,7 +232,7 @@ describe('Unit tests:', () => {
       const req2 = HttpMock.expectOne(ROOT_URL+'user/removeUser');
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
-    });*/
+    });
   });
   /////////////////////////////
   describe('getUnauthenticatedUsers()', () => {
@@ -323,7 +323,7 @@ describe('Unit tests:', () => {
         }
       );
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'user/getTasks');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getProjects');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -336,7 +336,7 @@ describe('Unit tests:', () => {
           expect(err).toBe(res);
         });
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'user/getTasks');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getProjects');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -375,7 +375,7 @@ describe('Unit tests:', () => {
       req2.flush(res);
     });
   });
-   /* it('should return an error object from the API via GET when no date is provided', async() => {
+   it('should return an error object from the API via GET when no date is provided', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const date = "";
       const res ={ message: "No time entries for the given day were found" };
@@ -388,6 +388,6 @@ describe('Unit tests:', () => {
       const req2 = HttpMock.expectOne(ROOT_URL+'userTimeEntry/getDailyTimeEntries?date='+date);
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
-    });*/
+    });
   });
 });
