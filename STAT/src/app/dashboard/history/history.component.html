@@ -35,8 +35,8 @@
       </button>
       <mat-menu #exportMenu="matMenu">
         <button mat-menu-item (click)="exportToJSON()">JSON</button>
-        <button mat-menu-item (click)="exportPDF()">PDF</button>
         <button mat-menu-item>Excel</button>
+        <button mat-menu-item (click)="exportPDF()">PDF</button>
       </mat-menu>
       <button mat-mini-fab id="download-menu" class="mx-1"
               matTooltip="Download"
@@ -47,8 +47,8 @@
       </button>
       <mat-menu #downloadMenu="matMenu">
         <button mat-menu-item (click)="downloadJSON()">JSON</button>
-        <button mat-menu-item>PDF</button>
         <button mat-menu-item (click)="downloadCSV()">Excel</button>
+        <button mat-menu-item (click)="downloadPDF()">PDF</button>
       </mat-menu>
     </h2>
     <div class="row p-0 mb-4">

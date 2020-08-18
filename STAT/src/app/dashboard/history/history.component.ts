@@ -566,6 +566,24 @@ export class HistoryComponent implements OnInit {
     //doc.save('Test.pdf');
   }
 
+  downloadPDF() {
+    var doc = new jsPDF("l");
+    var cols = ["Date", "Start time", "End time", "Active time", "Project", "Task", "Monetary Value", "Member"]
+    var rows = [];
+
+    this.tableData.forEach((element : any) => {
+      element.records.forEach((record : any) => {
+        var temp = [record.fDate, record.startTime, record.endTime, record.activeTime, record.project,
+                    record.task, record.monetaryValue, record.member]
+        rows.push(temp)
+      })
+    })
+
+    autoTable(doc, {head : [cols], body : rows})
+
+    doc.save('TrackingEntries.pdf');
+  }
+
   /*downloadCSV() {
     let dataStr = JSON.stringify(this.tableData, null, 4);
     const json2csv = require('json2csv').parse
