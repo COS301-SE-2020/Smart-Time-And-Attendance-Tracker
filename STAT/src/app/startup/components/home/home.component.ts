@@ -11,8 +11,8 @@ export class HomeComponent implements OnInit {
   constructor(public router : Router) { }
 
   ngOnInit(): void {
-    //if (localStorage.getItem('loggedIn') == 'true')
-    //  this.router.navigate(['main']);
+    if (localStorage.getItem('loggedIn') == 'true')
+      this.router.navigate(['main']);
   }
 
 }

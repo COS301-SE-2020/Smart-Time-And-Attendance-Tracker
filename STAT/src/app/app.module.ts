@@ -12,7 +12,6 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { MatIconModule } from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
   declarations: [
@@ -29,8 +28,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     DashboardModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgbModule,
-    NgxMatSelectSearchModule
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

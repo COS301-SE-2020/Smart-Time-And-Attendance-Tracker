@@ -10,44 +10,30 @@
   text-decoration: none
 
 body
+  background-color: #dbe4f3 !important
   width: 100%
   height: 100%
 
-.wrapper
-  background-color: #f2f3f7
+
 
 .main_body
   .sidebar_menu
     position: fixed
     left: 0
-    top: 4.75em
     width: 15em
-    height: 120%
+    height: 100%
     transition: all 0.3s linear
-    color: black
-    background-color: #fff
-    border-bottom-right-radius: 3em !important
 
     .inner__sidebar_menu
       position: relative
 
-    // ul li
-    //  background: rgb(120,70,235)
-    //  background: linear-gradient(0deg, rgba(120,70,235,1) 16%, rgba(40,204,191,1) 100%)
-
-    #stat
-      background: #fff
-
     ul li a
-      color: #4c585b
-      font-size: 0.8em
-      text-transform: uppercase
+      color: #fff
+      font-size: 1em
       padding: 1em 1.5em
-      margin-left: 1em
       display: block
       white-space: nowrap
-      background-color: white
-      border-radius:  3em 0em 0em 3em 
+      border-left: 0.3em solid #333
 
       .icon
         margin-right: 0.5em
@@ -58,24 +44,23 @@ body
         display: inline-block
 
       &:hover
-        color: #7846eb
+        background: #222
+        color: #fff
         cursor: pointer
+        border-left: 0.3em solid #fff
 
       &.active
-        color: #000
-        background: #f2f3f7        
-        border-radius:  3em -10em -10em 3em 
-        
-      &.active .icon
-        color: #7846eb
+        background: rgba(255, 255, 255, 0.3)
+        color: #fff
+        border-left: 0.3em solid #fff
 
     .hamburger
       position: absolute
-      top: 3px
+      top: 0px
       right: -25px
       width: 50px
       height: 50px
-      background: #f2f3f7
+      background: #fff
       border-radius: 50%
       cursor: pointer
 
@@ -89,24 +74,19 @@ body
       width: 40px
       border-radius: 50%
       height: 40px
-      background: #fff
+      background: #333
 
     .hamburger
       .arrow
-        color: #4c585b
+        color: #fff
         font-size: 20px
-        vertical-align: top
-        text-align: center
-        padding-top: 10%
 
     .right
       display: none
 
   .container
-    width: calc(100% - 17em)
-    margin-left: 17em
-    margin-top: 5em
-    max-width: 100vw
+    width: calc(100% - 15em)
+    margin-left: 15em
     padding: 1em
     transition: all 0.5s ease-in-out
 
@@ -141,8 +121,8 @@ body
     display: none
 
   .main_body .container
-    width: calc(100% - 7.5em)
-    margin-left: 7.5em
+    width: calc(100% - 5.5em)
+    margin-left: 5.5em
 
   h1
     visibility: hidden
@@ -153,9 +133,9 @@ body
 
 
 h1
+  color: #fff
   padding-top: 0.5em
   padding-left: 1em
-  color: #4c585b
 
 #addEntry
   float: right
@@ -163,21 +143,3 @@ h1
 
 .badge
   padding: 0.5em
-
-
-// UNAUTHORISED
-
-#unauthorised
-
-  .row
-    width: 100%
-    height: 100%
-    padding: 5em
-
-  .col-6
-    display: flex
-    align-items: center
-
-  img
-    width: 90%
-    float: right !important

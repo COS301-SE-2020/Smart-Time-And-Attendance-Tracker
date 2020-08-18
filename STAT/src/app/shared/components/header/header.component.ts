@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-
+  
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -49,6 +49,7 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem('roles');
     localStorage.removeItem('loggedIn');
     this.headerService.isUserLoggedIn.next(false);
-    this.headerService.kickOut();
+    
   }
 }
+ 

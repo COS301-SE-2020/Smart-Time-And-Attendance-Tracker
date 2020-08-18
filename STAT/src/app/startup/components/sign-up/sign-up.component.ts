@@ -138,17 +138,16 @@ export class SignUpComponent implements OnInit {
     this.service.signUp(form).subscribe(data => {
       localStorage.setItem('token', data['token']);
       localStorage.setItem('loggedIn', 'true');
+      this.headerService.isUserLoggedIn.next(true);
 
       this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
-      });
-      this.service.getName(localStorage.getItem('token')).subscribe(res => {
-    
-        localStorage.setItem('name', res['name']);
-        localStorage.setItem('surname', res['surname']);
-        this.headerService.isUserLoggedIn.next(true);
-        this.router.navigate(['main']);
+      this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
       });
     },
     error => {
@@ -163,17 +162,18 @@ export class SignUpComponent implements OnInit {
       localStorage.setItem('token', data['token']);
       localStorage.setItem('loggedIn', 'true');
 
+      this.headerService.isUserLoggedIn.next(true);
+
       this.service.getRoles(localStorage.getItem('token')).subscribe(res => {
       //console.log(res['roles']);
       localStorage.setItem('roles', res['roles']);
+      this.router.navigate(['main']);
+      },
+      error => {
+        localStorage.setItem('loggedIn', 'false'); 
+        this.signInError = error.error.message;
       });
-      this.service.getName(localStorage.getItem('token')).subscribe(res => {
-
-        localStorage.setItem('name', res['name']);
-        localStorage.setItem('surname', res['surname']);
-        this.headerService.isUserLoggedIn.next(true);
-        this.router.navigate(['main']);
-        });
+  
     },
     error => {
       localStorage.setItem('loggedIn', 'false'); 

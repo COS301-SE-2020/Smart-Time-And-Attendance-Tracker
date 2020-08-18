@@ -2,208 +2,90 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Righteous">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web">
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous">
+		<!--<link rel="stylesheet" type="text/css" href="style.css">-->
 	</head>
 
 	<body id="home">
 		<div id="container">
-			<div id="splash">
-				<!--<nav *ngIf="!isLoggedIn" class="navbar navbar-expand-lg" style="text-align:center;background-color: rgba(0,0,0,0);color:white;height:3.5em;">
-	            <a class="nav-item nav-link" [routerLink]="['home']">Home</a>
-	            <a class="nav-item nav-link" [routerLink]="['features']">Features</a>
-	            <a class="nav-item nav-link" [routerLink]="['desktop']">STAT Desktop</a>
-	            <a class="nav-item nav-link" [routerLink]="['sign-up']">Sign Up</a>
-				</nav>-->
-
-				<header id="name-and-tagline">
-					<!--<div class="header-content">
-						<h1>STAT</h1>
-						<h3 class="">Smart Time and Attendance Tracker</h3>
-						<br><br><p class="brought-to-you">Brought to you by Visionary</p>
-					</div>-->
-
-					<!--<div class="col-12 row">
+			<header class="background-colour-black" id="name-and-tagline">
+				<div class="header-content">
+					<div class="col-12 row">
 						<h1 id="home-title">STAT</h1>
 					</div>
 					<div class="col-12 row">
-						<h3>Smart Time and Attendance Tracker</h3>
+						<h6>Smart Time and Attendance Tracker</h6>
 					</div>
 					<div class="col-12 row">
 						<p id="brought-to-you">Brought to you by Visionary</p>
-					</div>-->
-				</header>
-			</div>
-
-			<section class="background-pink" id="what-is-stat">
-				<div class="section-content">
-					<h2>What is STAT</h2>
-					<p>
-						The Smart Time and Attendance Tracker (STAT) is your personal timekeeper. It is a system designed to assist organisations, particularly small businesses and freelancers, to track time spent on projects and the monetary value surrounding work activities. STAT allow users to track time and attendance based on what they are currently working on in order to minimise costs, whilst maximising productivity.
-					</p>
-				</div>
-			</section>
-
-			<section class="background-blue" id="why-use-stat">
-				<div class="section-content">
-					<h2>Why use STAT</h2>
-					<p>
-						STAT is designed to make your job easier. Our features are specially designed to make time and attendance tracking as hands-off as possible. Focus your efforts on developing your business without worrying about keeping track of how you have spent your time.
-					</p>
-				</div>
-			</section>
-
-			<section class="background-green" id="features">
-				<div class="section-content">
-					<h2>Features</h2>
-					<div id="feature-cards">
-						<mat-card class="feature">
-							<img mat-card-image src="././././assets/iot-integration.png">
-							<mat-card-title>IOT Integration</mat-card-title>
-							<mat-card-content>
-								You can use STAT almost anywhere. STAT is designed to work with external devices like cameras to help you track time and attendance more efficiently. Simply connect your IOT device to the system and STAT will receive time and attendance data from the device and track your time accordingly.
-							</mat-card-content>
-						</mat-card>
-						<mat-card class="feature">
-							<img mat-card-image src="././././assets/automatic-tracking.png">
-							<mat-card-title>Automatic Tracking</mat-card-title>
-							<mat-card-content>
-								Automatically track time spent on your browser and emails without having to manually start and stop the timer. STAT will record the total time spent on these applications. You can even split the total time and allocate it to specific activities
-							</mat-card-content>
-						</mat-card>
-						<mat-card class="feature">
-							<img mat-card-image src="././././assets/predictive-analysis.png">
-							<mat-card-title>Predictive Analysis</mat-card-title>
-							<mat-card-content>
-								STAT produces graphs that allow you to view how time is being or was spent during the course of a project and help to manage your team better. Using historical data, STAT can even predict how much more time will need to be allocated to a project.
-							</mat-card-content>
-						</mat-card>
-						<mat-card class="feature">
-							<img mat-card-image src="././././assets/calendar-syncing.png">
-							<mat-card-title>Calendar Syncing</mat-card-title>
-							<mat-card-content>
-								STAT automatically tracks your attendance when you connect it to your calendar. No need to worry about recording events in more than one place. STAT will retrieve the data from your calendar and automatically record your presence and track record the relevant time data.
-							</mat-card-content>
-						</mat-card>
-					</div>
-					<div>
-						<a mat-raised-button class="view-more" [routerLink]="['features']">View more</a>
-
 					</div>
 				</div>
-			</section>
+			</header>
 
-			<section class="background-purple" id="desktop">
-				<div class="section-content">
-					<h2>Desktop</h2>
-					<p>
-						[Dashboard and notification functionality] coming soon…
-					</p>
-					<div>
-						<a mat-raised-button class="view-more" [routerLink]="['desktop']">View more</a>
-					</div>
-				</div>
-			</section>
-
-			<section class="background-black" id="meet-the-team">
-				<div class="section-content">
-					<h2>Meet the team</h2>
-					<div>
+			<mat-card class="background-colour-yellow section" id="what-is-stat">
+				<mat-card class="section-content">
+					<mat-card-title>What is STAT</mat-card-title>
+					<mat-card-content>
 						<p>
-							Hello.
-							<br>We are Visionary – a group of 3rd year students at the University of Pretoria. We are all part of the EBIT faculty with most of us studying different degrees. Our collective experience covers front and backend developments, multimedia content creation, and programming using numerous coding languages.
-
+							Harum corrupti possimus ex ratione cumque tenetur quidem eaque. Sunt ut facilis illo dolorem alias voluptas iste tempore. Dicta ut quasi sit delectus laboriosam et. Culpa eum eius consequatur sed temporibus sit in corporis.
 						</p>
-					</div>
+					</mat-card-content>
+				</mat-card>
+			</mat-card>
+			
+			<mat-card class="background-colour-green section" id="why-use-stat">
+				<mat-card class="section-content">
+					<mat-card-title>Why use STAT</mat-card-title>
+					<mat-card-content>
+						<p>
+							Harum corrupti possimus ex ratione cumque tenetur quidem eaque. Sunt ut facilis illo dolorem alias voluptas iste tempore. Dicta ut quasi sit delectus laboriosam et. Culpa eum eius consequatur sed temporibus sit in corporis.
+						</p>
+					</mat-card-content>
+				</mat-card>
+			</mat-card>
 
+			<mat-card class="background-colour-blue section" id="features">
+				<mat-card class="section-content">
+					<mat-card-title>Features</mat-card-title>
+					<mat-card-content>
+						<p>
+							Harum corrupti possimus ex ratione cumque tenetur quidem eaque. Sunt ut facilis illo dolorem alias voluptas iste tempore. Dicta ut quasi sit delectus laboriosam et. Culpa eum eius consequatur sed temporibus sit in corporis.
+						</p>
+					</mat-card-content>
 					<div>
-						<div class="team-member">
-							<div class="avatar">
-								<img src="assets/Vianka.png" alt="Vianka Avatar">
-								<span class="badge float-right">Team Lead</span>
-							</div>
-							<h3>Vianka <br> Naidoo</h3>
-							<p>BSc IT [Software Development]</p>
-							<ul class="social-icons">
-								<li><a href="mailto:u18278273@tuks.co.za" class="fa fa-envelope"></a></li>
-								<li><a href="https://github.com/Vianka213" class="fa fa-github"></a></li>
-								<li><a href="https://www.linkedin.com/in/vianka-naidoo-063305157/" class="fa fa-linkedin-square"></a></li>
-							</ul>
-						</div>
-						<div class="team-member">
-							<div class="avatar">
-								<img src="assets/Munashe.png" alt="Munashe Avatar">
-							</div>
-							<h3>Munashe <br> Mujaji</h3>
-							<p>BIS Multimedia</p>
-							<ul class="social-icons">
-								<li><a href="mailto:u18078975@tuks.co.za" class="fa fa-envelope"></a></li>
-								<li><a href="https://munasheghub.github.io/" class="fa fa-github"></a></li>
-								<li><a href="https://www.linkedin.com/in/munashe-m-7754831a9" class="fa fa-linkedin-square"></a></li>
-							</ul>
-						</div>
-						<div class="team-member">
-							<div class="avatar">
-								<img src="assets/Jesse.png" alt="Jesse Avatar">
-							</div>
-							<h3>Jesse <br> Mwirigi</h3>
-							<p>BSc Computer Science</p>
-							<ul class="social-icons">
-								<li><a href="mailto:u17306192@tuks.co.za" class="fa fa-envelope"></a></li>
-								<li><a href="http://chirgugh.github.io/" class="fa fa-github"></a></li>
-								<li><a href="www.linkedin.com/in/jesseMwiti" class="fa fa-linkedin-square"></a></li>
-							</ul>
-						</div>
-						<div class="team-member">
-							<div class="avatar">
-								<img src="assets/Jana.png" alt="Jana Avatar">
-							</div>
-							<h3>Jana <br> Sander</h3>
-							<p>BSc IT [Data Science]</p>
-							<ul class="social-icons">
-								<li><a href="mailto:u18102639@tuks.co.za" class="fa fa-envelope"></a></li>
-								<li><a href="https://18102639.github.io/" class="fa fa-github"></a></li>
-								<li><a href="https://www.linkedin.com/in/jana-sander-72337a1a7/" class="fa fa-linkedin-square"></a></li>
-							</ul>
-						</div>
-						<div class="team-member">
-							<div class="avatar">
-								<img src="assets/Vedha.png" alt="Vedha Avatar">
-							</div>
-							<h3>Vedha <br> Velthapu</h3>
-							<p>BSc Computer Science</p>
-							<ul class="social-icons">
-								<li><a href="mailto:u18020624@tuks.co.za" class="fa fa-envelope"></a></li>
-								<li><a href="https://vedha286.github.io/" class="fa fa-github"></a></li>
-								<li><a href="https://www.linkedin.com/in/vedha-krishna-velthapu-983445187" class="fa fa-linkedin-square"></a></li>
-							</ul>
-						</div>
+						<button mat-raised-button color="primary"><a [routerLink]="['features']">View more</a></button>
 					</div>
-				</div>
-			</section>
+				</mat-card>
+			</mat-card>
+			
+			<mat-card class="background-colour-purple section" id="desktop">
+				<mat-card class="section-content">
+					<mat-card-title>Desktop</mat-card-title>
+					<mat-card-content>
+						<p>
+							Harum corrupti possimus ex ratione cumque tenetur quidem eaque. Sunt ut facilis illo dolorem alias voluptas iste tempore. Dicta ut quasi sit delectus laboriosam et. Culpa eum eius consequatur sed temporibus sit in corporis.
+						</p>
+					</mat-card-content>
+					<div>
+						<button mat-raised-button color="primary"><a [routerLink]="['desktop']">View more</a></button>
+					</div>
+				</mat-card>
+			</mat-card>
+			
+			<mat-card class="background-colour-pink section" id="meet-the-team">
+				<mat-card class="section-content">
+					<mat-card-title>Meet the team</mat-card-title>
+					<mat-card-content>
+						<p>
+							Harum corrupti possimus ex ratione cumque tenetur quidem eaque. Sunt ut facilis illo dolorem alias voluptas iste tempore. Dicta ut quasi sit delectus laboriosam et. Culpa eum eius consequatur sed temporibus sit in corporis.
+						</p>
+					</mat-card-content>
+				</mat-card>
+			</mat-card>
 
-			<footer id="name-and-tagline" class="row">
-				<div id="footer-logo" class="col-2">
-					<img src="assets/TeamLogo.png">
-				</div>
-
-				<div id="teamDetails" class="col-3">
-					<p> <b>VISIONARY</b>
-						<br>The path to success begins with an idea</p>
-				</div>
-
-				<div class="col-3">
-					&copy; 2020 | University of Pretoria
-				</div>
-
-				<div id="email" class="teamLinks col-2">
-					<a href="mailto:visionary2020@gmail.com"><i class="fa fa-envelope"></i></a>
-				</div>
-
-				<div id="github" class="teamLinks col-2">
-					<a href="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker"><i class="fa fa-github"></i></a>
+			<footer class="background-colour-black" id="name-and-tagline">
+				<div>
+					<button mat-raised-button color="accent"><a [routerLink]="['sign-in']">Sign In</a></button>
+					<button mat-raised-button color="accent"><a [routerLink]="['sign-up']">Sign Up</a></button>
 				</div>
 			</footer>
 		</div>

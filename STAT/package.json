@@ -28,8 +28,6 @@
     "@types/source-map": "^0.5.2",
     "bootstrap": "^4.5.0",
     "font-awesome": "^4.7.0",
-    "json2csv": "^5.0.1",
-    "ngx-mat-select-search": "^3.0.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
