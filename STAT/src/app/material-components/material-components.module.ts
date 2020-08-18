@@ -32,6 +32,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatBadgeModule } from "@angular/material/badge";
 
 const materialComponents = [
   MatCheckboxModule,
@@ -64,7 +65,8 @@ const materialComponents = [
   MatSnackBarModule,
   MatTableModule,
   MatSortModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatBadgeModule
 ];
 
 
@@ -103,7 +105,8 @@ const materialComponents = [
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MatIconModule
+    MatIconModule,
+    MatBadgeModule
   ],
   exports: [
     MatCheckboxModule,
@@ -137,7 +140,8 @@ const materialComponents = [
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MatIconModule
+    MatIconModule,
+    MatBadgeModule
   ]
 })
 export class MaterialComponentsModule { }

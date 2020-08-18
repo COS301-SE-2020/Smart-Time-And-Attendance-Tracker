@@ -1,0 +1,39 @@
+// CAROUSEL *********************************************************************
+ngb-carousel
+  width: 100%
+
+  &:focus
+    outline: none
+
+.carousel-inner
+  overflow: visible
+
+.carousel-item
+  display: flex !important
+  opacity: 0
+  visibility: hidden
+  transition: opacity .25s ease-in-out 0.05s, visibility .35s ease-in-out
+  z-index: -1
+
+  &.active
+    opacity: 1
+    visibility: visible
+    z-index: 10
+
+.carousel-indicators
+  z-index: 20
+  justify-content: center
+  text-align: center
+  margin: auto
+
+.carousel-indicators li
+  background-color: #7846eb
+  width: 0.5em
+  height: 0.5em
+  border-radius: 1em
+  border: 1px solid #4c585b30
+
+// ***********************************************************************************
+
+.mat-progress-spinner circle, .mat-spinner circle 
+  stroke: #00c8ff

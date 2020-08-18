@@ -1,0 +1,298 @@
+*
+  font-size: 1em
+
+.container
+  padding: 2em
+
+h2
+  color: #4c585b
+  font-size: 1.8em
+  margin-bottom: 0
+
+.info
+  color: #4c585b90
+  text-align: left
+  height: fit-content !important
+  display: flex
+  justify-content: center
+  align-items: center
+
+  .col-8, .col-auto
+    padding-bottom: 0
+    height: fit-content
+    vertical-align: top
+
+section
+    div.col-auto
+      display: inline-block
+      text-align: center
+      float: right
+
+    #total-members
+      b
+        color: #366ceb
+        font-size: 1.4em
+
+    #total-requests
+      b
+        color: #7846eb
+        font-size: 1.4em
+
+mat-card
+  background-color: #366ceb
+  border-radius: 1em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+  color: #ffffff
+  display: inline-block
+  margin-bottom: 1em
+  margin-left: 3%
+  margin-top: 1em
+  padding: 1.5em
+  padding-bottom: 2.25em
+  width: 100%
+  font-size: 0.9em
+  height: fit-content
+
+  mat-divider
+    color: #ffffff
+    margin-bottom: 1.5em
+    margin-top: 1.5em
+
+  mat-card-footer
+    color: #ffffff
+    padding-top: 0.5em
+    text-align: right
+
+    button
+      color: #333333
+      margin-left: 0.5em
+
+    .accept-request
+      background-color: #ffffff
+
+    .reject-request
+      background-color: #ffffff
+
+  mat-card-title
+    color: #ffffff
+    font-size: 1.25em
+
+  mat-card-subtitle
+    color: #ffffff
+    color: #ffffff
+
+mat-icon
+  font-size: 1.2em !important
+  vertical-align: top !important
+
+#requests
+
+    mat-card:nth-child(odd)
+        background: #366ceb
+        color: #ffffff
+
+    mat-card:nth-child(even)
+      background: #7846eb
+      color: #ffffff
+
+    button
+      outline: none !important
+
+.row
+  padding: 2em
+  padding-top: 0em
+
+  >
+    section
+      padding: 2em
+
+section
+  align-items: left
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: flex-start
+  height: 100%
+  padding: 1.5em
+  width: 100%
+
+#sort-menu
+  background-color: #00c8ff
+  color: #ffffff
+  outline: none !important
+
+.scroll
+  overflow-x: hidden
+  overflow-y: scroll
+  padding: 0 1.5em 0.2em 0.8em
+  height: 55vh
+
+.scroll::-webkit-scrollbar
+  border-radius: 0.5em
+  background-color: #ffffff
+  width: 0.5em
+
+.scroll::-webkit-scrollbar-track::hover
+  cursor: pointer
+
+.scroll::-webkit-scrollbar-thumb
+  border-radius: 0.5em
+  background-color: #4c585b70
+
+.scroll::-webkit-scrollbar-track
+  border-radius: 0.5em
+  background-color: #ffffff
+
+.req-spinner
+  margin: 1em auto 0 auto
+
+// members
+#members-div
+  align-items: center
+  padding: 0 1em
+  margin-top: -2em
+
+  mat-form-field
+    margin-left: 0.5em
+ 
+#members
+  height: 71vh
+
+.alphabet
+  width: 1em
+  text-align: center
+  display: inline
+  float: left
+  position: fixed
+
+  a
+    display: block
+    font-size: 0.77em
+    color: #4c585b
+    width: 2em
+
+    &.active
+      color: #7846eb !important
+      font-weight: bold
+      border-radius: 5em
+      border: 1px dashed #4c585b70
+
+    &:visited
+      text-decoration: none
+      color: #4c585b
+
+    &:hover
+      color: #7846eb
+      text-decoration: none
+      font-weight: bold
+
+$colors : #7846eb, #00c8ff, #ff2885, #366ceb
+@for $i from 0 through 10
+  li:nth-child(#{$i}) .pro-pic
+    background-color: nth($colors, random(length($colors)))
+
+ul
+  list-style-type: none
+  margin-top: 0
+
+  li
+    padding: 0.5em
+    background-color: #ffffff
+    color: #4c585b
+    font-size: 0.9em
+    border-top: 1px solid #4c585b50
+
+  .list-alpha
+    background-color: #4c585b20
+    font-weight: bold
+    border-top: none
+    border-radius: 0.3em 0.3em 0 0 
+
+  img, .pro-pic
+    display: inline-block
+    text-align: center
+    align-items: center
+    vertical-align: middle
+    color: #ffffff
+    letter-spacing: 1px
+    width: 40px
+    height: 40px
+    line-height: 40px
+    margin-left: 0.3em
+    border-radius: 5em
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+
+  span 
+    display: inline-block
+    vertical-align: middle
+    margin-left: 1.2em
+
+  i 
+    font-size: 0.85em
+    font-style: normal
+    color: #4c585b98
+
+  .role
+    background-color: #00c8ff40
+    color: #00c8ff
+    padding: 0.2em 0.5em !important
+    border-radius: 0.8em
+    font-size: 0.7em
+
+// edit and remove member
+.float-right button, .teams-btn
+  padding: 0
+  color: #4c585b90
+  text-transform: uppercase
+  font-size: 0.8em
+  line-height: normal
+  min-width: fit-content
+  margin-left: 1.5em
+  align-items: center
+
+  &:focus
+    outline: none
+
+  mat-icon
+    font-size: 1em !important
+    vertical-align: top !important
+
+.teams-btn
+  margin-left: 0
+  margin-right: 0.5em
+  padding: 0.2em 0.3em
+  border: 1px dashed #4c585b90
+  border-radius: 10em
+
+.teams-btn
+  visibility: hidden
+
+.member:hover, li:hover, mat-expansion-panel-header:hover
+  button
+    visibility: visible
+
+  &:hover
+    background-color: rgab(0,0,0,0) !important
+
+// MODAL ************************************************************************************
+
+.modal-title
+  margin-bottom: 0
+
+.modal-header 
+  button:focus, button:active, button
+    border: none !important
+    outline: none
+    background-color: transparent !important
+
+  mat-icon 
+    font-size: 1.5em
+
+.modal-footer 
+  padding-left: 16px
+
+  button
+    font-size: 1em
+    margin-left: 0.5em
+
+// ******************************************************************************************
