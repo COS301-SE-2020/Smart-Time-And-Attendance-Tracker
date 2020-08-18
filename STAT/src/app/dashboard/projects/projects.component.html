@@ -1,0 +1,593 @@
+<div class="row">
+    <section class="col-8">
+        <h2>Projects
+          <button *ngIf="roles.includes('Team Leader')" 
+                  mat-mini-fab
+                  class="start-tracking"
+                  id="addPro" 
+                  matTooltip="Add a project"
+                  matTooltipClass="action-tooltip"
+                  matTooltipPosition="right"
+                  (click)="open(addProjectModal)">
+            <mat-icon inline="true">add</mat-icon>
+          </button>
+        </h2>
+
+        <div id="members-div" class="info row">
+          <div class="col-8">
+            <mat-form-field appearance="standard" class="col-12">
+              <mat-label>Search Projects</mat-label>
+              <input matInput type="search" type="text" placeholder="Project details" name="searchProjects" [(ngModel)]="searchProj" (keyup)="searchProjects(searchProj)">
+            </mat-form-field>
+          </div>      
+          
+          <div *ngIf="!projects" id="total-projects" class="col-auto">
+            <b>-</b><br>PROJECTS<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+          <div *ngIf="projects && projects?.length == 1" id="total-projects" class="col-auto">
+            <b>1</b><br>PROJECT<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+          <div *ngIf="projects && (projects.length == 0 || projects.length > 1)" id="total-projects" class="col-auto">
+            <b>{{projects.length}}</b><br>PROJECTS<br>
+            <span class="float-right">
+              <button id="show-comp" mat-button (click)="completed()"><mat-icon inline="true">visibility</mat-icon>Show Completed</button>
+              <button id="hide-comp" hidden mat-button (click)="completed()"><mat-icon inline="true">visibility_off</mat-icon>Hide Completed</button>
+            </span>
+          </div>
+
+        </div>
+
+        <div class="scroll">
+            <mat-spinner *ngIf="!projects && !error" class="req-spinner"></mat-spinner>
+
+            <i *ngIf="error == 'Not Found'">You have no projects.</i>
+
+            <div id="accordion-padding"></div>
+
+            <mat-accordion>
+
+            <!-- PROJECT **************************** -->
+              <mat-expansion-panel *ngFor="let p of projects" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+
+                  <mat-panel-title>
+                  <mat-icon *ngIf="p.completed == true" inline="true">check_circle</mat-icon>
+                    {{p.projectName}}
+                  <span class="tag numTasks">{{p.tasks.length}} tasks</span>
+                  <button *ngIf="roles.includes('Team Leader')" 
+                          mat-button class="pro-btn"
+                          matTooltip="R{{p.hourlyRate}} per hour"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above">
+                          <mat-icon inline="true">payment</mat-icon>
+                  </button>
+                  <button *ngIf="roles.includes('Team Leader')" 
+                          mat-button class="pro-btn"
+                          matTooltip="Edit"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above"
+                          (click)="open(editProjectModal); popProjectForm(p)">
+                          <mat-icon inline="true">edit</mat-icon>
+                  </button>
+                  <button *ngIf="roles.includes('Team Leader')" 
+                          mat-button class="pro-btn"
+                          matTooltip="Delete"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above"
+                          (click)="open(deleteProjectModal); pid = p.ID; pname = p.projectName">
+                          <mat-icon inline="true">delete</mat-icon>
+                  </button>
+                  </mat-panel-title>
+                  
+                <span class="due-date float-right">Due {{formatDate(p.dueDate)}}</span>      
+                </mat-expansion-panel-header>
+                
+                <mat-divider></mat-divider><br>
+
+                <!-- tasks -->
+                <ul *ngIf="p.tasks.includes('no tasks')" class="tasks">
+                  <li>No tasks</li>
+                </ul>
+                <ul *ngIf="p.tasks != 'no tasks'" class="tasks">
+                  <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-button class="pro-btn"
+                            matTooltip="Edit"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="above"
+                            (click)="open(editTaskModal); popTaskForm(t)">
+                            <mat-icon inline="true">edit</mat-icon>
+                    </button>
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-button class="pro-btn"
+                            matTooltip="Delete"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="above"
+                            (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID; tname = t.taskName">
+                            <mat-icon inline="true">delete</mat-icon>
+                    </button>
+                     <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
+                     <span class="float-right tag" 
+                          [ngClass]="{'tag-ns': t.taskStatus == 'Not Started',
+                                      'tag-ip': t.taskStatus == 'In Progress',
+                                      'tag-c': t.taskStatus == 'Completed'}">{{t.taskStatus}}</span>
+
+                    <mat-divider></mat-divider>       
+                  </li>
+                </ul>
+                <span *ngIf="roles.includes('Team Leader')" class="float-right">
+                  <button mat-button (click)="open(addTaskModal); pid = p.ID"><mat-icon inline="true">add</mat-icon>New task</button>
+                </span>
+
+                <!-- team -->
+                <mat-action-row>
+                  <span *ngFor="let m of p.projectMembers" class="proj-member">
+                    <div *ngIf="m.profilePicture == 'none'" class="pro-pic proj"
+                          matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]" 
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
+                    <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg"
+                          matTooltip="{{m.name}} {{m.surname}}" 
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="below">
+                  </span>
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-mini-fab
+                            class="start-tracking addMember" 
+                            matTooltip="Add team member"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="below">
+                      <mat-icon inline="true" (click)="open(addMemberModal); pid = p.ID; getAvailableMembers(p.projectMembers)">add</mat-icon>
+                    </button>
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-mini-fab
+                            class="start-tracking addMember" 
+                            matTooltip="Add team"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="below">
+                      <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="pid = p.ID; getAvailableTeams(p.projectMembers)">group_add</mat-icon>
+                    </button>
+                    <button *ngIf="roles.includes('Team Leader')" 
+                            mat-mini-fab
+                            class="start-tracking addMember" 
+                            matTooltip="Edit team"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="below">
+                      <mat-icon inline="true" (click)="open(editTeamModal); pid = p.ID; editTeamMembers = p.projectMembers;">edit</mat-icon>
+                    </button>
+                </mat-action-row>
+
+                <mat-menu #menu="matMenu" id="member-menu">
+                  <mat-form-field appearance="standard" id="member-search-wrapper">
+                    <mat-label>Search teams</mat-label>
+                    <input (click)="$event.stopPropagation()" [(ngModel)]="searchTeam" (keyup)="getAvailableTeams(p.projectMembers); searchTeams(searchTeam);" matInput id="member-search" placeholder="Team name">
+                  </mat-form-field>
+                  <button class="member-button" *ngFor="let t of availTeams" mat-menu-item (click)="tid = t.ID; addTeam()">
+                    <span>{{t.teamName}}</span>
+                  </button>
+                </mat-menu>
+              </mat-expansion-panel>
+            <!-- END PROJECT **************************************** -->
+
+            </mat-accordion>
+
+            
+        </div>
+    </section>
+
+    <section class="col-4">
+      <h2>This Week</h2>
+      <div class="info row">
+
+        <!-- tasks -->
+        <div *ngIf="loading" id="numTasks" class="col-4">
+          <b>-</b><br>TASKS
+        </div>
+        <div *ngIf="tasksNum == 1" id="numTasks" class="col-4">
+          <b>1</b><br>TASK
+        </div>
+        <div *ngIf="(tasksNum == 0 || tasksNum > 1)" id="numTasks" class="col-4">
+          <b>{{tasksNum}}</b><br>TASKS
+        </div>
+        
+        <!-- due -->
+        <div *ngIf="loading" id="numDue" class="col-4">
+          <b>-</b><br>DUE
+        </div>
+        <div *ngIf="tasksDue == 1" id="numDue" class="col-4">
+          <b>1</b><br>DUE
+        </div>
+        <div *ngIf="tasksDue == 0 || tasksDue > 1" id="numDue" class="col-4">
+          <b>{{tasksDue}}</b><br>DUE
+        </div>
+
+        <!-- done -->
+        <div *ngIf="loading" id="numDone" class="col-4">
+          <b>-</b><br>DONE
+        </div>
+        <div *ngIf="tasksDone == 1" id="numDone" class="col-4">
+          <b>1</b><br>DONE
+        </div>
+        <div *ngIf="tasksDone == 0 || tasksDone > 1" id="numDone" class="col-4">
+          <b>{{tasksDone}}</b><br>DONE
+        </div>
+      </div><br>
+
+      <h2>Upcoming Tasks</h2>
+        <div id="tasks">
+          <mat-spinner *ngIf="upcoming.length == 0 && !error" class="req-spinner"></mat-spinner>
+          <i *ngIf="error == 'Not Found'">You have no upcoming tasks.</i>
+          <ngb-carousel [showNavigationArrows]="false" interval="0">
+            <ng-template ngbSlide *ngFor="let u of upcoming">
+              <div>
+                <ul class="tasks">
+                  <li *ngFor="let t of u"><small>{{t.projectName}} <span class="float-right">{{formatDate(t.dueDate)}}</span> </small> <span>{{t.taskName}}</span></li>
+                </ul>
+              </div>
+            </ng-template>
+          </ngb-carousel>
+        </div>
+
+    </section>
+</div>
+
+
+<!-- ADD PROJECT *******************************-->
+
+<ng-template #addProjectModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Add a project
+        <br><h4>Please enter the project details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="addProjectForm">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Project Name</mat-label>
+          <input matInput formControlName="projectName" placeholder="My Project" name = "projectName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="dueDate" name = "dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Hourly Rate</mat-label>
+          <input matInput formControlName="hourlyRate" type="number" min="0" step="any" placeholder="0.00" name = "hourlyRate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addProject(addProjectForm.value); addProjectForm.reset()"
+              [disabled]="addProjectForm.invalid" id="addProject">Create Project</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- EDIT PROJECT *******************************-->
+
+<ng-template #editProjectModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit project
+        <br><h4>Please enter the new project details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form #editProjectForm="ngForm">
+        <input hidden name="projectID" type="text" [(ngModel)]="projectToEdit.projectID" [value]="projectToEdit.projectID">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Project Name</mat-label>
+          <input matInput placeholder="My Project" name = "projectName" [(ngModel)]="projectToEdit.projectName" [value]="projectToEdit.projectName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" placeholder="My Project" name = "dueDate" [(ngModel)]="projectToEdit.dueDate" [value]="projectToEdit.dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Hourly Rate</mat-label>
+          <input matInput placeholder="0.00" name = "hourlyRate" type="number" min="0" step="any" [(ngModel)]="projectToEdit.hourlyRate" [value]="projectToEdit.hourlyRate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editProject(editProjectForm.value)" id="editProject">Save Changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- DELETE PROJECT *******************************-->
+
+<ng-template #deleteProjectModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Delete {{pname}}
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      Are you sure you want to delete this project?
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteProject(pid)" id="deleteProject">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- ADD TASK *******************************-->
+
+<ng-template #addTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Add a task
+        <br><h4>Please enter the task details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="addTaskForm">
+        <input hidden type="text" formControlName="projectID" name="projectID">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task Name</mat-label>
+          <input matInput formControlName="taskName" placeholder="My Task" name = "taskName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="dueDate" name = "dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addTask(addTaskForm.value); addTaskForm.reset()"
+              [disabled]="addTaskForm.invalid" id="addTask">Create Task</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- EDIT TASK *******************************-->
+
+<ng-template #editTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit task
+        <br><h4>Please enter the new task details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form #editTaskForm="ngForm">
+        <input hidden name="taskID" type="text" [(ngModel)]="taskToEdit.taskID" [value]="taskToEdit.taskID">
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task Name</mat-label>
+          <input matInput placeholder="My Task" name = "taskName" [(ngModel)]="taskToEdit.taskName" [value]="taskToEdit.taskName">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" placeholder="My Project" name = "dueDate" [(ngModel)]="taskToEdit.dueDate" [value]="taskToEdit.dueDate">
+          <mat-error>Please enter a value</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" mat-raised-button color="primary" (click)="modal.close('Save click'); editTask(editTaskForm.value)" id="editTask">Save Changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- DELETE TASK *******************************-->
+
+<ng-template #deleteTaskModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Delete {{tname}}
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      Are you sure you want to delete this task?
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteTask(tid, pid)" id="deleteTask">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->
+
+<!-- ****************************************** ADD MEMBER ****************************************** -->
+<ng-template #addMemberModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Add a member
+        <br><h4>Please select a member to add</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="add-member">
+          <mat-form-field color="accent" appearance="standard" class="col-12">
+            <mat-label>Members</mat-label>
+            <mat-select  placeholder="Search members" [multiple]="true" #multiSelect>
+              <mat-option placeholder="Search members">
+                <ngx-mat-select-search name="searchMember" ng-reflect-placeholder="Search" placeholder="Search" [showToggleAllCheckbox]="true" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option class="member-button" *ngFor="let m of members" (click)="addMember(m)">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-divider></mat-divider>
+          <ul *ngIf="addMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of addMembers">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.role}}
+                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Add member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.role"
+                    (keyup)="addRole(m, m.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="member" (click)="typeRole($event)">
+                    member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); addMembersToProject()">Add members</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- ****************************************** EDIT TEAM ****************************************** -->
+<ng-template #editTeamModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit team
+        <br><h4>Please edit the team details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="add-member">
+          <p>REMOVE</p>
+          <ul *ngIf="editTeamMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of editTeamMembers" class="editing">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.role}}
+                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Edit member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.role"
+                    (keyup)="editRole(m, m.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="member" (click)="typeRole($event)">
+                    member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-checkbox class="example-margin" (click)="removeMember(m)"></mat-checkbox>
+
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); removeMembersFromProject(); editMemberRoles();">Save changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click');">Cancel</button>
+    </div>
+  </div>
+</ng-template>

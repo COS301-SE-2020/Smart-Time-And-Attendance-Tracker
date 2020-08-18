@@ -1,0 +1,430 @@
+*
+  font-size: 1em
+
+h1
+  font-size: 2.5em
+  font-weight: bolder
+
+h2
+  font-size: 1.8em !important
+  color: #4c585b
+
+h3
+  font-size: 1.25em
+
+.row
+  padding: 2em
+  padding-top: 0
+
+  >
+    section
+      padding: 2em
+
+section
+  align-items: stretch
+  display: flex
+  flex-direction: column
+  height: 100%
+  padding: 1.5em
+
+.scroll
+  overflow-x: hidden
+  overflow-y: scroll
+  padding: 0 1.5em 0.2em 0.8em
+  height: 68vh
+
+.scroll::-webkit-scrollbar
+  border-radius: 0.5em
+  background-color: #ffffff
+  width: 0.5em
+
+.scroll::-webkit-scrollbar-track::hover
+  cursor: pointer
+
+.scroll::-webkit-scrollbar-thumb
+  border-radius: 0.5em
+  background-color: #4c585b70
+
+.scroll::-webkit-scrollbar-track
+  border-radius: 0.5em
+  background-color: #ffffff
+
+.tag
+  background-color: #7846eb50
+  padding: 0.2em 0.5em !important
+  margin-left: 0.5em
+  border-radius: 0.8em
+  color: #7846eb
+  font-size: 0.8em
+  height: 1.8em
+  float: right
+  font-weight: normal !important
+
+mat-divider
+  margin-bottom: 1em
+  margin-top: 1em
+  border-top-color: #4c585b30
+
+#tasks .tasks
+  margin-bottom: 2em
+  list-style-type: none
+  padding-left: 0.5em
+  width: 150%
+  
+  li 
+    margin-bottom: 0.5em
+    background-color: #ffffff
+    padding: 0.5em 0.8em
+    border-radius: 0.2em
+    font-size: 0.9em
+    color: #4c585b
+
+    &:nth-child(1)
+      border-left: 0.3em solid #7846eb
+      background-color: #7846eb10
+
+    &:nth-child(2)
+      border-left: 0.3em solid #ff2885
+      background-color: #ff288510
+
+    &:nth-child(3)
+      border-left: 0.3em solid #366ceb
+      background-color: #366ceb10
+  
+    &:nth-child(4)
+      border-left: 0.3em solid #00c8ff
+      background-color: #00c8ff10    
+
+    small
+      display: block
+      color: #4c585b80
+
+
+.info
+    text-align: center
+    color: #4c585b90
+    padding: 0
+
+    #numTasks 
+      b
+        color: #7846eb
+        font-size: 1.4em
+
+    #numDue    
+      b
+        color: #ff2885
+        font-size: 1.4em
+
+    #numDone       
+      b
+        color: #366ceb
+        font-size: 1.4em
+
+    #total-projects       
+      b
+        color: #00c8ff
+        font-size: 1.4em
+
+      span 
+        margin-bottom: 1em
+        font-size: 0.9em
+
+#show-comp, #hide-comp
+  vertical-align: bottom
+  margin: auto
+
+  mat-icon 
+    margin-right: 0.5em
+
+// PROJECTS *********************************************************************************
+
+.req-spinner
+  margin: 1em auto 0 auto
+
+.numTasks
+  margin-right: 1em !important
+
+.due-date
+  padding-right: 1em
+  color: #4c585b90
+  font-size: 0.9em
+  align-items: center
+
+.tasks button, .float-right button, .pro-btn
+  padding: 0
+  color: #4c585b90
+  text-transform: uppercase
+  font-size: 0.8em
+  line-height: normal
+  min-width: fit-content
+  margin-left: 1.5em
+
+  &:focus
+    outline: none
+
+  mat-icon
+    font-size: 1.2em !important
+    vertical-align: top !important
+
+.pro-btn
+  margin-left: 0
+  margin-right: 0.5em
+  padding: 0.2em 0.3em
+  border: 1px dashed #4c585b90
+  border-radius: 10em
+
+.tasks 
+  .pro-btn
+    font-size: 0.8em
+    padding: 0.3em
+    margin-left: 0
+    margin-right: 0.6em
+
+  li button:nth-child(1)
+    margin-left: 0.8em
+
+.tasks button, .pro-btn
+  visibility: hidden
+  
+.tasks li:hover, mat-expansion-panel-header:hover
+  button
+    visibility: visible
+
+  &:hover
+    background-color: rgab(0,0,0,0) !important
+
+::ng-deep .pro-tooltip
+  background-color: #4c585b90
+  padding: 0.3em
+  margin-bottom: 0.5em !important
+
+::ng-deep .action-tooltip
+  background-color: #4c585b90
+  padding: 0.3em
+
+// MEMBER MENU
+
+#member-menu
+  overflow-x: hidden
+  overflow-y: scroll
+  padding: 0 1.5em 0.2em 0.8em
+  height: 15em
+  color: red !important
+
+#mat-menu-panel::-webkit-scrollbar
+  border-radius: 0.5em
+  background-color: #ffffff
+  width: 0.5em
+
+#mat-menu-panel::-webkit-scrollbar-track::hover
+  cursor: pointer
+
+#mat-menu-panel::-webkit-scrollbar-thumb
+  border-radius: 0.5em
+  background-color: #4c585b70
+
+#mat-menu-panel::-webkit-scrollbar-track
+  border-radius: 0.5em
+  background-color: #ffffff
+
+.profile-pic
+  width: 40px
+  height: 40px
+  margin-left: 0.3em
+  border-radius: 5em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+
+#team
+  margin-right: 0.5em
+  vertical-align: middle
+
+.start-tracking
+  color: white
+  background-color: #00c8ff !important
+  font-size: 1.4em
+  text-align: center
+  margin-left: 0.3em !important
+  vertical-align: top
+
+  &:focus
+    border: none !important
+    outline: none
+
+#addPro
+  font-size: 0.7em
+  background-color: #7846eb !important
+
+mat-panel-title
+  color: #4c585b !important
+  font-weight: bold
+
+mat-action-row
+  padding-right: 24px !important
+
+  .addMember
+    background-color: #4c585b !important
+  
+mat-accordion .tasks
+  list-style-type: none
+  padding-left: 0
+
+  li 
+    margin: 0.8em 0
+
+  .tag
+    margin-right: 0.8em
+
+  .tag-c
+    background-color: #17e88340
+    color: #17e883
+
+  .tag-ip
+    background-color: #00c8ff40
+    color: #00c8ff
+  
+  .tag-ns
+    background-color: #ff288540
+    color: #ff2885
+
+$colors : #7846eb, #00c8ff, #ff2885, #366ceb
+@for $i from 0 through 10
+  .member-button:nth-child(#{$i}) div.pro-pic, .proj-member:nth-child(#{$i}) div.pro-pic, .members-to-add:nth-child(#{$i}) div.pro-pic
+    background-color: nth($colors, random(length($colors)))
+
+::ng-deep .mat-option
+  height: 4em !important
+  line-height: 4em !important
+  color: #4c585b !important
+
+.member-button .pro-pic, .member-button img
+  margin-left: 0.5em
+
+.member-button:focus
+  outline: none !important
+
+#member-search-wrapper
+  width: 100% !important
+
+  .mat-form-field-infix
+    padding: 0 !important
+    border-top: 0 !important
+
+  mat-label, #member-search
+    padding-left: 0.5em !important
+
+::ng-deep .mat-menu-content
+  max-height: 15em !important
+  min-width: 12em !important
+  padding-top: 0 !important
+
+
+img, .pro-pic
+  display: inline-block
+  text-align: center
+  align-items: center
+  vertical-align: middle
+  color: #ffffff
+  font-size: 0.8em
+  letter-spacing: 1px
+  width: 33px
+  height: 33px
+  line-height: 33px
+  margin-right: 0.5em
+  border-radius: 5em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 4px 6px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)
+
+.proj
+  font-size: 1em
+  width: 40px
+  height: 40px
+  line-height: 40px
+  margin-left: -1em 
+  border-radius: 5em
+  white-space: pre-line
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+
+.members-to-add
+  list-style-type: none
+  padding-left: 0
+
+  li 
+    margin: 0.8em 0
+    display: flex
+    align-items: center
+
+    mat-form-field
+      padding-right: 0 !important
+
+    .col-7
+      display: flex
+      align-items: center
+
+  .tag
+    margin-right: 0.8em
+
+.add-member
+  > mat-form-field mat-option
+    width: 8em !important
+
+::ng-deep .mat-chip-list-wrapper
+  display: inline-block !important
+  width: fit-content !important
+  margin-left: 0.8em !important
+
+
+mat-chip
+  font-size: 0.8em
+
+.editing 
+  mat-checkbox
+    margin-left: 1.5em
+
+  .col-7
+    padding-left: 0.3em
+    margin-right: -1em
+
+.add-member
+  p 
+    text-align: right
+    font-size: 0.8em
+    color: #4c585b
+
+mat-expansion-panel-header
+  align-items: center
+
+mat-panel-title
+  align-items: center
+
+  > mat-icon
+    margin-right: 0.5em
+    font-size: 1.2em
+    color: #17e883
+
+
+// ******************************************************************************************
+
+// MODAL ************************************************************************************
+
+.modal-title
+  margin-bottom: 0
+
+.modal-header 
+  button:focus, button:active, button
+    border: none !important
+    outline: none
+    background-color: transparent !important
+
+  mat-icon 
+    font-size: 1.5em
+
+.modal-footer 
+  padding-left: 16px
+
+  #toggle
+    padding-right: 5em
+
+  button
+    font-size: 1em
+    margin-left: 0.5em
+
+// ******************************************************************************************

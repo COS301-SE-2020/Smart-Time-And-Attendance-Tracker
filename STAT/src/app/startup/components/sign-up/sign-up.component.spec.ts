@@ -171,7 +171,7 @@ describe('Unit tests:', () => {
 });
 
 describe('Integration tests:', () => {
-    describe('SignInComponent', () => {
+    describe('SignUpComponent', () => {
   
       let component: SignUpComponent;
       let fixture: ComponentFixture<SignUpComponent>;
@@ -195,10 +195,11 @@ describe('Integration tests:', () => {
          providers: [
           {provide: Router, useValue: {navigate: () => {}}},
           {provide: AccountManagementService, useValue: {
+            getName: () => of({name: "Suzie", surname: "Smith"}),
             signUp: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign up successful."}),
             signIn: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign in successful."}),
-            getRoles: () => of({roles: ["General Team Member"]}),
-            params: of( "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18")}}
+            getRoles: () => of({roles: ["General Team Member, Team Leader, System Administrator, Security Administrator"]})
+          }}
          ]
         })
         .compileComponents().then(()=>
@@ -232,7 +233,9 @@ describe('Integration tests:', () => {
 
         expect(localStorage.getItem('token')).toBe("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18");
         expect(localStorage.getItem('loggedIn')).toBe('true');
-        expect(localStorage.getItem('roles')).toBe("General Team Member");
+        expect(localStorage.getItem('roles')).toBe("General Team Member, Team Leader, System Administrator, Security Administrator");
+        expect(localStorage.getItem('name')).toBe("Suzie");
+        expect(localStorage.getItem('surname')).toBe("Smith");
         expect(router.navigate).toHaveBeenCalledWith(['main']);
       }));
 
@@ -269,7 +272,7 @@ describe('Integration tests:', () => {
 
       expect(localStorage.getItem('token')).toBe("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18");
       expect(localStorage.getItem('loggedIn')).toBe('true');
-      expect(localStorage.getItem('roles')).toBe("General Team Member");
+      expect(localStorage.getItem('roles')).toBe("General Team Member, Team Leader, System Administrator, Security Administrator");
       expect(router.navigate).toHaveBeenCalledWith(['main']);
     }));
 
