@@ -54,7 +54,7 @@ describe('Unit tests:', () => {
       });
     });
     //////////////////////////////////////////
-    describe('signIn()', () => { 
+    describe('signIn()', () => {
     it('should return a response object from the API via POST', async() => {
       const req =
         { email:"suzieSmith@mail.com", password: "1234"};
@@ -85,7 +85,7 @@ describe('Unit tests:', () => {
     });
   });
   //////////////////////////////////
-  describe('getRoles()', () => { 
+  describe('getRoles()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={ roles: [
@@ -116,7 +116,7 @@ describe('Unit tests:', () => {
     });
   });
   /////////////////////////////////////
-  describe('getName()', () => { 
+  describe('getName()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={name: "Suzie", surname: "Smith", email:"suzieSmith@mail.com"};
@@ -145,7 +145,7 @@ describe('Unit tests:', () => {
     });
   });
   ///////////////////////////////////
-  describe('authenticate()', () => { 
+  describe('authenticate()', () => {
     it('should return a response object from the API via POST', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
@@ -190,7 +190,7 @@ describe('Unit tests:', () => {
     });*/
   });
   //////////////////////////////////////////
-  describe('reject()', () => { 
+  describe('reject()', () => {
     it('should return a response object from the API via POST', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
@@ -235,7 +235,7 @@ describe('Unit tests:', () => {
     });*/
   });
   /////////////////////////////
-  describe('getUnauthenticatedUsers()', () => { 
+  describe('getUnauthenticatedUsers()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={ID : "5f17df909b3e2d42dcbc3efb", email : "suzieSmith@mail.com", name : "Suzie", surname : "Smith"};
@@ -264,7 +264,7 @@ describe('Unit tests:', () => {
     });
   });
   //////////////////////////////
-  describe('getAllUsers()', () => { 
+  describe('getAllUsers()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={ID : "5f17df909b3e2d42dcbc3efb", email : "suzieSmith@mail.com", name : "Suzie", surname : "Smith"};
@@ -293,7 +293,7 @@ describe('Unit tests:', () => {
     });
   });
   //////////////////////////////
-  describe('getProjectsAndTasks()', () => { 
+  describe('getProjectsAndTasks()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={"projects": [
@@ -342,7 +342,7 @@ describe('Unit tests:', () => {
     });
   });
 ////////////////////////////////////
-  describe('getTimeEntries()', () => { 
+  describe('getTimeEntries()', () => {
     it('should return a response object from the API via GET', async() => {
       const date = "2020/07/22";
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";

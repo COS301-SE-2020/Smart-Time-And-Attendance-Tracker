@@ -42,13 +42,13 @@ describe('ProjectsComponent', () => {
     .compileComponents().then(()=>
     {
       fixture = TestBed.createComponent(ProjectsComponent);
-      projects = [ { 'ID': "5f18a3e4e4ccae3398d17951", 'dueDate': 1596153600000, 'hourlyRate': 150, 'projectName': "Botify Music", 
+      projects = [ { 'ID': "5f18a3e4e4ccae3398d17951", 'dueDate': 1596153600000, 'hourlyRate': 150, 'projectName': "Botify Music",
       'tasks': [{ 'ID': "5f18a730e4ccae3398d1795c",
       'dueDate': 1595455200000,
       'projectID': "5f18a685e4ccae3398d17957",
       'projectName': "Team Portfolio",
       'taskName': "Get in touch",
-      'taskStatus': "In Progress" }] } ] 
+      'taskStatus': "In Progress" }] } ]
 
       tasks = [ { 'ID': "5f18a730e4ccae3398d1795c",
       'dueDate': 1595455200000,
@@ -79,21 +79,38 @@ describe('ProjectsComponent', () => {
     fixture.detectChanges()
   });
 
-  /*it('should call the open method when the add button is pressed', async(() => {
+  it('should call the open method when the add button is pressed', async(() => {
     spyOn(component,'open');
     el = fixture.debugElement.query(By.css("#addPro")).nativeElement;
     el.click();
     expect(component.open).toHaveBeenCalledTimes(1);
   }));
 
+  it('add project form should be invalid with invalid hourly rate', async(() => {
+    component.addProjectForm.controls['hourlyRate'].setValue('-222');
+    expect(component.addProjectForm.valid).toBeFalse();
+  }));
+
   it("should call the addProject method when the 'Create Project' button is pressed", async(() => {
     spyOn(component,'addProject');
-    el = fixture.debugElement.query(By.css("#addProject")).nativeElement;
+    // open add project modal
+    el = fixture.debugElement.query(By.css("#addPro")).nativeElement;
+    const contentBeforeClick = document.querySelector(".modal-content");
+    expect(contentBeforeClick).toBeFalsy();
     el.click();
+    const contentAfterClick = document.querySelector(".modal-content");
+    expect(contentAfterClick).toBeTruthy();
+    // add values to form
+    component.addProjectForm.controls['projectName'].setValue('John');
+    component.addProjectForm.controls['dueDate'].setValue('2020-12-15');
+    component.addProjectForm.controls['hourlyRate'].setValue('2.50');
+    // click add project button
+    const btn = fixture.debugElement.query(By.css("#addProject")).nativeElement;
+    btn.click();
     expect(component.addProject).toHaveBeenCalledTimes(1);
   }));
 
-  it("should call the addTask method when the 'Create Task' button is pressed", async(() => {
+  /*it("should call the addTask method when the 'Create Task' button is pressed", async(() => {
     spyOn(component,'addTask');
     el = fixture.debugElement.query(By.css("#addTask")).nativeElement;
     el.click();
@@ -133,7 +150,7 @@ describe('ProjectsComponent', () => {
         component.addProjectForm.controls['projectName'].setValue('');
         component.addProjectForm.controls['Project'].setValue('');
         component.addProjectForm.controls['hourlyRate'].setValue('');
-    
+
         expect(component.addProjectForm.valid).toBeFalsy();
         expect(component.addProjectForm.controls.email.hasError('projectName')).toBe(true);
         expect(component.addProjectForm.controls.password.hasError('dueDate')).toBe(true);
@@ -147,7 +164,7 @@ describe('ProjectsComponent', () => {
       it('should be invalid with empty details', async(() => {
         component.addTaskForm.controls['taskName'].setValue('');
         component.addTaskForm.controls['dueDate'].setValue('');
-    
+
         expect(component.addTaskForm.valid).toBeFalsy();
         expect(component.addTaskForm.controls.email.hasError('taskName')).toBe(true);
         expect(component.addTaskForm.controls.password.hasError('dueDate')).toBe(true);
