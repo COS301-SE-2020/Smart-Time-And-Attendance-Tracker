@@ -29,6 +29,8 @@ const userTimeEntry = require('../controllers/userTimeEntry.controller');
 module.exports.addTimeEntries = async (entries, id)=> {
   return new Promise(function(resolve, reject) { 
       entries.forEach((entry) => { 
+        if(entry['description'] == undefined)
+          entry['description']= 'No title';
         var date = new Date(entry['startTime']);
         entry['date']= (date.toISOString().slice(0,10)).replace(/-/g,"/");
         entry['activeTime']= Math.floor((entry['endTime']-entry['startTime']) /60000);

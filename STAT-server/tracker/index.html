@@ -16,7 +16,7 @@
         var apiURL = "http://localhost:3000/api/calendar/getCredentials?"+ "calendar=google";
         http.open("GET",apiURL , true);
         http.setRequestHeader('Content-type', 'application/json');
-        http.setRequestHeader("Authorization", "Bearor "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5NzQ4ODQyMywiZXhwIjoxNTk3NTc0ODIzfQ.v0mxh5Yp_iY9aOqc7uLHyrLTWZxtigbqdB4BKWH8PyI");
+        http.setRequestHeader("Authorization", "Bearor "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5Nzc2OTM1NywiZXhwIjoxNTk3ODU1NzU3fQ.rbThQC89j8xhmzByXp66D-FhIQNu7yMWRloH0fYlMR8");
         http.onreadystatechange = function() {
           if(this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
@@ -31,6 +31,7 @@
       }
 
       function handleAuthResult(authResult) {
+        console.log("HELLO22 " +authResult);
         var authorizeButton = document.getElementById('authorize-button');
         if (authResult && !authResult.error) { 
           authorizeButton.style.visibility = 'hidden';
@@ -46,7 +47,7 @@
         var apiURL = "http://localhost:3000/api/calendar/getCredentials?calendar=google";
         http.open("GET",apiURL , true);
         http.setRequestHeader('Content-type', 'application/json');
-        http.setRequestHeader("Authorization", "Bearor "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5NzQ4ODQyMywiZXhwIjoxNTk3NTc0ODIzfQ.v0mxh5Yp_iY9aOqc7uLHyrLTWZxtigbqdB4BKWH8PyI");
+        http.setRequestHeader("Authorization", "Bearor "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5Nzc2OTM1NywiZXhwIjoxNTk3ODU1NzU3fQ.rbThQC89j8xhmzByXp66D-FhIQNu7yMWRloH0fYlMR8");
         http.onreadystatechange = function() {
           if(this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
@@ -61,6 +62,7 @@
       }
       
       function makeApiCall(authResult) {
+        console.log("HELLO" +authResult);
         const http = new XMLHttpRequest();
         var apiURL = "http://localhost:3000/api/calendar/syncEvents" ;
         var params =  {calendar :"google", accessToken: authResult.access_token ,expiryDate: authResult.expires_at,tokenType: authResult.token_type };

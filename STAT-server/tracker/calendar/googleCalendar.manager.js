@@ -79,25 +79,27 @@ module.exports.getEvents = (req, done) => {
       if (err) {
         done(err);
       }
-      const events = res.data.items;
-      if (events.length) {
-        var EventList = [];
-        
-        events.map((event, i) => {
-          const start = event.start.dateTime || event.start.date;
-          const end = event.end.dateTime || event.end.date;
-          var EventItem= {
-              'description': event.summary,
-              'startTime': new Date(start).getTime(),
-              'endTime': new Date(end).getTime(),
-              'device': 'Google calendar'
-          }
-          EventList.push(EventItem);
-        });
-        done(null, EventList,max);
-      } 
+      else{
+        const events = res.data.items;
+        if (events.length) {
+          var EventList = [];
+          
+          events.map((event, i) => {
+            const start = event.start.dateTime || event.start.date;
+            const end = event.end.dateTime || event.end.date;
+            var EventItem= {
+                'description': event.summary,
+                'startTime': new Date(start).getTime(),
+                'endTime': new Date(end).getTime(),
+                'device': 'Google calendar'
+            }
+            EventList.push(EventItem);
+          });
+          done(null, EventList,max);
+        } 
       else {
         done(null, false,max);
+      }
       }
     });  
   });
