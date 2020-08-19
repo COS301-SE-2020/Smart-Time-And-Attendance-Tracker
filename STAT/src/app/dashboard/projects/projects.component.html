@@ -1,10 +1,10 @@
 <div class="row">
     <section class="col-8">
         <h2>Projects
-          <button *ngIf="roles.includes('Team Leader')" 
+          <button *ngIf="roles.includes('Team Leader')"
                   mat-mini-fab
                   class="start-tracking"
-                  id="addPro" 
+                  id="addPro"
                   matTooltip="Add a project"
                   matTooltipClass="action-tooltip"
                   matTooltipPosition="right"
@@ -19,8 +19,8 @@
               <mat-label>Search Projects</mat-label>
               <input matInput type="search" type="text" placeholder="Project details" name="searchProjects" [(ngModel)]="searchProj" (keyup)="searchProjects(searchProj)">
             </mat-form-field>
-          </div>      
-          
+          </div>
+
           <div *ngIf="!projects" id="total-projects" class="col-auto">
             <b>-</b><br>PROJECTS<br>
             <span class="float-right">
@@ -62,14 +62,14 @@
                   <mat-icon *ngIf="p.completed == true" inline="true">check_circle</mat-icon>
                     {{p.projectName}}
                   <span class="tag numTasks">{{p.tasks.length}} tasks</span>
-                  <button *ngIf="roles.includes('Team Leader')" 
+                  <button *ngIf="roles.includes('Team Leader')"
                           mat-button class="pro-btn"
                           matTooltip="R{{p.hourlyRate}} per hour"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above">
                           <mat-icon inline="true">payment</mat-icon>
                   </button>
-                  <button *ngIf="roles.includes('Team Leader')" 
+                  <button *ngIf="roles.includes('Team Leader')"
                           mat-button class="pro-btn"
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
@@ -77,7 +77,7 @@
                           (click)="open(editProjectModal); popProjectForm(p)">
                           <mat-icon inline="true">edit</mat-icon>
                   </button>
-                  <button *ngIf="roles.includes('Team Leader')" 
+                  <button *ngIf="roles.includes('Team Leader')"
                           mat-button class="pro-btn"
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
@@ -86,10 +86,10 @@
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
                   </mat-panel-title>
-                  
-                <span class="due-date float-right">Due {{formatDate(p.dueDate)}}</span>      
+
+                <span class="due-date float-right">Due {{formatDate(p.dueDate)}}</span>
                 </mat-expansion-panel-header>
-                
+
                 <mat-divider></mat-divider><br>
 
                 <!-- tasks -->
@@ -98,7 +98,7 @@
                 </ul>
                 <ul *ngIf="p.tasks != 'no tasks'" class="tasks">
                   <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
-                    <button *ngIf="roles.includes('Team Leader')" 
+                    <button *ngIf="roles.includes('Team Leader')"
                             mat-button class="pro-btn"
                             matTooltip="Edit"
                             matTooltipClass="pro-tooltip"
@@ -106,7 +106,7 @@
                             (click)="open(editTaskModal); popTaskForm(t)">
                             <mat-icon inline="true">edit</mat-icon>
                     </button>
-                    <button *ngIf="roles.includes('Team Leader')" 
+                    <button *ngIf="roles.includes('Team Leader')"
                             mat-button class="pro-btn"
                             matTooltip="Delete"
                             matTooltipClass="pro-tooltip"
@@ -114,13 +114,13 @@
                             (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID; tname = t.taskName">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
-                     <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
-                     <span class="float-right tag" 
+                     <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span>
+                     <span class="float-right tag"
                           [ngClass]="{'tag-ns': t.taskStatus == 'Not Started',
                                       'tag-ip': t.taskStatus == 'In Progress',
                                       'tag-c': t.taskStatus == 'Completed'}">{{t.taskStatus}}</span>
 
-                    <mat-divider></mat-divider>       
+                    <mat-divider></mat-divider>
                   </li>
                 </ul>
                 <span *ngIf="roles.includes('Team Leader')" class="float-right">
@@ -131,33 +131,33 @@
                 <mat-action-row>
                   <span *ngFor="let m of p.projectMembers" class="proj-member">
                     <div *ngIf="m.profilePicture == 'none'" class="pro-pic proj"
-                          matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]" 
+                          matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
                     <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg"
-                          matTooltip="{{m.name}} {{m.surname}}" 
+                          matTooltip="{{m.name}} {{m.surname}}"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="below">
                   </span>
-                    <button *ngIf="roles.includes('Team Leader')" 
+                    <button *ngIf="roles.includes('Team Leader')"
                             mat-mini-fab
-                            class="start-tracking addMember" 
+                            class="start-tracking addMember"
                             matTooltip="Add team member"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
                       <mat-icon inline="true" (click)="open(addMemberModal); pid = p.ID; getAvailableMembers(p.projectMembers)">add</mat-icon>
                     </button>
-                    <button *ngIf="roles.includes('Team Leader')" 
+                    <button *ngIf="roles.includes('Team Leader')"
                             mat-mini-fab
-                            class="start-tracking addMember" 
+                            class="start-tracking addMember"
                             matTooltip="Add team"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
                       <mat-icon inline="true" [matMenuTriggerFor]="menu" (click)="pid = p.ID; getAvailableTeams(p.projectMembers)">group_add</mat-icon>
                     </button>
-                    <button *ngIf="roles.includes('Team Leader')" 
+                    <button *ngIf="roles.includes('Team Leader')"
                             mat-mini-fab
-                            class="start-tracking addMember" 
+                            class="start-tracking addMember"
                             matTooltip="Edit team"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="below">
@@ -179,7 +179,7 @@
 
             </mat-accordion>
 
-            
+
         </div>
     </section>
 
@@ -197,7 +197,7 @@
         <div *ngIf="(tasksNum == 0 || tasksNum > 1)" id="numTasks" class="col-4">
           <b>{{tasksNum}}</b><br>TASKS
         </div>
-        
+
         <!-- due -->
         <div *ngIf="loading" id="numDue" class="col-4">
           <b>-</b><br>DUE
@@ -274,7 +274,7 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" 
+      <button mat-raised-button color="primary"
               (click)="modal.close('Save click'); addProject(addProjectForm.value); addProjectForm.reset()"
               [disabled]="addProjectForm.invalid" id="addProject">Create Project</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
@@ -386,7 +386,7 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary" 
+      <button mat-raised-button color="primary"
               (click)="modal.close('Save click'); addTask(addTaskForm.value); addTaskForm.reset()"
               [disabled]="addTaskForm.invalid" id="addTask">Create Task</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
@@ -489,7 +489,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          
+
           <mat-divider></mat-divider>
           <ul *ngIf="addMembers.length > 0" class="members-to-add">
             <li *ngFor="let m of addMembers">

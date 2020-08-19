@@ -65,7 +65,6 @@ export class ProjectsComponent implements OnInit {
     this.resetTaskForm()
 
     this.roles = localStorage.getItem('roles');
-
     /**********
     FORM GROUPS
     ***********/
@@ -125,7 +124,7 @@ export class ProjectsComponent implements OnInit {
 
   // add project
   addProject(form : NgForm) {
-    console.log(form);
+    console.log("PIG");
     this.pmService.addProject(localStorage.getItem('token'),form).subscribe((data) => {
       console.log(data);
       this.getProAndTasks()
@@ -456,7 +455,7 @@ export class ProjectsComponent implements OnInit {
 
       // get all the members that are not in the team already
       getAvailableMembers(members : []) {
-        
+
         this.availMembers = this.allMembers.filter((m1 : any) => !members.some((m2 : any) => m1.ID === m2.ID))
 
         for (let i = 0; i < this.availMembers.length; i++)
@@ -521,7 +520,7 @@ export class ProjectsComponent implements OnInit {
             this.availTeams.push(t)
         });
 
-        
+
         console.log(members)
         console.log(this.availTeams)
       }
@@ -558,7 +557,7 @@ export class ProjectsComponent implements OnInit {
 
       // add team member
       addTeamMember(uID : string, pID: string, role : string) {
-        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};
         this.pmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
           console.log(data);
           this.getProAndTasks();
@@ -655,7 +654,7 @@ export class ProjectsComponent implements OnInit {
       }
 
       changeRole(uID : string, pID: string, role : string) {
-        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};
         this.pmService.changeRole(localStorage.getItem('token'), req).subscribe((data) => {
           console.log(data);
           this.getProAndTasks();
@@ -688,7 +687,6 @@ export class ProjectsComponent implements OnInit {
           x['teamName'].toLowerCase().includes(text.toLowerCase())
         )
       }
-
 
   // reset forms
   resetProjectForm() {
