@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,
+         ChangeDetectionStrategy,
+         ChangeDetectorRef } from '@angular/core';
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
@@ -10,22 +12,28 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class CalendarComponent implements OnInit {
 
   authorised : any;
+  src : string;
 
   private email;
   private clientID;
-
   private ROOT_URL = "http://localhost:3000/api/";
-
   public roles = localStorage.getItem('roles');
 
-  constructor(public http: HttpClient, public headerService : HeaderService) { }
+  constructor(public http: HttpClient, public headerService : HeaderService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.authorised = false;
-    this.checkAuth();
+    // console.log(gapi.auth2.getAuthInstance());
+    // console.log(gapi.auth2);
+
+    if (gapi.auth2.getAuthInstance() != undefined && gapi.auth2.getAuthInstance() != null)
+      this.authenticate(gapi.auth2.getAuthInstance());
+    else if (gapi.auth2 != undefined)
+      this.checkAuth();
+    else
+      this.authorised = false;
   }
-  
-  //check if authenticated
+
+  //check if authenticated, authenticate if not
   checkAuth() {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+localStorage.getItem('token'));
@@ -47,9 +55,19 @@ export class CalendarComponent implements OnInit {
       }
     });
   }
+
   authenticate(auth) {
-    this.email = auth.currentUser.get().getBasicProfile().getEmail();
-    console.log(this.email);
+    console.log(auth);
+    if (auth != null) {
+      this.authorised = true;
+      this.cd.detectChanges();
+      this.email = auth.currentUser.get().getBasicProfile().getEmail();
+      document.getElementById("calendar-frame").setAttribute("src", "https://calendar.google.com/calendar/embed?src=" + this.email);
+    }
+    else {
+      this.authorised = false;
+      this.cd.detectChanges();
+    }
   }
 
   makeApiCall(authResult) {
