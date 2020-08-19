@@ -25,8 +25,7 @@ const mongoose = require("mongoose")
 var IOTDeviceSchema = new mongoose.Schema({
     DeviceName:{
         type: String,
-        required : "Required",
-        unique: true
+        required : "Required"
     },
     MACAddress:{
         type: String,
@@ -35,13 +34,19 @@ var IOTDeviceSchema = new mongoose.Schema({
     },
     RegisteredBy:{
         type: mongoose.Schema.Types.ObjectId,
-        required : "ID required.",
-        unique: true
+        required : "ID required."
     },
     RegisteredOn:{
         type: String,
-        required : "Required",
-        unique: true
+        required : "Required"
+    },
+    DeregisteredBy:{
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    },
+    DeregisteredOn:{
+        type: String,
+        default: ""
     }
 });
 

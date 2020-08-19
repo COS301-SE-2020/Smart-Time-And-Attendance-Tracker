@@ -31,9 +31,17 @@ const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
+const iotDevice = require("../controllers/iotDevice.controller");
 
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
+
+//iot devices
+router.post("/iotDevice/register", iotDevice.register);
+router.post("/iotDevice/deregister", iotDevice.deregister);
+router.post("/iotDevice/getAllDevices", iotDevice.getAllDevices);
+router.post("/iotDevice/startTimer", iotDevice.startTimer);
+router.post("/iotDevice/stopTimer", iotDevice.stopTimer);
 
 //user
 router.post("/user/register", user.register);
