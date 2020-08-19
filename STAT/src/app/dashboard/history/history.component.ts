@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 import { element } from 'protractor';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-history',
@@ -38,7 +39,7 @@ export class HistoryComponent implements OnInit {
 
   imports : any[] = []
 
-  constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
+  constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService, private snackbar : MatSnackBar) { }
   ngOnInit(): void {
 
     if (this.roles.indexOf("Data Analyst") != -1)
@@ -117,6 +118,7 @@ export class HistoryComponent implements OnInit {
 
   // get all user time entries
   getAllUser() {
+    this.historyType = 'da'
     this.tableData = []
     this.historyService.getAllUserEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
@@ -215,14 +217,21 @@ export class HistoryComponent implements OnInit {
           imports.push(values)
         });
       }
-      reader.onerror = function (evt) {
-          console.log('error reading file');
+      reader.onerror = (evt) => {
+        console.log('error reading file');
+        this.snackbar.open("Incorrect JSON file format", "Dismiss", {
+          duration: 5000,
+        });
       }
     }
     
     reader.onloadend = () => {
       imports.forEach(element => {
         this.import(element)
+      });
+
+      this.snackbar.open("JSON file imported successfully", "Dismiss", {
+        duration: 5000,
       });
     }
   }
@@ -249,6 +258,13 @@ export class HistoryComponent implements OnInit {
       console.log(data); // Data will be logged in array format containing objects
     };
 
+    reader.onerror = (evt) => {
+      console.log('error reading file');
+      this.snackbar.open("Incorrect Excel file format", "Dismiss", {
+        duration: 5000,
+      });
+    }
+
     reader.onloadend = () => {
       data.forEach(element => {
         console.log(element)
@@ -274,6 +290,11 @@ export class HistoryComponent implements OnInit {
 
         this.import(element)
       });
+      
+      this.snackbar.open("Excel file imported successfully", "Dismiss", {
+        duration: 5000,
+      });
+
     }
   }
 
@@ -469,7 +490,7 @@ export class HistoryComponent implements OnInit {
         this.getAllUser()
         break
       case 'tl':
-        this.getAllUser()
+        this.getOwn()
         break
       case 'user':
         this.getUser(this.mSelected)

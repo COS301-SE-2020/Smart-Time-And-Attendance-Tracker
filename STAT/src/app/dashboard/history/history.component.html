@@ -21,8 +21,8 @@
         <mat-icon>note_add</mat-icon>
         </button>
       <mat-menu #importMenu="matMenu">
-        <button mat-menu-item (click)="openJSON()">JSON</button>
-        <button mat-menu-item (click)="openCSV()">Excel</button>
+        <button mat-menu-item (click)="openJSON(); getHistory()">JSON</button>
+        <button mat-menu-item (click)="openCSV(); getHistory()">Excel</button>
       </mat-menu>
       <input id="json-input" type="file" style="display: none;" accept="application/json" (change)="readJSON($event)" />
       <input id="csv-input" type="file" style="display: none;" accept=".csv, .xlsx" (change)="readCSV($event)" />
@@ -122,7 +122,7 @@
 
 
     <div id="history" class="scroll">
-      <mat-spinner *ngIf="!tableData"></mat-spinner>
+      <mat-spinner *ngIf="tableData == []"></mat-spinner>
 
       <div>       
         <mat-accordion>
