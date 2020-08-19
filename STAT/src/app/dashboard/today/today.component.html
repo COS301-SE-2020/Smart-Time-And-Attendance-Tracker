@@ -16,20 +16,20 @@
       <ngb-carousel [showNavigationArrows]="false" interval="0">
         <ng-template ngbSlide>
           <div>
-            <mat-card>
+            <mat-card *ngIf="stop == false">
               <button mat-mini-fab class="stop-tracking"  (click)="stopTracking()"><mat-icon inline="true">stop</mat-icon></button>
-              <mat-card-title>Browser - Firefox</mat-card-title>
-              <mat-card-subtitle>www.clickup.com</mat-card-subtitle>
+              <mat-card-title>{{currentlyTracking.device}}</mat-card-title>
+              <mat-card-subtitle>{{currentlyTracking.description}}</mat-card-subtitle>
               <mat-divider [inset]="true"></mat-divider>
               <mat-card-footer>
-                <span>July 05, 2020 | 08:59</span>
-                <span class="float-right">00:13:31</span>
+                <span>{{currentlyTracking.date}} | {{currentlyTracking.startTime}}</span>
+                <span class="float-right">{{getTime(currentlyTracking.activeTime)}}</span>
                 <br>
-                <span class="float-left pro">Project Name</span>
-                <span class="float-left tag">Task Name</span>
+                <span class="float-left pro">{{currentlyTracking.projectName}}</span>
+                <span class="float-left tag">{{currentlyTracking.taskName}}</span>
               </mat-card-footer>
             </mat-card>
-            <mat-card>
+            <!--<mat-card>
               <button mat-mini-fab class="stop-tracking"><mat-icon>stop</mat-icon></button>
               <mat-card-title>Browser - Google Chrome</mat-card-title>
               <mat-card-subtitle>www.instagram.com</mat-card-subtitle>
@@ -41,7 +41,7 @@
                 <span class="float-left pro">Project Name</span>
                 <span class="float-left tag">Task Name</span>
               </mat-card-footer>
-            </mat-card>
+            </mat-card>-->
             <br><br>
           </div>
         </ng-template>

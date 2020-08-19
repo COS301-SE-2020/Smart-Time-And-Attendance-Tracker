@@ -58,6 +58,9 @@ export class TodayComponent implements OnInit {
   date4 : Date = new Date()
   date5 : Date = new Date()
 
+  currentlyTracking = { 'device' : 'device', 'description' : '', 'date' : '', 'startTime' : '', 
+                                  'activeTime' : 0, 'projectName' : '', 'taskName' : ''}
+
   @ViewChild('iframe') iframe: ElementRef;
 
   ngOnInit(): void {
@@ -176,6 +179,7 @@ export class TodayComponent implements OnInit {
     let now = new Date();
     this.startTime = now.getTime();
     form['startTime']= this.startTime;
+    this.currentlyTracking.startTime = new Date(this.startTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } );
     setTimeout (() => {
       if(this.stop == false)
       {
@@ -191,6 +195,16 @@ export class TodayComponent implements OnInit {
           localStorage.setItem('currentlyTracking', data['timeEntryID']);
 
           var details = {'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
+          this.currentlyTracking.projectName = form['projectName']
+          this.currentlyTracking.taskName = form['taskName']
+          this.currentlyTracking.description = form['description']
+
+          const options = {
+            year: "numeric",
+            month:"short",
+            day:"2-digit"
+          }
+          this.currentlyTracking.date = new Date().toLocaleDateString('en-US', options)
   
           localStorage.setItem('currentlyTrackingDetails',JSON.stringify( details));
 
@@ -232,6 +246,8 @@ export class TodayComponent implements OnInit {
       { 
         this.timing = this.timing +1;
          ////////////////////////////////////////////display new time
+        this.currentlyTracking.activeTime = this.timing
+        console.log(this.currentlyTracking)
         console.log(this.timing);
         this.tracking();
       }
