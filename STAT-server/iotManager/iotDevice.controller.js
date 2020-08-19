@@ -33,7 +33,8 @@ const IOTDeviceModel = mongoose.model("IOTDevice");
  */
 module.exports.register = (req, res, next) => {
     var now = new Date;
-
+    console.log(req.ID);
+    console.log(req.body);
     var IOTDevice = new IOTDeviceModel();
     IOTDevice.DeviceName = req.body.deviceName;
     IOTDevice.MACAddress = req.body.macAddress;
@@ -118,21 +119,21 @@ module.exports.deregister = (req, res, next) => {
  * @param {Function} next The next function to be called.
  */
 module.exports.getAllDevices = (req, res, next) => {
-    var now = new Date;
+    // var now = new Date;
 
-    var IOTDevice = new IOTDeviceModel();
-    IOTDevice.DeviceName = req.body.deviceName;
-    IOTDevice.MACAddress = req.body.macAddress;
-    IOTDevice.RegisteredBy = req.ID;
-    IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
-    IOTDevice.save((err, doc) => {
-        if(!err){
-            return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
-        }
-        else{
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
-    })
+    // var IOTDevice = new IOTDeviceModel();
+    // IOTDevice.DeviceName = req.body.deviceName;
+    // IOTDevice.MACAddress = req.body.macAddress;
+    // IOTDevice.RegisteredBy = req.ID;
+    // IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
+    // IOTDevice.save((err, doc) => {
+    //     if(!err){
+    //         return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
+    //     }
+    //     else{
+    //         return res.status(500).send({message: 'Internal Server Error: ' + err});
+    //     }
+    // })
 }
 
 
@@ -143,21 +144,21 @@ module.exports.getAllDevices = (req, res, next) => {
  * @param {Function} next The next function to be called.
  */
 module.exports.stopTimer = (req, res, next) => {
-    var now = new Date;
+    // var now = new Date;
 
-    var IOTDevice = new IOTDeviceModel();
-    IOTDevice.DeviceName = req.body.deviceName;
-    IOTDevice.MACAddress = req.body.macAddress;
-    IOTDevice.RegisteredBy = req.ID;
-    IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
-    IOTDevice.save((err, doc) => {
-        if(!err){
-            return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
-        }
-        else{
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
-    })
+    // var IOTDevice = new IOTDeviceModel();
+    // IOTDevice.DeviceName = req.body.deviceName;
+    // IOTDevice.MACAddress = req.body.macAddress;
+    // IOTDevice.RegisteredBy = req.ID;
+    // IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
+    // IOTDevice.save((err, doc) => {
+    //     if(!err){
+    //         return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
+    //     }
+    //     else{
+    //         return res.status(500).send({message: 'Internal Server Error: ' + err});
+    //     }
+    // })
 }
 
 /**
@@ -167,19 +168,19 @@ module.exports.stopTimer = (req, res, next) => {
  * @param {Function} next The next function to be called.
  */
 module.exports.startTimer = (req, res, next) => {
-    var now = new Date;
+    // var now = new Date;
 
-    var IOTDevice = new IOTDeviceModel();
-    IOTDevice.DeviceName = req.body.deviceName;
-    IOTDevice.MACAddress = req.body.macAddress;
-    IOTDevice.RegisteredBy = req.ID;
-    IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
-    IOTDevice.save((err, doc) => {
-        if(!err){
-            return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
-        }
-        else{
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
-    })
+    // var IOTDevice = new IOTDeviceModel();
+    // IOTDevice.DeviceName = req.body.deviceName;
+    // IOTDevice.MACAddress = req.body.macAddress;
+    // IOTDevice.RegisteredBy = req.ID;
+    // IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
+    // IOTDevice.save((err, doc) => {
+    //     if(!err){
+    //         return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
+    //     }
+    //     else{
+    //         return res.status(500).send({message: 'Internal Server Error: ' + err});
+    //     }
+    // })
 }

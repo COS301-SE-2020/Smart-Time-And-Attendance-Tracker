@@ -37,7 +37,7 @@ const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
 
 //iot devices
-router.post("/iotDevice/register", iotDevice.register);
+router.post("/iotDevice/register", jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin, iotDevice.register);
 router.post("/iotDevice/deregister", iotDevice.deregister);
 router.post("/iotDevice/getAllDevices", iotDevice.getAllDevices);
 router.post("/iotDevice/startTimer", iotDevice.startTimer);
