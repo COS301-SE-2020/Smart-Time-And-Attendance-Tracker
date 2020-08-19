@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 
 @Component({
@@ -9,18 +9,16 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 export class MainComponent implements OnInit {
 
   isAuth : boolean
-
   roles = this.service.roles
-
   // active tab
   active : string;
 
   constructor(public service : AccountManagementService) {
-
-    this.isAuth = true;
+    this.isAuth = true
   }
 
   ngOnInit(): void {
+    console.log(this.roles)
 
     const hamburger = document.getElementById('hamburger');
     const wrapper = document.getElementById('wrapper');
@@ -29,9 +27,10 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     });
 
-    this.active = 'today';
+    this.active = 'calendar';
   }
-  // set active tab after component initialisation ************this function is not being run
+
+  // set active tab after component initialisation
   ngAfterViewInit(): void {
     const navItem = document.getElementById('today');
     navItem.classList.add('active');
@@ -45,5 +44,6 @@ export class MainComponent implements OnInit {
     link.classList.add('active');
     this.active = tabName;
   }
+
 
 }
