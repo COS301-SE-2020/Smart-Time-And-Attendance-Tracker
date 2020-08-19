@@ -41,7 +41,7 @@ router.post("/iotDevice/register", jwtHelper.verifyJWTtoken, userHelper.isAuthen
 router.post("/iotDevice/deregister", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.deregister);
 router.post("/iotDevice/getAllDevices", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.getAllDevices);
 router.post("/iotDevice/startTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.startTimer, userTimeEntry.addTimeEntry);
-router.post("/iotDevice/stopTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.stopTimer);
+router.post("/iotDevice/stopTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
 
 //user
 router.post("/user/register", user.register);
