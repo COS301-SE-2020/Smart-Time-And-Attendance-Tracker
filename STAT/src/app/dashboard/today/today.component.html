@@ -98,7 +98,9 @@
             <span *ngIf="week['today'] != 'no entries'" class="tag numEntries">{{week['today'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['today'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['today']">{{e.task}}
+            <li *ngFor="let e of week['today']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
@@ -107,6 +109,7 @@
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['today'] == 'no entries'" class="entries">
@@ -126,7 +129,9 @@
             <span *ngIf="week['yesterday'] != 'no entries'" class="tag numEntries">{{week['yesterday'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['yesterday'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['yesterday']">{{e.task}} 
+            <li *ngFor="let e of week['yesterday']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
@@ -135,6 +140,7 @@
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['yesterday'] == 'no entries'" class="entries">
@@ -154,7 +160,9 @@
             <span *ngIf="week['2days'] != 'no entries'" class="tag numEntries">{{week['2days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['2days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['2days']">{{e.task}} 
+            <li *ngFor="let e of week['2days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
@@ -162,6 +170,7 @@
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['2days'] == 'no entries'" class="entries">
@@ -181,7 +190,9 @@
             <span *ngIf="week['3days'] != 'no entries'" class="tag numEntries">{{week['3days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['3days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['3days']">{{e.task}} 
+            <li *ngFor="let e of week['3days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
@@ -189,6 +200,7 @@
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['3days'] == 'no entries'" class="entries">
@@ -208,7 +220,9 @@
             <span *ngIf="week['4days'] != 'no entries'" class="tag numEntries">{{week['4days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['4days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['4days']">{{e.task}} 
+            <li *ngFor="let e of week['4days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
@@ -216,6 +230,7 @@
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['4days'] == 'no entries'" class="entries">
@@ -235,7 +250,9 @@
             <span *ngIf="week['5days'] != 'no entries'" class="tag numEntries">{{week['5days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['5days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['5days']">{{e.task}} 
+            <li *ngFor="let e of week['5days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
@@ -244,6 +261,7 @@
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['5days'] == 'no entries'" class="entries">
