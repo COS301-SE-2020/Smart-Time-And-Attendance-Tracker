@@ -214,7 +214,7 @@ export class TodayComponent implements OnInit {
           this.service.EntryID = data['timeEntryID'];
           localStorage.setItem('currentlyTracking', data['timeEntryID']);
 
-          var details = {'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
+          var details = {'description' : form['description'], 'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
           this.currentlyTracking.projectName = form['projectName']
           this.currentlyTracking.taskName = form['taskName']
           this.currentlyTracking.description = form['description']

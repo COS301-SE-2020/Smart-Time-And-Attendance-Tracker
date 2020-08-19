@@ -12,11 +12,42 @@
       </button>
     </h2>
     <div>
+      <!-- AUTOMATIC TRACKING FORM ************************************************ -->
+      <form [formGroup]="automaticTrackingForm" id="auto-tracking-form" method="post">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" type="text" placeholder="Research" name="description" required>
+        </mat-form-field>
+  
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Project</mat-label>
+          <mat-select [(value)]="aProjectSelected" formControlName="projectID">
+            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a'); pName = p.projectName" >{{p.projectName}}</mat-option>
+          </mat-select>
+          <mat-error>Please select a value</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task</mat-label>
+          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="taskID">
+          <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
+          </mat-select>
+          <mat-error>Please select a value</mat-error>
+
+          <input hidden formControlName="projectName" [(ngModel)]="pName" [value]="pName">
+          <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
+        </mat-form-field>
+
+        <button mat-raised-button color="accent" class="float-right" 
+              (click)="addAutomaticEntry(automaticTrackingForm.value);"
+              [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
+      </form>
+      <br><br>
       <!-- ENTRIES -->
-      <ngb-carousel *ngIf= "trackingNow" [showNavigationArrows]="false" interval="0">
-        <ng-template ngbSlide>
+      <!--<ngb-carousel *ngIf= "trackingNow" [showNavigationArrows]="false" interval="0">
+        <ng-template ngbSlide>-->
           <div>
-            <mat-card >
+            <mat-card *ngIf= "trackingNow">
               <button mat-mini-fab class="stop-tracking"  (click)="stopTracking()"><mat-icon inline="true">stop</mat-icon></button>
               <mat-card-title>{{currentlyTracking.description}}</mat-card-title>
               <mat-card-subtitle>{{getTime(currentlyTracking.activeTime)}}</mat-card-subtitle>
@@ -43,8 +74,8 @@
             </mat-card>-->
             <br><br>
           </div>
-        </ng-template>
-      </ngb-carousel>
+        <!--</ng-template>
+      </ngb-carousel>-->
       
       
     </div>
@@ -262,13 +293,10 @@
 <ng-template #trackingModal let-modal id="tracking-form">
   <div class="modal-content">
     <div class="modal-header">
-      <h2 *ngIf="autoTracking==false" class="modal-title">Create an entry
+      <h2 class="modal-title">Create an entry
         <br><h4>Tell us what you've been working on during the week</h4>
       </h2>
-      <h2 *ngIf="autoTracking==true" class="modal-title">Let's start tracking
-        <br><h4>Tell us what you're working on and we'll handle the rest</h4>
-      </h2>
-      <button (click)="modal.dismiss('Cross click'); manualTrackingForm.reset(); automaticTrackingForm.reset(); autoTracking = true">
+      <button (click)="modal.dismiss('Cross click'); manualTrackingForm.reset();">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -276,7 +304,7 @@
     <div class="modal-body">
 
       <!-- MANUAL TRACKING FORM ************************************************ -->
-      <form [formGroup]="manualTrackingForm" *ngIf="autoTracking==false" id="manual-tracking-form" (ngSubmit)="addManualEntry(manualTrackingForm.value)">
+      <form [formGroup]="manualTrackingForm" id="manual-tracking-form" (ngSubmit)="addManualEntry(manualTrackingForm.value)">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
           <input matInput formControlName="description" type="text" placeholder="Research" name="description">
@@ -327,48 +355,15 @@
       </form>
       <!-- END ***************************************************************** -->
    
-      <!-- AUTOMATIC TRACKING FORM ************************************************ -->
-      <form [formGroup]="automaticTrackingForm" *ngIf="autoTracking==true" id="auto-tracking-form" method="post">
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Description</mat-label>
-          <input matInput formControlName="description" type="text" placeholder="Research" name="description" required>
-        </mat-form-field>
-  
-        <mat-form-field appearance="standard" class="col-6">
-          <mat-label>Project</mat-label>
-          <mat-select [(value)]="aProjectSelected" formControlName="projectID">
-            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a'); pName = p.projectName" >{{p.projectName}}</mat-option>
-          </mat-select>
-          <mat-error>Please select a value</mat-error>
-        </mat-form-field>
-  
-        <mat-form-field appearance="standard" class="col-6">
-          <mat-label>Task</mat-label>
-          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="taskID">
-          <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
-          </mat-select>
-          <mat-error>Please select a value</mat-error>
-
-          <input hidden formControlName="projectName" [(ngModel)]="pName" [value]="pName">
-          <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
-        </mat-form-field>
-      </form>
+      
     </div>
 
     <div class="modal-footer">
-      <div id="toggle" class="float-left">
-       <mat-slide-toggle checked="checked" (click)="modalForm()">Automatic tracking</mat-slide-toggle>
-      </div>
-      <button *ngIf="autoTracking==false" 
-              mat-raised-button color="primary" 
+      <button mat-raised-button color="primary" 
               (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
               [disabled]="manualTrackingForm.invalid", id= "m-tracking">Create an Entry
-      </button>
-      <button *ngIf="autoTracking==true" 
-              mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); addAutomaticEntry(automaticTrackingForm.value);"
-              [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
-      <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset(); automaticTrackingForm.reset(); autoTracking = true">Cancel</button>
+      </button>    
+      <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset();">Cancel</button>
     </div>
 
   </div> 
