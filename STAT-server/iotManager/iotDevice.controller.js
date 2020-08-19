@@ -58,20 +58,56 @@ module.exports.register = (req, res, next) => {
  */
 module.exports.deregister = (req, res, next) => {
     var now = new Date;
+    var date = now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate();
 
-    var IOTDevice = new IOTDeviceModel();
-    IOTDevice.DeviceName = req.body.deviceName;
-    IOTDevice.MACAddress = req.body.macAddress;
-    IOTDevice.RegisteredBy = req.ID;
-    IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
-    IOTDevice.save((err, doc) => {
-        if(!err){
-            return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
-        }
-        else{
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
-    })
+    if(req.body.deviceName && req.body.macAddress)
+    {
+        IOTDeviceModel.findOne({MACAddress : req.body.macAddress, DeviceName : req.body.deviceName}, function(err, result) {
+            if(err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            else if (!result)
+                return res.status(404).send({message: 'Project not found'});
+            else if(result.DeregisteredBy == null && result.DeregisteredOn == "")
+            {
+                IOTDeviceModel.updateOne({_id : result._id},{DeregisteredOn:date, DeregisteredBy : req.ID }, function(err, result) {
+                    if(err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else if (!result)
+                        return res.status(404).send({message: 'IOT Device not found'});
+                    else
+                        return res.status(200).send({message: 'Deregistered IOT Device'});                
+                });
+            }
+            else
+                return res.status(200).send({message: 'Device already deregistered'});   
+        });
+    }
+    else if(req.body.deviceID)
+    {
+        IOTDeviceModel.findOne({_id : req.body.deviceID}, function(err, result) {
+            if(err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            else if (!result)
+                return res.status(404).send({message: 'Project not found'});
+            else if(result.DeregisteredBy == null && result.DeregisteredOn == "")
+            {
+                IOTDeviceModel.updateOne({_id : req.body.deviceID},{DeregisteredOn:date, DeregisteredBy : req.ID }, function(err, result) {
+                    if(err) 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    else if (!result)
+                        return res.status(404).send({message: 'IOT Device not found'});
+                    else
+                        return res.status(200).send({message: 'Deregistered IOT Device'});                
+                });
+            }
+            else
+                return res.status(200).send({message: 'Device already deregistered'});                
+        });
+    }
+    else
+        return res.status(400).send({message: 'No project ID provided or device MAC Address provided'});
+
+    
 }
 
 
