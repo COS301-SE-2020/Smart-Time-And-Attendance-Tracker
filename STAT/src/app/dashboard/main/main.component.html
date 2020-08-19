@@ -18,7 +18,7 @@
                   </a>
                 </li>
                 <li>
-                  <a id="calendar" (click)="setActive('calendar')" class="prev">
+                  <a id="schedule" (click)="setActive('schedule')" class="prev">
                     <span class="icon">
                       <mat-icon>today</mat-icon>
                     </span>
@@ -90,7 +90,6 @@
         <!-- dashboard -->
         <div class="container">
           <app-today *ngIf="active=='today'"></app-today>
-          <app-calendar *ngIf="active=='calendar'"></app-calendar>
           <app-projects *ngIf="active=='projects'"></app-projects>
           <app-organisation *ngIf="active=='organisation'"></app-organisation>
           <app-teams *ngIf="active=='teams'"></app-teams>

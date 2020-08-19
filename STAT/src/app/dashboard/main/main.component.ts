@@ -9,14 +9,11 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 export class MainComponent implements OnInit {
 
   isAuth : boolean
-
-  roles = this.service.roles
-
+  roles : any =  this.service.roles
   // active tab
   active : string;
 
   constructor(public service : AccountManagementService) {
-
     this.isAuth = true;
   }
 
@@ -28,12 +25,11 @@ export class MainComponent implements OnInit {
     hamburger.addEventListener('click', () => {
       wrapper.classList.toggle('open')
     });
-
     this.active = 'today';
   }
   // set active tab after component initialisation ************this function is not being run
   ngAfterViewInit(): void {
-    const navItem = document.getElementById('today');
+    const navItem = document.getElementById('history');
     navItem.classList.add('active');
   }
 
