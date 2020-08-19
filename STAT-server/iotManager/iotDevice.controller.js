@@ -33,8 +33,8 @@ const IOTDeviceModel = mongoose.model("IOTDevice");
  */
 module.exports.register = (req, res, next) => {
     var now = new Date;
-    console.log(req.ID);
-    console.log(req.body);
+    //console.log(req.ID);
+    //console.log(req.body);
     var IOTDevice = new IOTDeviceModel();
     IOTDevice.DeviceName = req.body.deviceName;
     IOTDevice.MACAddress = req.body.macAddress;
@@ -48,6 +48,8 @@ module.exports.register = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
     })
+
+    // check if device is registered, activate it again
 }
 
 
@@ -119,21 +121,24 @@ module.exports.deregister = (req, res, next) => {
  * @param {Function} next The next function to be called.
  */
 module.exports.getAllDevices = (req, res, next) => {
-    // var now = new Date;
-
-    // var IOTDevice = new IOTDeviceModel();
-    // IOTDevice.DeviceName = req.body.deviceName;
-    // IOTDevice.MACAddress = req.body.macAddress;
-    // IOTDevice.RegisteredBy = req.ID;
-    // IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
-    // IOTDevice.save((err, doc) => {
-    //     if(!err){
-    //         return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
-    //     }
-    //     else{
-    //         return res.status(500).send({message: 'Internal Server Error: ' + err});
-    //     }
-    // })
+    IOTDeviceModel.find({  DeregisteredBy : null, DeregisteredOn : ""},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'No IOT Device found' }); 
+        else
+        {
+            devices=[];
+            console.log(result);
+            for(var a=0; a<result.length; a++)
+            {
+                devices.push({'ID' : result[a]._id, 'deviceName' : result[a].DeviceName, 'macAddress' : result[a].MACAddress});
+                    
+                if(devices.length == result.length)
+                    return res.status(200).json({ iotDevices: devices});        
+            }
+        }
+    });
 }
 
 
