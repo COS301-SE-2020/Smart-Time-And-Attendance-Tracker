@@ -21,10 +21,11 @@
         <mat-icon>note_add</mat-icon>
         </button>
       <mat-menu #importMenu="matMenu">
-        <button mat-menu-item (click)="openJSON()">JSON</button>
-        <button mat-menu-item>Excel</button>
+        <button mat-menu-item (click)="openJSON(); getHistory()">JSON</button>
+        <button mat-menu-item (click)="openCSV(); getHistory()">Excel</button>
       </mat-menu>
       <input id="json-input" type="file" style="display: none;" accept="application/json" (change)="readJSON($event)" />
+      <input id="csv-input" type="file" style="display: none;" accept=".csv, .xlsx" (change)="readCSV($event)" />
       <button mat-mini-fab id="export-menu" class="mx-1"
               matTooltip="Export"
               matTooltipClass="action-tooltip"
@@ -34,8 +35,8 @@
       </button>
       <mat-menu #exportMenu="matMenu">
         <button mat-menu-item (click)="exportToJSON()">JSON</button>
-        <button mat-menu-item>PDF</button>
-        <button mat-menu-item>Excel</button>
+        <button mat-menu-item (click)="exportCSV()">Excel</button>
+        <button mat-menu-item (click)="exportPDF()">PDF</button>
       </mat-menu>
       <button mat-mini-fab id="download-menu" class="mx-1"
               matTooltip="Download"
@@ -46,8 +47,8 @@
       </button>
       <mat-menu #downloadMenu="matMenu">
         <button mat-menu-item (click)="downloadJSON()">JSON</button>
-        <button mat-menu-item>PDF</button>
         <button mat-menu-item (click)="downloadCSV()">Excel</button>
+        <button mat-menu-item (click)="downloadPDF()">PDF</button>
       </mat-menu>
     </h2>
     <div class="row p-0 mb-4">
@@ -56,13 +57,13 @@
         <mat-form-field *ngIf="toggle == false" appearance="standard" class="col-6">
           <mat-label>View Project Entries</mat-label>
           <mat-select [(ngModel)]="pSelected">
-            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getAllProject(p.ID)">{{p.projectName}}</mat-option>
+            <mat-option *ngFor="let p of projects" [value]="p.projectName" (click)="getAllProject(p.ID)">{{p.projectName}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="toggle == true" appearance="standard" class="col-6">
           <mat-label>View Member Entries</mat-label>
           <mat-select [(ngModel)]="mSelected">
-            <mat-option *ngFor="let m of members" [value]="m.ID" (click)="getUser(m.ID)">{{m.name}} {{m.surname}}</mat-option>
+            <mat-option *ngFor="let m of members" [value]="m.name + ' ' + m.surname" (click)="getUser(m.ID)">{{m.name}} {{m.surname}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-radio-group aria-label="Select search type">
@@ -121,7 +122,7 @@
 
 
     <div id="history" class="scroll">
-      <mat-spinner *ngIf="!tableData"></mat-spinner>
+      <mat-spinner *ngIf="tableData == []"></mat-spinner>
 
       <div>       
         <mat-accordion>
