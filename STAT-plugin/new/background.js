@@ -11,11 +11,6 @@ setInterval(UpdateBadges, 1000);  //update badge every second
 chrome.tabs.onUpdated.addListener(HandleUpdate);
 chrome.tabs.onRemoved.addListener(HandleRemove);
 chrome.tabs.onReplaced.addListener(HandleReplace);
-var stopStartBtn = document.getElementById("start_stop");
-/*var startTimer = document.getElementById("start");
-
-stopTimer.style.display = "block";
-startTimer.style.display = "none";*/
 
 function Update(t, tabID, url) {
     if (!url) {
@@ -33,16 +28,23 @@ function Update(t, tabID, url) {
     }
     const now = new Date();
     chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false", ""]);  //[time, url, timeEntryID, stop =="false"/"true", project selected]
-    setCookie("historyTime"+tabID, 0, 1);
-    setTimeout (() => {
-      if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
+    
+    
+    setTimeout (() => { 
+      if(chrome.extension.getBackgroundPage().History[tabID])
       {
-        var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
-        AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
-        
-
+        if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
+        {
+          //alert( "make time entry");
+          var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);
+          AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
+          
+        }
       }
-    }, 10000);
+      else{
+        //alert( "prob");
+      }
+    }, 60*1000);
 
     var history_limit = parseInt(localStorage["history_size"]);
     if (! history_limit) {
@@ -62,14 +64,25 @@ function HandleUpdate(tabID, changeInfo, tab) {
   }
   
   function HandleRemove(tabID, removeInfo) {    //working
-    setCookie("historyTime"+tabID, "", 1);
+    if(chrome.extension.getBackgroundPage().History[tabID])
+    {
+      var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);// + parseInt(getCookie("historyTime"+tabID)); 
+      if(currentDuration>60)
+      {
+        UpdateTimeEntry(new Date(), tabID, currentDuration, true);
+      }
+    }
     delete chrome.extension.getBackgroundPage().History[tabID];
   }
   
   function HandleReplace(addedtabID, removedtabID) {
-      console.log("replace");
+    console.log("replace");
     var t = new Date();
-    setCookie("historyTime"+removedtabID, "", 1);
+    var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[addedtabID][0][0]); 
+    if(currentDuration>60)
+    {
+      UpdateTimeEntry(new Date(), addedtabID, currentDuration, true);
+    }
     delete chrome.extension.getBackgroundPage().History[removedtabID];
     chrome.tabs.get(addedtabID, function(tab) {
       Update(t, addedtabID, tab.url);
@@ -83,22 +96,20 @@ function HandleUpdate(tabID, changeInfo, tab) {
         currentID = tabs[0].id;
         for(tabID in chrome.extension.getBackgroundPage().History) {
           if(tabID != currentID){ //non-active tab
-            if(getCookie("historyTime"+tabID) != chrome.extension.getBackgroundPage().History[tabID][0][0]) {   //current time == saved time  ==> already saved
-              setCookie("historyTime"+tabID, chrome.extension.getBackgroundPage().History[tabID][0][0], 1); 
-            }
+           // if(getCookie("historyTime"+tabID) != chrome.extension.getBackgroundPage().History[tabID][0][0]) {   //current time == saved time  ==> already saved
+           //   setCookie("historyTime"+tabID, chrome.extension.getBackgroundPage().History[tabID][0][0], 1); 
+           // }
           }
           else{ //active tab
             if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false") {    //pause timer  => timer is not stoped
               chrome.extension.getBackgroundPage().History[tabID][0][0] = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0])+1;
-              
             }
             if(localStorage.getItem('currentlyTracking') !=  chrome.extension.getBackgroundPage().History[tabID][0][2])
             {
               localStorage.setItem('currentlyTracking', chrome.extension.getBackgroundPage().History[tabID][0][2]);
-
             }
           }
-          var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]) + parseInt(getCookie("historyTime"+tabID));
+          var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);// + parseInt(getCookie("historyTime"+tabID));
           console.log("Time:  "+ FormatDuration(displayDuration));
           chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabID), 'text': FormatDuration(displayDuration)});
         }
@@ -110,35 +121,19 @@ function HandleUpdate(tabID, changeInfo, tab) {
         chrome.browserAction.setBadgeText({ 'tabId': parseInt(tabID), 'text': '00:00'});
       }
     }
-}
+  }
 
-
-  function cacheDurationPeriodically()
+  function syncDurationPeriodically() //sync every 10 minutes
   {
-      //alert("TABS: ");
-      for(tabID in chrome.extension.getBackgroundPage().History) {
-        if(chrome.extension.getBackgroundPage().History[currentID][0][2] != "")
+    for(tabID in chrome.extension.getBackgroundPage().History) {
+      if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
+      {
+        var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);// + parseInt(getCookie("historyTime"+tabID)); 
+        if(currentDuration>60)
         {
-            var now  = new Date();
-            //alert("tab ID " + tabID);
-            var duration = FormatDuration(now - chrome.extension.getBackgroundPage().History[tabID][0][0]);
-            duration = addTimes([duration, getCookie("historyTime"+tabID)]);
-           // alert("Saving data  " + duration);
-            setCookie("historyTime"+tabID, duration, 1);
+          UpdateTimeEntry(new Date(), tabID, currentDuration, false);
+        }
       }
     }
   }
-/*
-  after next wednesday (in 2 weeks)
-  1 year training
-  weekly session 
-  6 months to 1 year project
-  150 people in company
-  */
-  
-  
-
-
-
-
-  //setInterval(cacheDurationPeriodically, 60*1000); //calling function every minute (60 seconds)
+  setInterval(syncDurationPeriodically, 60*1000*10); //calling function every minute 10 minutes

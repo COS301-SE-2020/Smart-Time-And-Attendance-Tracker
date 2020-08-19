@@ -1,38 +1,31 @@
 * {
+  font-family: 'Poppins', sans-serif;
   font-size: 1em;
+  width: 25em;
 }
 
-#start, #stop {
-  font-size: 0.9em;
-  padding: 0.95em;
-  width: 5em;
+button {
+  background-color: #FF2885 !important;
+  border: 0px !important;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  color: white !important;
+  font-size: 0.8em !important;
+  font-weight: bold !important;
+  margin: 0em auto;
+  text-transform: uppercase;
 }
 
-.loginInput {
-  width: 12em;
+html {
+  height: 100%;
 }
 
-#selected_task {
-  display: none;
+body {
+  height: 100%;
 }
 
-#select_task_form {
-  display: block;
-}
-
-#select_task {
-  font-size: 0.9em;
-  padding: 0.95em;
-  width: 7em;
-}
-
-.jumbotron {
-  background-color: rgba(0,0,0,0);
-}
-
-.row {
-  margin: 0.25em;
-  padding: 1.5em;
+.container {
+  padding-bottom: 2em !important;
+  padding-top: 2em !important;
 }
 
 .display-4-modified {
@@ -41,7 +34,138 @@
   line-height: 1.2;
 }
 
+#logout_btn {
+  background-color: #3F51B5 !important;
+  position: fixed;
+  left: 0.5em;
+  top: 0.6em;
+}
+
+#errorMessage, #task_error {
+  color: red !important;
+  font-size: 0.8em;
+}
+
+form {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0em !important;
+  text-align: center;
+}
+
+#select_task_form {
+  display: block;
+}
+
 .form-group-modified {
   margin-bottom: 1rem;
-  padding-bottom: 1.5em;
+  padding-bottom: 0.5em;
+}
+
+p.lead {
+  font-size: 1em;
+}
+
+h1 {
+  color: black !important;
+  font-family: 'Righteous', sans-serif;
+  font-size: 1.75em !important;
+  font-weight: bolder !important;
+}
+
+h6 {
+  font-size: 1em;
+}
+
+hr {
+  width: 100% !important;
+}
+
+input {
+  border: 0px !important;
+  border-bottom: 1px solid #CED4DA !important;
+  border-radius: 0px !important;
+  font-size: 0.8em !important;
+  text-align: left;
+}
+
+select {
+  border: 0px !important;
+  border-bottom: 1px solid #CED4DA !important;
+  border-radius: 0px !important;
+  font-size: 0.8em !important;
+  text-align: left;
+}
+
+.jumbotron {
+  background-color: rgba(0,0,0,0);
+  margin: 0em;
+  padding-bottom: 0em;
+  padding-top: 0em;
+  text-align: center;
+  width: 100% !important;
+}
+
+label {
+  color: #495057 !important;
+  display: inline-flex !important;
+  font-size: 0.8em;
+  margin-bottom: 0em !important;
+  padding: 0em !important;
+}
+
+#loading_projects {
+  color: #CED4DA !important;
+  font-size: 1.2em;
+}
+
+#logo {
+  height: 3em;
+  width: auto;
+}
+
+p {
+  color: #CED4DA !important;
+}
+
+.row {
+  margin: 0.25em;
+  padding: 1.5em;
+}
+
+#popup, #login, #start_stop, #logout_btn, #reselect_task {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  padding-bottom: 0.5em !important;
+  padding-top: 0.5em !important;
+  width: 7em;
+}
+
+#selected_task {
+  display: none;
+}
+
+#select_task_form {
+  display: none;
+}
+
+#select_task {
+  font-size: 0.9em;
+  padding: 0.95em;
+  width: 7em;
+}
+
+#start, #stop {
+  font-size: 0.9em;
+  padding: 0.95em;
+  width: 5em;
+}
+
+#timer {
+  font-size: 0.9em;
+  text-align: right;
+}
+
+#userEmail {
+  font-size: 0.95em;
 }

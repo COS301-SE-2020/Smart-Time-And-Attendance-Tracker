@@ -1,7 +1,7 @@
 var token = "";
 var name = "";
 var surname = "";
-var status=false; 
+var status=false;
 var userLogin = document.getElementById("login");
 
 var userName="";
@@ -44,13 +44,13 @@ userLogin.onclick = function(){
                 setCookie("email", data.email, 1);
                 console.log(data);
                 getTasks();
-                setCookie("stop", "false", 1); 
+                setCookie("stop", "false", 1);
                 document.getElementById("userName").innerHTML=data.name;
                 document.getElementById("userEmail").innerHTML=data.email;
                 document.getElementById("loginForm").style.display = "none";
                 document.getElementById("popup").style.display = "block";
                 document.getElementById("errorMessage").innerHTML= "";
-                /////look for name 
+                /////look for name
                 getUserName();
                 ///show start and stop buttons
                  setInterval(showTime, 1000);
@@ -104,7 +104,7 @@ function getUserName(){
                    var data = JSON.parse(http.responseText);
                    document.getElementById("errorMessage").style.display="block";
                    document.getElementById("errorMessage").innerHTML=data.message;
-                   
+
                    console.log(data);
             }
         }
@@ -134,7 +134,7 @@ function getTasks() {
               opt.appendChild( document.createTextNode(obj.tasks[t].taskName) );
               opt.value = obj.tasks[t].ID;
               opt.name = obj.tasks[t].projectName;
-              tasksDropdown.appendChild(opt); 
+              tasksDropdown.appendChild(opt);
             }
         }
         else if(http.readyState == 4 && http.status != 200) {  //error in recording time
@@ -154,7 +154,7 @@ function getTimeWithID(currentID){
   var now = new Date();
   var t ="";
   if(isString(chrome.extension.getBackgroundPage().History[currentID][0][0]) == false)
-  { 
+  {
     //.innerHTML += FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]) + "\n";
     t = FormatDuration(now - chrome.extension.getBackgroundPage().History[currentID][0][0]);
     t = addTimes([t, document.cookie.indexOf("historyTime"+currentID)]);
@@ -180,14 +180,14 @@ function AddTimeEntry(url,startTime, endTime,currentID ) {
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
       var text = '{ "Description": "'+ url + '",'
-          + '"StartTime": "'+ startTime.getTime() + '",' 
-          + '"EndTime": "'+ endTime.getTime() + '",' 
-          + '"Device": "Browser",' 
-          + '"ProjectName": "Un-specified",' 
-          + '"TaskName": "Un-specified",' 
-          + '"ActiveTime":'+ convertDurationToInt(getTimeWithID(currentID)) +',' 
-//          + '"ActiveTime":' + convertDurationToInt(getTimeWithID(currentID)) + ',' 
-          + '"Date": "'+ new Date() + '"' 
+          + '"StartTime": "'+ startTime.getTime() + '",'
+          + '"EndTime": "'+ endTime.getTime() + '",'
+          + '"Device": "Browser",'
+          + '"ProjectName": "Un-specified",'
+          + '"TaskName": "Un-specified",'
+          + '"ActiveTime":'+ convertDurationToInt(getTimeWithID(currentID)) +','
+//          + '"ActiveTime":' + convertDurationToInt(getTimeWithID(currentID)) + ','
+          + '"Date": "'+ new Date() + '"'
           + '}';
 
       http.open('POST', apiURL, true);
@@ -223,9 +223,9 @@ function UpdateTimeEntry(endTime,currentID ) {
       var http = new XMLHttpRequest();
       var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
       var text = '{'
-          + '"TimeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'  
-          + '"EndTime": "'+ endTime.getTime() + '",'  
-          + '"ActiveTime":'+ convertDurationToInt(getTimeWithID(currentID)) +',' 
+          + '"TimeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'
+          + '"EndTime": "'+ endTime.getTime() + '",'
+          + '"ActiveTime":'+ convertDurationToInt(getTimeWithID(currentID)) +','
           + '}';
 
       http.open('POST', apiURL, true);
@@ -258,14 +258,14 @@ function UpdateTask(currentID, tasksDropdown) {
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
   var text = '{ "TimeEntryID": "'+ TimeEntryID + '",'
-      + '"TaskID": "'+ taskID + '",' 
-      + '"Request": "update task"' 
+      + '"TaskID": "'+ taskID + '",'
+      + '"Request": "update task"'
       + '}';
 
   http.open('POST', apiURL, true);
   http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader("authorization", "token "+getCookie("token"));
-  
+
   http.onreadystatechange = function() {
       if(http.readyState == 4 && http.status == 200) {
         var task =  tasksDropdown.options[ tasksDropdown.selectedIndex ].innerHTML;
@@ -307,7 +307,7 @@ function getCookie(cname) {
     }
     return "";
   }
-  
+
   function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -325,13 +325,13 @@ function getCookie(cname) {
     }
     return Math.floor(d / divisor[0]) + ":" + pad(Math.floor((d % divisor[0]) / divisor[1]));
   }
-  
-function char_count(str, letter) 
+
+function char_count(str, letter)
 {
  var letter_Count = 0;
- for (var position = 0; position < str.length; position++) 
+ for (var position = 0; position < str.length; position++)
  {
-    if (str.charAt(position) == letter) 
+    if (str.charAt(position) == letter)
       {
       letter_Count += 1;
       }
@@ -343,7 +343,7 @@ function addTimes(times = []) {
 
     const z = (n) => (n < 10 ? '0' : '') + n;
     for(var i=0; i<times.length; i++) {
-  
+
       if(char_count(times[i],":") == 0)
       {
         times[i] = "0:0:"+times[i];
@@ -368,8 +368,6 @@ function addTimes(times = []) {
     const seconds = second % 60
     const minutes = parseInt(minute % 60) + parseInt(second / 60)
     const hours = hour + parseInt(minute / 60)
-  
+
     return z(hours) + ':' + z(minutes) + ':' + z(seconds)
   }
-
-
