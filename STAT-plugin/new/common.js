@@ -19,11 +19,12 @@ processDisplay();
         else
           processProjects(user.getInstance().allProject, false);
         //cookie exists - hide form
+        
+        document.getElementById("userName").innerHTML = localStorage.getItem("name") + " " + localStorage.getItem("surname");
+        document.getElementById("userEmail").innerHTML = localStorage.getItem("email");
+        document.getElementById("errorMessage").innerHTML= "";
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("popup").style.display = "block";
-        document.getElementById("userName").innerHTML = localStorage.getItem("name");
-        document.getElementById("userEmail").innerHTML = localStorage.getItem("surname");
-        document.getElementById("errorMessage").innerHTML= "";
     }
     else
     {  ///hide everything except the login form
@@ -43,11 +44,6 @@ processDisplay();
       {
         var data = JSON.parse(http.responseText);
         localStorage.setItem('token', data.token);
-
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("popup").style.display = "block";
-        document.getElementById("errorMessage").innerHTML= "";
-
         getUserName();
 
         getProjects();
@@ -64,6 +60,7 @@ processDisplay();
             }
           }, 60000);
         }
+
       }
       else if( http.readyState == 4 && http.status != 200)
       {
@@ -76,6 +73,8 @@ processDisplay();
     var password = document.getElementById("password").value;
 
     var userData = '{ "email": "'+ email + '",' + '"password": "'+ password + '"' +'}';
+    localStorage.setItem('email', email);
+
     console.log(userData);
     http.send(userData);
 }
@@ -93,15 +92,20 @@ function getUserName(){
       console.log(data);
       localStorage.setItem('name', data.name);
       localStorage.setItem('surname', data.surname);
-
-      document.getElementById("userName").innerHTML = data.name;
-      document.getElementById("userEmail").innerHTML = data.surname;
+      document.getElementById("userName").innerHTML = data.name + " " + data.surname;
+      document.getElementById("userEmail").innerHTML = localStorage.getItem('email');
+      
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("popup").style.display = "block";
+      document.getElementById("errorMessage").innerHTML= "";
     }
     else if (http.readyState == 4 && http.status != 200) 
     {
       var data = JSON.parse(http.responseText);
       document.getElementById("errorMessage").style.display = "block";
       document.getElementById("errorMessage").innerHTML = data.message;
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("popup").style.display = "none";
 
       console.log(data);
     }
@@ -179,7 +183,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
 }
 
 function UpdateTimeEntry(endTime,currentID, duration, stop) {
-  alert("currentID  " + currentID)
+  //alert("currentID  " + currentID)
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
   var text = '{'
@@ -212,7 +216,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
       processDisplay();
     }
     else if(http.readyState == 4 && http.status != 200) {  //error in recording time
-      alert(http.responseText);
+      //alert(http.responseText);
     }
   }
   http.send(text);
@@ -240,7 +244,7 @@ function getProjects() {
         }
         else if(http.readyState == 4 && http.status == 403) //login again => token expired
         {
-          alert("token -- expired");
+          //alert("token -- expired");
           localStorage.removeItem('token');
           processDisplay();
         }
