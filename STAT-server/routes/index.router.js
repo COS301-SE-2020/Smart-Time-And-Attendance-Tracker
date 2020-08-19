@@ -31,7 +31,7 @@ const userTimeEntry = require('../controllers/userTimeEntry.controller');
 const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
-const iotDevice = require("../controllers/iotDevice.controller");
+const iotDevice = require("../iotManager/iotDevice.controller");
 
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
