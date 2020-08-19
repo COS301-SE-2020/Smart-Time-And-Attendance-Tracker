@@ -33,7 +33,10 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jspdf/dist/jspdf.node.min.js",
+              "node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js"
+            ]
           },
           "configurations": {
             "production": {

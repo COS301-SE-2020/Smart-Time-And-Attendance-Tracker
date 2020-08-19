@@ -38,7 +38,7 @@ export class ProjectManagementService {
     let parameters = new HttpParams();
     parameters = parameters.append('taskID', task);
     parameters = parameters.append('projectID', project);
-    return this.http.delete(this.ROOT_URL+'task', {
+    return this.http.delete(this.ROOT_URL+'task?', {
       headers: headers,
       params: parameters
     });
@@ -49,7 +49,7 @@ export class ProjectManagementService {
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
     parameters = parameters.append('projectID', project);
-    return this.http.delete(this.ROOT_URL+'project', {
+    return this.http.delete(this.ROOT_URL+'project?', {
       headers: headers,
       params: parameters
     });
@@ -101,7 +101,7 @@ export class ProjectManagementService {
   addTeam(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+'team/addTeam', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'project/addTeam', JSON.stringify(values), {
       headers: headers
     });
   }
@@ -109,7 +109,7 @@ export class ProjectManagementService {
   addTeamMember(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+'team/addTeamMember', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'project/addMember', JSON.stringify(values), {
       headers: headers
     });
   }
@@ -117,7 +117,7 @@ export class ProjectManagementService {
   removeTeamMember(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
-    return this.http.post(this.ROOT_URL+'team/removeTeamMember', JSON.stringify(values), {
+    return this.http.post(this.ROOT_URL+'project/removeMember', JSON.stringify(values), {
       headers: headers
     });
   }
@@ -126,6 +126,15 @@ export class ProjectManagementService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.post(this.ROOT_URL+'project/changeRole', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+
+  // get projects
+  getProjects(token) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.get(this.ROOT_URL+ 'project/getProjects', {
       headers: headers
     });
   }

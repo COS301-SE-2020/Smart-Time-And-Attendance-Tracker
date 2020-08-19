@@ -29,7 +29,7 @@ export class MainComponent implements OnInit {
   }
   // set active tab after component initialisation ************this function is not being run
   ngAfterViewInit(): void {
-    const navItem = document.getElementById('today');
+    const navItem = document.getElementById('history');
     navItem.classList.add('active');
   }
 

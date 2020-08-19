@@ -22,7 +22,7 @@
                     <span class="icon">
                       <mat-icon>today</mat-icon>
                     </span>
-                    <span class="list">Schedule</span>
+                    <span class="list">Calendar</span>
 
                   </a>
                 </li>
@@ -32,6 +32,14 @@
                       <mat-icon>assignment</mat-icon>
                     </span>
                     <span class="list">Projects</span>
+                  </a>
+                </li>
+                <li>
+                  <a id="history" (click)="setActive('history')">
+                    <span class="icon">
+                      <mat-icon>history</mat-icon>
+                    </span>
+                    <span class="list">History</span>
                   </a>
                 </li>
                 <li>
@@ -49,14 +57,6 @@
                     </span>
                     <span class="list">Analysis</span>
                   </a>
-                </li>
-                <li *ngIf="roles && roles.includes('Data Analyst')">
-                    <a id="data" (click)="setActive('data')">
-                        <span class="icon">
-                          <mat-icon>timeline</mat-icon>
-                        </span>
-                        <span class="list">Data</span>
-                    </a>
                 </li>
                 <li *ngIf="roles && (roles.includes('Data Analyst') || roles.includes('System Administrator'))">
                     <a id="iot" (click)="setActive('iot')">
@@ -93,6 +93,7 @@
           <app-projects *ngIf="active=='projects'"></app-projects>
           <app-organisation *ngIf="active=='organisation'"></app-organisation>
           <app-teams *ngIf="active=='teams'"></app-teams>
+          <app-history *ngIf="active=='history'"></app-history>
         </div>
 
     </div>

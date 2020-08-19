@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { formatDate } from '@angular/common';
+import { templateJitUrl } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class TeamManagementService {
     });
   }*/
 
-  // create team
+  // Create team (Team leader)
   public createTeam(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
@@ -35,7 +36,7 @@ export class TeamManagementService {
         headers: headers
       });
   }
-  // add team member
+  // Add team member (Team leader)
   public addTeamMember(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
@@ -43,7 +44,7 @@ export class TeamManagementService {
       headers: headers
     });
   }
-  // remove team member
+  // Remove team member (Team leader)
   public removeTeamMember(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
@@ -51,12 +52,31 @@ export class TeamManagementService {
       headers: headers
     });
   }
-  // change role in team
+  // Change role in team (Team leader)
   public changeRole(token, values) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
     return this.http.post(this.ROOT_URL+'team/changeRole', JSON.stringify(values), {
       headers: headers
+    });
+  }
+  // Edit team (Team leader)
+  public editTeam(token, values) {
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
+    return this.http.post(this.ROOT_URL+'team/editTeam', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  // Delete team (Team leader)
+  public deleteTeam(token, teamID) {
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set('Authorization', 'Bearer '+token);
+    let parameters = new HttpParams();
+    parameters = parameters.append('teamID', teamID);
+    return this.http.delete(this.ROOT_URL+'team?', {
+      headers: headers,
+      params: parameters
     });
   }
 
