@@ -124,7 +124,6 @@ export class ProjectsComponent implements OnInit {
 
   // add project
   addProject(form : NgForm) {
-    console.log("PIG");
     this.pmService.addProject(localStorage.getItem('token'),form).subscribe((data) => {
       console.log(data);
       this.getProAndTasks()

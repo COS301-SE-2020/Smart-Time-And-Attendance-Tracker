@@ -60,6 +60,7 @@ describe('ProjectsComponent', () => {
         component.projects = projects
         component.tasks = tasks
         component.upcoming = tasks
+        component.roles = roles;
 
         fixture.detectChanges();
         de = fixture.debugElement.query(By.css('.row'));
@@ -75,7 +76,6 @@ describe('ProjectsComponent', () => {
   });
 
   it('the add project button should show if the user is a Team Leader', async(() => {
-    component.roles = roles;
     expect(fixture.debugElement.query(By.css("#addPro")).nativeElement).toBeTruthy();
   }));
 
@@ -168,7 +168,7 @@ describe('Integration tests:', () => {
 
 
     it("should call the addProject method when the 'Create Project' button is pressed", async(() => {
-      spyOn(component,'addProject');
+      spyOn(pmService,'addProject');
       // open add project modal
       el = fixture.debugElement.query(By.css("#addPro")).nativeElement;
       const contentBeforeClick = document.querySelector(".modal-content");
@@ -177,30 +177,45 @@ describe('Integration tests:', () => {
       const contentAfterClick = document.querySelector(".modal-content");
       expect(contentAfterClick).toBeTruthy();
       // add values to form
-      component.addProjectForm.controls['projectName'].setValue('John');
+      component.addProjectForm.controls['projectName'].setValue('Unit tests');
       component.addProjectForm.controls['dueDate'].setValue('2020-12-15');
       component.addProjectForm.controls['hourlyRate'].setValue('2.50');
+      // detect changes to enable button
       fixture.detectChanges();
       // click add project button
       const btn = (<HTMLElement>document.querySelector('button#addProject'));
-      console.log(btn);
       btn.click();
-      //const btn = fixture.debugElement.query(By.css("#addProject")).nativeElement;
-      //btn.textContent = "James";
-      //btn.click();
+      // check if function was called
       fixture.detectChanges();
       expect(document.querySelector(".modal-content")).toBeFalsy();
-      expect(component.addProject).toHaveBeenCalledTimes(1);
+      expect(pmService.addProject).toHaveBeenCalledTimes(1);
     }));
 
-    /*it("should call the addTask method when the 'Create Task' button is pressed", async(() => {
+    it("should call the addTask method when the 'Create Task' button is pressed", async(() => {
       spyOn(component,'addTask');
+      // open add project modal
       el = fixture.debugElement.query(By.css("#addTask")).nativeElement;
+      const contentBeforeClick = document.querySelector(".modal-content");
+      expect(contentBeforeClick).toBeFalsy();
       el.click();
+      const contentAfterClick = document.querySelector(".modal-content");
+      expect(contentAfterClick).toBeTruthy();
+      // add values to form
+      component.addTaskForm.controls['taskName'].setValue('Modal tests');
+      component.addTaskForm.controls['dueDate'].setValue('2020-12-01');
+      // detect changes to enable button
+      fixture.detectChanges();
+      // click add task button
+      const btn = (<HTMLElement>document.querySelector('button#addTask'));
+      console.log(btn);
+      btn.click();
+      // check if function was called
+      fixture.detectChanges();
+      expect(document.querySelector(".modal-content")).toBeFalsy();
       expect(component.addTask).toHaveBeenCalledTimes(1);
     }));
 
-    it("should call the editProject method when the 'Create Project' button is pressed", async(() => {
+    /*it("should call the editProject method when the 'Create Project' button is pressed", async(() => {
       spyOn(component,'editProject');
       el = fixture.debugElement.query(By.css("#editProject")).nativeElement;
       el.click();
