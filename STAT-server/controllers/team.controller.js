@@ -233,8 +233,10 @@ module.exports.deleteTeam = (req, res) => {
  * @param {HTTP Response} res 
  * @return {String} Array with teams and appropriate details
  */
+
 module.exports.getTeams = (req, res) => {
     const allTeams =[];
+
     TeamModel.find({},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -245,6 +247,7 @@ module.exports.getTeams = (req, res) => {
         {
             if(result.length == 0)
                 return res.status(404).json({ message: 'No teams found' });
+
             else
             {
                 for(a=0; a<result.length; a++) ///result array with team objects
@@ -263,6 +266,8 @@ module.exports.getTeams = (req, res) => {
                         
                     });
                 }
+                if(allTeams.length == result.length )
+                    return res.status(200).json({teams : allTeams });
             }
         
         }
