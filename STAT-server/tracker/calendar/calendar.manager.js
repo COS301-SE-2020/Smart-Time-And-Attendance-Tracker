@@ -74,7 +74,6 @@ module.exports.syncEvents = async(req, res) => {
                             return res.status(500).json({message: 'Internal server error: ' + err});
                         else
                         {
-                            console.log(entries);
                             try {
                                 const  final = await trackerManager.addTimeEntries(entries, req.ID);
                                 return res.status(200).json({message: 'Calendar successfully synced'});
