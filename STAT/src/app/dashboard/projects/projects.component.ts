@@ -85,8 +85,11 @@ export class ProjectsComponent implements OnInit {
     });
 
     this.getProAndTasks()
-    this.getMembers()
-    this.getTeam()
+
+    if (this.roles.includes("Team Leader")) {
+      this.getMembers()
+      this.getTeam()
+    }
   }
 
 
