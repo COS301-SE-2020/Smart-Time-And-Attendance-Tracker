@@ -67,7 +67,7 @@ module.exports.editTeam = (req, res, next) => {
     TeamModel.updateOne({_id : (req.body.teamID)},{ TeamName: req.body.teamName }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else 
             return res.status(200).json({ teamID: result._id, message: 'Team name successfully edited' });   
@@ -96,7 +96,7 @@ module.exports.createTeam = (req, res, next) => {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else
             return res.status(200).send({teamID :doc._id,  message: 'Team created'});
-    })
+    });
 }
 
 /**
@@ -118,7 +118,7 @@ module.exports.addTeamMember = (req, res, next) => {
     TeamModel.updateOne({_id : (req.body.teamID)},{ $addToSet: { TeamMembers: { _id: req.body.userID, Role: req.body.userRole } } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else 
             return res.status(200).json({ teamID: result._id, message: 'Member successfully added to team' });     
@@ -143,7 +143,7 @@ module.exports.removeTeamMember = (req, res) => {
     TeamModel.updateOne({_id : (req.body.teamID)},{ $pull: { TeamMembers: { _id: req.body.userID} } }, function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else 
             return res.status(200).json({ teamID: result._id, message: 'Member successfully removed from team' });   
@@ -174,7 +174,7 @@ module.exports.addRole = (req, res) => {  / ////optimize
     TeamModel.updateOne({_id : (req.body.teamID)},{ $pull: { TeamMembers: { _id: req.body.userID} } },function(err, result) {
         if(err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
-        else if (!result)
+        else if (result.n == 0)
             return res.status(404).send({message: 'Team not found'});
         else {
            TeamModel.updateOne({_id : (req.body.teamID)},{ $push: { TeamMembers: { _id: req.body.userID,  Role: req.body.userRole} } },function(err, result) {
@@ -202,7 +202,7 @@ module.exports.deleteTeam = (req, res) => {
    TeamModel.deleteOne({_id: req.query.teamID},(err,val)=>{
     if(err)
         return res.status(500).send({message: 'Internal Server Error: ' + err});
-    else if (!val) 
+    else if (val.n == 0) 
         return res.status(404).json({ message: 'Team not found' });
     else 
         return res.status(200).json({ message: 'Team successfully deleted ' });
@@ -233,7 +233,10 @@ module.exports.deleteTeam = (req, res) => {
  * @param {HTTP Response} res 
  * @return {String} Array with teams and appropriate details
  */
-module.exports.getTeams = (req, res, next) => {
+
+module.exports.getTeams = (req, res) => {
+    const allTeams =[];
+
     TeamModel.find({},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -244,42 +247,24 @@ module.exports.getTeams = (req, res, next) => {
         {
             if(result.length == 0)
                 return res.status(404).json({ message: 'No teams found' });
-            var allTeams =[];
-            for(i=0; i<result.length; i++) ///result array with team objects
-            {    
-                var teamDetails ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
-                var  teamUsers = [];
-                   ///take team member detals
-                var teamLength =result[i].TeamMembers.length;
-                if(teamLength == 0)
-                {
-                    teamDetails["TeamMembers"] =teamUsers;
-                    allTeams.push(teamDetails);
-                }
-                else
-                {
-                    var teamDetails2 ={"ID": result[i]._id, "teamName": result[i].TeamName};  //team details
-                    var teamUsers2 = [];
-                    var inLen = teamLength;
-                    for(var a=0; a<teamLength; a++)
-                    {
-                        UserHelper.getUserDetails(result[i].TeamMembers[a], (err,val)=> {
+
+            else
+            {
+                for(a=0; a<result.length; a++) ///result array with team objects
+                {    
+                    UserHelper.getTeamUserDetails(result[a], (err,val,team)=> {
                         if(err)
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
-                        else if(val)
-                            teamUsers2.push(val);
-                        else if(!val)
-                            inLen = inLen - 1;  
-
-                        if(teamUsers2.length == inLen)
+                        else 
                         {
-                            teamDetails2["TeamMembers"] =teamUsers2;
-                            allTeams.push(teamDetails2);
-                            if(allTeams.length == result.length )
-                                return res.status(200).json({teams : allTeams });
-                        }
-                        });
-                    } 
+                            var teamDetails ={"ID": team._id, "teamName": team.TeamName, "teamMembers" : val};
+                            allTeams.push(teamDetails);
+                        } 
+            
+                        if(allTeams.length == result.length)
+                            return res.status(200).json({teams : allTeams });
+                        
+                    });
                 }
                 if(allTeams.length == result.length )
                     return res.status(200).json({teams : allTeams });

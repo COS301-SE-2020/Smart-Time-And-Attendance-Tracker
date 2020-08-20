@@ -37,3 +37,4 @@ const Role = require("./role.model")
 const TimeEntry = require("./timeEntry.model");
 const UserTimeEntry = require("./userTimeEntry.model");
 const IOTDevice = require("./iotDevice.model");
+const Calendar = require("./calendarEvents.model");
