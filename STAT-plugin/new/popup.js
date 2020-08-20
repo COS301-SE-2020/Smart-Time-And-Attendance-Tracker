@@ -4,9 +4,16 @@ function showTime() {
 
     var currentID =0; //
     var now = new Date();
-    var desc = document.getElementById("timer");
+    var timer = document.getElementById("timer");
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
+        if(tabs[0].url.includes("localhost:4200"))
+        {
+            document.getElementById("select_task_form").style.display="none";
+            document.getElementById("reselect_task").style.display="none";
+            document.getElementById("start_stop").style.display = "none";
+            document.getElementById("timer").innerHTML = "-";
+        }
         var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
         url = url.split("://")[1];
         url = url.split("/")[0];
@@ -15,7 +22,7 @@ function showTime() {
         //if(window.localStorage.hasOwnProperty('token'))
         //{
             var displayDuration = parseInt(chrome.extension.getBackgroundPage().History[currentID][0][0]);// + parseInt(getCookie("historyTime"+currentID));
-            desc.innerHTML = FormatDuration(displayDuration).slice(0,5) + "\n";            
+            timer.innerHTML = FormatDuration(displayDuration).slice(0,5) + "\n";            
         //}
         //else
         //    desc.innerHTML = "00:00:00\n";
@@ -52,7 +59,7 @@ projectsDropdown.onchange = function() {
         tasksDropdown.appendChild(opt); 
     }
     opt = document.createElement('option');
-    opt.appendChild( document.createTextNode("Un-specified") );
+    opt.appendChild( document.createTextNode("unspecified") );
     opt.value = "";
     tasksDropdown.appendChild(opt); 
 
@@ -61,7 +68,14 @@ projectsDropdown.onchange = function() {
 SelectTask.onclick = function() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
-        var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
+        var url = tabs[0].url;
+        if(tabs[0].url.includes("localhost:4200"))
+        {
+            document.getElementById("select_task_form").style.display="none";
+            document.getElementById("reselect_task").style.display="none";
+            document.getElementById("start_stop").style.display = "none";
+            document.getElementById("timer").innerHTML = "-";
+        }
         url = url.split("://")[1];
         url = url.split("/")[0];
 
@@ -94,7 +108,7 @@ SelectTask.onclick = function() {
                 document.getElementById("reselect_task").style.display="block";
           
                 document.getElementById("project").innerHTML = "Project: " + ProjectName;
-                if(TaskName != "Un-specified")
+                if(TaskName != "unspecified")
                   document.getElementById("task").innerHTML = "Task: "+ TaskName;
             }
         }
@@ -110,7 +124,14 @@ showTime();
 stopStartBtn.onclick = function(){
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
-        var url = chrome.extension.getBackgroundPage().History[currentID][0][1];
+        var url = tabs[0].url
+        if(tabs[0].url.includes("localhost:4200"))
+        {
+            document.getElementById("select_task_form").style.display="none";
+            document.getElementById("reselect_task").style.display="none";
+            document.getElementById("start_stop").style.display = "none";
+            document.getElementById("timer").innerHTML = "-";
+        }
         url = url.split("://")[1];
         url = url.split("/")[0];
         var now  = new Date();
@@ -166,8 +187,15 @@ stopStartBtn.onclick = function(){
 function displayButton() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
+        if(tabs[0].url.includes("localhost:4200"))
+        {
+            document.getElementById("select_task_form").style.display="none";
+            document.getElementById("reselect_task").style.display="none";
+            document.getElementById("start_stop").style.display = "none";
+            document.getElementById("timer").innerHTML = "-";
+        }
+        
         //alert(stopStartBtn.name + "  " + stopStartBtn.value + "  " + stopStartBtn.innerHTML);
-
         if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
         { 
             stopStartBtn.name = "stop";

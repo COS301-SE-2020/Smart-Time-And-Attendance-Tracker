@@ -25,6 +25,19 @@ processDisplay();
         document.getElementById("errorMessage").innerHTML= "";
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("popup").style.display = "block";
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+          currentID = tabs[0].id;
+          if(tabs[0].url.includes("localhost:4200"))
+          {
+              document.getElementById("select_task_form").style.display="none";
+              document.getElementById("start_stop").style.display = "none";
+              document.getElementById("timer").innerHTML = "-";
+              document.getElementById("reselect_task").style.display="none";
+              document.getElementById("loading_projects").style.display="none";
+              
+              return;
+          }
+        });
     }
     else
     {  ///hide everything except the login form
@@ -47,7 +60,7 @@ processDisplay();
         getUserName();
 
         getProjects();
-
+        console.log(chrome.extension.getBackgroundPage().History);
         for(tabID in chrome.extension.getBackgroundPage().History)
         {
           chrome.extension.getBackgroundPage().History[tabID][0][0] = 0;
@@ -129,7 +142,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
           + '"endTime": "'+ endTime.getTime() + '",'
           + '"device": "Browser",'
           + '"activeTime":' + getMinutesFromSeconds(duration) + ','
-          + '"date": "'+  (mm + '/' + dd + '/' + yyyy) + '"'
+          + '"date": "'+  (yyyy + '/' + mm + '/' + dd) + '"'
           + '}';
 
   http.open('POST', apiURL, true);
@@ -265,10 +278,7 @@ function processProjects(responseText, display)
   //alert("1");
   chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
     var currentID = tabs[0].id;
-    if(display == true && user.getInstance().allProject)
-    {
-      //alert("2.1");
-      while(projectsDropdown.hasChildNodes())
+    while(projectsDropdown.hasChildNodes())
       {
         projectsDropdown.removeChild(projectsDropdown.firstChild);
       }
@@ -276,6 +286,9 @@ function processProjects(responseText, display)
       {
           tasksDropdown.removeChild(tasksDropdown.firstChild);
       }
+    if(display == true && user.getInstance().allProject)
+    {
+      //alert("2.1");
       const obj = JSON.parse(user.getInstance().allProject);
       for( p in obj.projects)
       {
@@ -312,7 +325,7 @@ function processProjects(responseText, display)
         document.getElementById("select_task_form").style.display="block";
       }
     }
-    else if(chrome.extension.getBackgroundPage().History[currentID][0][4] != "")
+    else if(chrome.extension.getBackgroundPage().History[currentID][0][4])
     {
       //alert("2.2");
         var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);

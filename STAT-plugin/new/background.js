@@ -16,6 +16,12 @@ function Update(t, tabID, url) {
     if (!url) {
         return;
     }
+    if(url.includes("localhost:4200"))
+    {
+      chrome.browserAction.setBadgeText({ 'tabId': tabID, 'text': '0:00'});
+      chrome.browserAction.setPopup({ 'tabId': tabID, 'popup': "popup.html#tabId=" + tabID});
+      return;
+    }
     console.log("url " + url);
     if (tabID in chrome.extension.getBackgroundPage().History) {
         if (url == chrome.extension.getBackgroundPage().History[tabID][0][1]) {
@@ -26,34 +32,36 @@ function Update(t, tabID, url) {
     else {
       chrome.extension.getBackgroundPage().History[tabID] = [];
     }
-    const now = new Date();
-    chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false", ""]);  //[time, url, timeEntryID, stop =="false"/"true", project selected]
     
     
-    setTimeout (() => { 
-      if(chrome.extension.getBackgroundPage().History[tabID])
-      {
-        if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
+      const now = new Date();
+      chrome.extension.getBackgroundPage().History[tabID].unshift(["0", url, "", "false", ""]);  //[time, url, timeEntryID, stop =="false"/"true", project selected]
+      
+      
+      setTimeout (() => { 
+        if(chrome.extension.getBackgroundPage().History[tabID])
         {
-          //alert( "make time entry");
-          var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);
-          AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
-          
+          if(chrome.extension.getBackgroundPage().History[tabID][0][3] == "false" && localStorage.hasOwnProperty('token'))
+          {
+            //alert( "make time entry");
+            var duration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);
+            AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
+            
+          }
         }
-      }
-      else{
-        //alert( "prob");
-      }
-    }, 60*1000);
+        else{
+          //alert( "prob");
+        }
+      }, 60*1000);
 
-    var history_limit = parseInt(localStorage["history_size"]);
-    if (! history_limit) {
-        history_limit = 23;
-    }
-    while (chrome.extension.getBackgroundPage().History[tabID].length > history_limit) {
-      chrome.extension.getBackgroundPage().History[tabID].pop();
-    }
-    
+      var history_limit = parseInt(localStorage["history_size"]);
+      if (! history_limit) {
+          history_limit = 23;
+      }
+      while (chrome.extension.getBackgroundPage().History[tabID].length > history_limit) {
+        chrome.extension.getBackgroundPage().History[tabID].pop();
+      }
+      
     chrome.browserAction.setBadgeText({ 'tabId': tabID, 'text': '0:00'});
     chrome.browserAction.setPopup({ 'tabId': tabID, 'popup': "popup.html#tabId=" + tabID});
 }
