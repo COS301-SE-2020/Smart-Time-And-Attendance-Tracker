@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, HostListener } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -106,6 +106,7 @@ export class AccountManagementService {
     return this.http.get(this.ROOT_URL+ 'user/getAllUsers', {
       headers: headers
     });
+
   }
   //Remove user from organisation
   public removeUser(token, userID){
@@ -139,6 +140,7 @@ export class AccountManagementService {
       headers: headers
     });
   }
+
 
   // edit profile
   // edit settings
