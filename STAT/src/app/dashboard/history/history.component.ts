@@ -6,6 +6,11 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 import { Breakpoints } from '@angular/cdk/layout';
 import { ValueTransformer } from '@angular/compiler/src/util';
+import * as XLSX from 'xlsx';
+import { element } from 'protractor';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-history',
@@ -34,26 +39,25 @@ export class HistoryComponent implements OnInit {
 
   imports : any[] = []
 
-  constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService) { }
+  constructor(public headerService : HeaderService, public historyService : HistoryService, public amService : AccountManagementService, public pmService : ProjectManagementService, private snackbar : MatSnackBar) { }
   ngOnInit(): void {
 
     if (this.roles.indexOf("Data Analyst") != -1)
       this.allColumns = ['Date', 'Start Time', 'End Time', 'Active Time', 'Description', 'Project', 'Task', 'Monetary Value', 'Member'];
       this.displayedColumns = this.allColumns
-
-    // if general user
-    if (this.roles.indexOf("General Team Member") != -1) {
-      this.historyType = 'general'
-      this.getOwn();
-    } else if (this.roles.indexOf("Data Analyst") != -1) {
-      this.historyType = 'general'
-      this.getOwn()
+      
+    if (this.roles.indexOf("Data Analyst") != -1) {
+      this.historyType = 'da'
+      this.getAllUser()
       this.getProjectsDA()
       this.getMembers()
-    } else {
+    } else if (this.roles.indexOf("Team Leader") != -1) {
       this.historyType = 'tl'
-      this.getAllUser()
+      this.getOwn()
       this.getProjectsTL()
+    } else {
+      this.historyType = 'general'
+      this.getOwn();
     }
   }
 
@@ -114,6 +118,7 @@ export class HistoryComponent implements OnInit {
 
   // get all user time entries
   getAllUser() {
+    this.historyType = 'da'
     this.tableData = []
     this.historyService.getAllUserEntries(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
@@ -176,6 +181,10 @@ export class HistoryComponent implements OnInit {
     document.getElementById('json-input').click();
   }
 
+  openCSV() {
+    document.getElementById('csv-input').click();
+  }
+
   readJSON(event) {
     var file = event.srcElement.files[0];
     var imports = []
@@ -208,8 +217,11 @@ export class HistoryComponent implements OnInit {
           imports.push(values)
         });
       }
-      reader.onerror = function (evt) {
-          console.log('error reading file');
+      reader.onerror = (evt) => {
+        console.log('error reading file');
+        this.snackbar.open("Incorrect JSON file format", "Dismiss", {
+          duration: 5000,
+        });
       }
     }
     
@@ -217,7 +229,86 @@ export class HistoryComponent implements OnInit {
       imports.forEach(element => {
         this.import(element)
       });
+
+      this.snackbar.open("JSON file imported successfully", "Dismiss", {
+        duration: 5000,
+      });
     }
+  }
+
+  readCSV(event) {
+    const target: DataTransfer = <DataTransfer>(event.target);
+    let data
+    if (target.files.length !== 1) {
+      throw new Error('Cannot use multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.readAsBinaryString(target.files[0]);
+    reader.onload = (e: any) => {
+      /* create workbook */
+      const binarystr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
+
+      /* selected the first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* save data */
+      data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
+      console.log(data); // Data will be logged in array format containing objects
+    };
+
+    reader.onerror = (evt) => {
+      console.log('error reading file');
+      this.snackbar.open("Incorrect Excel file format", "Dismiss", {
+        duration: 5000,
+      });
+    }
+
+    reader.onloadend = () => {
+      data.forEach(element => {
+        console.log(element)
+        let date = new Date(Math.round((element.date - 25569)*86400*1000))
+        let sDate = date.getFullYear() + "/"
+        if (date.getMonth() + 1 < 10)
+          sDate += "0" + (date.getMonth()+1) + "/"
+        else
+          sDate += (date.getMonth()+1) + "/"
+
+        if (date.getDate() < 10)
+          sDate += "0" + date.getDate()
+        else
+          sDate += date.getDate()
+
+        console.log(sDate)
+        element.date = sDate
+        let start = new Date(sDate + " " + this.formatCSVTime(element.startTime))
+        element.startTime = start.getTime()
+        let end = new Date(sDate + " " + this.formatCSVTime(element.endTime))
+        element.endTime = end.getTime()
+        console.log(element)
+
+        this.import(element)
+      });
+      
+      this.snackbar.open("Excel file imported successfully", "Dismiss", {
+        duration: 5000,
+      });
+
+    }
+  }
+
+  formatCSVTime(time) {
+    var result
+    var hours = parseInt(time.substr(0, 2));
+    if(time.indexOf('am') != -1 && hours == 12) {
+      result = time.replace('12', '0');
+    }
+    if(time.indexOf('pm')  != -1 && hours < 12) {
+        result = time.replace(hours, (hours + 12));
+    }
+    result = result.replace(/(am|pm)/, '');
+    return result
   }
 
   // import time entry
@@ -399,7 +490,7 @@ export class HistoryComponent implements OnInit {
         this.getAllUser()
         break
       case 'tl':
-        this.getAllUser()
+        this.getOwn()
         break
       case 'user':
         this.getUser(this.mSelected)
@@ -440,62 +531,58 @@ export class HistoryComponent implements OnInit {
     linkElement.click();
   }
 
-  downloadCSV() {
-    let dataStr : any = this.tableData
-    let keys = Object.keys(dataStr[0]['records'][0]);
-    console.log(keys)
+  exportPDF() {
+    
+    var doc = new jsPDF("l");
+    var cols = ["Date", "Start time", "End time", "Active time", "Project", "Task", "Monetary Value", "Member"]
+    var rows = [];
 
-    let columnDelimiter = ',';
-    let lineDelimiter = '\n';
+    this.tableData.forEach((element : any) => {
+      element.records.forEach((record : any) => {
+        var temp = [record.fDate, record.startTime, record.endTime, record.activeTime, record.project,
+                    record.task, record.monetaryValue, record.member]
+        rows.push(temp)
+      })
+    })
 
-    let csvColumnHeader = keys.join(columnDelimiter);
-    let csvStr = csvColumnHeader + lineDelimiter;
+    autoTable(doc, {head : [cols], body : rows})
 
-    dataStr.forEach(item => {
-      item.records.forEach(element => {
-        keys.forEach((key, index) => {
-          if( (index > 0) && (index < keys.length-1) ) {
-              csvStr += columnDelimiter;
-          }
-          csvStr += element[key];
-        });
-        csvStr += lineDelimiter;
-      });
-    });
-
-    dataStr = encodeURIComponent(csvStr)
-
-    let dataUri = 'data:text/csv;charset=utf-8,'+ csvStr;
-
-    let exportFileDefaultName = 'TrackingEntries.csv';
-
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-
+    doc.output('dataurlnewwindow');
+    //doc.save('Test.pdf');
   }
 
-  /*downloadCSV() {
-    let dataStr = JSON.stringify(this.tableData, null, 4);
-    const json2csv = require('json2csv').parse
-    var csv = json2csv(dataStr, {flatten : true})
+  downloadPDF() {
+    var doc = new jsPDF("l");
+    var cols = ["Date", "Start time", "End time", "Active time", "Project", "Task", "Monetary Value", "Member"]
+    var rows = [];
 
-    let dataUri = 'data:text/csv;charset=utf-8,'+ csv;
+    this.tableData.forEach((element : any) => {
+      element.records.forEach((record : any) => {
+        var temp = [record.fDate, record.startTime, record.endTime, record.activeTime, record.project,
+                    record.task, record.monetaryValue, record.member]
+        rows.push(temp)
+      })
+    })
 
-    let exportFileDefaultName = 'TrackingEntries.csv';
+    autoTable(doc, {head : [cols], body : rows})
 
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-  }*/
+    doc.save('TrackingEntries.pdf');
+  }
 
-  /*downloadCSV() {
+  downloadCSV() {
     const { Parser, transforms: { unwind } } = require('json2csv');
 
-    const fields = ['month', 'records.date', 'records.startTime', 'records.endTime', 'records.activeTime', 
-                    'records.project', 'records.task', 'records.monetaryValue', 'records.member'];
+    const fields = [
+      { label : 'Month', value : 'records.month'}, 
+      { label : 'Date', value : 'records.date'}, 
+      { label : 'Start Time', value : 'records.startTime'}, 
+      { label : 'End Time', value : 'records.endTime'}, 
+      { label : 'Active Time', value : 'records.activeTime'}, 
+      { label : 'Project', value : 'records.project'}, 
+      { label : 'Task', value : 'records.task'}, 
+      { label : 'Monetary Value', value : 'records.monetaryValue'}, 
+      { label : 'Member', value : 'records.member'}
+    ];
     const transforms = [unwind({ paths: ['records'] })];
     
     const json2csvParser = new Parser({ fields, transforms });
@@ -509,7 +596,37 @@ export class HistoryComponent implements OnInit {
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
-  }*/
+  }
+
+  exportCSV() {
+    const { Parser, transforms: { unwind } } = require('json2csv');
+
+    const fields = [
+      { label : 'Month', value : 'records.month'}, 
+      { label : 'Date', value : 'records.date'}, 
+      { label : 'Start Time', value : 'records.startTime'}, 
+      { label : 'End Time', value : 'records.endTime'}, 
+      { label : 'Active Time', value : 'records.activeTime'}, 
+      { label : 'Project', value : 'records.project'}, 
+      { label : 'Task', value : 'records.task'}, 
+      { label : 'Monetary Value', value : 'records.monetaryValue'}, 
+      { label : 'Member', value : 'records.member'}
+    ];
+    const transforms = [unwind({ paths: ['records'] })];
+    
+    const json2csvParser = new Parser({ fields, transforms });
+    const csv = json2csvParser.parse(this.tableData);
+
+    let dataUri = 'data:text/csv;charset=utf-8,'+ csv;
+
+    let exportFileDefaultName = 'TrackingEntries.csv';
+    
+
+    var x = window.open();
+    x.document.open();
+    x.document.write('<html><body><pre>' + csv + '</pre></body></html>');
+    x.document.close();
+  }
 }
 
 export interface Element {
