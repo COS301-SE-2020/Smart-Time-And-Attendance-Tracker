@@ -315,7 +315,7 @@ function processProjects(responseText, display)
           tasksDropdown.appendChild(opt);
       }
       opt = document.createElement('option');
-      opt.appendChild( document.createTextNode("Un-specified") );
+      opt.appendChild( document.createTextNode("unspecified") );
       opt.value = "";
       tasksDropdown.appendChild(opt);
 
@@ -330,7 +330,7 @@ function processProjects(responseText, display)
       //alert("2.2");
         var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
         document.getElementById("project").innerHTML = "Project: " + obj.projectName;
-        if(obj.taskName != "" && obj.taskName != "Un-specified")
+        if(obj.taskName != "" && obj.taskName != "unspecified")
           document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
 
           if(chrome.extension.getBackgroundPage().History[currentID][0][3]  == "false")
@@ -358,7 +358,7 @@ function processProjects(responseText, display)
       }
 
       document.getElementById("project").innerHTML = "Project: " + obj.projectName;
-      if(obj.taskName != "" && obj.taskName  != "Un-specified")
+      if(obj.taskName != "" && obj.taskName  != "unspecified")
         document.getElementById("task").innerHTML = "Task: "+ obj.taskName;
       else
         document.getElementById("task").innerHTML = "";
@@ -391,7 +391,7 @@ function processProjects(responseText, display)
           tasksDropdown.appendChild(opt);
       }
       opt = document.createElement('option');
-      opt.appendChild( document.createTextNode("Un-specified") );
+      opt.appendChild( document.createTextNode("unspecified") );
       opt.value = "";
       tasksDropdown.appendChild(opt);
       document.getElementById("loading_projects").style.display="none";
