@@ -35,6 +35,7 @@
 - [Features](#features)
 - [Demo 1](#demo-1)
 - [Demo 2](#demo-2)
+- [Demo 3](#demo-3)
 - [Project Management Tools](#project-management-tools)
 - [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
@@ -66,16 +67,27 @@ STAT produces graphs that allow you to view how time is being or was spent durin
 **Organisation Management**\
 Authentication requests are automatically sent to your administrator each time a new user registers, which allows you to control who has access to your system by accepting and rejecting requests. You can also control what information and functionality each user has using STAT's role assignment functionality.
 
+**Import/Export Functionality**\
+STAT accepts tracking data in various formats so you can track how you spend your time any way you want. When you import CVS or JSON data, STAT automatically creates the time entries for you. You can even export all of your tracking data to a JSON, CVS, or PDF file.
+
 ## Demo 1
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
 - SRS Document: https://drive.google.com/file/d/17SGuoiNxXJCnJ14fTUmAWB5VPJ2AD9UL/view?usp=sharing
 
 ## Demo 2
-- Architectural Design Patterns: https://drive.google.com/file/d/1UIMtvR-hgIoTYJfa78N5g_nfO_b32auD/view?usp=sharing
-- Coding Standards: https://drive.google.com/file/d/1d1UdJzh5wFhPiRaUNDHKQXwP5tUybyhg/view?usp=sharing
+- Architectural Design: https://drive.google.com/file/d/1UIMtvR-hgIoTYJfa78N5g_nfO_b32auD/view?usp=sharing
+- Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
 - User Manual: https://drive.google.com/file/d/1gy8THPFXtESbqcOVpp8Dsv8xBL9v20Nu/view?usp=sharing
 - Video: https://drive.google.com/file/d/1wY_0H7jXFBdQec9SUmZG9QOw8eIgxi7T/view?usp=sharing
 - SRS Document: https://drive.google.com/file/d/1LCYIuHA63eCdl8ZeNO4EmYa2Z_DKYwW-/view?usp=sharing
+
+
+## Demo 3
+- Architectural Design: https://drive.google.com/file/d/1wYCW10m5axuvDAHTmsx3Z5wpCW_wB_CJ/view?usp=sharing
+- Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
+- User Manual:
+- Video:
+- SRS Document:
 
 ## Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
