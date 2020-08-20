@@ -9,7 +9,7 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 export class MainComponent implements OnInit {
 
   isAuth : boolean
-  roles = this.service.roles
+  roles : any =  this.service.roles
   // active tab
   active : string;
 
@@ -26,8 +26,8 @@ export class MainComponent implements OnInit {
     hamburger.addEventListener('click', () => {
       wrapper.classList.toggle('open')
     });
-
-    this.active = 'calendar';
+    
+    this.active = 'today';
   }
 
   // set active tab after component initialisation

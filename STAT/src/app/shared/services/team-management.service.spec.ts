@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TeamManagementService } from './team-management.service';
 
 describe('Unit tests:', () => {
-  describe( 'TeamManagementService', async() => {
+  describe( TeamManagementService', () => {
     let service: TeamManagementService;
     let HttpMock: HttpTestingController;
     let ROOT_URL = "http://localhost:3000/api/";
