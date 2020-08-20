@@ -22,6 +22,7 @@
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
           <mat-select [(value)]="aProjectSelected" formControlName="projectID">
+            <mat-option (click)="tName = 'Unspecified'">None</mat-option>
             <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a'); pName = p.projectName" >{{p.projectName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
@@ -30,6 +31,7 @@
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="taskID">
+          <mat-option (click)="tName = 'Unspecified'">None</mat-option>
           <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>

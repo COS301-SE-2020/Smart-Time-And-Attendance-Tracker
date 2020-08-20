@@ -190,10 +190,10 @@ export class TodayComponent implements OnInit {
 
     this.currentlyTracking.description = form['description']
 
-    if( form['taskName']!= undefined)
+    if( form['taskName']!= undefined || form['taskName']!= 'none')
       this.currentlyTracking.taskName =form['taskName'];
 
-    if( form['projectName']!= undefined)
+    if( form['projectName']!= undefined || form['taskName']!='none')
       this.currentlyTracking.projectName =form['projectName'];
 
     this.startTime = now.getTime();
@@ -244,6 +244,7 @@ export class TodayComponent implements OnInit {
 
   stopTracking()
   {
+    this.automaticTrackingForm.reset()
     console.log("Stop");
     this.stop = true;
     this.trackingNow =false;
@@ -257,7 +258,7 @@ export class TodayComponent implements OnInit {
         if (errorCode == '403')
           this.headerService.kickOut();
         });
-    
+    this.reload()
      
 
   }
