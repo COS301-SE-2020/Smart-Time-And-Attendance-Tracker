@@ -1,3 +1,25 @@
+/**
+  * @file STAT-server/models/db.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles the database connection.
+  * @date 11 June 2020
+ */
+
+/**
+* Filename:             STAT-server/models/db.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   11 June 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles the database connection.
+*
+*/ 
+
 const mongoose = require('mongoose');
 require("../config/config.js");
 
@@ -14,3 +36,5 @@ const Team = require("./team.model")
 const Role = require("./role.model")
 const TimeEntry = require("./timeEntry.model");
 const UserTimeEntry = require("./userTimeEntry.model");
+const IOTDevice = require("./iotDevice.model");
+const Calendar = require("./calendarEvents.model");

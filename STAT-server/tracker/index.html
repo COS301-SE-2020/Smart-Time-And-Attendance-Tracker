@@ -1,0 +1,161 @@
+<html>
+  <body onload="checkAuth()">
+    <div id='content'>
+      <h1>Events</h1>
+      <h3 id="error"></h3>
+      <ul id='events'></ul>
+    </div>
+    <a href='#' id='authorize-button' onclick='handleAuthClick();'>Login</a>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+    <script>
+        
+      function checkAuth() {
+        const http = new XMLHttpRequest();
+        var apiURL = "http://localhost:3000/api/calendar/getCredentials?"+ "calendar=google";
+        http.open("GET",apiURL , true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.setRequestHeader("Authorization", "Bearor "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5Nzc2OTM1NywiZXhwIjoxNTk3ODU1NzU3fQ.rbThQC89j8xhmzByXp66D-FhIQNu7yMWRloH0fYlMR8");
+        http.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            gapi.client.setApiKey(response.apiKey);
+            gapi.auth.authorize({client_id: response.clientId, scope: response.scopes, immediate: true}, handleAuthResult);
+          }
+          else if(this.readyState == 4)
+            console.log(response);
+            //document.getElementById('error').innerHTML = response.message; 
+        }
+        http.send();
+      }
+
+      function handleAuthResult(authResult) {
+        console.log("HELLO22 " +authResult);
+        var authorizeButton = document.getElementById('authorize-button');
+        if (authResult && !authResult.error) { 
+          authorizeButton.style.visibility = 'hidden';
+          makeApiCall(authResult);
+        } else {
+          authorizeButton.style.visibility = '';
+          authorizeButton.onclick = handleAuthClick;
+        }
+      }
+
+      function handleAuthClick(event) {
+        const http = new XMLHttpRequest();
+        var apiURL = "http://localhost:3000/api/calendar/getCredentials?calendar=google";
+        http.open("GET",apiURL , true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.setRequestHeader("Authorization", "Bearor "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5Nzc2OTM1NywiZXhwIjoxNTk3ODU1NzU3fQ.rbThQC89j8xhmzByXp66D-FhIQNu7yMWRloH0fYlMR8");
+        http.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            gapi.auth.authorize({client_id: response.clientId, scope: response.scopes, immediate: false}, handleAuthResult); 
+          }
+          else if(this.readyState == 4)
+            console.log(response);
+            //document.getElementById('error').innerHTML = response.message;    
+        }
+        http.send();
+        return false;
+      }
+      
+      function makeApiCall(authResult) {
+        console.log("HELLO" +authResult);
+        const http = new XMLHttpRequest();
+        var apiURL = "http://localhost:3000/api/calendar/syncEvents" ;
+        var params =  {calendar :"google", accessToken: authResult.access_token ,expiryDate: authResult.expires_at,tokenType: authResult.token_type };
+
+        http.open("POST",apiURL , true);
+        http.setRequestHeader('Content-type', 'application/json');
+        http.setRequestHeader("Authorization", "Bearor "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5NzQ4ODQyMywiZXhwIjoxNTk3NTc0ODIzfQ.v0mxh5Yp_iY9aOqc7uLHyrLTWZxtigbqdB4BKWH8PyI");
+        http.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            console.log(response);
+            var response = JSON.parse(this.responseText);
+            /*if(response.Events)
+            {
+              var i=0;
+              for (i in response.Events) {
+                //console.log(response.Events);
+                var li = document.createElement('li');
+                li.appendChild(document.createTextNode(response.Events[i].Event));
+                li.appendChild(document.createTextNode(" FROM " +  moment(response.Events[i].StartTime).format("L") + ' ' + moment(response.Events[i].StartTime).format("LT") ));
+                li.appendChild(document.createTextNode(" TO " + moment(response.Events[i].EndTime).format("LT")  ));
+
+
+                var now =moment(response.Events[i].StartTime).format("X"); //start
+                var end = moment(response.Events[i].EndTime).format("X"); //end
+                var duration = (end-now)/60;
+                /*console.log(duration);
+                console.log(moment(response.Events[i].StartTime).format("X"))
+                console.log( duration/60 );*/
+              /* var entryObject={
+                      "Date" : moment(response.Events[i].StartTime).format("L"),
+                      "TaskID" : "undefined",
+                      "ProjectID": "undefined",
+                      "TaskName": response.Events[i].Event,
+                      "ProjectName": "Demo 3",
+                      "StartTime":moment(response.Events[i].StartTime).format("X"),
+                      "EndTime":moment(response.Events[i].EndTime).format("X"),
+                      "ActiveTime" :duration,
+                      "Description" : "Calendar entry",
+                      "Device" : "Website"
+                }
+
+
+                var entryObject = '{ "description": "'+ response.Events[i].Event + '",'
+                + '"startTime": "'+ moment(response.Events[i].StartTime).format("X") + '",' 
+                + '"endTime": "'+ moment(response.Events[i].EndTime).format("X") + '",' 
+                + '"taskName": "'+ response.Events[i].Event + '",' 
+                + '"device": "Google calendar",'  
+                + '"activeTime":'+duration +',' 
+                + '"date": "'+moment(response.Events[i].StartTime).format("L") + '"' 
+                + '}';
+
+
+                //addTimeEntry(entryObject);
+               // console.log(entryObject);
+              
+                document.getElementById('events').appendChild(li);
+              }
+            }
+            else
+              document.getElementById('error').innerHTML = response.message;*/
+          }
+          else if(this.readyState == 4)
+            document.getElementById('error').innerHTML = response.message;
+        }
+        http.send(JSON.stringify(params));  
+      }
+
+      
+/*function addTimeEntry(object){
+              console.log(object);
+
+            var http = new XMLHttpRequest();
+            var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
+            http.open('POST', apiURL, true);
+
+            http.setRequestHeader('Content-type', 'application/json');
+            http.setRequestHeader("Authorization", "Bearor Token"+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMjJiODM1ZGM5YmIyNDJmNGUyN2E3OSIsImlhdCI6MTU5NzQ4ODQyMywiZXhwIjoxNTk3NTc0ODIzfQ.v0mxh5Yp_iY9aOqc7uLHyrLTWZxtigbqdB4BKWH8PyI");
+            http.onreadystatechange = function() {
+                if(http.readyState == 4 && http.status == 200) {
+                    const obj = JSON.parse(http.responseText);
+                    console.log(obj)
+                    alert(obj.message);
+                }
+                else if(http.readyState == 4 && http.status != 200) {  //error in recording time
+                  const obj = JSON.parse(http.statusText);
+                    console.log(obj)
+                    alert(obj.message);
+                }
+            }
+            http.send(object);
+
+}*/
+      
+    </script>
+  </body>
+</html>
