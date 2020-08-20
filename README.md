@@ -35,6 +35,7 @@
 - [Features](#features)
 - [Demo 1](#demo-1)
 - [Demo 2](#demo-2)
+- [Demo 3](#demo-3)
 - [Project Management Tools](#project-management-tools)
 - [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
@@ -74,11 +75,19 @@ STAT accepts tracking data in various formats so you can track how you spend you
 - SRS Document: https://drive.google.com/file/d/17SGuoiNxXJCnJ14fTUmAWB5VPJ2AD9UL/view?usp=sharing
 
 ## Demo 2
-- Architectural Design Patterns: https://drive.google.com/file/d/1UIMtvR-hgIoTYJfa78N5g_nfO_b32auD/view?usp=sharing
+- Architectural Design: https://drive.google.com/file/d/1UIMtvR-hgIoTYJfa78N5g_nfO_b32auD/view?usp=sharing
 - Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
 - User Manual: https://drive.google.com/file/d/1gy8THPFXtESbqcOVpp8Dsv8xBL9v20Nu/view?usp=sharing
 - Video: https://drive.google.com/file/d/1wY_0H7jXFBdQec9SUmZG9QOw8eIgxi7T/view?usp=sharing
 - SRS Document: https://drive.google.com/file/d/1LCYIuHA63eCdl8ZeNO4EmYa2Z_DKYwW-/view?usp=sharing
+
+
+## Demo 3
+- Architectural Design: https://drive.google.com/file/d/1wYCW10m5axuvDAHTmsx3Z5wpCW_wB_CJ/view?usp=sharing
+- Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
+- User Manual:
+- Video:
+- SRS Document:
 
 ## Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
