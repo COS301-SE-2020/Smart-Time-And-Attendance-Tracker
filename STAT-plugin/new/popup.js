@@ -59,7 +59,7 @@ projectsDropdown.onchange = function() {
         tasksDropdown.appendChild(opt); 
     }
     opt = document.createElement('option');
-    opt.appendChild( document.createTextNode("unspecified") );
+    opt.appendChild( document.createTextNode("Unspecified") );
     opt.value = "";
     tasksDropdown.appendChild(opt); 
 
@@ -108,7 +108,7 @@ SelectTask.onclick = function() {
                 document.getElementById("reselect_task").style.display="block";
           
                 document.getElementById("project").innerHTML = "Project: " + ProjectName;
-                if(TaskName != "unspecified")
+                if(TaskName != "Unspecified")
                   document.getElementById("task").innerHTML = "Task: "+ TaskName;
             }
         }
