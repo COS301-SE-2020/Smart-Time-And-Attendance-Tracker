@@ -3,3 +3,7 @@ STAT-server/node_modules/
 STAT-server/node_modules/*
 STAT/node_modules/
 STAT/node_modules/*
+STAT/
+STAT/*
+STAT-server/
+STAT-server/*
