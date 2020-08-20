@@ -1,15 +1,34 @@
+/**
+  * @file STAT-server/models/timeEntry.model.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse
+  * @fileoverview This file contains the TimeEntry model in our database
+  * @date 3 July 2020
+ */
+
+/**
+* Filename:             STAT-server/models/timeEntry.model.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse 
+*   
+* File Creation Date:   3 July 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file contains the TimeEntry model in our database
+*
+*/
 const mongoose = require('mongoose');
 
 const TimeEntrySchema = mongoose.Schema({
   TaskID: {
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Task',
-    required : "Task ID required."
+    ref: 'Task'
   },
   ProjectID: {
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Project',
-    required : "Project ID required."
+    ref: 'Project'
   },
   StartTime: {
     type: Number,
@@ -39,12 +58,10 @@ const TimeEntrySchema = mongoose.Schema({
     type: Number
   },
   ProjectName: { 
-    type: String,
-    required: "Project name required."
+    type: String
   },
   TaskName: { 
-    type: String,
-    required: "Task name required."
+    type: String
   },
 
 });

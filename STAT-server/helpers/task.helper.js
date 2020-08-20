@@ -1,16 +1,40 @@
+/**
+  * @file STAT-server/helper/task.helper.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles some of the requests regarding Task model in our database. 
+  * This is a helper file to handle Task related requests.
+  * @date 15 July 2020
+ */
+
+/**
+* Filename:             STAT-server/helper/task.helper.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   15 July 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles some of the requests regarding Task model in our database. 
+*                       This is a helper file to handle Task related requests.
+*
+*/
 const mongoose = require("mongoose");
 const TaskModel = mongoose.model("Task");
 
-
-/*
-  DESCRPTION
-*/
-
+/**
+ * 
+ * @param {HTTP Request} req Request body - Task name, due date of Task, time spent on Task, start date of Task and Monetary Value
+ * @param {HTTP Response} res Success or error message
+ * @param {Function} next Next function to be called
+ */
 module.exports.add = (req, res, next) => {
     var task = new TaskModel();
     task.TaskName = req.body.taskName;
     task.DueDate = req.body.dueDate;
-    task.TimeSpent = req.body.timeSpent;
+    task.TimeSpent = req.body.timeSpent;    //SHOULDN'T timeSpent BE 0??
     task.StartDate = req.body.startDate;
     task.MonetaryValue = req.body.monetaryValue;    
     task.updateOne((err, doc) => {
@@ -23,6 +47,12 @@ module.exports.add = (req, res, next) => {
     });
 }
 
+/**
+ * 
+ * @param {String} id ID of task
+ * @param {*} done 
+ * @return {String} - Name of Task.
+ */
 module.exports.getName = (id, done)=>{
     TaskModel.findOne({ _id: id},(err, result) => {
         if(err) 
@@ -35,6 +65,12 @@ module.exports.getName = (id, done)=>{
     });
 }
 
+/**
+ * 
+ * @param {String} id ID of task
+ * @param {*} done 
+ * @return {Array} - Name of Task, Id of Task, status of Task, due date oF Task.
+ */
 module.exports.getTaskName = (id, done)=>{
     TaskModel.findOne({ _id: id},(err, result) => {
         if(err) 
@@ -53,45 +89,33 @@ module.exports.getTaskName = (id, done)=>{
         }        
     });
 }
+
+/**
+ * Deletes all tasks in the array.
+ * @param {Array} ids ID of tasks
+ * @param {Function} done 
+ * @returns {String} error message else void
+ */
 module.exports.deleteTask= (ids, done) => {      
-       
-    TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
-        if(err) 
-            done(err);
-        else
-            done(null);
-    });            
+    if(ids.length == 1)
+    {
+        TaskModel.deleteOne({_id: ids[0]},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        });            
+    
+    }
+    else
+    {
+        TaskModel.deleteMany({_id: {$in: ids}},(err,val)=>{     
+            if(err) 
+                done(err);
+            else
+                done(null);
+        }); 
+    }           
 
 }
 
-/*
-projects: [
-    {
-        ID: "abcd122hsj1",
-        ProjectName: "P1",
-        tasks: [
-            {
-                ID: "ajn62hcw",
-                taskName: "A",
-                tastStatus: "IN PROGRESS"
-            }
-        ]
-    },
-    {
-        ID: "abcd122hsh7",
-        ProjectName: "P2",
-        tasks: [
-            {
-                ID: "ajn62hgw",
-                taskName: "V",
-                tastStatus: "IN PROGRESS"
-            },
-            {
-                ID: "ajnt6v78ji",
-                taskName: "Z",
-                tastStatus: "IN PROGRESS"
-            }
-        ]
-    }
-]
-*/
