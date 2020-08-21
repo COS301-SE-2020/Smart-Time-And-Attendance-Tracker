@@ -145,3 +145,173 @@ section
 
 .req-spinner
   margin: 1em auto 0 auto
+
+// members
+#members-div
+  align-items: center
+  padding: 0 1em
+  margin-top: -2em
+
+  mat-form-field
+    margin-left: 0.5em
+ 
+#members
+  height: 71vh
+
+.alphabet
+  width: 1em
+  text-align: center
+  display: inline
+  float: left
+  position: fixed
+
+  a
+    display: block
+    font-size: 0.77em
+    color: #4c585b
+    width: 2em
+
+    &.active
+      color: #7846eb !important
+      font-weight: bold
+      border-radius: 5em
+      border: 1px dashed #4c585b70
+
+    &:visited
+      text-decoration: none
+      color: #4c585b
+
+    &:hover
+      color: #7846eb
+      text-decoration: none
+      font-weight: bold
+
+$colors : #7846eb, #00c8ff, #ff2885, #366ceb
+@for $i from 0 through 10
+  li:nth-child(#{$i}) .pro-pic
+    background-color: nth($colors, random(length($colors)))
+
+ul
+  list-style-type: none
+  margin-top: 0
+
+  li
+    padding: 0.5em
+    background-color: #ffffff
+    color: #4c585b
+    font-size: 0.9em
+    border-top: 1px solid #4c585b50
+
+  .list-alpha
+    background-color: #4c585b20
+    font-weight: bold
+    border-top: none
+    border-radius: 0.3em 0.3em 0 0 
+
+  img, .pro-pic
+    display: inline-block
+    text-align: center
+    align-items: center
+    vertical-align: middle
+    color: #ffffff
+    letter-spacing: 1px
+    width: 40px
+    height: 40px
+    line-height: 40px
+    margin-left: 0.8em
+    border-radius: 5em
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+
+  span 
+    display: inline-block
+    vertical-align: middle
+    margin-left: 1.2em
+
+  i 
+    font-size: 0.85em
+    font-style: normal
+    color: #4c585b98
+
+  .role
+    background-color: #00c8ff40
+    color: #00c8ff
+    padding: 0.2em 0.5em !important
+    border-radius: 0.8em
+    font-size: 0.7em
+    margin-left: 0
+    margin-right: 0.5em
+    margin-top: 0.5em
+
+  .sec
+    background-color: #ff288540
+    color: #ff2885
+
+  .tl
+    background-color: #366ceb40
+    color: #366ceb
+
+  .da 
+    background-color: #7846eb40
+    color: #7846eb
+  
+  .member-roles
+    height: fit-content
+    text-align: right
+
+// edit and remove member
+.float-right button, .teams-btn
+  padding: 0
+  color: #4c585b90
+  text-transform: uppercase
+  font-size: 0.8em
+  line-height: normal
+  min-width: fit-content
+  margin-left: 1.5em
+  align-items: center
+
+  &:focus
+    outline: none
+
+  mat-icon
+    font-size: 1em !important
+    vertical-align: top !important
+
+.teams-btn
+  margin-left: 0
+  margin-right: 0.5em
+  padding: 0.2em 0.3em
+  border: 1px dashed #4c585b90
+  border-radius: 10em
+
+.teams-btn
+  visibility: hidden
+
+.member:hover, li:hover, mat-expansion-panel-header:hover
+  button
+    visibility: visible
+
+  &:hover
+    background-color: rgab(0,0,0,0) !important
+
+// MODAL ************************************************************************************
+
+.modal-title
+  margin-bottom: 0
+
+.modal-header 
+  button:focus, button:active, button
+    border: none !important
+    outline: none
+    background-color: transparent !important
+
+  mat-icon 
+    font-size: 1.5em
+
+.modal-footer 
+  padding-left: 16px
+
+  button
+    font-size: 1em
+    margin-left: 0.5em
+
+// ******************************************************************************************

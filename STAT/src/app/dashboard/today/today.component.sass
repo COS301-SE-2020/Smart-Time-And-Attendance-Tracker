@@ -188,13 +188,16 @@ section
     background: #7846eb
     color: #fff
 
-#currently-tracking 
+#currently-tracking
   padding-right: 0
+
+  mat-card
+    margin-left: 15px
 
   mat-card-subtitle
     color: #f2f3f7
 
-#auto-tracking 
+#auto-tracking
   mat-card-title
     color: #4c585b
 
@@ -207,13 +210,13 @@ section
 .modal-title
   margin-bottom: 0
 
-.modal-header 
+.modal-header
   button:focus, button:active, button
     border: none !important
     outline: none
     background-color: transparent !important
 
-.modal-footer 
+.modal-footer
   padding-left: 16px
 
   #toggle
@@ -228,17 +231,17 @@ section
     text-align: center
     color: #4c585b90
 
-    #activity 
+    #activity
       b
         color: #7846eb
         font-size: 1.4em
 
-    #entries       
+    #entries
       b
         color: #ff2885
         font-size: 1.4em
 
-    #tasks       
+    #tasks
       b
         color: #366ceb
         font-size: 1.4em
@@ -271,7 +274,7 @@ section
       font-size: 1.2em !important
       vertical-align: top !important
 
-  li:hover 
+  li:hover
     .edit-btn
       visibility: visible
 
@@ -287,8 +290,20 @@ section
     font-size: 1.2em !important
     vertical-align: top !important
 
-mat-card
-  width: 140%
 
 .req-spinner
   margin: 1em auto 0 auto
+
+.entries li .tag
+  margin-left: 0.5em
+  align-items: center
+  color: #ffffff !important
+  background-color: #9aa8ac90 !important
+
+form button
+  font-size: 1em !important
+  margin-right: 1em !important
+
+  &:focus
+    outline: none !important
+    
