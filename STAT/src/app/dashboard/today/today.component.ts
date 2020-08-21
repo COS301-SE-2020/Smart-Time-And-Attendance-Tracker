@@ -244,7 +244,7 @@ export class TodayComponent implements OnInit {
 
   stopTracking()
   {
-    this.automaticTrackingForm.reset()
+    //this.automaticTrackingForm.reset()
     console.log("Stop");
     this.stop = true;
     this.trackingNow =false;
@@ -258,10 +258,9 @@ export class TodayComponent implements OnInit {
         if (errorCode == '403')
           this.headerService.kickOut();
         });
-    this.reload()
-     
-
+    this.getEntries(this.formatDate(this.date))
   }
+  
   tracking()
   {
     //console.log(this.service.getSharedLocalStorage(this.iframe.nativeElement, "token"));
@@ -372,18 +371,31 @@ export class TodayComponent implements OnInit {
   // get tracking entries
   getEntries(date : String) {
     this.amService.getTimeEntries(date, localStorage.getItem('token')).subscribe((data) => {
+      console.log(data)
       if (date == this.formatDate(this.date))
-        this.week['today'] = data['timeEntries']
+        this.week['today'] = data['timeEntries'].sort((a : any ,b : any) =>
+          b.endTime - a.endTime
+      );
       if (date == this.formatDate(this.date1))
-        this.week['yesterday'] = data['timeEntries']
+        this.week['yesterday'] = data['timeEntries'].sort((a : any ,b : any) =>
+        b.endTime - a.endTime
+      );
       if (date == this.formatDate(this.date2))
-        this.week['2days'] = data['timeEntries']
+        this.week['2days'] = data['timeEntries'].sort((a : any ,b : any) =>
+        b.endTime - a.endTime
+      );
       if (date == this.formatDate(this.date3))
-        this.week['3days'] = data['timeEntries']
+        this.week['3days'] = data['timeEntries'].sort((a : any ,b : any) =>
+        b.endTime - a.endTime
+      );
       if (date == this.formatDate(this.date4))
-        this.week['4days'] = data['timeEntries']
+        this.week['4days'] = data['timeEntries'].sort((a : any ,b : any) =>
+        b.endTime - a.endTime
+      );
       if (date == this.formatDate(this.date5))
-        this.week['5days'] = data['timeEntries']
+        this.week['5days'] = data['timeEntries'].sort((a : any ,b : any) =>
+        b.endTime - a.endTime
+      );
     },
     error => {
       //console.log(error);

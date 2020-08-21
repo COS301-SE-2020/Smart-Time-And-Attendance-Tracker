@@ -41,7 +41,7 @@
         </mat-form-field>
 
         <button mat-raised-button color="accent" class="float-right" 
-              (click)="addAutomaticEntry(automaticTrackingForm.value);"
+              (click)="addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
       </form>
       <br><br>
