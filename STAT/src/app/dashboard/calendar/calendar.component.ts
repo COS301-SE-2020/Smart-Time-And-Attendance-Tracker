@@ -11,10 +11,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class CalendarComponent implements OnInit {
 
-  authorised : any;
+  authorised =false;
   src : string;
+  storedAuthResult : any;
 
   private email;
+  private user;
   private clientID;
   private ROOT_URL = "http://localhost:3000/api/";
   public roles = localStorage.getItem('roles');
@@ -22,15 +24,37 @@ export class CalendarComponent implements OnInit {
   constructor(public http: HttpClient, public headerService : HeaderService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    // console.log(gapi.auth2.getAuthInstance());
-    // console.log(gapi.auth2);
+   
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+localStorage.getItem('token'));
+    let parameters = new HttpParams();
+    parameters = parameters.append('calendar','google');
+     this.http.get(this.ROOT_URL+'calendar/getCredentials', {
+      headers: headers,
+      params: parameters
+    }).subscribe((data) => {
+      this.clientID = data['clientId'];
+      gapi.load('auth2', () => {
+        gapi.client.setApiKey(data['apiKey']);
+        gapi.auth2.init({client_id: this.clientID,scope: data['scopes'][0]}).then((this.checkLoggedIn).bind(this));
+      });
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+   
+  }
 
-    if (gapi.auth2.getAuthInstance() != undefined && gapi.auth2.getAuthInstance() != null)
-      this.authenticate(gapi.auth2.getAuthInstance());
-    else if (gapi.auth2 != undefined)
-      this.checkAuth();
-    else
-      this.authorised = false;
+  //check if logged in to display screen
+  checkLoggedIn(auth) {
+   this.authorised =  auth.isSignedIn.get();
+   console.log(this.authorised);
+   if(this.authorised == true)
+    this.authenticate(auth);
   }
 
   //check if authenticated, authenticate if not
@@ -45,7 +69,9 @@ export class CalendarComponent implements OnInit {
     }).subscribe((data) => {
       this.clientID = data['clientId'];
       gapi.client.setApiKey(data['apiKey']);
-      gapi.auth2.authorize({client_id: data['clientId'], scope: data['scopes'],response_type: "token id_token" },(this.makeApiCall).bind(this) );
+      gapi.load('auth2', () => {
+        gapi.auth2.init({client_id: this.clientID,scope: data['scopes'][0]}).then((this.handleAuthResult).bind(this));
+      });
     },
     error => {
       let errorCode = error['status'];
@@ -56,25 +82,51 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  authenticate(auth) {
-    console.log(auth);
-    if (auth != null) {
+
+  handleAuthResult(authResult) {
+    authResult.signIn().then((this.authenticate2).bind(this)); 
+  }
+
+  authenticate(auth) { //GoogleAuth
+    this.user = auth.currentUser.get(); 
+    if (auth && !auth.error) { 
       this.authorised = true;
       this.cd.detectChanges();
       this.email = auth.currentUser.get().getBasicProfile().getEmail();
       document.getElementById("calendar-frame").setAttribute("src", "https://calendar.google.com/calendar/embed?src=" + this.email);
-    }
+      var authResult = this.user .getAuthResponse();
+      this.makeApiCall(authResult);
+
+    } 
     else {
       this.authorised = false;
       this.cd.detectChanges();
-    }
+    }   
+  }
+
+  authenticate2(auth) { //GoogleUser
+    this.user = auth; 
+    if (auth && !auth.error) { 
+      this.authorised = true;
+      this.cd.detectChanges();
+      this.email = auth.getBasicProfile().getEmail();
+      document.getElementById("calendar-frame").setAttribute("src", "https://calendar.google.com/calendar/embed?src=" + this.email);
+      var authResult = this.user.getAuthResponse();
+      this.makeApiCall(authResult);
+
+    } 
+    else {
+      this.authorised = false;
+      this.cd.detectChanges();
+    }   
+  }
+  
+  refresh() {
+    var authResult = this.user.getAuthResponse();
+    this.makeApiCall(authResult);
   }
 
   makeApiCall(authResult) {
-      gapi.load('auth2', () => {
-        gapi.auth2.init({client_id: this.clientID}).then((this.authenticate).bind(this));
-      });
-    console.log(authResult);
     var that = this;
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+localStorage.getItem('token'));
@@ -82,10 +134,8 @@ export class CalendarComponent implements OnInit {
      that.http.post(this.ROOT_URL+'calendar/syncEvents',JSON.stringify(params), {
       headers: headers
     }).subscribe((data) => {
-      console.log(data);
     },
     error => {
-      console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -93,4 +143,6 @@ export class CalendarComponent implements OnInit {
       }
     });
   }
+
+  
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class TodayComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public headerService : HeaderService, public service : TrackingService, public amService : AccountManagementService, public sanitizer: DomSanitizer) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public service : TrackingService, public amService : AccountManagementService, public sanitizer: DomSanitizer, private cd: ChangeDetectorRef) { }
 
   stop =false;
   currentTime : number;
@@ -60,7 +60,7 @@ export class TodayComponent implements OnInit {
 
   trackingNow =false;
 
-  currentlyTracking = { 'description' : 'No description', 'date' : '', 'startTime' : '', 
+  currentlyTracking = { 'description' : 'No description', 'startTime' : '', 
                                   'activeTime' : 0, 'projectName' : 'Unspecified', 'taskName' : 'Unspecified'}
 
   @ViewChild('iframe') iframe: ElementRef;
@@ -98,14 +98,17 @@ export class TodayComponent implements OnInit {
     this.date4.setDate(this.date.getDate()-4)
     this.date5.setDate(this.date.getDate()-5)
 
-    this.reload()
-   /* if(localStorage.getItem('trackingNow')== 'true')
+    if(localStorage.getItem('trackingNow')== 'true')
     {
       this.trackingNow = true;
+      this.cd.detectChanges();
       this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
-      this.timing = Number(localStorage.getItem('timing'));
-      console.log(this.trackingNow);
-    }*/
+      this.timing = this.currentlyTracking.activeTime;
+      console.log(this.currentlyTracking);
+      this.tracking();
+    }
+    this.reload()
+  
   }
 
   // reload page data
@@ -187,7 +190,7 @@ export class TodayComponent implements OnInit {
     localStorage.setItem('trackingNow', 'true');
     this.stop = false;
     let now = new Date();
-
+    this.currentlyTracking.activeTime= 0;
     this.currentlyTracking.description = form['description']
 
     if( form['taskName']!= undefined || form['taskName']!= 'none')
@@ -195,6 +198,8 @@ export class TodayComponent implements OnInit {
 
     if( form['projectName']!= undefined || form['taskName']!='none')
       this.currentlyTracking.projectName =form['projectName'];
+
+    localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
 
     this.startTime = now.getTime();
     form['startTime']= this.startTime;
@@ -205,8 +210,7 @@ export class TodayComponent implements OnInit {
         now = new Date();
         form['endTime']=  now.getTime();
 
-        this.timing = 1;
-        this.currentlyTracking.activeTime = this.timing;
+        this.currentlyTracking.activeTime = 1;
         form['activeTime'] = 1;
         form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
 
@@ -214,19 +218,13 @@ export class TodayComponent implements OnInit {
           this.service.EntryID = data['timeEntryID'];
           localStorage.setItem('currentlyTracking', data['timeEntryID']);
 
-          var details = {'description' : form['description'], 'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
-          this.currentlyTracking.projectName = form['projectName']
-          this.currentlyTracking.taskName = form['taskName']
-          this.currentlyTracking.description = form['description']
+          //var details = {'description' : form['description'], 'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
 
           const options = {
             year: "numeric",
             month:"short",
             day:"2-digit"
           }
-          this.currentlyTracking.date = new Date().toLocaleDateString('en-US', options)
-  
-          localStorage.setItem('currentlyTrackingDetails',JSON.stringify(details));
 
           this.tracking();
           },
@@ -248,8 +246,8 @@ export class TodayComponent implements OnInit {
     console.log("Stop");
     this.stop = true;
     this.trackingNow =false;
-    /*localStorage.removeItem('timing');
-    localStorage.removeItem('trackingNow');*/
+
+    localStorage.removeItem('trackingNow');
     localStorage.removeItem('currentlyTracking');
     localStorage.removeItem('currentlyTrackingDetails');
     this.updateEntry().subscribe((data) => { this.stopTracking();},
@@ -270,8 +268,10 @@ export class TodayComponent implements OnInit {
     this.count.subscribe(x => {
       if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
       { 
-        this.timing = this.timing +1;
-        this.currentlyTracking.activeTime = this.timing
+        this.currentlyTracking.activeTime =  this.currentlyTracking.activeTime+1;
+        this.cd.detectChanges();
+        localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
+        console.log(this.currentlyTracking.activeTime);
         this.tracking();
       }
     });
@@ -301,13 +301,13 @@ export class TodayComponent implements OnInit {
 
   }
 
-  //Update a time entry. Parameters are the new end time and active time
+  //Update a time entry
   updateEntry()
   {
     console.log("update");
     var endTime = new Date().getTime();
-    console.log(this.timing);
-    this.hours =  this.timing / 60;
+
+    this.hours =   this.currentlyTracking.activeTime / 60;
     if(this.hourlyRate == undefined)
       this.monetaryValue = 0
     else
@@ -317,7 +317,7 @@ export class TodayComponent implements OnInit {
     {
       this.monetaryValue = 0
     }
-    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" : this.timing," monetaryValue" : this.monetaryValue};
+    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
      return this.service.updateTimeEntry(values, localStorage.getItem('token'));
 
   }
