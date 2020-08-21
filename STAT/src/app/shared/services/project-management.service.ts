@@ -54,6 +54,7 @@ export class ProjectManagementService {
       params: parameters
     });
   }
+  //edit a task
   public editTask(token, values) {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);

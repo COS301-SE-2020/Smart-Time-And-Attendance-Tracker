@@ -99,7 +99,7 @@
                 <ul *ngIf="p.tasks != 'no tasks'" class="tasks">
                   <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
                     <button *ngIf="roles.includes('Team Leader')"
-                            mat-button class="pro-btn"
+                            mat-button class="pro-btn editTaskBtn"
                             matTooltip="Edit"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="above"

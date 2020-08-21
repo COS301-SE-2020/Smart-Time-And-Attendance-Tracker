@@ -9,10 +9,11 @@ import { MaterialComponentsModule } from 'src/app/material-components/material-c
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
+import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { of } from 'rxjs';
 
-describe('Unit tests:', () => {
 describe('ProjectsComponent', () => {
+describe('Unit tests:', () => {
   let component: ProjectsComponent;
   let fixture: ComponentFixture<ProjectsComponent>;
   let de: DebugElement;
@@ -101,8 +102,8 @@ describe('ProjectsComponent', () => {
 });
 });
 
-describe('Integration tests:', () => {
-  describe('ProjectsComponent', () => {
+describe('ProjectsComponent', () => {
+  describe('Integration tests:', () => {
     let component: ProjectsComponent;
     let fixture: ComponentFixture<ProjectsComponent>;
     let de: DebugElement;
@@ -110,6 +111,7 @@ describe('Integration tests:', () => {
     let projects;
     let tasks;
     let pmService;
+    let amService;
     let roles;
 
     beforeEach(async(() => {
@@ -163,6 +165,27 @@ describe('Integration tests:', () => {
         de = fixture.debugElement.query(By.css('.row'));
         el = de.nativeElement;
 
+        // pmService = TestBed.get(ProjectManagementService);
+        // amService = TestBed.get(AccountManagementService);
+
+        var store = {
+          token : 'GOOSE'
+        };
+
+        spyOn(localStorage, 'getItem').and.callFake(function (key) {console.log("DUCK");
+          return store[key];
+        });
+
+        /*spyOn(component, 'getProAndTasks').and.callFake(function () {console.log("GOOSE");
+          component.allProjects = projects;
+          component.projects = projects;
+          component.getTasks();
+        });
+
+        fixture.detectChanges();
+        de = fixture.debugElement.query(By.css('.row'));
+        el = de.nativeElement;*/
+
       });
     }));
 
@@ -171,11 +194,9 @@ describe('Integration tests:', () => {
       spyOn(pmService,'addProject');
       // open add project modal
       el = fixture.debugElement.query(By.css("#addPro")).nativeElement;
-      const contentBeforeClick = document.querySelector(".modal-content");
-      expect(contentBeforeClick).toBeFalsy();
+      expect(document.querySelector(".modal-content")).toBeFalsy();
       el.click();
-      const contentAfterClick = document.querySelector(".modal-content");
-      expect(contentAfterClick).toBeTruthy();
+      expect(document.querySelector(".modal-content")).toBeTruthy();
       // add values to form
       component.addProjectForm.controls['projectName'].setValue('Unit tests');
       component.addProjectForm.controls['dueDate'].setValue('2020-12-15');
@@ -183,7 +204,7 @@ describe('Integration tests:', () => {
       // detect changes to enable button
       fixture.detectChanges();
       // click add project button
-      const btn = (<HTMLElement>document.querySelector('button#addProject'));
+      const btn = (<HTMLElement>document.querySelector('.modal-content button#addProject'));
       btn.click();
       // check if function was called
       fixture.detectChanges();
@@ -192,41 +213,56 @@ describe('Integration tests:', () => {
     }));
 
     it("should call the addTask method when the 'Create Task' button is pressed", async(() => {
-      spyOn(component,'addTask');
-      // open add project modal
+      spyOn(pmService,'addTask');
+      // open add task modal
       el = fixture.debugElement.query(By.css("#addTask")).nativeElement;
-      const contentBeforeClick = document.querySelector(".modal-content");
-      expect(contentBeforeClick).toBeFalsy();
+      expect(document.querySelector(".modal-content")).toBeFalsy();
       el.click();
-      const contentAfterClick = document.querySelector(".modal-content");
-      expect(contentAfterClick).toBeTruthy();
+      expect(document.querySelector(".modal-content")).toBeTruthy();
       // add values to form
       component.addTaskForm.controls['taskName'].setValue('Modal tests');
       component.addTaskForm.controls['dueDate'].setValue('2020-12-01');
       // detect changes to enable button
       fixture.detectChanges();
       // click add task button
-      const btn = (<HTMLElement>document.querySelector('button#addTask'));
-      console.log(btn);
+      const btn = (<HTMLElement>document.querySelector('.modal-content button#addTask'));
       btn.click();
       // check if function was called
       fixture.detectChanges();
       expect(document.querySelector(".modal-content")).toBeFalsy();
-      expect(component.addTask).toHaveBeenCalledTimes(1);
+      expect(pmService.addTask).toHaveBeenCalledTimes(1);
     }));
 
-    /*it("should call the editProject method when the 'Create Project' button is pressed", async(() => {
+    it("should call the editTask method when the 'Save Changes' button is pressed", async(() => {
+      spyOn(pmService,'editTask');
+      fixture.detectChanges();
+      // open edit task modal
+      el = fixture.debugElement.query(By.css(".editTaskBtn")).nativeElement;
+      expect(document.querySelector(".modal-content")).toBeFalsy();
+      el.click();
+      expect(document.querySelector(".modal-content")).toBeTruthy();
+      // add values to form
+      component.taskToEdit = {
+          'taskID' : '1',
+          'taskName' : "Modal form tests",
+          'dueDate' : '2020-12-09'
+      }
+      // detect changes to enable button
+      fixture.detectChanges();
+      // click edit task button
+      const btn = (<HTMLElement>document.querySelector('.modal-content button#editTask'));
+      btn.click();
+      // check if function was called
+      fixture.detectChanges();
+      expect(document.querySelector(".modal-content")).toBeFalsy();
+      expect(pmService.editTask).toHaveBeenCalledTimes(1);
+    }));
+
+  /*  it("should call the editProject method when the 'Edit Project' button is pressed", async(() => {
       spyOn(component,'editProject');
       el = fixture.debugElement.query(By.css("#editProject")).nativeElement;
       el.click();
       expect(component.editProject).toHaveBeenCalledTimes(1);
-    }));
-
-    it("should call the editTask method when the 'Save Changes' button is pressed", async(() => {
-      spyOn(component,'editTask');
-      el = fixture.debugElement.query(By.css("#editTask")).nativeElement;
-      el.click();
-      expect(component.editTask).toHaveBeenCalledTimes(1);
     }));
 
     it("should call the deleteProject method when the 'Yes' button is pressed", async(() => {

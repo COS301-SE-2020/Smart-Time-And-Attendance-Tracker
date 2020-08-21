@@ -31,6 +31,8 @@ export class ProjectsComponent implements OnInit {
   // forms
   addProjectForm : FormGroup
   addTaskForm : FormGroup
+  editTaskForm :  FormGroup
+
   pid : string
   tid : string
   pname : string
@@ -83,6 +85,13 @@ export class ProjectsComponent implements OnInit {
       projectID : new FormControl('')
     });
 
+    // edit task
+    this.editTaskForm = new FormGroup({
+      taskName : new FormControl('', [Validators.required]),
+      dueDate : new FormControl('', [Validators.required]),
+      taskID : new FormControl('')
+    });
+
     this.getProAndTasks()
     this.getMembers()
     this.getTeam()
@@ -99,8 +108,7 @@ export class ProjectsComponent implements OnInit {
   *********/
 
   // get projects and tasks
-  getProAndTasks()
-  {
+  getProAndTasks() {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.allProjects = data['projects']
@@ -179,9 +187,9 @@ export class ProjectsComponent implements OnInit {
   }
   // edit task (taskID must be added to body)
   editTask(form : NgForm) {
-    console.log(form)
+    //console.log(form)
     this.pmService.editTask(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
