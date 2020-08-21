@@ -193,10 +193,10 @@ export class TodayComponent implements OnInit {
     this.currentlyTracking.activeTime= 0;
     this.currentlyTracking.description = form['description']
 
-    if( form['taskName']!= undefined || form['taskName']!= 'none')
+    if( form['taskName']!= undefined || form['taskName']!= 'Unspecified')
       this.currentlyTracking.taskName =form['taskName'];
 
-    if( form['projectName']!= undefined || form['taskName']!='none')
+    if( form['projectName']!= undefined || form['taskName']!='Unspecified')
       this.currentlyTracking.projectName =form['projectName'];
 
     localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));

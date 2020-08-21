@@ -49,7 +49,7 @@
       <!--<ngb-carousel *ngIf= "trackingNow" [showNavigationArrows]="false" interval="0">
         <ng-template ngbSlide>-->
           <div>
-            <mat-card *ngIf= "trackingNow">
+            <mat-card *ngIf= "trackingNow == true">
               <button mat-mini-fab class="stop-tracking"  (click)="stopTracking()"><mat-icon inline="true">stop</mat-icon></button>
               <mat-card-title>{{currentlyTracking.description}}</mat-card-title>
               <mat-card-subtitle>{{getTime(currentlyTracking.activeTime)}}</mat-card-subtitle>
