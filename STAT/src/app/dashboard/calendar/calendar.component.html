@@ -17,7 +17,10 @@
         <mat-icon inline="true">sync</mat-icon>
       </button>
     </h2>
-    <div *ngIf="!authorised" class="col-12 justify-content-center">
+    <div *ngIf="loading" class="col-12 mx-auto justify-content-center">
+      <mat-spinner class="mx-auto"></mat-spinner>
+    </div>
+    <div *ngIf="!loading && !authorised" class="col-12 justify-content-center">
       <p class="col-12 text-center mx-auto">Would you like to STAT view your calendar?</p>
       <div class="justify-content-center mx-auto">
         <button id="authorize-button"

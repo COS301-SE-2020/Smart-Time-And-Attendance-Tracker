@@ -11,7 +11,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class CalendarComponent implements OnInit {
 
-  authorised =false;
+  loading = true;
+  authorised = false;
   src : string;
   storedAuthResult : any;
 
@@ -24,7 +25,6 @@ export class CalendarComponent implements OnInit {
   constructor(public http: HttpClient, public headerService : HeaderService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-   
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+localStorage.getItem('token'));
     let parameters = new HttpParams();
@@ -46,19 +46,22 @@ export class CalendarComponent implements OnInit {
         this.headerService.kickOut();
       }
     });
-   
   }
 
   //check if logged in to display screen
-  checkLoggedIn(auth) {
+  checkLoggedIn(auth) {console.log('PIG');
+  this.loading = false;
    this.authorised =  auth.isSignedIn.get();
    console.log(this.authorised);
-   if(this.authorised == true)
-    this.authenticate(auth);
+    if(this.authorised == true)
+      this.authenticate(auth);
   }
 
   //check if authenticated, authenticate if not
   checkAuth() {
+    this.loading = true;
+    this.cd.detectChanges();
+    /////
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+localStorage.getItem('token'));
     let parameters = new HttpParams();
@@ -84,43 +87,50 @@ export class CalendarComponent implements OnInit {
 
 
   handleAuthResult(authResult) {
-    authResult.signIn().then((this.authenticate2).bind(this)); 
+    authResult.signIn().then((this.authenticate2).bind(this));
   }
 
   authenticate(auth) { //GoogleAuth
-    this.user = auth.currentUser.get(); 
-    if (auth && !auth.error) { 
+    this.user = auth.currentUser.get();
+    if (auth && !auth.error) {
       this.authorised = true;
+      this.cd.detectChanges();
+      this.loading = false;
       this.cd.detectChanges();
       this.email = auth.currentUser.get().getBasicProfile().getEmail();
       document.getElementById("calendar-frame").setAttribute("src", "https://calendar.google.com/calendar/embed?src=" + this.email);
       var authResult = this.user .getAuthResponse();
       this.makeApiCall(authResult);
 
-    } 
+    }
     else {
       this.authorised = false;
       this.cd.detectChanges();
-    }   
+      this.loading = false;
+      this.cd.detectChanges();
+    }
   }
 
   authenticate2(auth) { //GoogleUser
-    this.user = auth; 
-    if (auth && !auth.error) { 
+    this.user = auth;
+    if (auth && !auth.error) {
       this.authorised = true;
+      this.cd.detectChanges();
+      this.loading = false;
       this.cd.detectChanges();
       this.email = auth.getBasicProfile().getEmail();
       document.getElementById("calendar-frame").setAttribute("src", "https://calendar.google.com/calendar/embed?src=" + this.email);
       var authResult = this.user.getAuthResponse();
       this.makeApiCall(authResult);
-
-    } 
+    }
     else {
       this.authorised = false;
       this.cd.detectChanges();
-    }   
+      this.loading = false;
+      this.cd.detectChanges();
+    }
   }
-  
+
   refresh() {
     var authResult = this.user.getAuthResponse();
     this.makeApiCall(authResult);
@@ -144,5 +154,5 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  
+
 }
