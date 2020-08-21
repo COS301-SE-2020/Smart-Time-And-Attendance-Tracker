@@ -34,6 +34,7 @@ const project = require('../controllers/project.controller');
 const calendar = require('../tracker/calendar/calendar.manager');
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
+const iotDevice = require('../iotManager/iotDevice.controller');
 
 //user
 router.post("/user/register", user.register);
