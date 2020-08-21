@@ -250,7 +250,7 @@ export class TodayComponent implements OnInit {
     localStorage.removeItem('trackingNow');
     localStorage.removeItem('currentlyTracking');
     localStorage.removeItem('currentlyTrackingDetails');
-    this.updateEntry().subscribe((data) => { this.stopTracking();},
+    this.updateEntry().subscribe((data) => { },
       error => {
         let errorCode = error['status'];
         if (errorCode == '403')
@@ -290,13 +290,8 @@ export class TodayComponent implements OnInit {
       }
       else
       {
-        this.updateEntry().subscribe((data) => { this.stopTracking();},
-        error => {
-          let errorCode = error['status'];
-          if (errorCode == '403')
-            this.headerService.kickOut();
-          });
-      }
+         this.stopTracking();}
+      
     });
 
   }
