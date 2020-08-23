@@ -87,7 +87,7 @@ STAT accepts tracking data in various formats so you can track how you spend you
 - Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
 - Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
 - Video: https://drive.google.com/file/d/1zUjqtTmcJDGeoipVc3awsqgtnbAcBrvC/view?usp=sharing
-- SRS Document: https://drive.google.com/file/d/1akoGRY8iSAnc8-RvtXaA_xlmTE4y-BZF/view?usp=sharing
+- SRS Document: https://drive.google.com/file/d/1eyT3XSIN02zO8fkohkQpa3Wz4tB2BQYe/view?usp=sharing
 
 ## Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
