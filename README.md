@@ -83,7 +83,7 @@ STAT accepts tracking data in various formats so you can track how you spend you
 
 
 ## Demo 3
-- Architectural Design: https://drive.google.com/file/d/1wYCW10m5axuvDAHTmsx3Z5wpCW_wB_CJ/view?usp=sharing
+- Architectural Design: https://drive.google.com/file/d/1xLS8pOe43drdDVKPAOgKUeBnl8PbHuE5/view?usp=sharing
 - Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
 - Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
 - Video: https://drive.google.com/file/d/1zUjqtTmcJDGeoipVc3awsqgtnbAcBrvC/view?usp=sharing
