@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-iot',
@@ -10,6 +13,8 @@ export class IOTComponent implements OnInit {
   roles : string[] = ['Data Analyst', 'System Administrator', 'Security Administrator', 'Team Leader', 'General Team Member']
   devices : any;
 
+  addDeviceForm : FormGroup;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -20,6 +25,28 @@ export class IOTComponent implements OnInit {
       {'deviceName': 'Fingerprint Scanner', 'macAddress': '985.346.89', 'description': 'VIP Offices'},
       {'deviceName': 'Iris Scanner', 'macAddress': '995.274.78', 'description': 'Vault'},
     ];
+
+    this.addDeviceForm = new FormGroup({
+      deviceName : new FormControl('',[Validators.required]),
+      macAddress : new FormControl('',[Validators.required]),
+      description : new FormControl('')
+    });
+
+    this.getDevices();
   }
 
+  getDevices() {
+  }
+
+  registerDevice(form : NgForm) {
+  }
+
+  deregisterDevice(macAddress : string) {
+  }
+
+  startTracking() {
+  }
+
+  stopTracking() {
+  }
 }
