@@ -14,11 +14,10 @@ import { HistoryComponent } from './history/history.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { IOTComponent } from './iot/iot.component';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
