@@ -1,131 +1,123 @@
 *
   font-size: 1em
 
-.container
-  padding: 2em
+#addEntry
+  background-color: #7846eb
 
-h2
-  color: #4c585b
-  font-size: 1.8em
+#auto-tracking mat-card
   margin-bottom: 0
-
-.info
-  color: #4c585b90
-  text-align: left
-  height: fit-content !important
-  display: flex
-  justify-content: center
-  align-items: center
-
-  .col-8, .col-auto
-    padding-bottom: 0
-    height: fit-content
-    vertical-align: top
-
-section
-    div.col-auto
-      display: inline-block
-      text-align: center
-      float: right
-
-    #total-members
-      b
-        color: #366ceb
-        font-size: 1.4em
-
-    #total-requests
-      b
-        color: #7846eb
-        font-size: 1.4em
-
-mat-card
-  background-color: #366ceb
-  border-radius: 1em
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
-  color: #ffffff
-  display: inline-block
-  margin-bottom: 1em
-  margin-left: 3%
-  margin-top: 1em
-  padding: 1.5em
-  padding-bottom: 2.25em
-  width: 100%
-  font-size: 0.9em
-  height: fit-content
+  margin-top: 0
+  padding-bottom: 0.8em
 
   mat-divider
-    color: #ffffff
-    margin-bottom: 1.5em
-    margin-top: 1.5em
+    margin-top: 0.5em
+    margin-bottom: -0.5em
 
-  mat-card-footer
-    color: #ffffff
-    padding-top: 0.5em
-    text-align: right
+button
+  font-size: 1.5em
 
-    button
-      color: #333333
-      margin-left: 0.5em
+.column
+  display: inline-block
+  padding: 2em
+  margin-bottom: 2em
 
-    .accept-request
-      background-color: #ffffff
+div.col-5.column
+  margin-bottom: 0
 
-    .reject-request
-      background-color: #ffffff
+.float-left
+  float: left
 
-  mat-card-title
-    color: #ffffff
-    font-size: 1.25em
+.entries
+  padding-left: 0.3em
+  list-style-type: none
 
-  mat-card-subtitle
-    color: #ffffff
-    color: #ffffff
+.entries li
+  margin-bottom: 0.8em
+  padding-bottom: 0.3em
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.12)
 
-mat-icon
-  font-size: 1.2em !important
-  vertical-align: top !important
+h1
+  font-size: 2.5em
+  font-weight: bolder
 
-#requests
+h2
+  font-size: 1.8em
+  color: #4c585b
 
-    mat-card:nth-child(odd)
-        background: #366ceb
-        color: #ffffff
+h3
+  font-size: 1.25em
 
-    mat-card:nth-child(even)
-      background: #7846eb
-      color: #ffffff
+#history h3
+  color: #808080
+  font-style: italic
 
-    button
-      outline: none !important
+#history .scroll
+  margin-left: 0
+  margin-bottom: 0
+  padding-bottom: 0.5em
+  height: 65vh
+
+mat-card
+  background-color: white
+  margin-bottom: 1em
+  margin-top: 1em
+  margin-right: 1em
+  padding: 1.5em
+  padding-bottom: 2.25em
+  border-radius: 1em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+
+mat-card-footer
+  color: #f2f3f7
+  margin: 0.05em
+  padding-top: 0.5em
+  font-size: 0.9em
+
+mat-card-title
+  font-size: 1.1em
+
+mat-card-subtitle
+  font-size: 0.9em
+  color: #f2f3f750
+
+mat-card-content
+  font-size: 0.9em
+
+mat-divider
+  margin-bottom: 1.5em
+  margin-top: 1em
+  border-top-color: #f2f3f750
+
+.numEntries
+  float: right
+  margin-right: 1em
+
+.pro
+  margin-right: 0.2em
+
+.pro-name
+  color: #fff
 
 .row
   padding: 2em
-  padding-top: 0em
+  padding-top: 0
 
   >
     section
       padding: 2em
 
 section
-  align-items: left
+  align-items: stretch
   display: flex
   flex-direction: column
-  flex-wrap: wrap
-  justify-content: flex-start
   height: 100%
   padding: 1.5em
-  width: 100%
-
-#sort-menu
-  background-color: #00c8ff
-  color: #ffffff
-  outline: none !important
 
 .scroll
   overflow-x: hidden
   overflow-y: scroll
   padding: 0 1.5em 0.2em 0.8em
-  height: 55vh
+  height: 68vh
 
 .scroll::-webkit-scrollbar
   border-radius: 0.5em
@@ -143,172 +135,175 @@ section
   border-radius: 0.5em
   background-color: #ffffff
 
-.req-spinner
-  margin: 1em auto 0 auto
-
-// members
-#members-div
-  align-items: center
-  padding: 0 1em
-  margin-top: -2em
-
-  mat-form-field
-    margin-left: 0.5em
-
-#members
-  height: 71vh
-
-.alphabet
-  width: 1em
+.start-tracking
+  color: white
+  background-color: #00c8ff
+  font-size: 0.7em
   text-align: center
-  display: inline
-  float: left
-  position: fixed
-
-  a
-    display: block
-    font-size: 0.77em
-    color: #4c585b
-    width: 2em
-
-    &.active
-      color: #7846eb !important
-      font-weight: bold
-      border-radius: 5em
-      border: 1px dashed #4c585b70
-
-    &:visited
-      text-decoration: none
-      color: #4c585b
-
-    &:hover
-      color: #7846eb
-      text-decoration: none
-      font-weight: bold
-
-$colors : #7846eb, #00c8ff, #ff2885, #366ceb
-@for $i from 0 through 10
-  li:nth-child(#{$i}) .pro-pic
-    background-color: nth($colors, random(length($colors)))
-
-ul
-  list-style-type: none
-  margin-top: 0
-
-  li
-    padding: 0.5em
-    background-color: #ffffff
-    color: #4c585b
-    font-size: 0.9em
-    border-top: 1px solid #4c585b50
-
-  .list-alpha
-    background-color: #4c585b20
-    font-weight: bold
-    border-top: none
-    border-radius: 0.3em 0.3em 0 0
-
-  img, .pro-pic
-    display: inline-block
-    text-align: center
-    align-items: center
-    vertical-align: middle
-    color: #ffffff
-    letter-spacing: 1px
-    width: 40px
-    height: 40px
-    line-height: 40px
-    margin-left: 0.8em
-    border-radius: 5em
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
-
-  span
-    display: inline-block
-    vertical-align: middle
-    margin-left: 1.2em
-
-  i
-    font-size: 0.85em
-    font-style: normal
-    color: #4c585b98
-
-  .role
-    background-color: #00c8ff40
-    color: #00c8ff
-    padding: 0.2em 0.5em !important
-    border-radius: 0.8em
-    font-size: 0.7em
-    margin-left: 0
-    margin-right: 0.5em
-    margin-top: 0.5em
-
-  .sec
-    background-color: #ff288540
-    color: #ff2885
-
-  .tl
-    background-color: #366ceb40
-    color: #366ceb
-
-  .da
-    background-color: #7846eb40
-    color: #7846eb
-
-  .member-roles
-    height: fit-content
-    text-align: right
-
-// edit and remove member
-.float-right button, .teams-btn
-  padding: 0
-  color: #4c585b90
-  text-transform: uppercase
-  font-size: 0.8em
-  line-height: normal
-  min-width: fit-content
-  margin-left: 1.5em
-  align-items: center
+  margin-left: 0.5em
+  vertical-align: top
 
   &:focus
+    border: none !important
     outline: none
 
-  mat-icon
-    font-size: 1em !important
-    vertical-align: top !important
+.section-divider
+  margin-bottom: 3em
+  margin-top: 3em
 
-.teams-btn
-  margin-left: 0
-  margin-right: 0.5em
-  padding: 0.2em 0.3em
-  border: 1px dashed #4c585b90
-  border-radius: 10em
+.stop-tracking
+  color: white
+  background-color: #ff2885
+  float: right
+  left: 2em
+  top: 2em
+  vertical-align: top
 
-.teams-btn
-  visibility: hidden
+.tag
+  background-color: #f2f3f750
+  padding: 0.2em 0.5em
+  border-radius: 0.8em
+  color: #f2f3f7
+  font-size: 0.8em
+  height: 1.8em
+  float: left
 
-.member:hover, li:hover, mat-expansion-panel-header:hover
-  button
-    visibility: visible
+#history .tag
+  background-color: #00c8ff40
+  color: #00c8ff
 
-  &:hover
-    background-color: rgab(0,0,0,0) !important
+.tag-1
+  color: #366ceb
+  background-color: #366ceb30
 
-// MODAL ************************************************************************************
+.tag-2
+  color: #ff2885
+  background-color: #ff288530
+
+#currently-tracking mat-card:nth-child(odd)
+    background: #366ceb
+    color: #fff
+
+#currently-tracking mat-card:nth-child(even)
+    background: #7846eb
+    color: #fff
+
+#currently-tracking
+  padding-right: 0
+
+  mat-card
+    margin-left: 15px
+
+  mat-card-subtitle
+    color: #f2f3f7
+
+#auto-tracking
+  mat-card-title
+    color: #4c585b
+
+  mat-card-subtitle
+    color: #4c585b80
+
+  mat-card
+    padding-bottom: 0
 
 .modal-title
   margin-bottom: 0
 
-button:focus, button:active, button
-  border: none !important
-  outline: none
-  background-color: transparent !important
-
-  mat-icon
-    font-size: 1.5em
+.modal-header
+  button:focus, button:active, button
+    border: none !important
+    outline: none
+    background-color: transparent !important
 
 .modal-footer
   padding-left: 16px
 
+  #toggle
+    padding-right: 5em
+
   button
     font-size: 1em
     margin-left: 0.5em
+
+#history
+  .info
+    text-align: center
+    color: #4c585b90
+
+    #activity
+      b
+        color: #7846eb
+        font-size: 1.4em
+
+    #entries
+      b
+        color: #ff2885
+        font-size: 1.4em
+
+    #tasks
+      b
+        color: #366ceb
+        font-size: 1.4em
+
+  .scroll
+    height: 53vh
+
+  small
+    font-size: smaller
+    color: #4c585b90
+
+  .date
+    margin-right: 0.8em
+    font-weight: bold
+    color: #4c585b
+
+  .edit-btn
+    color: #4c585b90
+    text-transform: uppercase
+    font-size: 0.8em
+    line-height: normal
+    min-width: fit-content
+    margin-left: 0.6em
+    padding: 0.3em
+    border: 1px dashed #4c585b90
+    border-radius: 10em
+    visibility: hidden
+
+    mat-icon
+      font-size: 1.2em !important
+      vertical-align: top !important
+
+  li:hover
+    .edit-btn
+      visibility: visible
+
+::ng-deep .entry-tooltip
+  background-color: #4c585b90
+  padding: 0.2em 0.3em
+
+::ng-deep .action-tooltip
+  background-color: #4c585b90
+  padding: 0.2em 0.3em
+
+  mat-icon
+    font-size: 1.2em !important
+    vertical-align: top !important
+
+
+.req-spinner
+  margin: 1em auto 0 auto
+
+.entries li .tag
+  margin-left: 0.5em
+  align-items: center
+  color: #ffffff !important
+  background-color: #9aa8ac90 !important
+
+form button
+  font-size: 1em !important
+  margin-right: 1em !important
+
+  &:focus
+    outline: none !important
+    

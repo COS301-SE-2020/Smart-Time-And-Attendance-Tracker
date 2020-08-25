@@ -11,14 +11,14 @@
       <div *ngIf="requests && (requests.length == 0 || requests.length > 1)" id="total-requests" class="col-auto">
         <b>{{requests.length}}</b><br>REQUESTS
       </div>
-
+      
       <div class="col-8">
         <mat-form-field appearance="standard" class="col-10">
           <mat-label>Search Requests</mat-label>
           <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
         </mat-form-field>
 
-        <button mat-mini-fab id="sort-menu"
+        <button mat-mini-fab id="sort-menu" 
                 matTooltip="Sort"
                 matTooltipClass="action-tooltip"
                 matTooltipPosition="right"
@@ -32,7 +32,7 @@
           <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">Date (newest first)</button>
         </mat-menu>
       </div>
-
+      
     </div>
     <div id="requests" class="pr-3 row scroll">
       <mat-spinner *ngIf="!requests" class="req-spinner"></mat-spinner>
@@ -41,7 +41,7 @@
           <!-- details -->
         <mat-card-title>{{r.name}} {{r.surname}}</mat-card-title>
         <mat-card-subtitle>{{r.email}}</mat-card-subtitle>
-
+        
           <mat-divider [inset]="true"></mat-divider>
           <mat-card-footer class="px-3">
 
@@ -69,15 +69,15 @@
   </section>
 
   <section class="col-6">
-
+    
     <div id="members-div" class="info row p-0">
       <div class="col-8">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Search Members</mat-label>
           <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)">
         </mat-form-field>
-      </div>
-
+      </div>      
+      
       <div *ngIf="!members" id="total-members" class="col-auto">
         <b>-</b><br>MEMBERS
       </div>
@@ -220,3 +220,4 @@
     </div>
   </div>
 </ng-template>
+

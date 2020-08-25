@@ -3,8 +3,8 @@
   <!-- CURRENTLY TRACKING -->
   <section id="currently-tracking" class="col-6 float-left">
     <h2>Currently Tracking
-      <button mat-mini-fab (click)="open(trackingModal)"
-            class="start-tracking"
+      <button mat-mini-fab (click)="open(trackingModal)" 
+            class="start-tracking" 
             matTooltip="Add a tracking entry"
             matTooltipClass="action-tooltip"
             matTooltipPosition="right">
@@ -13,12 +13,12 @@
     </h2>
     <div>
       <!-- AUTOMATIC TRACKING FORM ************************************************ -->
-      <form [formGroup]="automaticTrackingForm" id="auto-tracking-form" method="post" class="col-12">
+      <form [formGroup]="automaticTrackingForm" id="auto-tracking-form" method="post">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
           <input matInput formControlName="description" type="text" placeholder="Research" name="description" required>
         </mat-form-field>
-
+  
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
           <mat-select [(value)]="aProjectSelected" formControlName="projectID">
@@ -27,7 +27,7 @@
           </mat-select>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
-
+  
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="taskID">
@@ -40,7 +40,7 @@
           <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
         </mat-form-field>
 
-        <button mat-raised-button color="accent" class="float-right"
+        <button mat-raised-button color="accent" class="float-right" 
               (click)="addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
       </form>
@@ -78,8 +78,8 @@
           </div>
         <!--</ng-template>
       </ngb-carousel>-->
-
-
+      
+      
     </div>
   </section>
 
@@ -285,7 +285,7 @@
             </li>
           </ul>
         </mat-expansion-panel>
-
+        
       </mat-accordion>
     </div>
   </section>
@@ -311,7 +311,7 @@
           <mat-label>Description</mat-label>
           <input matInput formControlName="description" type="text" placeholder="Research" name="description">
         </mat-form-field>
-
+    
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
           <mat-select [(value)]="mProjectSelected" formControlName="project">
@@ -319,7 +319,7 @@
           </mat-select>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
-
+  
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected" formControlName="taskID">
@@ -327,24 +327,24 @@
           </mat-select>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
-
+    
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Monetary value</mat-label>
           <input matInput readonly [value]="monetaryValue" formControlName="monetaryValue" type="text" placeholder="0.00" name="monetary-value">
         </mat-form-field>
-
+    
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Date</mat-label>
           <input matInput formControlName="date" type="date" placeholder="0.00" name="monetary-value" [min]="formatDate(date5)" [max]="formatDate(date)" required>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
-
+    
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Start time</mat-label>
           <input matInput formControlName="startTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
           <mat-error>{{getStartError()}}</mat-error>
         </mat-form-field>
-
+    
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>End time</mat-label>
           <input matInput formControlName="endTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
@@ -356,19 +356,19 @@
         <input hidden formControlName="activeTime" [(ngModel)]="activeTime" [value]="activeTime">
       </form>
       <!-- END ***************************************************************** -->
-
-
+   
+      
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary"
-              (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()"
+      <button mat-raised-button color="primary" 
+              (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
               [disabled]="manualTrackingForm.invalid", id= "m-tracking">Create an Entry
-      </button>
+      </button>    
       <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset();">Cancel</button>
     </div>
 
-  </div>
+  </div> 
 </ng-template>
 
 <ng-template #editModal let-modal id="edit-form">
@@ -389,7 +389,7 @@
           <mat-label>Description</mat-label>
           <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
         </mat-form-field>
-
+  
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
           <mat-select [(value)]="aProjectSelected" formControlName="Project">
@@ -397,7 +397,7 @@
           </mat-select>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
-
+  
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
           <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="TaskID">
@@ -409,10 +409,11 @@
     </div>
 
     <div class="modal-footer">
-      <button mat-raised-button color="primary"
+      <button mat-raised-button color="primary" 
               (click)="modal.close('Save click'); editEntry(editEntryForm.value)">Save Changes</button>
       <button mat-raised-button color="accent"(click)="modal.close('Save click'); editEntryForm.reset();">Cancel</button>
     </div>
 
   </div>
 </ng-template>
+  
