@@ -1,0 +1,70 @@
+<div class="row">
+  <section id="organisation-header" class="col-6">
+    <h2>IOT Devices</h2>
+    <div>
+      <!-- ADD DEVICE FORM ************************************************ -->
+      <form id="register-device-form" [formGroup]="addDeviceForm" method="post" class="col-12">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Device name</mat-label>
+          <input matInput formControlName="deviceName" type="text" placeholder="Research" name="deviceName" required>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Mac address</mat-label>
+          <input matInput formControlName="macAddress" type="text" placeholder="Research" name="macAddress" required>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" type="text" placeholder="Research" name="description">
+        </mat-form-field>
+        <button mat-raised-button color="accent" class="float-right"
+              (click)="registerDevice(addDeviceForm.value); addDeviceForm.reset()"
+              [disabled]="addDeviceForm.invalid">Add Device</button>
+      </form>
+    </div>
+  </section>
+  <section class="col-6">
+    <div id="devices-div" class="info row p-0">
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Search Devices</mat-label>
+          <input matInput type="search" type="text" placeholder="Device details" name="searchDevices">
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="!devices" id="total-devices" class="col-auto">
+        <b>-</b><br>DEVICES
+      </div>
+      <div *ngIf="devices && devices?.length == 1" id="total-devices" class="col-auto">
+        <b>1</b><br>DEVICE
+      </div>
+      <div *ngIf="devices && (devices.length == 0 || devices.length > 1)" id="total-devices" class="col-auto">
+        <b>{{devices.length}}</b><br>DEVICES
+      </div>
+    </div>
+
+    <mat-spinner *ngIf="!devices" class="req-spinner"></mat-spinner>
+
+    <!-- devices -->
+    <div id="devices" class="pr-3 row scroll">
+      <mat-spinner *ngIf="!devices" class="req-spinner"></mat-spinner>
+
+      <mat-card *ngFor="let d of devices" class="device">
+        <!-- reject -->
+        <button mat-mini-fab class="delete-device d-block float-right"
+                matTooltip="Delete"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="below"
+                (click)="deregisterDevice(d.macAddress)" id="delete">
+          <mat-icon inline="true">delete</mat-icon>
+        </button>
+          <!-- details -->
+        <mat-card-title>{{d.deviceName}}</mat-card-title>
+        <mat-card-subtitle>{{d.macAddress}}</mat-card-subtitle>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-card-footer class="px-3">
+          {{d.description}}
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  </section>
+</div>
