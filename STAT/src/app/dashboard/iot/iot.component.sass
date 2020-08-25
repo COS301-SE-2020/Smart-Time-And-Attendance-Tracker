@@ -1,0 +1,181 @@
+*
+  font-size: 1em
+
+button:focus, button:active, button
+  border: none !important
+  outline: none
+
+.container
+  padding: 2em
+
+#devices
+  mat-card:nth-child(odd)
+      background: #366ceb
+      color: #ffffff
+
+  mat-card:nth-child(even)
+    background: #7846eb
+    color: #ffffff
+
+  button
+    outline: none !important
+
+h2
+  color: #4c585b
+  font-size: 1.8em
+  margin-bottom: 0
+
+.info
+  color: #4c585b90
+  text-align: left
+  height: fit-content !important
+  display: flex
+  justify-content: center
+  align-items: center
+
+  .col-8, .col-auto
+    padding-bottom: 0
+    height: fit-content
+    vertical-align: top
+
+#devices-div mat-form-field
+  margin-left: 0em !important
+
+.row
+  padding: 2em
+  padding-top: 0em
+
+  >
+    section
+      padding: 2em
+
+mat-card
+  background-color: #366ceb
+  border-radius: 1em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+  color: #ffffff
+  display: inline-block
+  margin: 0em auto
+  margin-bottom: 1em
+  margin-top: 1em
+  padding: 1.5em
+  padding-bottom: 2.25em
+  width: 80%
+  font-size: 0.9em
+  height: fit-content
+
+  mat-divider
+    color: #ffffff
+    margin-bottom: 1.5em
+    margin-top: 1.5em
+
+  mat-card-footer
+    color: #ffffff
+    padding-top: 0.5em
+    text-align: right
+
+    button
+      color: #333333
+      margin-left: 0.5em
+
+    .delete-device
+      background-color: #ffffff
+
+  mat-card-title
+    color: #ffffff
+    font-size: 1.25em
+
+  mat-card-subtitle
+    color: #ffffff
+    color: #ffffff
+
+mat-icon
+  font-size: 1.2em !important
+  vertical-align: top !important
+
+.scroll
+  flex-direction: column
+  flex-wrap: nowrap
+  overflow-x: hidden
+  overflow-y: scroll
+  padding: 0 1.5em 0.2em 0.8em
+  height: 70vh
+
+.scroll::-webkit-scrollbar
+  border-radius: 0.5em
+  background-color: #ffffff
+  width: 0.5em
+
+.scroll::-webkit-scrollbar-track::hover
+  cursor: pointer
+
+.scroll::-webkit-scrollbar-thumb
+  border-radius: 0.5em
+  background-color: #4c585b70
+
+.scroll::-webkit-scrollbar-track
+  border-radius: 0.5em
+  background-color: #ffffff
+
+section
+  align-items: left
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: flex-start
+  height: 100%
+  padding: 1.5em
+  width: 100%
+
+  div.col-auto
+    display: inline-block
+    text-align: center
+    float: right
+
+  #total-devices
+    b
+      color: #366ceb
+      font-size: 1.4em
+
+.float-right button, .device-btn
+  padding: 0
+  color: #4c585b90
+  text-transform: uppercase
+  font-size: 0.8em
+  line-height: normal
+  min-width: fit-content
+  margin-left: 1.5em
+  align-items: center
+
+  &:focus
+    outline: none
+
+  mat-icon
+    font-size: 1em !important
+    vertical-align: top !important
+
+#devices-div
+  align-items: center
+  padding: 0 1em
+  margin-top: -2em
+
+  mat-form-field
+    margin-left: 0.5em
+
+.device-btn
+  margin-left: 0
+  margin-right: 0.5em
+  padding: 0.2em 0.3em
+  border: 1px dashed white !important
+  border-radius: 10em
+  visibility: hidden
+
+  mat-icon
+    color: rgba(255, 255, 255, 0.85)
+
+.device:hover
+  button
+    visibility: visible
+
+  button:hover
+    background-color: rgab(0,0,0,0) !important
