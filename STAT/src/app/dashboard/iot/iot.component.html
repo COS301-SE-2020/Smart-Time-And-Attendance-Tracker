@@ -1,80 +1,222 @@
 <div class="row">
   <section id="organisation-header" class="col-6">
-    <h2>IOT Devices</h2>
-    <div>
-      <!-- ADD DEVICE FORM ************************************************ -->
-      <form id="register-device-form" [formGroup]="addDeviceForm" method="post" class="col-12">
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Device name</mat-label>
-          <input matInput formControlName="deviceName" type="text" placeholder="Research" name="deviceName" required>
-        </mat-form-field>
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Mac address</mat-label>
-          <input matInput formControlName="macAddress" type="text" placeholder="Research" name="macAddress" required>
-        </mat-form-field>
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Description</mat-label>
-          <input matInput formControlName="description" type="text" placeholder="Research" name="description">
-        </mat-form-field>
-        <button mat-raised-button color="accent" class="float-right">Add Device</button>
-        <button mat-raised-button color="accent" class="float-right"
-              (click)="registerDevice(addDeviceForm.value); addDeviceForm.reset()"
-              [disabled]="addDeviceForm.invalid">Start Tracking</button>
-      </form>
-    </div>
-  </section>
-  <section class="col-6">
-    <div id="devices-div" class="info row p-0">
+    <h2>Authorisation Requests</h2>
+    <div class="info row p-0">
+      <div *ngIf="!requests" id="total-requests" class="col-auto">
+        <b>-</b><br>REQUESTS
+      </div>
+      <div *ngIf="requests && requests?.length == 1" id="total-requests" class="col-auto">
+        <b>1</b><br>REQUEST
+      </div>
+      <div *ngIf="requests && (requests.length == 0 || requests.length > 1)" id="total-requests" class="col-auto">
+        <b>{{requests.length}}</b><br>REQUESTS
+      </div>
+
       <div class="col-8">
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Search Devices</mat-label>
-          <input matInput type="search" type="text" placeholder="Device details" name="searchDevices">
+        <mat-form-field appearance="standard" class="col-10">
+          <mat-label>Search Requests</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
         </mat-form-field>
+
+        <button mat-mini-fab id="sort-menu"
+                matTooltip="Sort"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="right"
+                [matMenuTriggerFor]="menu">
+          <mat-icon>sort</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('a')">Alphabetically</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('o')">Date (oldest first)</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">Date (newest first)</button>
+        </mat-menu>
       </div>
 
-      <div *ngIf="!devices" id="total-devices" class="col-auto">
-        <b>-</b><br>DEVICES
-      </div>
-      <div *ngIf="devices && devices?.length == 1" id="total-devices" class="col-auto">
-        <b>1</b><br>DEVICE
-      </div>
-      <div *ngIf="devices && (devices.length == 0 || devices.length > 1)" id="total-devices" class="col-auto">
-        <b>{{devices.length}}</b><br>DEVICES
-      </div>
     </div>
-
-    <mat-spinner *ngIf="!devices" class="req-spinner"></mat-spinner>
-
-    <!-- devices -->
-    <div id="devices" class="pr-3 row scroll">
-      <mat-spinner *ngIf="!devices" class="req-spinner"></mat-spinner>
-      <mat-card *ngFor="let d of devices" class="device">
+    <div id="requests" class="pr-3 row scroll">
+      <mat-spinner *ngIf="!requests" class="req-spinner"></mat-spinner>
+      <mat-card *ngFor="let r of searchRequests(searchText)" class="request">
 
           <!-- details -->
-        <mat-card-title>{{d.deviceName}}
-          <span class="device-edit">
-            <button mat-button class="device-btn float-right"
-                    matTooltip="Edit"
-                    matTooltipClass="device-tooltip"
-                    matTooltipPosition="above">
-                    <mat-icon inline="true">edit</mat-icon>
-            </button>
-            <button mat-button class="device-btn float-right"
-                    matTooltip="Remove"
-                    matTooltipClass="device-tooltip"
-                    matTooltipPosition="above"
-                    (click)="deregisterDevice(d.macAddress)">
-                    <mat-icon inline="true">remove_circle</mat-icon>
-            </button>
-          </span>
-        </mat-card-title>
-        <mat-card-subtitle>{{d.macAddress}}</mat-card-subtitle>
+        <mat-card-title>{{r.name}} {{r.surname}}</mat-card-title>
+        <mat-card-subtitle>{{r.email}}</mat-card-subtitle>
 
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-card-footer class="px-3">
-          {{d.description}}
-        </mat-card-footer>
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-card-footer class="px-3">
+
+            <!-- accept -->
+            <button mat-mini-fab class="accept-request"
+                    matTooltip="Accept"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="authenticateUser(r.ID)" id="accept">
+              <mat-icon inline="true">check</mat-icon>
+            </button>
+
+            <!-- reject -->
+            <button mat-mini-fab class="reject-request"
+                    matTooltip="Reject"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="rejectUser(r.ID)" id="reject">
+              <mat-icon inline="true">close</mat-icon>
+            </button>
+          </mat-card-footer>
       </mat-card>
+
     </div>
   </section>
+
+  <section class="col-6">
+
+    <div id="members-div" class="info row p-0">
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Search Members</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchMem" (keyup)="searchMembers(searchMem)">
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="!members" id="total-members" class="col-auto">
+        <b>-</b><br>MEMBERS
+      </div>
+      <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
+        <b>1</b><br>MEMBER
+      </div>
+      <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
+        <b>{{members.length}}</b><br>MEMBERS
+      </div>
+    </div>
+
+    <mat-spinner *ngIf="!members" class="req-spinner"></mat-spinner>
+
+    <!-- members -->
+    <div *ngIf="members" id="members" class="scroll">
+      <aside id="alphabet" class="alphabet">
+        <a class="active" (click)="filterMem('#')">#</a>
+        <a class="" (click)="filterMem('A')">A</a>
+        <a class="" (click)="filterMem('B')">B</a>
+        <a class="" (click)="filterMem('C')">C</a>
+        <a class="" (click)="filterMem('D')">D</a>
+        <a class="" (click)="filterMem('E')">E</a>
+        <a class="" (click)="filterMem('F')">F</a>
+        <a class="" (click)="filterMem('G')">G</a>
+        <a class="" (click)="filterMem('H')">H</a>
+        <a class="" (click)="filterMem('I')">I</a>
+        <a class="" (click)="filterMem('J')">J</a>
+        <a class="" (click)="filterMem('K')">K</a>
+        <a class="" (click)="filterMem('L')">L</a>
+        <a class="" (click)="filterMem('M')">M</a>
+        <a class="" (click)="filterMem('N')">N</a>
+        <a class="" (click)="filterMem('O')">O</a>
+        <a class="" (click)="filterMem('P')">P</a>
+        <a class="" (click)="filterMem('Q')">Q</a>
+        <a class="" (click)="filterMem('R')">R</a>
+        <a class="" (click)="filterMem('S')">S</a>
+        <a class="" (click)="filterMem('T')">T</a>
+        <a class="" (click)="filterMem('U')">U</a>
+        <a class="" (click)="filterMem('V')">V</a>
+        <a class="" (click)="filterMem('W')">W</a>
+        <a class="" (click)="filterMem('X')">X</a>
+        <a class="" (click)="filterMem('Y')">Y</a>
+        <a class="" (click)="filterMem('Z')">Z</a>
+      </aside>
+
+      <ul class="member-list" *ngFor="let m of membersResult" id="{{m.alphabet}}">
+        <li class="list-alpha">{{m.alphabet}}</li>
+        <li *ngFor="let r of m.records" class="member">
+          <div *ngIf="r.profilePicture == 'none'" class="pro-pic">{{r.name[0]}}{{r.surname[0]}}</div>
+          <img *ngIf="r.profilePicture != 'none'" src="assets/proPic3.jpg">
+          <span>{{r.name}} {{r.surname}}<br> <i>{{r.email}}</i></span>
+          <span class="member-edit">
+            <button mat-button class="teams-btn"
+                    matTooltip="Edit"
+                    matTooltipClass="teams-tooltip"
+                    matTooltipPosition="above"
+                    (click)="editMember = r; open(editMemberModal); memberName = r.name + ' ' + r.surname; editRoles = r.role;">
+                    <mat-icon inline="true">edit</mat-icon>
+            </button>
+            <button mat-button class="teams-btn"
+                    matTooltip="Remove"
+                    matTooltipClass="teams-tooltip"
+                    matTooltipPosition="above"
+                    (click)="open(removeMemberModal); mid = r.ID; memberName = r.name + ' ' + r.surname;">
+                    <mat-icon inline="true">remove_circle</mat-icon>
+            </button>
+          </span><br>
+          <div class="member-roles">
+          <span *ngIf="r.role.includes('System Administrator')" class="tag role sys">System Administrator</span>
+          <span *ngIf="r.role.includes('Security Administrator')" class="tag role sec">Security Administrator</span>
+          <span *ngIf="r.role.includes('Team Leader')" class="tag role tl">Team Leader</span>
+          <span *ngIf="r.role.includes('Data Analyst')" class="tag role da">Data Analyst</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </section>
 </div>
+
+<!-- ****************************************** REMOVE MEMBER ****************************************** -->
+<ng-template #removeMemberModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Remove {{memberName}}
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to remove this member from the organisation?
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); removeUser(mid)">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ****************************************** EDIT MEMBER ****************************************** -->
+<ng-template #editMemberModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit {{memberName}}'s details
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <mat-form-field appearance="standard" class="col-6">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="John" name = "editName" [(ngModel)]="editMember.name" [value]="editMember.name">
+        <mat-error>Please enter a value</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="col-6">
+        <mat-label>Surname</mat-label>
+        <input matInput placeholder="Doe" name = "editSurname" [(ngModel)]="editMember.surname" [value]="editMember.surname">
+        <mat-error>Please enter a value</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="col-6">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="jdoe@gmail.com" name = "editEmail" [(ngModel)]="editMember.email" [value]="editMember.email">
+        <mat-error>Please enter a value</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="standard" class="col-6">
+        <mat-label>Organisation Roles</mat-label>
+        <mat-select multiple [ngModel]="editMember.role">
+          <mat-option (click)="updateRoles(r)" *ngFor="let r of roles" [value]="r">{{r}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); editUser()">Save changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
