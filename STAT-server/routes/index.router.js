@@ -36,6 +36,8 @@ const calendar = require('../tracker/calendar/calendar.manager');
 const jwtHelper = require('../config/jwtHelper');
 const userHelper = require('../helpers/user.helper');
 
+const analysis =  require('../controllers/analysis.controller');
+
 //user
 router.post("/user/register", user.register);
 router.post("/user/login", user.login);
@@ -107,5 +109,11 @@ router.post("/iotDevice/deregister", jwtHelper.verifyJWTtoken, userHelper.isAuth
 router.post("/iotDevice/getAllDevices", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.getAllDevices);
 router.post("/iotDevice/startTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.startTimer, userTimeEntry.addTimeEntry);
 router.post("/iotDevice/stopTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
+
+
+//predictive annalysis
+router.get("/analysis/getUserAverageTime", analysis.getUserAverageTime);
+
+
 
 module.exports = router;
