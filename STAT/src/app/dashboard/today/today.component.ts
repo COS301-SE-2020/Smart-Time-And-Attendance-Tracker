@@ -103,7 +103,7 @@ export class TodayComponent implements OnInit {
       this.trackingNow = true;
       this.cd.detectChanges();
       this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
-      this.timing = this.currentlyTracking.activeTime;
+      this.tracking();
       console.log(this.currentlyTracking);
     }
     this.reload()
@@ -191,13 +191,12 @@ export class TodayComponent implements OnInit {
     let now = new Date();
     this.currentlyTracking.activeTime= 0;
     this.currentlyTracking.description = form['description']
-
-    if( form['taskName']!= undefined || form['taskName']!= 'Unspecified')
+    if( form['taskName']!= undefined )
       this.currentlyTracking.taskName =form['taskName'];
 
-    if( form['projectName']!= undefined || form['taskName']!='Unspecified')
+    if( form['projectName']!= undefined )
       this.currentlyTracking.projectName =form['projectName'];
-
+      
     localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
 
     this.startTime = now.getTime();
@@ -212,11 +211,11 @@ export class TodayComponent implements OnInit {
         this.currentlyTracking.activeTime = 1;
         form['activeTime'] = 1;
         form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
-
+        localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
           this.service.EntryID = data['timeEntryID'];
           localStorage.setItem('currentlyTracking', data['timeEntryID']);
-
+          localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
           //var details = {'description' : form['description'], 'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
 
           const options = {
@@ -251,6 +250,7 @@ export class TodayComponent implements OnInit {
     localStorage.removeItem('currentlyTrackingDetails');
     this.updateEntry().subscribe((data) => { },
       error => {
+        console.log(error);
         let errorCode = error['status'];
         if (errorCode == '403')
           this.headerService.kickOut();
@@ -281,6 +281,7 @@ export class TodayComponent implements OnInit {
         this.updateEntry().subscribe((data) => {
         },
         error => {
+          console.log(error);
           let errorCode = error['status'];
           if (errorCode == '403')
             this.headerService.kickOut();
@@ -311,7 +312,7 @@ export class TodayComponent implements OnInit {
     {
       this.monetaryValue = 0
     }
-    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
+    let values = {"timeEntryID" : localStorage.getItem('currentlyTracking'), "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
      return this.service.updateTimeEntry(values, localStorage.getItem('token'));
 
   }
