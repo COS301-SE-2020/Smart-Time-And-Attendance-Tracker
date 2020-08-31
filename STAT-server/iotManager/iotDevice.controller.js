@@ -47,8 +47,8 @@ module.exports.register = (req, res) => {
             IOTDevice.MACAddress = req.body.macAddress;
             IOTDevice.RegisteredBy = req.ID;
             if(req.body.hasOwnProperty("description"))
-                IOTDevice.Description = description;
-            IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
+                IOTDevice.Description = req.body.description;
+            IOTDevice.RegisteredOn = (now.toISOString().slice(0,10)).replace(/-/g,"/");
             IOTDevice.save((err, doc) => {
                 if(!err){
                     return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
@@ -81,7 +81,7 @@ module.exports.register = (req, res) => {
  */
 module.exports.deregister = (req, res) => {
     var now = new Date;
-    var date = now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate();
+    var date = (now.toISOString().slice(0,10)).replace(/-/g,"/");
 
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
     {
@@ -220,7 +220,7 @@ module.exports.startTimer = (req, res, next) => {
     if(!req.body.hasOwnProperty("userID"))
         return res.status(400).send({message: 'No user ID provided'});
     var now = new Date;
-    var date = now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate();
+    var date = (now.toISOString().slice(0,10)).replace(/-/g,"/");
 
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
     {
