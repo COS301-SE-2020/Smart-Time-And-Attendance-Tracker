@@ -105,7 +105,6 @@ export class TodayComponent implements OnInit {
       this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
       this.timing = this.currentlyTracking.activeTime;
       console.log(this.currentlyTracking);
-      this.tracking();
     }
     this.reload()
   
