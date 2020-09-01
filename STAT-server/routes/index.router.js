@@ -102,10 +102,10 @@ router.post("/calendar/syncEvents",jwtHelper.verifyJWTtoken,calendar.getLastSync
 router.get("/calendar/getCredentials", jwtHelper.verifyJWTtoken,calendar.getCredentials);
 
 //iot devices
-router.post("/iotDevice/register", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.register);
-router.post("/iotDevice/deregister", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.deregister);
-router.post("/iotDevice/getAllDevices", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.getAllDevices);
-router.post("/iotDevice/startTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.startTimer, userTimeEntry.addTimeEntry);
-router.post("/iotDevice/stopTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
+router.post("/iotDevice/register", jwtHelper.verifyJWTtoken, userHelper.isSystemAdmin, iotDevice.register);
+router.post("/iotDevice/deregister", jwtHelper.verifyJWTtoken, userHelper.isSystemAdmin, iotDevice.deregister);
+router.get("/iotDevice/getAllDevices", jwtHelper.verifyJWTtoken,  userHelper.isSystemAdmin, iotDevice.getAllDevices);
+router.post("/iotDevice/startTimer", iotDevice.startTimer, userTimeEntry.addTimeEntry);
+router.post("/iotDevice/stopTimer", iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
 
 module.exports = router;
