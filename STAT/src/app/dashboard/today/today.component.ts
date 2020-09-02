@@ -27,7 +27,10 @@ export class TodayComponent implements OnInit {
   sync;
   projectName: string;
   projectID : string;
-  
+
+  eID : string
+  ename : string
+
   panelOpenState = false;
   closeResult: string;
   autoTracking = true;
@@ -319,6 +322,26 @@ export class TodayComponent implements OnInit {
 
   // edit tracking entry
   editEntry(form : NgForm) {
+
+  }
+
+  // delete tracking entry
+  deleteEntry(id : string) {
+
+    this.service.removeTimeEntry(localStorage.getItem('token'), id).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+    this.reload();
 
   }
 

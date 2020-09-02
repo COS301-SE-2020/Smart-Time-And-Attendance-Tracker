@@ -62,8 +62,7 @@
                   <mat-icon *ngIf="p.completed == true" inline="true">check_circle</mat-icon>
                     {{p.projectName}}
                   <span class="tag numTasks">{{p.tasks.length}} tasks</span>
-                  <button *ngIf="roles.includes('Team Leader')" 
-                          mat-button class="pro-btn"
+                  <button mat-button class="pro-btn"
                           matTooltip="R{{p.hourlyRate}} per hour"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above">
