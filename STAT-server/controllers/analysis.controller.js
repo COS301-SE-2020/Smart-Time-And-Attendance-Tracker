@@ -353,6 +353,7 @@ module.exports.getUserWebsites = async (req, res) => {
     }
     
         var urlArray = [];
+        var websites=[];
         UserTimeEntryModel.findOne({  UserID : req.query.userID}, async (err, result) => {
            //console.log(result);
             if (err) {
@@ -427,28 +428,43 @@ module.exports.getUserWebsites = async (req, res) => {
 
                                     
                                    // return array[map.indexOf(Math.max.apply(null, map))];
+
                                    var arr=urlArray;
-                                   console.log(arr);
-                                   for(var a=0; a<arr.length; a++){
+                                   for(var b=0; b<arr.length; b++){
+                                       if(arr[b]==undefined){
+                                           arr[b]="others";
+                                       }
+
+                                   }
+
+                                   
+                                   //console.log(arr);
+                                   //console.log(arr.length);
+                                   var arrayLength=urlArray.length;
+                                   for(var a=0; a<arrayLength; a++){
+                                      
                                             AnalysisHelper.mostVisitedWebsite( arr, async (err, val) => {
                                                 //console.log(err)
                                                 //console.log(val)
-                                                //console.log(urlArray)
+                                                console.log(val)
+
                                                if (val) {
-                                                    AnalysisHelper.deleteFromArray( arr,val, async (err, result) => {
+                                                websites.push(val);
+                                                    AnalysisHelper.deleteFromArray( arr,val.element, async (err, result) => {
                                                         //console.log(err);
+                                                        //arrayLength=arr.le
                                                     });
                                                }
-                                               else{ ///error value
+                                              /* else{ ///error value
                                                    console.log("error = "+err);
                                                    AnalysisHelper.deleteFromArray( arr,"undefined", async (err, result) => {
                                                     //console.log(err);
                                                 });
-                                               }
+                                               }*/
                                         });
                                      //console.log(a);
-                                     if(a==arr.length-5){
-                                        return res.status(200).json({url: urlArray});
+                                     if(arr.length == 1){
+                                        return res.status(200).json({url: websites});
                                      }
                                    }
 
