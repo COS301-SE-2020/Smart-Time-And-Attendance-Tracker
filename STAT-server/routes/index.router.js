@@ -113,7 +113,7 @@ router.post("/iotDevice/stopTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthe
 
 //predictive annalysis
 router.get("/analysis/getUserAverageTime", analysis.getUserAverageTime);
-router.get("/analysis/getAllProjectDevices", analysis.getAllProjectDevices);
+//router.get("/analysis/getAllProjectDevices", analysis.getAllProjectDevices);
 router.get("/analysis/getUserDevices", analysis.getUserDevices);
 router.get("/analysis/getUserWebsites", analysis.getUserWebsites);
 router.get("/analysis/getProjectDevices", analysis.getProjectDevices);
