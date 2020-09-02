@@ -399,35 +399,7 @@ module.exports.getUserWebsites = async (req, res) => {
                                 }
                                 if(count3==times-1){
 
-                                    /*var map = urlArray.map(function(a) {
-                                        return urlArray.filter(function(b) {
-                                            return a === b;
-                                        }).length;
-                                    });
-                                    console.log(urlArray[map.indexOf(Math.max.apply(null, map))])*/
-
-                                    
-                                    /*if(urlArray.length == 0)
-                                        return null;
-                                    var modeMap = {};
-                                    var maxEl = urlArray[0], maxCount = 1;
-                                    for(var i = 0; i < urlArray.length; i++)
-                                    {
-                                        var el = urlArray[i];
-                                        if(modeMap[el] == null)
-                                            modeMap[el] = 1;
-                                        else
-                                            modeMap[el]++;  
-                                        if(modeMap[el] > maxCount)
-                                        {
-                                            maxEl = el;
-                                            maxCount = modeMap[el];
-                                        }
-                                    }
-                                    console.log(maxEl+" - "+maxCount);*/
-
-                                    
-                                   // return array[map.indexOf(Math.max.apply(null, map))];
+                                   
 
                                    var arr=urlArray;
                                    for(var b=0; b<arr.length; b++){
@@ -684,6 +656,7 @@ module.exports.getProjectWebsites = async (req, res) => {
         var totalCount=0;
         var members=0;
         var urlArray=[];
+        var websites=[];
         ProjectHelper.getProject(req.query.projectID, async(err, result) => {
             if (err) {
                 return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -727,13 +700,13 @@ module.exports.getProjectWebsites = async (req, res) => {
                              else{
                                  
              
-                                if(req.query.hasOwnProperty("projectID")) ////redundant again
-                                {
+                               
                                     var totalEntries =0;
                                     
                                     result.TimeEntries.forEach( async function(myDoc){ 
-                                        //console.log(myDoc);
-                                        TimeEntryModel.findOne({_id: myDoc, ProjectID: req.query.ProjectID,  StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
+                                       
+
+                                        TimeEntryModel.findOne({_id: myDoc._id, ProjectID: req.query.ProjectID,  StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
                                             count3= count3+1;
                                            
                                             if(err){
@@ -753,17 +726,76 @@ module.exports.getProjectWebsites = async (req, res) => {
                                                 urlArray.push(host);
                                             }
                                             if(count3==times-1){
-                                                        count3=0;
-                                                        members=members+1;
-                                                        console.log(members)
-                                                if (members == teamMembers) {
-                                                    console.log(urlArray)
-                                                }  
+            
+                                                
+                                               count3=0;
+            
+                                               var arr=urlArray;
+                                               for(var b=0; b<arr.length; b++){
+                                                   if(arr[b]==undefined){
+                                                       arr[b]="others";
+                                                   }
+            
+                                               }
+            
+                                               
+                                               //console.log(arr);
+                                               //console.log(arr.length);
+                                               var arrayLength=urlArray.length;
+                                               for(var a=0; a<arrayLength; a++){
+                                                  
+                                                        AnalysisHelper.mostVisitedWebsite( arr, async (err, val) => {
+                                                            //console.log(err)
+                                                            //console.log(val)
+                                                            console.log(val)
+            
+                                                           if (val) {
+                                                            websites.push(val);
+                                                                AnalysisHelper.deleteFromArray( arr,val.element, async (err, result) => {
+                                                                    //console.log(err);
+                                                                    //arrayLength=arr.le
+                                                                });
+                                                           }
+                                                          /* else{ ///error value
+                                                               console.log("error = "+err);
+                                                               AnalysisHelper.deleteFromArray( arr,"undefined", async (err, result) => {
+                                                                //console.log(err);
+                                                            });
+                                                           }*/
+                                                    });
+                                                 //console.log(a);
+                                                
+                                                 if(arr.length == 1){
+                                                    members=members+1;
+                                                    console.log(members)
+                                                    if (members == teamMembers) {
+                                                        return res.status(200).json({url: websites});
+                                                    }
+                                                    break;
+
+                                                 }
+                                               
+
+
+                                                 /*if(arr.length == 1){
+                                                    return res.status(200).json({url: websites});
+                                                 }*/
+
+
+                                               }
+            
+                                               
+                                                
                                             }
                                         });
+
+
+
+
+
                                     });
                                    
-                                }
+                                
 
 
 
@@ -772,7 +804,7 @@ module.exports.getProjectWebsites = async (req, res) => {
                          }
                      });
                      
-                     console.log("lalalalalaal") 
+                     //console.log("lalalalalaal") 
 
 
                 }); 
