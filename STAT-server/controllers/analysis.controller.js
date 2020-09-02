@@ -31,7 +31,9 @@ const UserHelper =require('../helpers/user.helper');
 const ProjectModel = mongoose.model("Project");
 var Promise = require('promise');
 var async = require("async");
+const { calendar } = require("googleapis/build/src/apis/calendar");
 
+const AnalysisHelper =require('../helpers/analysis.helper');
 /**
  * this function receives user id and calculates users average time
  * @param {user id} req 
@@ -40,8 +42,8 @@ var async = require("async");
 module.exports.getUserAverageTime = (req, res) => {  
     var count = true;
     var count3 = 0;
-    if(!req.query.hasOwnProperty("userID"))
-        return res.status(400).send({message: 'No user ID provided'});
+    if(!req.query.hasOwnProperty("userID") || !req.query.hasOwnProperty("minDate") || !req.query.hasOwnProperty("maxDate"))
+        return res.status(400).send({message: 'Provide correct detail. Check minDate,maxDate and userID'});
 
     UserTimeEntryModel.findOne({  UserID : req.query.userID},(err, result) => {
         if (err) {
@@ -58,11 +60,18 @@ module.exports.getUserAverageTime = (req, res) => {
                 return res.status(404).json({ message: 'No time entries for the given user were found' });
             }
             else{
+                ///set dates
+                var min = new Date(req.query.minDate).getTime();
+                var max = new Date(req.query.maxDate);
+                max.setDate(max.getDate() + 1);
+                max = max.getTime();
+
                 if(req.query.hasOwnProperty("projectID")) ///return average on a certain project
                 {
                     var totalEntries =0;
+                    
                    for(var a=0; a<times; a++){
-                        TimeEntryModel.findOne({_id: result.TimeEntries[a], ProjectID: req.query.ProjectID},(err,val)=>{   
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a], ProjectID: req.query.ProjectID  },(err,val)=>{   
                             count3= count3+1; 
                             if(err){
                                 return res.status(500).send({message: 'Internal Server Error: ' + error});
@@ -112,4 +121,646 @@ module.exports.getUserAverageTime = (req, res) => {
             }
         }
     });
+}
+
+
+/*
+ * this function gets a device breakdown for a project - checks each users device usage
+ * @param {projectID, minDate, maxDate } req 
+ * @param { Total: 72, Browser: 40, Website: 32 } res 
+ */
+
+module.exports.getAllProjectDevices = async (req, res) => {  
+    if(!req.query.hasOwnProperty("projectID"))
+        return res.status(400).send({message: 'No project ID provided'});
+    var projectID=req.query.projectID;
+    var count4 =0;
+
+    var min = new Date(req.query.minDate).getTime();
+    if(req.query.hasOwnProperty("maxDate"))
+    {
+        var max = new Date(req.query.maxDate);
+        max.setDate(max.getDate() + 1);
+        max = max.getTime()
+    }
+    else
+        var max = new Date().getTime(); 
+
+    TimeEntryModel.find({  ProjectID : req.query.projectID,  StartTime: {$gte: min,$lte: max} },async (err, result) => {
+        if (err) {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result ){
+            return res.status(404).json({ message: 'No time entries for the given project were found' }); 
+        }
+        else{
+            var timeentries = result.length;
+            console.log(timeentries)
+            if(result.length==0){
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            }
+            else{
+                    var browsers=0;
+                    var websites=0;
+                    for(var a=0; a<timeentries; a++){
+                        if(val.Device == "Browser"){
+                            browsers++;
+                        }
+                        else if(val.Device == "Website"){
+                            websites++;
+                        }
+                        else if(val.Device == "Google calendar"){
+                            calendar++;
+                        }
+                        else if(val.Device == "Manual entry"){
+                            manual++;
+                        }
+                        else if(val.Device == "IOT Device"){
+                            iot++;
+                        }
+                        else{
+                            others++
+                        }
+                    }
+                    return res.status(200).json({Total: timeentries, Browser: browsers, Website: websites});
+            }
+        }               
+    });
+}
+
+
+/**
+ * receives userid and returns device breakdown, add projectid to get auser project device breakdown
+ * @param {} req 
+ * @param {*} res 
+ */
+
+module.exports.getUserDevices = async (req, res) => {  
+    if(!req.query.hasOwnProperty("userID"))
+        return res.status(400).send({message: 'No user ID provided'});
+
+    var count4 =0;
+
+    var min = new Date(req.query.minDate).getTime();
+    if(req.query.hasOwnProperty("maxDate"))
+    {
+        var max = new Date(req.query.maxDate);
+        max.setDate(max.getDate() + 1);
+        max = max.getTime()
+    }
+    else{
+        var max = new Date().getTime();
+    }
+    
+        var browsers=0;
+        var websites=0;
+        var others=0;
+        var calendar=0;
+        var iot=0;
+        var manual=0;
+        UserTimeEntryModel.findOne({  UserID : req.query.userID}, async (err, result) => {
+           //console.log(result);
+            if (err) {
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            }
+            else if (!result){
+                return res.status(404).json({ message: 'No time entries for the given user were found' }); 
+            }
+            else{
+  
+                var times = result.TimeEntries.length;
+                 var count3=0;
+                if(times == 0){   
+                    return res.status(404).json({ message: 'No time entries for the given user were found' });
+                }
+                else{
+                    
+
+                    if(req.query.hasOwnProperty("projectID")) ////device for project
+                    {
+                        var totalEntries =0;
+                        
+                        result.TimeEntries.forEach( async function(myDoc){ 
+                            //console.log(myDoc);
+                            TimeEntryModel.findOne({_id: myDoc, ProjectID: req.query.ProjectID,  StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
+                                count3= count3+1;
+                                //console.log(count3); 
+                                if(err){
+                                    return res.status(500).send({message: 'Internal Server Error: ' + error});
+    
+                                }
+                                else if(!val){
+                                    others++;
+                                }
+                                else if(val){
+                                    if(val.Device == "Browser"){
+                                        browsers++;
+                                    }
+                                    else if(val.Device == "Website"){
+                                        websites++;
+                                    }
+                                    else if(val.Device == "Google calendar"){
+                                        calendar++;
+                                    }
+                                    else if(val.Device == "Manual entry"){
+                                        manual++;
+                                    }
+                                    else if(val.Device == "IOT Device"){
+                                        iot++;
+                                    }
+                                    else{
+                                        others++
+                                    }
+                                }
+                                if(count3==times-1){
+                                    return res.status(200).json({Total: count3, Browser: browsers, 
+                                           Website: websites, Calendar:calendar, IOT: iot, Manual: manual, Others: others});
+                                }
+                            });
+                        });
+                       
+                    }
+                    else{   ////without project
+    
+                        result.TimeEntries.forEach( async function(myDoc){ 
+                            //console.log(myDoc);
+                            TimeEntryModel.findOne({_id: myDoc, StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
+                                count3= count3+1;
+                                //console.log(count3); 
+                                if(err){
+                                    return res.status(500).send({message: 'Internal Server Error: ' + error});
+    
+                                }
+                                else if(!val){
+                                    others++;
+                                }
+                                else if(val){
+                                    if(val.Device == "Browser"){
+                                        browsers++;
+                                    }
+                                    else if(val.Device == "Website"){
+                                        websites++;
+                                    }
+                                    else if(val.Device == "Google calendar"){
+                                        calendar++;
+                                    }
+                                    else if(val.Device == "Manual entry"){
+                                        manual++;
+                                    }
+                                    else if(val.Device == "IOT Device"){
+                                        iot++;
+                                    }
+                                    else{
+                                        others++
+                                    }
+                                }
+                                if(count3==times-1){
+                                    return res.status(200).json({Total: count3, Browser: browsers, 
+                                           Website: websites, Calendar:calendar, IOT: iot, Manual: manual, Others: others});
+                                }
+                            });
+                        });
+
+                    }
+                    
+                }
+            }
+        });
+}
+
+
+/**
+ * This project returns the websites a users has visited
+ * 
+ */
+
+ 
+module.exports.getUserWebsites = async (req, res) => {  
+    if(!req.query.hasOwnProperty("userID"))
+        return res.status(400).send({message: 'No user ID provided'});
+
+    var count4 =0;
+
+    var min = new Date(req.query.minDate).getTime();
+    if(req.query.hasOwnProperty("maxDate"))
+    {
+        var max = new Date(req.query.maxDate);
+        max.setDate(max.getDate() + 1);
+        max = max.getTime()
+    }
+    else{
+        var max = new Date().getTime();
+    }
+    
+        var urlArray = [];
+        UserTimeEntryModel.findOne({  UserID : req.query.userID}, async (err, result) => {
+           //console.log(result);
+            if (err) {
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            }
+            else if (!result){
+                return res.status(404).json({ message: 'No time entries for the given user were found' }); 
+            }
+            else{
+  
+                var times = result.TimeEntries.length;
+                 var count3=0;
+                if(times == 0){   
+                    return res.status(404).json({ message: 'No time entries for the given user were found' });
+                }
+                else{
+                    
+
+                    if(req.query.hasOwnProperty("projectID")) ////device for project
+                    {
+                        var totalEntries =0;
+                        
+                        result.TimeEntries.forEach( async function(myDoc){ 
+                            //console.log(myDoc);
+                            TimeEntryModel.findOne({_id: myDoc, ProjectID: req.query.ProjectID,  StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
+                                count3= count3+1;
+                               
+                                if(err){
+                                    return res.status(500).send({message: 'Internal Server Error: ' + error});
+    
+                                }
+                                else if(!val){
+                                    //others++;
+                                }
+                                else if(val){
+                                    var pathArray = val.Description.split( '/' ); 
+                                    var protocol = pathArray[0];
+                                    var host = pathArray[2];
+                                    var url = protocol + '//' + host;
+                                   // console.log(val.Description)
+                                    //console.log(host)
+                                    urlArray.push(host);
+                                }
+                                if(count3==times-1){
+
+                                    /*var map = urlArray.map(function(a) {
+                                        return urlArray.filter(function(b) {
+                                            return a === b;
+                                        }).length;
+                                    });
+                                    console.log(urlArray[map.indexOf(Math.max.apply(null, map))])*/
+
+                                    
+                                    /*if(urlArray.length == 0)
+                                        return null;
+                                    var modeMap = {};
+                                    var maxEl = urlArray[0], maxCount = 1;
+                                    for(var i = 0; i < urlArray.length; i++)
+                                    {
+                                        var el = urlArray[i];
+                                        if(modeMap[el] == null)
+                                            modeMap[el] = 1;
+                                        else
+                                            modeMap[el]++;  
+                                        if(modeMap[el] > maxCount)
+                                        {
+                                            maxEl = el;
+                                            maxCount = modeMap[el];
+                                        }
+                                    }
+                                    console.log(maxEl+" - "+maxCount);*/
+
+                                    
+                                   // return array[map.indexOf(Math.max.apply(null, map))];
+                                   var arr=urlArray;
+                                   console.log(arr);
+                                   for(var a=0; a<arr.length; a++){
+                                            AnalysisHelper.mostVisitedWebsite( arr, async (err, val) => {
+                                                //console.log(err)
+                                                //console.log(val)
+                                                //console.log(urlArray)
+                                               if (val) {
+                                                    AnalysisHelper.deleteFromArray( arr,val, async (err, result) => {
+                                                        //console.log(err);
+                                                    });
+                                               }
+                                               else{ ///error value
+                                                   console.log("error = "+err);
+                                                   AnalysisHelper.deleteFromArray( arr,"undefined", async (err, result) => {
+                                                    //console.log(err);
+                                                });
+                                               }
+                                        });
+                                     //console.log(a);
+                                     if(a==arr.length-5){
+                                        return res.status(200).json({url: urlArray});
+                                     }
+                                   }
+
+                                   
+                                    
+                                }
+                            });
+                        });
+                       
+                    }
+                    else{   ////without project
+    
+                        result.TimeEntries.forEach( async function(myDoc){ 
+                            //console.log(myDoc);
+                            TimeEntryModel.findOne({_id: myDoc, StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
+                                count3= count3+1;
+                               
+                                if(err){
+                                    return res.status(500).send({message: 'Internal Server Error: ' + error});
+    
+                                }
+                                else if(!val){
+                                    //others++;
+                                }
+                                else if(val){
+                                    var pathArray = val.Description.split( '/' ); 
+                                    var protocol = pathArray[0];
+                                    var host = pathArray[2];
+                                    var url = protocol + '//' + host;
+                                   // console.log(val.Description)
+                                    console.log(host)
+                                    urlArray.push(host);
+                                }
+                                if(count3==times-1){
+                                     return res.status(200).json({url: urlArray});
+                                    }
+                            });
+                        });
+
+                    }
+                    
+                }
+            }
+        });
+}
+
+
+/**
+ * 
+ * this function receives a project id and dates 
+ * returns project device breakdown
+ */
+
+module.exports.getProjectDevices = async (req, res) => {  
+    if(!req.query.hasOwnProperty("projectID"))
+        return res.status(400).send({message: 'No project ID provided'});
+
+    var count4 =0;
+
+    var min = new Date(req.query.minDate).getTime();
+    if(req.query.hasOwnProperty("maxDate"))
+    {
+        var max = new Date(req.query.maxDate);
+        max.setDate(max.getDate() + 1);
+        max = max.getTime()
+    }
+    else{
+        var max = new Date().getTime();
+    }
+    
+        var browsers=0;
+        var websites=0;
+        var others=0;
+        var calendar=0;
+        var iot=0;
+        var manual=0;
+        var totalCount=0;
+        var members=0;
+        ProjectHelper.getProject(req.query.projectID, async(err, result) => {
+            if (err) {
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            }
+            else if (!result){
+                return res.status(404).json({ message: 'Project not found' }); 
+            }
+            else{
+                var teamMembers=result.TeamMembers.length;
+                console.log(teamMembers)
+                result.TeamMembers.forEach( async function(myDoc){ 
+                    console.log(myDoc)
+                    UserTimeEntryModel.findOne({  UserID :myDoc._id}, async (err, result) => {
+                        /*members=members+1;
+                        console.log(members)*/
+                        //console.log(result);
+                         if (err) {
+                             return res.status(500).send({message: 'Internal Server Error: ' + err});
+                         }
+                         else if (!result){
+                             //return res.status(404).json({ message: 'No time entries for the given user were found' });
+                             members=members+1;
+                             console.log(members)
+
+                             if (members == teamMembers) {
+                                return res.status(200).json({Total: totalCount, Browser: browsers, 
+                                    Website: websites, Calendar:calendar, IOT: iot, Manual: manual, Others: others});
+                            } 
+                         }
+                         else{
+               
+                             var times = result.TimeEntries.length;
+                              var count3=0;
+                             if(times == 0){   
+                                 //return res.status(404).json({ message: 'No time entries for the given user were found' });
+                                 members=members+1;
+                                 console.log(members)
+                                 if (members == teamMembers) {
+                                    return res.status(200).json({Total: totalCount, Browser: browsers, 
+                                        Website: websites, Calendar:calendar, IOT: iot, Manual: manual, Others: others});
+                                }
+                             }
+                             else{
+                                 
+             
+                                 if(req.query.hasOwnProperty("projectID")) ////redundant
+                                 {
+                                     var totalEntries =0;
+                                     
+                                     result.TimeEntries.forEach( async function(myDoc){ 
+                                         //console.log(myDoc);
+                                         TimeEntryModel.findOne({_id: myDoc, ProjectID: req.query.ProjectID,  StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
+                                             count3= count3+1;
+                                             totalCount=totalCount+1;
+                                             //console.log(count3); 
+                                             if(err){
+                                                 return res.status(500).send({message: 'Internal Server Error: ' + error});
+                 
+                                             }
+                                             else if(!val){
+                                                 others++;
+                                             }
+                                             else if(val){
+                                                 console.log("ndani")
+                                                 if(val.Device == "Browser"){
+                                                     browsers++;
+                                                 }
+                                                 else if(val.Device == "Website"){
+                                                     websites++;
+                                                 }
+                                                 else if(val.Device == "Google calendar"){
+                                                     calendar++;
+                                                 }
+                                                 else if(val.Device == "Manual entry"){
+                                                     manual++;
+                                                 }
+                                                 else if(val.Device == "IOT Device"){
+                                                     iot++;
+                                                 }
+                                                 else{
+                                                     others++
+                                                 }
+                                             }
+                                             if(count3==times-1){
+                                                /* return res.status(200).json({Total: count3, Browser: browsers, 
+                                                        Website: websites, Calendar:calendar, IOT: iot, Manual: manual, Others: others});*/
+                                                        count3=0;
+                                                       // console.log("got in")
+                                                        members=members+1;
+                                                        console.log(members)
+                                                        if (members == teamMembers) {
+                                                            return res.status(200).json({Total: totalCount, Browser: browsers, 
+                                                                Website: websites, Calendar:calendar, IOT: iot, Manual: manual, Others: others});
+                                                        }
+                                                        
+                                             }
+                                         });
+                                     });
+                                    
+                                 }
+                                 
+                             }
+                         }
+                     });
+                     
+                     console.log("lalalalalaal") 
+
+
+                }); 
+            }
+           
+        });
+}
+
+
+/**
+ * 
+ * 
+ */
+
+
+module.exports.getProjectWebsites = async (req, res) => {  
+    if(!req.query.hasOwnProperty("projectID"))
+        return res.status(400).send({message: 'No project ID provided'});
+
+    var count4 =0;
+
+    var min = new Date(req.query.minDate).getTime();
+    if(req.query.hasOwnProperty("maxDate"))
+    {
+        var max = new Date(req.query.maxDate);
+        max.setDate(max.getDate() + 1);
+        max = max.getTime()
+    }
+    else{
+        var max = new Date().getTime();
+    }
+    
+        var totalCount=0;
+        var members=0;
+        var urlArray=[];
+        ProjectHelper.getProject(req.query.projectID, async(err, result) => {
+            if (err) {
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            }
+            else if (!result){
+                return res.status(404).json({ message: 'Project not found' }); 
+            }
+            else{
+                var teamMembers=result.TeamMembers.length;
+                console.log(teamMembers)
+                result.TeamMembers.forEach( async function(myDoc){ 
+                   // console.log(myDoc)
+                    UserTimeEntryModel.findOne({  UserID :myDoc._id}, async (err, result) => {
+                        /*members=members+1;
+                        console.log(members)*/
+                        //console.log(result);
+                         if (err) {
+                             return res.status(500).send({message: 'Internal Server Error: ' + err});
+                         }
+                         else if (!result){
+                             //return res.status(404).json({ message: 'No time entries for the given user were found' });
+                             members=members+1;
+                             console.log(members)
+
+                             if (members == teamMembers) {
+                                console.log(urlArray);
+                            } 
+                         }
+                         else{
+               
+                             var times = result.TimeEntries.length;
+                              var count3=0;
+                             if(times == 0){   
+                                 //return res.status(404).json({ message: 'No time entries for the given user were found' });
+                                 members=members+1;
+                                 console.log(members)
+                                 if (members == teamMembers) {
+                                    console.log(urlArray)
+                                }
+                             }
+                             else{
+                                 
+             
+                                if(req.query.hasOwnProperty("projectID")) ////redundant again
+                                {
+                                    var totalEntries =0;
+                                    
+                                    result.TimeEntries.forEach( async function(myDoc){ 
+                                        //console.log(myDoc);
+                                        TimeEntryModel.findOne({_id: myDoc, ProjectID: req.query.ProjectID,  StartTime: {$gte: min,$lte: max}   }, async(err,val)=>{   
+                                            count3= count3+1;
+                                           
+                                            if(err){
+                                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+                
+                                            }
+                                            else if(!val){
+                                                //others++;
+                                            }
+                                            else if(val){
+                                                var pathArray = val.Description.split( '/' ); 
+                                                var protocol = pathArray[0];
+                                                var host = pathArray[2];
+                                                var url = protocol + '//' + host;
+                                               // console.log(val.Description)
+                                                //console.log(host)
+                                                urlArray.push(host);
+                                            }
+                                            if(count3==times-1){
+                                                        count3=0;
+                                                        members=members+1;
+                                                        console.log(members)
+                                                if (members == teamMembers) {
+                                                    console.log(urlArray)
+                                                }  
+                                            }
+                                        });
+                                    });
+                                   
+                                }
+
+
+
+                                 
+                             }
+                         }
+                     });
+                     
+                     console.log("lalalalalaal") 
+
+
+                }); 
+            }
+           
+        });
 }
