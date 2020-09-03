@@ -35,6 +35,7 @@ export class TodayComponent implements OnInit {
   closeResult: string;
   manualTrackingForm : FormGroup
   automaticTrackingForm: FormGroup
+  editEntryForm : FormGroup
 
   projects : []
   tasks : { ID : any, taskName : string }[]
@@ -50,6 +51,7 @@ export class TodayComponent implements OnInit {
 
   pName : string
   tName : string
+  entryToEdit : any
 
   entries : Object[]
   week : Object[] = []
@@ -94,6 +96,21 @@ export class TodayComponent implements OnInit {
       projectName : new FormControl(''),
       taskName : new FormControl('')
     });
+
+    this.editEntryForm = new FormGroup({
+      description : new FormControl(''),
+      project : new FormControl(''),
+      taskID : new FormControl(''),
+      //MonetaryValue : new FormControl('', [Validators.required]),
+      date : new FormControl('', [Validators.required]),
+      startTime : new FormControl('', [Validators.required]),
+      endTime : new FormControl('', [Validators.required]),
+      projectName : new FormControl(''),
+      taskName : new FormControl(''),
+      activeTime : new FormControl('')
+    });
+
+    this.editEntryForm.setValidators(this.checkTimes('startTime', 'endTime'));
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
 
@@ -329,6 +346,7 @@ export class TodayComponent implements OnInit {
   editEntry(form : NgForm) {
 
   }
+
 
   // delete tracking entry
   deleteEntry(id : string) {
