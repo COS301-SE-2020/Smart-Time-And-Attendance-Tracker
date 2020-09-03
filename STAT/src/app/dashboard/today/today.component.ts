@@ -60,7 +60,7 @@ export class TodayComponent implements OnInit {
   date4 : Date = new Date()
   date5 : Date = new Date()
 
-  activityVal : any
+  activityVal : number = 0
   entriesVal : number = 0
   tasksVal : any[] = []
 
@@ -403,8 +403,8 @@ export class TodayComponent implements OnInit {
         if (element.task != 'Unspecified' && !this.tasksVal.includes(val)) {
           this.tasksVal.push(val)
         }
+        this.activityVal += element.activeTime
       });
-      console.log(this.tasksVal)
 
       if (date == this.formatDate(this.date))
         this.week['today'] = data['timeEntries'].sort((a : any ,b : any) =>

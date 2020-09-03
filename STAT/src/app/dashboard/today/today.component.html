@@ -88,10 +88,15 @@
     <h2>This Week</h2>
 
     <div class="info row">
-      <div id="activity" class="col-4">
-        <b>17h 20m</b><br>ACTIVITY
+
+      <!-- ACTIVITY -->
+      <div *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" id="activity" class="col-4">
+        <b>-</b><br>ACTIVITY
       </div>
-      
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days']" id="activity" class="col-4">
+        <b>{{getTime(activityVal)}}</b><br>ACTIVITY
+      </div>
+
       <!-- ENTIRES -->
       <div *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" id="entries" class="col-4">
         <b>-</b><br>ENTRIES
