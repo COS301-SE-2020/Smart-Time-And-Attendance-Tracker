@@ -33,7 +33,6 @@ export class TodayComponent implements OnInit {
 
   panelOpenState = false;
   closeResult: string;
-  autoTracking = true;
   manualTrackingForm : FormGroup
   automaticTrackingForm: FormGroup
 
@@ -61,6 +60,10 @@ export class TodayComponent implements OnInit {
   date4 : Date = new Date()
   date5 : Date = new Date()
 
+  activityVal : any
+  entriesVal : number = 0
+  tasksVal : any[] = []
+
   trackingNow =false;
 
   currentlyTracking = { 'description' : 'No description', 'startTime' : '', 
@@ -82,7 +85,7 @@ export class TodayComponent implements OnInit {
       activeTime : new FormControl('')
     });
 
-    this.manualTrackingForm.setValidators(this.checkTimes('StartTime', 'EndTime'));
+    this.manualTrackingForm.setValidators(this.checkTimes('startTime', 'endTime'));
 
     this.automaticTrackingForm = new FormGroup({
       description : new FormControl('',[Validators.required]),
@@ -115,6 +118,10 @@ export class TodayComponent implements OnInit {
 
   // reload page data
   reload() {
+    this.entriesVal = 0
+    this.activityVal = 0
+    this.tasksVal = []
+
     this.getProAndTasks()
 
     // get entries
@@ -145,14 +152,12 @@ export class TodayComponent implements OnInit {
     }
   }
 
-  modalForm() {
-    this.autoTracking = !this.autoTracking
-  }
-
   //Add a manual time entry from form
   addManualEntry(form : NgForm)
   {
-    this.service.addMTimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
+    form['date'] = form['date'].replace(/\-/g, '/')
+    this.service.addMTimeEntry(localStorage.getItem('token'), form).subscribe((data) => {
+      console.log(data)
       this.reload()
     },
     error => {
@@ -390,6 +395,17 @@ export class TodayComponent implements OnInit {
   getEntries(date : String) {
     this.amService.getTimeEntries(date, localStorage.getItem('token')).subscribe((data) => {
       console.log(data)
+
+      // values on dashboard
+      this.entriesVal += data['timeEntries'].length
+      data['timeEntries'].forEach(element => {
+        let val = element.task + element.project
+        if (element.task != 'Unspecified' && !this.tasksVal.includes(val)) {
+          this.tasksVal.push(val)
+        }
+      });
+      console.log(this.tasksVal)
+
       if (date == this.formatDate(this.date))
         this.week['today'] = data['timeEntries'].sort((a : any ,b : any) =>
           b.endTime - a.endTime
@@ -486,20 +502,20 @@ export class TodayComponent implements OnInit {
 
   // start time must be at least a minute before end time
   getStartError() {
-    if (this.manualTrackingForm.controls.StartTime.hasError('required')) {
+    if (this.manualTrackingForm.controls.startTime.hasError('required')) {
       return 'Please enter a value';
     }
 
-    return this.manualTrackingForm.controls.StartTime.hasError('mustMatch') ? 'Invalid start time' : '';
+    return this.manualTrackingForm.controls.startTime.hasError('mustMatch') ? 'Invalid start time' : '';
   }
 
   // end time must be at least a minute after start time
   getEndError() {
-    if (this.manualTrackingForm.controls.EndTime.hasError('required')) {
+    if (this.manualTrackingForm.controls.endTime.hasError('required')) {
       return 'Please enter a value';
     }
 
-    return this.manualTrackingForm.controls.EndTime.hasError('mustMatch') ? 'End time must occur at least a minute after start time' : '';
+    return this.manualTrackingForm.controls.endTime.hasError('mustMatch') ? 'End time must occur at least a minute after start time' : '';
   }
 
   // check time values

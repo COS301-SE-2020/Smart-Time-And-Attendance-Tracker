@@ -26,12 +26,12 @@ export class MainComponent implements OnInit {
       wrapper.classList.toggle('open')
     });
 
-    this.active = 'iot';
+    this.active = 'today';
 
   }
   // set active tab after component initialisation ************this function is not being run
   ngAfterViewInit(): void {
-    const navItem = document.getElementById('iot');
+    const navItem = document.getElementById('today');
     navItem.classList.add('active');
   }
 

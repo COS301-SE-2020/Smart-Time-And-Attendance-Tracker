@@ -85,19 +85,35 @@
 
   <!-- HISTORY -->
   <section id="history" class="col-6">
+    <h2>This Week</h2>
+
     <div class="info row">
       <div id="activity" class="col-4">
         <b>17h 20m</b><br>ACTIVITY
       </div>
-      <div id="entries" class="col-4">
-        <b>12</b><br>ENTRIES
+      
+      <!-- ENTIRES -->
+      <div *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" id="entries" class="col-4">
+        <b>-</b><br>ENTRIES
       </div>
-      <div id="tasks" class="col-4">
-        <b>3</b><br>TASKS
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && entriesVal == 1" id="entries" class="col-4">
+        <b>1</b><br>ENTRY
+      </div>
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && (entriesVal == 0 || entriesVal > 1)" id="entries" class="col-4">
+        <b>{{entriesVal}}</b><br>ENTRIES
+      </div>
+      
+      <!-- TASKS -->
+      <div *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" id="tasks" class="col-4">
+        <b>-</b><br>TASKS
+      </div>
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && tasksVal.length == 1" id="tasks" class="col-4">
+        <b>1</b><br>TASK
+      </div>
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && (tasksVal.length == 0 || tasksVal.length > 1)" id="tasks" class="col-4">
+        <b>{{tasksVal.length}}</b><br>TASKS
       </div>
     </div>
-
-    <h2>This Week</h2>
 
     <div class="scroll">
       <mat-spinner *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" class="req-spinner"></mat-spinner>
@@ -346,7 +362,6 @@
     </div>
 
     <div class="modal-body">
-
       <!-- MANUAL TRACKING FORM ************************************************ -->
       <form [formGroup]="manualTrackingForm" id="manual-tracking-form" (ngSubmit)="addManualEntry(manualTrackingForm.value)">
         <mat-form-field appearance="standard" class="col-12">
@@ -372,24 +387,24 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Monetary value</mat-label>
-          <input matInput readonly [value]="monetaryValue" formControlName="monetaryValue" type="text" placeholder="0.00" name="monetary-value">
+          <input matInput readonly [value]="monetaryValue" formControlName="monetaryValue" type="text" placeholder="0.00">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Date</mat-label>
-          <input matInput formControlName="date" type="date" placeholder="0.00" name="monetary-value" [min]="formatDate(date5)" [max]="formatDate(date)" required>
+          <input matInput formControlName="date" type="date" placeholder="0.00" [min]="formatDate(date5)" [max]="formatDate(date)" required>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Start time</mat-label>
-          <input matInput formControlName="startTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
+          <input matInput formControlName="startTime" type="time" placeholder="0.00" required (change)="calculateMoney()">
           <mat-error>{{getStartError()}}</mat-error>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>End time</mat-label>
-          <input matInput formControlName="endTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
+          <input matInput formControlName="endTime" type="time" placeholder="0.00" required (change)="calculateMoney()">
           <mat-error>{{getEndError()}}</mat-error>
         </mat-form-field>
 
@@ -398,19 +413,17 @@
         <input hidden formControlName="activeTime" [(ngModel)]="activeTime" [value]="activeTime">
       </form>
       <!-- END ***************************************************************** -->
-   
-      
     </div>
 
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
               (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
-              [disabled]="manualTrackingForm.invalid", id= "m-tracking">Create an Entry
+              [disabled]="manualTrackingForm.invalid" id= "m-tracking">Create an Entry
       </button>    
       <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset();">Cancel</button>
     </div>
 
-  </div> 
+  </div>
 </ng-template>
 
 <ng-template #editModal let-modal id="edit-form">
