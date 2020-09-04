@@ -41,7 +41,7 @@
         </mat-form-field>
 
         <button mat-raised-button color="accent" class="float-right" 
-              (click)="addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
+              (click)="editing = false; addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
       </form>
       <br><br>
@@ -186,7 +186,7 @@
                           matTooltip="Delete"
                           matTooltipClass="entry-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                          (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
@@ -223,7 +223,7 @@
                 matTooltip="Delete"
                 matTooltipClass="entry-tooltip"
                 matTooltipPosition="above"
-                (click)="open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
                 <mat-icon inline="true">delete</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
@@ -260,7 +260,7 @@
                     matTooltip="Delete"
                     matTooltipClass="entry-tooltip"
                     matTooltipPosition="above"
-                    (click)="open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                    (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
                     <mat-icon inline="true">delete</mat-icon>
                </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
@@ -297,7 +297,7 @@
                     matTooltip="Delete"
                     matTooltipClass="entry-tooltip"
                     matTooltipPosition="above"
-                    (click)="open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                    (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
                     <mat-icon inline="true">delete</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
@@ -335,7 +335,7 @@
                       matTooltip="Delete"
                       matTooltipClass="entry-tooltip"
                       matTooltipPosition="above"
-                      (click)="open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                      (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
                       <mat-icon inline="true">delete</mat-icon>
               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
@@ -422,7 +422,7 @@
 
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
+              (click)="editing = false; modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
               [disabled]="manualTrackingForm.invalid" id= "m-tracking">Create an Entry
       </button>    
       <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset();">Cancel</button>

@@ -52,6 +52,8 @@ export class TodayComponent implements OnInit {
   pName : string
   tName : string
   entryToEdit : any
+  editing : boolean = false
+  editingTime : any = 0
 
   entries : Object[]
   week : Object[] = []
@@ -360,6 +362,8 @@ export class TodayComponent implements OnInit {
   }
 
   setEditValues() {
+    this.editing = true
+    this.editingTime = this.entryToEdit.activeTime
     this.entryToEdit.date = this.entryToEdit.date.replace(/\//g, '-')
     this.entryToEdit.startTime = new Date(this.entryToEdit.startTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } )
     this.entryToEdit.endTime = new Date(this.entryToEdit.endTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } )
@@ -377,6 +381,7 @@ export class TodayComponent implements OnInit {
     this.entryToEdit.endTime = endTime.valueOf()
     var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
     var activeTime = Math.round(difference / 60000);
+    this.editingTime = activeTime - this.editingTime
     this.entryToEdit.activeTime = activeTime
 
     if (this.mProjectSelected != null) {
@@ -419,6 +424,8 @@ export class TodayComponent implements OnInit {
           this.getEntries(this.formatDate(this.date5))
           break
       }
+
+      //this.editing = false
     },
     error => {
       //console.log(error);
@@ -500,13 +507,19 @@ export class TodayComponent implements OnInit {
       console.log(data)
 
       // values on dashboard
-      this.entriesVal += data['timeEntries'].length
+      if (this.editing == false) {
+        this.entriesVal += data['timeEntries'].length
+      } else {
+        this.activityVal -= - this.editingTime
+      }
+
       data['timeEntries'].forEach(element => {
-        let val = element.task + element.project
-        if (element.task != 'Unspecified' && !this.tasksVal.includes(val)) {
-          this.tasksVal.push(val)
+        if (element.taskID != null && !this.tasksVal.includes(element.taskID)) {
+          this.tasksVal.push(element.taskID)
         }
-        this.activityVal += element.activeTime
+
+        if (this.editing == false)
+          this.activityVal += element.activeTime
       });
 
       if (date == this.formatDate(this.date))
