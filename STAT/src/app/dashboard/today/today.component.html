@@ -179,7 +179,7 @@
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
                       matTooltipPosition="above"
-                      (click)="open(editModal)">
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <button   mat-button class="edit-btn"
@@ -447,20 +447,20 @@
       <form #editEntryForm="ngForm" id="edit-entry-form" (ngSubmit)="addManualEntry(editEntryForm.value)">
           <mat-form-field appearance="standard" class="col-12">
             <mat-label>Description</mat-label>
-            <input matInput formControlName="description" type="text" placeholder="Research" name="description">
+            <input matInput [(ngModel)]="entryToEdit.description" [value]="entryToEdit.description" type="text" placeholder="Research" name="description">
           </mat-form-field>
       
           <mat-form-field appearance="standard" class="col-6">
             <mat-label>Project</mat-label>
-            <mat-select [(value)]="mProjectSelected" formControlName="project">
-              <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'm'); pName = p.projectName">{{p.projectName}}</mat-option>
+            <mat-select [(value)]="mProjectSelected">
+              <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'm'); pName = p.projectName; hourlyRate = p.hourlyRate">{{p.projectName}}</mat-option>
             </mat-select>
             <mat-error>Please select a value</mat-error>
           </mat-form-field>
     
           <mat-form-field appearance="standard" class="col-6">
             <mat-label>Task</mat-label>
-            <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected" formControlName="taskID">
+            <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected">
             <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
             </mat-select>
             <mat-error>Please select a value</mat-error>
@@ -468,36 +468,36 @@
       
           <mat-form-field appearance="standard" class="col-6">
             <mat-label>Monetary value</mat-label>
-            <input matInput readonly [value]="monetaryValue" formControlName="monetaryValue" type="text" placeholder="0.00">
+            <input matInput readonly [(ngModel)]="entryToEdit.monetaryValue" [value]="entryToEdit.monetaryValue" type="text" placeholder="0.00" name="monetaryValue">
           </mat-form-field>
       
           <mat-form-field appearance="standard" class="col-6">
             <mat-label>Date</mat-label>
-            <input matInput formControlName="date" type="date" placeholder="0.00" [min]="formatDate(date5)" [max]="formatDate(date)" required>
+            <input matInput type="date" [(ngModel)]="entryToEdit.date" [value]="entryToEdit.date" placeholder="0.00" [min]="formatDate(date5)" [max]="formatDate(date)" required name="date">
             <mat-error>Please select a value</mat-error>
           </mat-form-field>
       
           <mat-form-field appearance="standard" class="col-6">
             <mat-label>Start time</mat-label>
-            <input matInput formControlName="startTime" type="time" placeholder="0.00" required (change)="calculateMoney()">
+            <input matInput type="time" [(ngModel)]="entryToEdit.startTime" [value]="entryToEdit.startTime" placeholder="0.00" required (change)="editMoney()" name="startTime">
             <mat-error>{{getStartError()}}</mat-error>
           </mat-form-field>
       
           <mat-form-field appearance="standard" class="col-6">
             <mat-label>End time</mat-label>
-            <input matInput formControlName="endTime" type="time" placeholder="0.00" required (change)="calculateMoney()">
+            <input matInput type="time" [(ngModel)]="entryToEdit.endTime" [value]="entryToEdit.endTime" placeholder="0.00" required (change)="editMoney()" name="endTime">
             <mat-error>{{getEndError()}}</mat-error>
           </mat-form-field>
   
-          <input hidden formControlName="projectName" [(ngModel)]="pName" [value]="pName">
-          <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
-          <input hidden formControlName="activeTime" [(ngModel)]="activeTime" [value]="activeTime">
+          <input hidden [(ngModel)]="pName" [value]="pName" name="projectName">
+          <input hidden [(ngModel)]="tName" [value]="tName" name="taskName">
+          <input hidden [(ngModel)]="activeTime" [value]="activeTime" name="activeTime">
       </form>
     </div>
 
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); editEntry(editEntryForm.value)">Save Changes</button>
+              (click)="modal.close('Save click'); editEntry()">Save Changes</button>
       <button mat-raised-button color="accent"(click)="modal.close('Save click'); editEntryForm.reset();">Cancel</button>
     </div>
 

@@ -207,6 +207,23 @@ export class TodayComponent implements OnInit {
 
   }
 
+  editMoney() {
+    var startTime = this.entryToEdit.startTime
+    var endTime = this.entryToEdit.endTime
+    if (startTime && endTime) {
+      startTime = new Date('2020/01/01 ' + startTime)
+      endTime = new Date('2020/01/01 ' + endTime)
+      var diff = endTime.getTime() - startTime.getTime()
+      this.entryToEdit.activeTime = Math.floor( diff / 60000);
+      var hours = diff / 3600000
+      this.entryToEdit.monetaryValue = hours * this.hourlyRate
+    }
+
+    if (isNaN(this.entryToEdit.monetaryValue))
+      this.entryToEdit.monetaryValue = 0
+
+  }
+
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
@@ -342,9 +359,77 @@ export class TodayComponent implements OnInit {
 
   }
 
-  // edit tracking entry
-  editEntry(form : NgForm) {
+  setEditValues() {
+    this.entryToEdit.date = this.entryToEdit.date.replace(/\//g, '-')
+    this.entryToEdit.startTime = new Date(this.entryToEdit.startTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } )
+    this.entryToEdit.endTime = new Date(this.entryToEdit.endTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } )
+    this.mProjectSelected = this.entryToEdit.projectID
+    this.mTaskSelected = this.entryToEdit.taskID
+  }
 
+  // edit tracking entry
+  editEntry() {
+    this.entryToEdit.date = this.entryToEdit.date.replace(/\-/g, '/')
+
+    var startTime = new Date(this.entryToEdit.date + ' ' + this.entryToEdit.startTime); 
+    var endTime = new Date(this.entryToEdit.date + ' ' + this.entryToEdit.endTime);
+    this.entryToEdit.startTime = startTime.valueOf()
+    this.entryToEdit.endTime = endTime.valueOf()
+    var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+    var activeTime = Math.round(difference / 60000);
+    this.entryToEdit.activeTime = activeTime
+
+    if (this.mProjectSelected != null) {
+      this.entryToEdit.projectID = this.mProjectSelected
+      this.entryToEdit.projectName = this.pName
+    }
+
+    if (this.mTaskSelected != null) {
+      this.entryToEdit.taskID = this.mTaskSelected
+      this.entryToEdit.taskName = this.tName
+    }
+
+    console.log(this.entryToEdit)
+
+    this.service.updateTimeEntry(this.entryToEdit, localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+      switch (this.entryToEdit.date) {
+        case this.formatDate(this.date):
+          this.week['today'] = []
+          this.getEntries(this.formatDate(this.date))
+          break
+        case this.formatDate(this.date1):
+          this.week['yesterday'] = []
+          this.getEntries(this.formatDate(this.date1))
+          break
+        case this.formatDate(this.date2):
+          this.week['2days'] = []
+          this.getEntries(this.formatDate(this.date2))
+          break
+        case this.formatDate(this.date3):
+          this.week['3days'] = []
+          this.getEntries(this.formatDate(this.date3))
+          break
+        case this.formatDate(this.date4):
+          this.week['4days'] = []
+          this.getEntries(this.formatDate(this.date4))
+          break
+        case this.formatDate(this.date5):
+          this.week['5days'] = []
+          this.getEntries(this.formatDate(this.date5))
+          break
+      }
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
   }
 
 
