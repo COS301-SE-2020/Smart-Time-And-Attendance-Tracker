@@ -141,14 +141,14 @@
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
                       matTooltipPosition="above"
-                      (click)="open(editModal)">
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <button   mat-button class="edit-btn"
                           matTooltip="Delete"
                           matTooltipClass="entry-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                          (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
@@ -216,7 +216,8 @@
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="above">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <button   mat-button class="edit-btn"
@@ -253,7 +254,8 @@
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="above">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <button   mat-button class="edit-btn"
@@ -290,7 +292,8 @@
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="above">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <button   mat-button class="edit-btn"
@@ -328,7 +331,7 @@
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
                       matTooltipPosition="above"
-                      (click)="open(editModal)">
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
               <button   mat-button class="edit-btn"
