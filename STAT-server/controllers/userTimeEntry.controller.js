@@ -432,7 +432,7 @@ module.exports.getDailyTimeEntries = (req, res) => {
  * @returns {JSON Object} Success or error message
  */  
 module.exports.deleteTimeEntry = (req, res) => {  
-    if(!req.body.hasOwnProperty('timeEntryID'))
+    if(!req.query.hasOwnProperty('timeEntryID'))
         return res.status(400).send({message: 'No time entry ID provided'}); 
     UserTimeEntryModel.updateOne({  UserID : req.ID},{ $pull: { 'TimeEntries':  req.query.timeEntryID}},(err, result) => {
         if (err) 
