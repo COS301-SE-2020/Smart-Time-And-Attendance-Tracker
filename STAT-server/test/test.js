@@ -22,49 +22,143 @@ var user1Token;
 
 
 describe("USER endpoints", ()=>{
-    describe("POST api/user/register", ()=>{
-        it("register a user", (done) =>{
-            let user = {
-                name:Name,
-                surname:Surname,
-                email: user1Email,
-                password: user1Password,
-                passwordConf:PasswordConf
-            }
-            chai.request('http://localhost:3000')
-                 .post("/api/user/register")
-                 .send(user)
-                 .end((err,res) => {
-                    res.body.should.be.a('object');
-                    res.should.have.status(201);
-                    res.body.should.have.property('message');
-                    res.body.should.have.property('token');
-                    user1Token=res.body.token;
-                done(); 
-                 })
-        });
+
+
+            it("register a user", (done) =>{
+                let user = {
+                    name:Name,
+                    surname:Surname,
+                    email: user1Email,
+                    password: user1Password,
+                    passwordConf:PasswordConf
+                }
+                chai.request('http://localhost:3000')
+                     .post("/api/user/register")
+                     .send(user)
+                     .end((err,res) => {
+                        res.body.should.be.a('object');
+                        res.should.have.status(201);
+                        res.body.should.have.property('message');
+                        res.body.should.have.property('token');
+                        user1Token=res.body.token;
+                    done(); 
+                     })
+            });
+    
+            it("fail register a user - User already exists", (done) =>{
+                let user = {
+                    name:Name,
+                    surname:Surname,
+                    email: user1Email,
+                    password: user1Password,
+                    passwordConf:PasswordConf
+                }
+                chai.request('http://localhost:3000')
+                     .post("/api/user/register")
+                     .send(user)
+                     .end((err,res) => {
+                        res.should.have.status(409);
+                        res.body.message.should.be.eq('User already exists');
+                    done(); 
+                     })
+            });
+    
+    
+            it("fail register a user - Missing credentials", (done) =>{
+                let user = {
+                    name:Name,
+                    surname:Surname,
+                    password: user1Password,
+                    passwordConf:PasswordConf
+                }
+                chai.request('http://localhost:3000')
+                     .post("/api/user/register")
+                     .send(user)
+                     .end((err,res) => {
+                        res.should.have.status(400);
+                        res.body.message.should.be.eq('Missing credentials');
+                    done(); 
+                     })
+            });
+    
+            it("fail register a user - Missing credentials", (done) =>{
+                let user = {
+                    name:Name,
+                    surname:Surname,
+                    email: user1Email,
+                    password: user1Password,
+                    passwordConf:PasswordConf+date
+                }
+                chai.request('http://localhost:3000')
+                     .post("/api/user/register")
+                     .send(user)
+                     .end((err,res) => {
+                        res.should.have.status(400);
+                        res.body.message.should.be.eq('Passwords do not match');
+                    done(); 
+                     })
+            });
+        //////end register
 
 
         ///login user  - login
-        var adminToken;
 
-        it("login a user", (done) =>{
-            let user = {
-                email: "admin@gmail.com",
-                password: "12345678"
-            }
-            chai.request('http://localhost:3000')
-                 .post("/api/user/login")
-                 .send(user)
-                 .end((err,res) => {
-                    res.body.should.be.a('object');
-                    res.should.have.status(200);
-                    res.body.should.have.property('message');
-                    res.body.should.have.property('token');
-                    adminToken=res.body.token;
-                done(); 
-                 })
-        });
+            var adminToken;
+
+            it("login a user", (done) =>{
+                let user = {
+                    email: "admin@gmail.com",
+                    password: "12345678"
+                }
+                chai.request('http://localhost:3000')
+                     .post("/api/user/login")
+                     .send(user)
+                     .end((err,res) => {
+                        res.body.should.be.a('object');
+                        res.should.have.status(200);
+                        res.body.should.have.property('message');
+                        res.body.should.have.property('token');
+                        adminToken=res.body.token;
+                    done(); 
+                     })
+            });
+
+
+            it("fail login a user - Missing credentials", (done) =>{
+                let user = {
+                    email: "admin@gmail.com"
+                }
+                chai.request('http://localhost:3000')
+                     .post("/api/user/login")
+                     .send(user)
+                     .end((err,res) => {
+                        res.body.should.be.a('object');
+                        res.should.have.status(400);
+                        res.body.should.have.property('message');
+                        res.body.message.should.be.eq('Missing credentials');
+                    done(); 
+                     })
+            });
+
+
+            it("fail login a user - unknown user", (done) =>{
+                let user = {
+                    email: date,
+                    password: "12345678"
+                }
+                chai.request('http://localhost:3000')
+                     .post("/api/user/login")
+                     .send(user)
+                     .end((err,res) => {
+                        res.body.should.be.a('object');
+                        res.should.have.status(500);
+                    done(); 
+                     })
+            });
+
+//////end login
+
+      
 
 
 /////get user1 name, email and id -getUnauthenticatedUsers
@@ -89,7 +183,7 @@ describe("USER endpoints", ()=>{
  
 
 
-/////GET namw
+/////GET name
 var user1ID;
         it("get  users name ; name="+Name, (done) =>{
             chai.request('http://localhost:3000')
@@ -99,6 +193,16 @@ var user1ID;
                     res.body.should.be.a('object');
                     res.should.have.status(200);
                     res.body.name.should.be.eq(Name); 
+                done(); 
+                 })
+        });
+
+        it("fail get users name - User not found", (done) =>{
+            chai.request('http://localhost:3000')
+                 .get("/api/user/getName")
+                 .set("Authorization", "Bearer " + user1Token+'l')
+                 .end((err,res) => {
+                    res.should.have.status(403);
                 done(); 
                  })
         });
@@ -158,6 +262,35 @@ var user1ID;
                  })
         });
 
+        it("fail authenticate user1 No user ID given", (done) =>{
+            let user = {
+            }
+            chai.request('http://localhost:3000')
+                 .post("/api/user/authenticateUser")
+                 .set("Authorization", "Bearer " + adminToken)
+                 .send(user) 
+                 .end((err,res) => {
+                    res.body.message.should.be.eq('No user ID given'); 
+                    res.should.have.status(400);
+                done(); 
+                 })
+        });
+
+        it("fail authenticate user1 -User not found ", (done) =>{
+            let user = {
+                userID:date
+            }
+            chai.request('http://localhost:3000')
+                 .post("/api/user/authenticateUser")
+                 .set("Authorization", "Bearer " + adminToken)
+                 .send(user) 
+                 .end((err,res) => {
+                    res.body.message.should.be.a('string'); 
+                    res.should.have.status(500);
+                done(); 
+                 })
+        });
+
 
 ///check if user is authenticated - isAuthenticated
 
@@ -175,7 +308,6 @@ var user1ID;
                 done(); 
                  })
         });
-
 ///get all projects a user is assigned - getProjects
 
         it("get all projects a user is assigned", (done) =>{
@@ -307,13 +439,6 @@ var user1ID;
                 done(); 
                  })
         });
-
-
-    
-    
- 
-
-});
 
 
 

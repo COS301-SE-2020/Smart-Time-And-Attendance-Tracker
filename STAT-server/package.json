@@ -42,13 +42,7 @@
     "all": false,
     "check-coverage": true,
     "exclude": [
-      "helpers/*",
-      "coverage/*",
-      "iotManager/*",
-      "tracker/*",
-      "tracker/*",
-      "config/*",
-      "calendar/*"
+      "tracker/*"
     
     ]
   }

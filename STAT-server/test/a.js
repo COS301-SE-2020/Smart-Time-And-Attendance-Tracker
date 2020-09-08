@@ -32,6 +32,7 @@ describe('test file 1', function() {
         server.close();
     }); 
 
+    
     describe('test USER', function() {
       require ('./test.js')
     })
@@ -56,12 +57,13 @@ describe('test file 1', function() {
       require ('./task.js')
     })
 
-  /*
-    describe('test file 1', function() {
-        require ('./test.js')
+  
+
+    describe('iotDevice', function() {
+        require ('./iotDevice.js')
       })
       
-   
+   /*
     
       describe('test file 2', function() {
         require ('./cover.js')
