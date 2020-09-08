@@ -6,6 +6,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { OrganisationComponent } from './organisation/organisation.component';
 import { TeamsComponent } from './teams/teams.component';
 import { HistoryComponent } from "./history/history.component";
+import { AnalysisComponent } from "./analysis/analysis.component";
 
 
 const routes: Routes = [
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'calendar', component: CalendarComponent},
   { path: 'organisation', component: OrganisationComponent},
   { path: 'teams', component: TeamsComponent},
-  { path: 'history', component: HistoryComponent }
+  { path: 'history', component: HistoryComponent },
+  { path: 'analysis', component: AnalysisComponent }
 ];
 
 @NgModule({
