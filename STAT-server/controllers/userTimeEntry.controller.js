@@ -914,7 +914,7 @@ module.exports.getProjectTotalDailyTime = async(req, res) => {
                 
     try {
         const  val = await TimeEntryModel.aggregate([
-            { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {Project: req.query.projectName},{StartTime: {$gte: min,$lte: max}}] } },
+            { $match: { $and: [{Project: req.query.projectName},{StartTime: {$gte: min,$lte: max}}] } },
             {
                 $group: {
                 _id: "$Date",
