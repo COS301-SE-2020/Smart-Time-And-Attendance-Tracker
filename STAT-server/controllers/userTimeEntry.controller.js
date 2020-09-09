@@ -895,8 +895,90 @@ module.exports.getAllProjectMembersTimeEntries = async (req, res) => {
     });
 }
 
+/**
+ * Get daily total time for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 
-           
+module.exports.getUserDailyTotalTime = async(req, res) => {
+
+    if(!req.query.hasOwnProperty("projectID"))
+        return res.status(400).send({message: 'No project ID provided'});
+    
+    var date = new Date();
+
+    var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
+    max = new Date().getTime();
+                
+    try {
+        const  val = await TimeEntryModel.aggregate([
+            { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {Project: req.query.projectName},{StartTime: {$gte: min,$lte: max}}] } },
+            {
+                $group: {
+                _id: "$Date",
+                totalTime: { $sum: "$ActiveTime"},
+                count: { $sum: 1 }
+                }
+            }
+            ]);
+        return res.status(200).send({totalDailyValues: val})
+    } 
+    catch (error) {
+        return res.status(500).send({message: 'Internal Server Error: ' + error})
+    }
+
+}
+
+ /**
+ * Get daily total time for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+
+module.exports.getProjectTotalDailyTime = async(req, res) => {
+    var userID =req.ID;
+    
+    var date = new Date();
+
+    UserTimeEntryModel.findOne({ UserID: userID }, async(err, result) => {
+        if (err) 
+            return res.status(500).send({ message: 'Internal Server Error: ' + err});
+         else if (!result) 
+            return res.status(404).json({message: 'No time entries for the given user were found'});
+        else {
+            var times = result.TimeEntries.length;
+            if (times == 0) 
+                return res.status(404).json({message: 'No time entries for the given user were found'});
+            else { 
+
+                var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
+                max = new Date().getTime();
+                            
+                try {
+                    const  val = await TimeEntryModel.aggregate([
+                        { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
+                        {
+                          $group: {
+                            _id: "$Date",
+                            totalTime: { $sum: "$ActiveTime"},
+                            count: { $sum: 1 }
+                          }
+                        }
+                      ]);
+                    return res.status(200).send({totalDailyValues: val})
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+            }
+                       
+        }
+    });
+}
+          
 
 
 

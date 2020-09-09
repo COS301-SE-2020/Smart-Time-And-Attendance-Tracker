@@ -1,12 +1,12 @@
 /**
-  * @file STAT-server/controllers/predictive.controller.js
+  * @file STAT-server/controllers/analysis.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
-  * @fileoverview This file handles all the requests regarding predictive analysis
+  * @fileoverview This file handles all the requests regarding analysis
   * @date  26 August 2020
  */
 
 /**
-* Filename:             STAT-server/controllers/predictive.controller.js
+* Filename:             STAT-server/controllers/analysis.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
@@ -16,22 +16,16 @@
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:          This file handles all the requests regarding the predictive analysis
+* Description:          This file handles all the requests regarding the analysis
 *
 */
 
 const mongoose = require("mongoose");
-const TaskHelper = require("../helpers/task.helper");
 const ProjectHelper = require("../helpers/project.helper");
 const UserTimeEntryModel = mongoose.model("UserTimeEntry");
 const TimeEntryModel = mongoose.model("TimeEntry");
-const UserModel = mongoose.model("User");
-const TimeEntryHelper = require('../helpers/timeEntry.helper');
-const UserHelper = require('../helpers/user.helper');
-const ProjectModel = mongoose.model("Project");
 var Promise = require('promise');
 var async = require("async");
-const {calendar} = require("googleapis/build/src/apis/calendar");
 
 const AnalysisHelper = require('../helpers/analysis.helper');
 /**
@@ -350,11 +344,6 @@ module.exports.getUserDevices = async (req, res) => {
 
 
 module.exports.getUserWebsites = async (req, res) => {
-    if (!req.query.hasOwnProperty("userID")) 
-        return res.status(400).send({message: 'No user ID provided'});
-    
-
-    var count4 = 0;
 
     var min = new Date(req.query.minDate).getTime();
     if (req.query.hasOwnProperty("maxDate")) {
@@ -368,7 +357,7 @@ module.exports.getUserWebsites = async (req, res) => {
     var urlArray = [];
     var websites = [];
     UserTimeEntryModel.findOne({
-        UserID: req.query.userID
+        UserID: req.ID
     }, async (err, result) => { // console.log(result);
         if (err) {
             return res.status(500).send({
@@ -826,26 +815,19 @@ module.exports.getProjectWebsites = async (req, res) => {
 
     });
 }
+/**
+ * Get daily total time for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 
- ////////////////////////////////daily functions
  module.exports.getUserDailyTotalTime = (req, res) => {
     var count = true;
     var count3 = 0;
-    var userID;
-    console.log("jkvbkfdjvbkbj")
-    if (req.query.hasOwnProperty("userID")){ ///requested by admin
-        userID=req.query("userID");
-        console.log("1  - jkvbkfdjvbkbj")
-    }
-    else{   /////requested by user
-        console.log("2 - jkvbkfdjvbkbj")
-        console.log(req.ID)
-        userID =req.ID
-    }
-   // console.log(userID)
-    if (!req.query.hasOwnProperty("date")) 
-        return res.status(400).send({message: 'Provide correct detail. Check date'});
+    var userID =req.ID;
     
+    var date = new Date().getTime();
 
     UserTimeEntryModel.findOne({ UserID: userID }, (err, result) => {
         if (err) {
