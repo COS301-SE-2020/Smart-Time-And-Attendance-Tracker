@@ -902,7 +902,7 @@ module.exports.getAllProjectMembersTimeEntries = async (req, res) => {
  * @returns {String} Success or error message.
  */
 
-module.exports.getUserDailyTotalTime = async(req, res) => {
+module.exports.getProjectTotalDailyTime = async(req, res) => {
 
     if(!req.query.hasOwnProperty("projectID"))
         return res.status(400).send({message: 'No project ID provided'});
@@ -938,7 +938,7 @@ module.exports.getUserDailyTotalTime = async(req, res) => {
  * @returns {String} Success or error message.
  */
 
-module.exports.getProjectTotalDailyTime = async(req, res) => {
+module.exports.getUserDailyTotalTime = async(req, res) => {
     var userID =req.ID;
     
     var date = new Date();
