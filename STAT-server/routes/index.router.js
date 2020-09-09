@@ -111,13 +111,16 @@ router.post("/iotDevice/startTimer", iotDevice.startTimer, userTimeEntry.addTime
 router.post("/iotDevice/stopTimer", iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
 
 
-//predictive annalysis
+// annalysis
 router.get("/analysis/getUserAverageTime", analysis.getUserAverageTime);
 //router.get("/analysis/getAllProjectDevices", analysis.getAllProjectDevices);
 router.get("/analysis/getUserDevices", analysis.getUserDevices);
 router.get("/analysis/getUserWebsites", analysis.getUserWebsites);
 router.get("/analysis/getProjectDevices", analysis.getProjectDevices);
 router.get("/analysis/getProjectWebsites", analysis.getProjectWebsites);
+router.get("/analysis/getUserDailyTotalTime",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, analysis.getUserDailyTotalTime);
+router.get("/analysis/getProjectTotalDailyTime",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, analysis.getProjectTotalDailyTime);
+
 
 
 module.exports = router;
