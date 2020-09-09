@@ -261,11 +261,32 @@ export class ProjectsComponent implements OnInit {
       this.startTask(taskID)
     else if (status == 'In Progress')
       this.completeTask(taskID)
+    else
+      this.resetTask(taskID)
     
     this.getProAndTasks()
   }
 
-  //mark task as started
+  //mark task as not started
+  resetTask(taskID : String) {
+    let req ={"taskID": taskID}
+    this.pmService.resetTask(localStorage.getItem('token'),req).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  //mark task as in progess
   startTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.startTask(localStorage.getItem('token'),req).subscribe((data) => {

@@ -94,6 +94,14 @@ export class ProjectManagementService {
       headers: headers
     });
   }
+  //mark task as not started
+  public resetTask(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'task/reset', JSON.stringify(values), {
+      headers: headers
+    });
+  }
 
   /*** organisation management ***/
 
