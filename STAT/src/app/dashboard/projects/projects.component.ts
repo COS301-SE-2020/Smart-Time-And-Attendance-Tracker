@@ -326,16 +326,18 @@ export class ProjectsComponent implements OnInit {
 
     // get week details
     var startDate = new Date()
+    var endDate = new Date()
+    endDate.setDate(startDate.getDate()+6)
     console.log(startDate)
-    var weekTasks = this.tasks.filter((t : any) => t.dueDate > startDate)
+    var weekTasks = this.tasks.filter((t : any) => t.dueDate > startDate && t.dueDate < endDate)
     console.log(weekTasks)
-    this.tasksNum = this.tasks.length
-
-    this.tasksDone = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+    this.tasksNum = weekTasks.length
+    this.tasksDone = weekTasks.filter((t : any) => t.taskStatus == 'Completed').length
     this.tasksDue = this.tasksNum - this.tasksDone
 
     this.loading = false
-    this.slides = Math.ceil(this.tasksDue / 4)
+    var taskSlides = this.tasks.length - this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+    this.slides = Math.ceil(taskSlides / 4)
 
 
     // get upcoming tasks
