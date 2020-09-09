@@ -97,6 +97,7 @@ router.get("/project/getProjects",jwtHelper.verifyJWTtoken,userHelper.isAuthenti
 //task
 router.post("/task/start",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.startTask);
 router.post("/task/complete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
+router.post("/task/reset",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.reset);
 router.delete("/task", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader,project.deleteTask, task.deleteTask);
 router.post("/task/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.update);
 
