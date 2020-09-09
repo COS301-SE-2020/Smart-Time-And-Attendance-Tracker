@@ -108,6 +108,7 @@ export class ProjectsComponent implements OnInit {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.allProjects = data['projects']
+
       this.allProjects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
       this.projects = this.allProjects.filter((x : any) => x['completed'] == false)
       this.getTasks()
@@ -263,6 +264,13 @@ export class ProjectsComponent implements OnInit {
       this.completeTask(taskID)
     else
       this.resetTask(taskID)
+    
+    this.getProAndTasks()
+  }
+
+  changeProjectStatus(projectID : string, status : string) {
+    if (status == 'In Progress')
+      this.completeProject(projectID)
     
     this.getProAndTasks()
   }
