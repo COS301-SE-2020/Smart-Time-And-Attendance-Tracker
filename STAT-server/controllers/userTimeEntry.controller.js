@@ -28,7 +28,7 @@ const TimeEntryModel = mongoose.model("TimeEntry");
 const UserModel = mongoose.model("User");
 const TimeEntryHelper =  require('../helpers/timeEntry.helper');
 const UserHelper =require('../helpers/user.helper');
-const ProjectModel = mongoose.model("Project");
+const IOTHelper =require('../helpers/iot.helper');
 var Promise = require('promise');
 var async = require("async");
 
@@ -553,6 +553,90 @@ module.exports.getUserTimeEntries = (req, res) => {
         return res.status(400).send({message: 'No user ID provided'});
 
     UserTimeEntryModel.findOne({  UserID : req.query.userID},(err, result) => {
+        if (err) {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result){
+            return res.status(404).json({ message: 'No time entries for the given user were found' }); 
+        }
+        else{
+            var timeEntries=[];
+            var times = result.TimeEntries.length;
+           
+            if(times == 0){
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            }
+            else{
+                if(req.query.hasOwnProperty("minDate"))
+                {
+                    var min = new Date(req.query.minDate).getTime();
+                    if(req.query.hasOwnProperty("maxDate"))
+                    {
+                        var max = new Date(req.query.maxDate);
+                        max.setDate(max.getDate() + 1);
+                        max = max.getTime()
+                    }
+                    else
+                        var max = new Date().getTime(); 
+                
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a], StartTime: {$gte: min,$lte: max}},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
+                }
+                else{
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
+                }
+                
+            }
+        }
+    });
+}
+
+/**
+ * This function returns all time entries for an IOT device.
+ * @param {HTTP Request} req Parameters - Device ID
+ * @param {HTTP Response} res 
+ * @returns {JSON Object} returns all time entries and entry information in an array ie - name, email
+ */  
+module.exports.getIOTTimeEntries = (req, res) => {  
+    if(!req.query.hasOwnProperty("deviceID"))
+        return res.status(400).send({message: 'No device ID provided'});
+
+    TimeEntryModel.findOne({  UserID : req.query.userID},(err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
