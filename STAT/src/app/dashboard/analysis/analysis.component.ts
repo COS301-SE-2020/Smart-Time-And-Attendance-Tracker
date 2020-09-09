@@ -1,8 +1,6 @@
-import {
-  Component, OnInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef
-} from '@angular/core';
+import {Component, OnInit,ChangeDetectionStrategy,ChangeDetectorRef} from '@angular/core';
+import { AnalysisService } from 'src/app/shared/services/analysis.service';
+import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Component({
   selector: 'app-analysis',
@@ -18,9 +16,12 @@ export class AnalysisComponent implements OnInit {
   meView : boolean = true;
   projectView : boolean = false;
 
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
+    console.log('Hello');
+    this.getDailyValues();
+    this.getProjectDailyValues("5f3d4cdc5f704424503cff44");
   }
 
   toggleAnalysis()
@@ -37,5 +38,37 @@ export class AnalysisComponent implements OnInit {
     this.meView = this.projectView;
     this.projectView = temp;
     this.cd.detectChanges();
+  }
+
+  getDailyValues()
+  {
+    this.aService.getDailyValues(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  getProjectDailyValues(projectID : String)
+  {
+    this.aService.getProjectDailyValues(localStorage.getItem('token'), projectID).subscribe((data) => {
+     console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
   }
 }
