@@ -75,7 +75,7 @@ module.exports.reset = (req, res) => {
         else if (result.n ==0)
             return res.status(404).send({message: 'Task not found'});
         else
-            return res.status(200).json({message: 'Task status updated to "Completed"'});
+            return res.status(200).json({message: 'Task status updated to "Not Started"'});
 
     });
 }
