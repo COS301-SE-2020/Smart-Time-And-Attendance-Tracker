@@ -321,15 +321,13 @@ export class ProjectsComponent implements OnInit {
     }
 
     // sort tasks according to due date
-    this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName)
+    this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName || a.taskName - b.taskName)
     console.log(this.tasks)
 
     // get week details
     var startDate = new Date()
-    var s = this.convertDate(startDate)
     console.log(startDate)
-    var endDate = startDate.getDate()+1
-    var weekTasks = this.tasks.filter((t : any) => this.formatDate(t.dueDate) == this.formatDate(startDate))
+    var weekTasks = this.tasks.filter((t : any) => t.dueDate > startDate)
     console.log(weekTasks)
     this.tasksNum = this.tasks.length
 
@@ -342,6 +340,10 @@ export class ProjectsComponent implements OnInit {
 
     // get upcoming tasks
     let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
+    tempTasks.forEach((element : any) => {
+      if (element.dueDate < startDate)
+        element['overdue'] = true
+    });
 
     while (tempTasks.length) {
       this.upcoming.push(tempTasks.splice(0,4))

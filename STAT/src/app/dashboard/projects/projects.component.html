@@ -96,7 +96,8 @@
                   <li>No tasks</li>
                 </ul>
                 <ul *ngIf="p.tasks != 'no tasks'" class="tasks">
-                  <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
+                  <li *ngFor="let t of sortProTasks(p.tasks)">
+                    {{t.taskName}}
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
                             matTooltip="Edit"
@@ -113,7 +114,8 @@
                             (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID; tname = t.taskName">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
-                     <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
+                     <span class="float-right t-dueDate" [ngClass]="{'task-od-date': t.overdue == true}" >{{formatDate(t.dueDate)}}</span> 
+                     
                      <span class="float-right tag" 
                           [matTooltip]="t.taskStatus == 'Not Started' ? 'Change to In Progress' :
                                         (t.taskStatus == 'In Progress' ? 'Change to Completed' : 'Change to Not Started')"
@@ -233,7 +235,10 @@
             <ng-template ngbSlide *ngFor="let u of upcoming">
               <div>
                 <ul class="tasks">
-                  <li *ngFor="let t of u"><small>{{t.projectName}} <span class="float-right">{{formatDate(t.dueDate)}}</span> </small> <span>{{t.taskName}}</span></li>
+                  <li [ngClass]="{'task-od': t.overdue == true}" *ngFor="let t of u">
+                    <small> {{t.projectName}} 
+                      <span class="float-right">{{formatDate(t.dueDate)}}</span> 
+                    </small> <span>{{t.taskName}}</span></li>
                 </ul>
               </div>
             </ng-template>
