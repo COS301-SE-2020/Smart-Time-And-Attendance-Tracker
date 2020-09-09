@@ -256,6 +256,15 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
+  changeTaskStatus(taskID : string, status : string) {
+    if (status == 'Not Started')
+      this.startTask(taskID)
+    else if (status == 'In Progress')
+      this.completeTask(taskID)
+    
+    this.getProAndTasks()
+  }
+
   //mark task as started
   startTask(taskID : String) {
     let req ={"taskID": taskID}
@@ -534,9 +543,9 @@ export class ProjectsComponent implements OnInit {
         this.teamMembers == []
 
         for (let x = 0; x < this.teams.length; x++) {
-          console.log(this.teams)
+          //console.log(this.teams)
           var temp : Object[] = this.teams[x]['TeamMembers']
-          console.log(temp)
+          //console.log(temp)
         }
       }
 

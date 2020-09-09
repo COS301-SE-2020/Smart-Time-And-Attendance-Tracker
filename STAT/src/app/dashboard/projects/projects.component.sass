@@ -273,18 +273,35 @@ mat-accordion .tasks
 
   .tag
     margin-right: 0.8em
+    border: 2px solid white
+    padding: 0.4em 0
+    display: flex
+    align-items: center
+    align-content: center
+  
+    &:hover
+      cursor: pointer
 
   .tag-c
     background-color: #17e88340
     color: #17e883
 
+    &:hover
+      border: 2px solid #17e883
+
   .tag-ip
     background-color: #00c8ff40
     color: #00c8ff
+
+    &:hover
+      border: 2px solid #00c8ff
   
   .tag-ns
     background-color: #ff288540
     color: #ff2885
+
+    &:hover
+      border: 2px solid #ff2885
 
 $colors : #7846eb, #00c8ff, #ff2885, #366ceb
 @for $i from 0 through 10
