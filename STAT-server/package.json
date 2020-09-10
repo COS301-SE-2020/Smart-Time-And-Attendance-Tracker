@@ -44,7 +44,6 @@
     "check-coverage": true,
     "exclude": [
       "tracker/*"
-    
     ]
   }
 }
