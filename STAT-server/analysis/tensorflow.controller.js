@@ -1,3 +1,27 @@
+
+/**
+  * @file STAT-server/analysis/tensorflow.controller.js
+  * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+  * @fileoverview This file handles the predictive analysis
+  * @date 10 September 2020
+ */
+
+/**
+* Filename:             STAT-server/analysis/tensorflow.controller.js
+*
+* Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
+*   
+* File Creation Date:   10 Spetember 2020
+*
+* Development Group:    Visionary
+*
+* Project:              Smart Time and Attendance Tracker
+*
+* Description:          This file handles the predictive analysis
+*
+*/ 
+
+
 const AnalysisHelper = require('../helpers/analysis.helper');
 const tensor = require("@tensorflow/tfjs");
 const totalDays = 7*4;
@@ -43,7 +67,6 @@ function sortByDate(entries) {
 }
 module.exports.try2 = function(req, res){
     var userTimes = [];
-    console.log(req.projects);
     if(req.projects.length > 0)
     {
         const totalEntries = req.projects.length * totalDays;
@@ -51,10 +74,9 @@ module.exports.try2 = function(req, res){
         {
             var dateVar = new Date();
             dateVar = new Date(dateVar.setDate(dateVar.getDate()-t));
-            console.log(dateVar);
             for (var p = 0; p < req.projects.length; p++) {
                 const project = req.projects[p];
-                AnalysisHelper.getUserTotalTimeForProject(project.ID, dateVar, (err, result) => {
+                AnalysisHelper.getUserTotalTimeForProject(project, dateVar, (err, result) => {
                     if (err) 
                         return res.status(500).send({message: 'Internal Server Error: ' + err});
                     else if (!result){}
@@ -63,7 +85,7 @@ module.exports.try2 = function(req, res){
 
                     if(totalEntries == userTimes.length)
                     {
-                        console.log("RETURNING!!!!!!!!!!!!!!!!1");
+                        //console.log("RETURNING!!!!!!!!!!!!!!!!1");
                         var sortedByPorjects = getTimeEntriesForProject(userTimes);
                         var sortedByDate = sortByDate(sortedByPorjects);
                         var newArr = [];
@@ -86,32 +108,33 @@ module.exports.try2 = function(req, res){
 
                             var ys = tensor.tensor1d(yArr, 'float32');
                             var xs = tensor.tensor1d(xArr, 'int32');
-                            console.log("------------------");
+                            //console.log("------------------");
                             
                             const model = tensor.sequential();
                             model.add(tensor.layers.dense({units: 1, inputShape: [1]}));
                             model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
-                            console.log(totalDays + "    " + yArr.length);
+                            //console.log(totalDays + "    " + yArr.length);
                             await model.fit(xs, ys, {epochs : 30}).then(() => {  
                                 ys.print();
                                 var nextElement = inn2; 
-                                console.log(nextElement + "   " + inn + "  " + inn2);
+                                //console.log(nextElement + "   " + inn + "  " + inn2);
                                 var prediction = [];     
                                 for(var i=0; i<7; i++)
                                 {
                                     //var output = Array.from(model.predict(tensor.tensor1d([(nextElement/7)])).dataSync())[0];
                                     var output = Array.from(model.predict(tensor.tensor1d([nextElement])).dataSync())[0];
-                                    console.log("Predict     " + output +"    " + nextElement);
+                                    //console.log("Predict     " + output +"    " + nextElement);
                                     prediction.push(output);
                                     nextElement += (1/7);
                                 }
 
-                                console.log("------------------");
+                                //console.log("------------------");
 
                                 var text = {
-                                    "ProjectID": element[0].ProjectID,
-                                    "PastTimes" : yArr,
-                                    "Prediction" : prediction     
+                                    "projectID": element[0].ProjectID,
+                                    "projectName": element[0].ProjectName,
+                                    "pastTimes" : yArr,
+                                    "predictions" : prediction     
                                 };
                                 newArr.push(text);
                                 if(sortedByDate.length == newArr.length)

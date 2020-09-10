@@ -111,10 +111,9 @@ async function mostVisitedWebsite(array){
  * @param {average time} res 
  */
 module.exports.getUserTotalTimeForProject = (project, datePassed, done) => {
-    
-    var getTime =  datePassed.getDate() + "/" + (datePassed.getMonth()+1) + "/" + datePassed.getFullYear();
+    var getTime =  (datePassed.toISOString().slice(0,10)).replace(/-/g,"/");
     TimeEntryModel.find({
-        ProjectID: project,
+        ProjectID: project.ID,
         Date: getTime
     }, (err, val) => {
         if (err) {
@@ -124,7 +123,8 @@ module.exports.getUserTotalTimeForProject = (project, datePassed, done) => {
             if(val.length == 0)
             {
                 var text = {
-                    "ProjectID" : project,
+                    "ProjectID" : project.ID,
+                    "ProjectName": project.projectName,
                     "Time" : 0,
                     "Date": datePassed
                 };
@@ -141,7 +141,8 @@ module.exports.getUserTotalTimeForProject = (project, datePassed, done) => {
                 if(l == totalEntries)
                 {
                     var text = {
-                        "ProjectID" : project,
+                        "ProjectID" : project.ID,
+                        "ProjectName": project.projectName,
                         "Time" : averageTime,
                         "Date": datePassed
                     };

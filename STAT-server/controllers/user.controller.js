@@ -157,13 +157,13 @@ module.exports.addProfilePicture = (req, res) => {
  * fecthing the user's details from the database.
  */
 module.exports.getName = (req, res, next) => {
-    UserModel.findOne({ _id: req.ID},{Name: 1, Surname: 1},(err, result) => {
+    UserModel.findOne({ _id: req.ID},{Name: 1, Surname: 1, ProfilePicture: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         else
-            return res.status(200).json({name : result.Name, surname : result.Surname});
+            return res.status(200).json({name : result.Name, surname : result.Surname, profilePicture: ProfilePicture});
         
     });
 }
