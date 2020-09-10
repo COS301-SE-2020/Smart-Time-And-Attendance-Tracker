@@ -2,8 +2,43 @@
     <br><br>
     <br><br>
     <br><br>
-    <br><br>
-    <div class="row">
-        profile
+
+    <input type="file" style="display:none" (change)="handle($event)" accept="image/x-png,image/jpeg">
+
+    <div class="card">
+        <div class="card-header">
+          <div class="card-cover" style="background-image: url({{cover}})"></div>
+          <div id="pic">
+            <button mat-mini-fab (click)="openFile()"
+                    class="start-tracking" 
+                    matTooltip="Change profile picture"
+                    matTooltipClass="action-tooltip" 
+                    matTooltipPosition="right">
+                <mat-icon inline="true">edit</mat-icon>
+            </button>
+
+            <div *ngIf="!profilePic" class="pro-pic card-avatar">{{name[0]}}{{surname[0]}}</div>
+          
+            <img *ngIf="profilePic" class="card-avatar" src="{{profilePic}}" alt="avatar" />  
+            
+          </div>
+            
+          <h1 class="card-fullname">{{name}} {{surname}}</h1>
+          <h2 class="card-email">janedoe@gmail.com</h2>
+        </div>
+        <div class="card-main">
+          <div class="card-section is-active" id="about">
+            <div class="card-content">
+              <div class="card-subtitle">ROLES</div>
+                <div class="member-roles">
+                    <span *ngIf="roles.includes('System Administrator')" class="tag role sys">System Administrator</span>
+                    <span *ngIf="roles.includes('Security Administrator')" class="tag role sec">Security Administrator</span>
+                    <span *ngIf="roles.includes('Team Leader')" class="tag role tl">Team Leader</span>
+                    <span *ngIf="roles.includes('Data Analyst')" class="tag role da">Data Analyst</span>
+                </div>
+            </div>
+          </div>
+        </div>
     </div>
+
 </body>
