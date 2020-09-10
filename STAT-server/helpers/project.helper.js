@@ -27,7 +27,7 @@ const TaskHelper =require('../helpers/task.helper');
 const UserHelper =require('../helpers/user.helper');
 
 /**
- * This function gets a projectsproject.
+ * This function gets a project.
  * @param {String} id ID of project
  * @param {Function} done 
  */
@@ -86,13 +86,31 @@ module.exports.removeUser = ( userID, ids,done)=>{
  * @returns {Number} returns the hourly rate of a project. 
  */
 module.exports.hourlyRate = (id, done)=>{
-    ProjectModel.find({_id: id},(err, result) => {
+    ProjectModel.findOne({_id: id},(err, result) => {
         if(err) 
             done(err);
         else if (!result)
             done(null,false);
         else if(result)
            done(null, result.HourlyRate);
+        
+    });
+}
+
+/**
+ * This funtion returns the members of a project.
+ * @param {String} id ID of project.
+ * @param {*} done 
+ * @returns {Array} returns members of a project. 
+ */
+module.exports.getMembers = (id, done)=>{
+    ProjectModel.findOne({_id: id},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+           done(null, result.TeamMembers);
         
     });
 }

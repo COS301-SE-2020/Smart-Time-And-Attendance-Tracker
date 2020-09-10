@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tensorflow/tfjs": "^2.3.0",
     "async": "^3.2.0",
     "asyncify": "^2.1.2",
     "axios": "^0.20.0",

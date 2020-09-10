@@ -131,6 +131,25 @@ module.exports.changePass = (req, res, next) => {
 } */  
 
 /**
+ * This function allows the user to add a photo.
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
+ * @return {Http Response} - If adding a photo is a success a success message is returned, otherwise a error message is returned
+*/ 
+module.exports.addProfilePicture = (req, res) => {
+    UserModel.updateOne({ _id: req.ID},{ProfilePicture: req.body.profilePicture},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (result.n ==0)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'Profile picture added'});
+               
+    });
+   
+}
+
+/**
  * This function returns the name and surname of the user.
  * @param {*} req HTTP request 
  * @param {*} res HTTP response 
@@ -138,13 +157,13 @@ module.exports.changePass = (req, res, next) => {
  * fecthing the user's details from the database.
  */
 module.exports.getName = (req, res, next) => {
-    UserModel.findOne({ _id: req.ID},{Name: 1, Surname: 1},(err, result) => {
+    UserModel.findOne({ _id: req.ID},{Name: 1, Surname: 1, ProfilePicture: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         else
-            return res.status(200).json({name : result.Name, surname : result.Surname});
+            return res.status(200).json({name : result.Name, surname : result.Surname, profilePicture: ProfilePicture});
         
     });
 }
@@ -417,7 +436,7 @@ module.exports.isAuthenticated = (req, res) => {
  * @param {HTTP Response} res 
  * @return {Http Response} - Array with all projects and tasks objects
  */
-module.exports.getProjects = (req, res) => {
+module.exports.getProjects = (req, res, next) => {
     let count = 0;
     let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},{Projects: 1},(err, result) => {
@@ -443,7 +462,14 @@ module.exports.getProjects = (req, res) => {
 
                     if(count == result.Projects.length)
                     {
-                        return res.status(200).json({projects : projectsOfUser});
+                        if(next)
+                        {
+                            req.projects = projectsOfUser;
+                            console.log("going next");
+                            next();
+                        }
+                        else
+                            return res.status(200).json({projects : projectsOfUser});
                     };
                 }); 
                 
