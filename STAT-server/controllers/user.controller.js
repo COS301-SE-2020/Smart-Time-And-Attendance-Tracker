@@ -417,7 +417,7 @@ module.exports.isAuthenticated = (req, res) => {
  * @param {HTTP Response} res 
  * @return {Http Response} - Array with all projects and tasks objects
  */
-module.exports.getProjects = (req, res) => {
+module.exports.getProjects = (req, res, next) => {
     let count = 0;
     let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},{Projects: 1},(err, result) => {
@@ -443,7 +443,14 @@ module.exports.getProjects = (req, res) => {
 
                     if(count == result.Projects.length)
                     {
-                        return res.status(200).json({projects : projectsOfUser});
+                        if(next)
+                        {
+                            req.projects = projectsOfUser;
+                            console.log("going next");
+                            next();
+                        }
+                        else
+                            return res.status(200).json({projects : projectsOfUser});
                     };
                 }); 
                 

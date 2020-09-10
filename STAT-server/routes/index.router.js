@@ -38,6 +38,9 @@ const userHelper = require('../helpers/user.helper');
 
 const analysis =  require('../controllers/analysis.controller');
 
+const tensorFlowAnalysis =  require('../analysis/tensorflow.controller');
+
+
 //user
 router.post("/user/register", user.register);
 router.post("/user/login", user.login);
@@ -112,12 +115,16 @@ router.post("/iotDevice/stopTimer", iotDevice.stopTimer, userTimeEntry.updateTim
 
 
 //predictive annalysis
-router.get("/analysis/getUserAverageTime", analysis.getUserAverageTime);
+router.post("/analysis/getUserAverageTime", jwtHelper.verifyJWTtoken, analysis.getUserAverageTime);
 //router.get("/analysis/getAllProjectDevices", analysis.getAllProjectDevices);
 router.get("/analysis/getUserDevices", analysis.getUserDevices);
 router.get("/analysis/getUserWebsites", analysis.getUserWebsites);
 router.get("/analysis/getProjectDevices", analysis.getProjectDevices);
 router.get("/analysis/getProjectWebsites", analysis.getProjectWebsites);
 
+//tensorFlowAnalysis
+//router.post("/analysis/userWeeklyHoursPrediction", jwtHelper.verifyJWTtoken, user.getProjects, tensorFlowAnalysis.getFourWeekData, tensorFlowAnalysis.userWeeklyHoursPrediction);
+
+router.post("/analysis/userWeeklyHoursPrediction", jwtHelper.verifyJWTtoken, user.getProjects, tensorFlowAnalysis.try2);
 
 module.exports = router;
