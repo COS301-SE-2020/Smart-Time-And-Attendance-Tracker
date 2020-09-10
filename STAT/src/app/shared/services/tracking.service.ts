@@ -12,7 +12,7 @@ export class TrackingService {
   EntryID : string
 
   // Add manual time entry
-  public addMTimeEntry(values, token) {
+  public addMTimeEntry(token, values) {
     let epoch = new Date(values.date +" " +values.startTime).getTime();
     values.startTime = epoch;
     epoch = new Date(values.date +" " +values.endTime).getTime();
