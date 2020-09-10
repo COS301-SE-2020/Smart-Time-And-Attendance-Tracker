@@ -22,6 +22,8 @@
 *
 */
 const mongoose = require("mongoose");
+const UserTimeEntryModel = mongoose.model("UserTimeEntry");
+const TimeEntryModel = mongoose.model("TimeEntry");
 
 
 module.exports.mostVisitedWebsite =async (arr1 ,done)=>{

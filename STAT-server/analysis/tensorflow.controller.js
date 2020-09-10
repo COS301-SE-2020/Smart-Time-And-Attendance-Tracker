@@ -51,7 +51,7 @@ module.exports.try2 = function(req, res){
         {
             var dateVar = new Date();
             dateVar = new Date(dateVar.setDate(dateVar.getDate()-t));
-            //console.log(dateVar);
+            console.log(dateVar);
             for (var p = 0; p < req.projects.length; p++) {
                 const project = req.projects[p];
                 AnalysisHelper.getUserTotalTimeForProject(project.ID, dateVar, (err, result) => {
