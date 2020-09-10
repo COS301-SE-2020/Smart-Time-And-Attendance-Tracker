@@ -38,6 +38,8 @@ application.use(cors());
 application.use(passport.initialize());
 application.use('/api', routes);
 
+
+/*
 // error handler
 application.use((err, req, res, next) => {
     if (err.name === 'ValidationError') {
@@ -46,14 +48,49 @@ application.use((err, req, res, next) => {
         res.status(422).send(valErrors)
     }
     
-});
+});*/
 
 // start server
+const mongoose = require('mongoose');
+var server
+exports.listen = function (){
+    server = application.listen("3000", function () {
+    console.log('Server available listening at: 3000');
+    })
+ };
+
+exports.close = function () {
+    server.close(function (){
+      console.log('Server Closed')
+    }); 
+    mongoose.connection.close()
+};
+
+
+
+
+
+/*
 application.listen("3000"), ()=>{
     console.log("Server started");
-};  
+}; 
+*/
 
 
+
+
+
+
+
+
+/*
 application.get('/calendar', (req, res) => {
     res.sendFile(__dirname + '/tracker/index.html');
-  });
+  }); */
+
+
+ 
+  application.get('/', (req, res) => {
+    var valErrors = [1,2,3,4,5,6];
+    res.status(200).send(valErrors)
+  }); 
