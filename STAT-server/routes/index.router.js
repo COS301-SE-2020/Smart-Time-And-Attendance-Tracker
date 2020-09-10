@@ -45,6 +45,7 @@ router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
 router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
 router.get("/user/isAuthenticated",jwtHelper.verifyJWTtoken, user.isAuthenticated);
 router.get("/user/getProjects",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getProjects);
+router.post("/user/addProfilePicture",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.addProfilePicture);
 //router.post("/user/changePass",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.changePass);
 router.get("/user/getUnauthenticatedUsers",jwtHelper.verifyJWTtoken,userHelper.isSecurityAdmin,user.getUnauthenticatedUsers);
 router.get("/user/getAllUsers",jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsers,user.getAllUsers);
@@ -114,16 +115,17 @@ router.post("/iotDevice/stopTimer", iotDevice.stopTimer, userTimeEntry.updateTim
 
 
 // annalysis
-router.get("/analysis/getUserAverageTime", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated ,analysis.getUserAverageTime);
+//router.get("/analysis/getUserAverageTime", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated ,analysis.getUserAverageTime);
 //router.get("/analysis/getAllProjectDevices", analysis.getAllProjectDevices);
-router.get("/analysis/getUserDevices", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , analysis.getUserDevices);
-router.get("/analysis/getUserWebsites", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , analysis.getUserWebsites);
+//router.get("/analysis/getUserWebsites", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , analysis.getUserWebsites);
 //router.get("/analysis/getProjectDevices", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader , analysis.getProjectDevices);
 //router.get("/analysis/getProjectWebsites", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader , analysis.getProjectWebsites);
 
 router.get("/userTimeEntry/getUserDailyTotalTime",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, userTimeEntry.getUserDailyTotalTime);
-router.get("/userTimeEntry/getProjectTotalDailyTime",jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, userTimeEntry.getProjectTotalDailyTime);
-
-
-
+router.get("/userTimeEntry/getProjectDailyTotalTime",jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, userTimeEntry.getProjectDailyTotalTime);
+router.get("/userTimeEntry/getUserDailyTotalMoney",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, userTimeEntry.getUserDailyTotalMoney);
+router.get("/userTimeEntry/getUserWeeklyTimeForProjects",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, userTimeEntry.getUserWeeklyTimeForProjects);
+router.get("/userTimeEntry/getUserDevices", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , userTimeEntry.getUserDevices);
+router.get("/userTimeEntry/getUserWeeklyTimeForTasks", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , userTimeEntry.getUserWeeklyTimeForTasks);
+router.get("/userTimeEntry/getProjectMembersTotalTime",jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, userTimeEntry.getProjectMembersTotalTime);
 module.exports = router;
