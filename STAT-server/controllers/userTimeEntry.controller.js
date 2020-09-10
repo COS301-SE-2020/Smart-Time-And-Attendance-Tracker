@@ -1,12 +1,12 @@
 /**
-  * @file STAT-server/helper/userTimeEntry.controller.js
+  * @file STAT-server/controllers/userTimeEntry.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
   * @fileoverview This file handles all the requests regarding the UserTimeEntry and TimeEntry models in our database
   * @date 11 June 2020
  */
 
 /**
-* Filename:             STAT-server/helper/userTimeEntry.controller.js
+* Filename:             STAT-server/controllers/userTimeEntry.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
@@ -902,19 +902,18 @@ module.exports.getAllProjectMembersTimeEntries = async (req, res) => {
  * @returns {String} Success or error message.
  */
 
-module.exports.getProjectTotalDailyTime = async(req, res) => {
+module.exports.getProjectDailyTotalTime = async(req, res) => {
 
     if(!req.query.hasOwnProperty("projectID"))
         return res.status(400).send({message: 'No project ID provided'});
     
     var date = new Date();
 
-    var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
-    max = new Date().getTime();
-                
+    var min = (new Date( date.setDate(date.getDate() - 8) )).getTime();
+    max = new Date().getTime();           
     try {
         const  val = await TimeEntryModel.aggregate([
-            { $match: { $and: [{Project: req.query.projectName},{StartTime: {$gte: min,$lte: max}}] } },
+            { $match: { $and: [{ProjectID: new mongoose.Types.ObjectId(req.query.projectID)},{StartTime: {$gte: min,$lte: max}}] } },
             {
                 $group: {
                 _id: "$Date",
@@ -954,7 +953,7 @@ module.exports.getUserDailyTotalTime = async(req, res) => {
                 return res.status(404).json({message: 'No time entries for the given user were found'});
             else { 
 
-                var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
+                var min = (new Date( date.setDate(date.getDate() - 8) )).getTime();
                 max = new Date().getTime();
                             
                 try {
@@ -978,11 +977,264 @@ module.exports.getUserDailyTotalTime = async(req, res) => {
         }
     });
 }
-          
+  
 
+/**
+ * Get daily total monetary value for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 
+module.exports.getUserDailyTotalMoney = async(req, res) => {
+    var userID =req.ID;
+    
+    var date = new Date();
 
+    UserTimeEntryModel.findOne({ UserID: userID }, async(err, result) => {
+        if (err) 
+            return res.status(500).send({ message: 'Internal Server Error: ' + err});
+         else if (!result) 
+            return res.status(404).json({message: 'No time entries for the given user were found'});
+        else {
+            var times = result.TimeEntries.length;
+            if (times == 0) 
+                return res.status(404).json({message: 'No time entries for the given user were found'});
+            else { 
 
+                var min = (new Date( date.setDate(date.getDate() - 8) )).getTime();
+                max = new Date().getTime();
+                            
+                try {
+                    const  val = await TimeEntryModel.aggregate([
+                        { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
+                        {
+                          $group: {
+                            _id: "$Date",
+                            totalAmount: { $sum: "$MonetaryValue"},
+                            count: { $sum: 1 }
+                          }
+                        }
+                      ]);
+                    return res.status(200).send({totalDailyValues: val})
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+            }
+                       
+        }
+    });
+}
+/**
+ * Get daily total monetary value for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+
+module.exports.getUserWeeklyTimeForProjects = async(req, res) => {
+    var userID =req.ID;
+    var date = new Date();
+
+    UserTimeEntryModel.findOne({ UserID: userID }, async(err, result) => {
+        if (err) 
+            return res.status(500).send({ message: 'Internal Server Error: ' + err});
+         else if (!result) 
+            return res.status(404).json({message: 'No time entries for the given user were found'});
+        else {
+            var times = result.TimeEntries.length;
+            if (times == 0) 
+                return res.status(404).json({message: 'No time entries for the given user were found'});
+            else { 
+
+                var min = (new Date( date.setDate(date.getDate() - 8) )).getTime();
+                max = new Date().getTime();
+                            
+                try {
+                    const  val = await TimeEntryModel.aggregate([
+                        { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
+                        {
+                          $group: {
+                            _id: "$ProjectName",
+                            totalTime: { $sum: "$ActiveTime"},
+                            count: { $sum: 1 }
+                          }
+                        }
+                      ]);
+                    return res.status(200).send({totalProjectsTimes: val})
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+            }
+                       
+        }
+    });
+}
+
+/**
+ * Get devices used for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.getUserDevices = async (req, res) => {
+    var userID =req.ID;
+    var date = new Date();
+
+    UserTimeEntryModel.findOne({ UserID: userID }, async(err, result) => {
+        if (err) 
+            return res.status(500).send({ message: 'Internal Server Error: ' + err});
+         else if (!result) 
+            return res.status(404).json({message: 'No time entries for the given user were found'});
+        else {
+            var times = result.TimeEntries.length;
+            if (times == 0) 
+                return res.status(404).json({message: 'No time entries for the given user were found'});
+            else { 
+
+                var min = (new Date( date.setDate(date.getDate() - 8) )).getTime();
+                max = new Date().getTime();
+                            
+                try {
+                    const  val = await TimeEntryModel.aggregate([
+                        { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
+                        {
+                          $group: {
+                            _id: "$Device",
+                            count: { $sum: 1 }
+                          }
+                        }
+                      ]);
+                    return res.status(200).send({totalDevices: val})
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+            }
+                       
+        }
+    });
+}
+
+/**
+ * Get time spent on each task for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.getUserWeeklyTimeForTasks = async (req, res) => {
+    var userID =req.ID;
+    var date = new Date();
+
+    UserTimeEntryModel.findOne({ UserID: userID }, async(err, result) => {
+        if (err) 
+            return res.status(500).send({ message: 'Internal Server Error: ' + err});
+         else if (!result) 
+            return res.status(404).json({message: 'No time entries for the given user were found'});
+        else {
+            var times = result.TimeEntries.length;
+            if (times == 0) 
+                return res.status(404).json({message: 'No time entries for the given user were found'});
+            else { 
+
+                var min = (new Date( date.setDate(date.getDate() - 8) )).getTime();
+                max = new Date().getTime();
+                            
+                try {
+                    const  val = await TimeEntryModel.aggregate([
+                        { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
+                        {
+                          $group: {
+                            _id: "$TaskName",
+                            totalTime: { $sum: "$ActiveTime"},
+                            count: { $sum: 1 }, 
+                            projectName : { $first: '$ProjectName' },
+                          }
+                        }
+                      ]);
+                    return res.status(200).send({totalTasksTimes: val})
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+            }
+                       
+        }
+    });
+}
+
+/**
+ * Get time spent on project by each project member for the last week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.getProjectMembersTotalTime = async (req, res) => {
+    if(!req.query.hasOwnProperty("projectID"))
+        return res.status(400).send({message: 'No project ID provided'});
+
+    var date = new Date();
+    final = [];
+    ProjectHelper.getMembers(req.query.projectID, (err, result) => {
+        if (err) {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result){
+            return res.status(404).json({ message: 'Project not found' }); 
+        }
+        else{
+            result.forEach( async function(myDoc){ 
+
+                UserHelper.getUserDetails(myDoc, async(err, userResult) => {
+                    if (err) { 
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                    }
+                    else{
+
+                        UserTimeEntryModel.findOne({ UserID: myDoc._id }, async(err, timeResult) => {
+                            if (err) 
+                                return res.status(500).send({ message: 'Internal Server Error: ' + err});
+                             else if (!timeResult) 
+                             final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, timeSpent : 0, numberOfEntries: 0});
+                            else {
+                                if (timeResult.TimeEntries.length == 0) 
+                                final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, timeSpent : 0, numberOfEntries: 0});
+                                else { 
+                    
+                                    var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
+                                    max = new Date().getTime();
+                                                
+                                    try {
+                                        const  val = await TimeEntryModel.aggregate([
+                                            { $match: { $and: [{ProjectID: new mongoose.Types.ObjectId(req.query.projectID)},{_id: { "$in": timeResult.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
+                                            {
+                                              $group: {
+                                                _id: "$ProjectName",
+                                                totalTime: { $sum: "$ActiveTime"},
+                                                count: { $sum: 1 }
+                                              }
+                                            }
+                                          ]);
+                                        final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
+                                        if(final.length == result.length)
+                                             return res.status(200).send({membersTotalTime:final})
+                                    } 
+                                    catch (error) {
+                                        return res.status(500).send({message: 'Internal Server Error: ' + error})
+                                    }
+                                }
+                                           
+                            }
+                        });
+                      }
+                });
+            });
+        }
+    });
+    
+}
 
 
 
