@@ -5,6 +5,8 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 import { TeamManagementService } from 'src/app/shared/services/team-management.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-projects',
@@ -13,7 +15,7 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService, private snackbar : MatSnackBar) { }
 
   panelOpenState = false
   name = "John Doe"
@@ -108,6 +110,7 @@ export class ProjectsComponent implements OnInit {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.allProjects = data['projects']
+
       this.allProjects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
       this.projects = this.allProjects.filter((x : any) => x['completed'] == false)
       this.getTasks()
@@ -256,7 +259,81 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  //mark task as started
+  //mark project as not completed
+  uncompleteProject(projectID : String) {
+    let req ={"projectID": projectID}
+    this.pmService.uncompleteProject(localStorage.getItem('token'),req).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  changeTaskStatus(taskID : string, taskName : string, status : string) {
+    if (status == 'Not Started') {
+      this.startTask(taskID)
+      this.snackbar.open("Updated " + taskName + "'s status to In Progress", "Dismiss", {
+        duration: 5000,
+      });
+    }
+    else if (status == 'In Progress') {
+      this.completeTask(taskID)
+      this.snackbar.open("Updated " + taskName + "'s status to Completed", "Dismiss", {
+        duration: 5000,
+      });
+    }
+    else {
+      this.resetTask(taskID)
+      this.snackbar.open("Updated " + taskName + "'s status to Not Started", "Dismiss", {
+        duration: 5000,
+      });
+    }
+    
+    this.getProAndTasks()
+  }
+
+  changeProjectStatus(projectID : string, projectName : string, status : string) {
+    if (status == 'Completed') 
+      this.completeProject(projectID)
+    else
+      this.uncompleteProject(projectID)
+
+    this.getProAndTasks()
+
+    this.snackbar.open("Updated " + projectName + "'s status to " + status, "Dismiss", {
+      duration: 5000,
+    });
+  }
+
+  //mark task as not started
+  resetTask(taskID : String) {
+    let req ={"taskID": taskID}
+    this.pmService.resetTask(localStorage.getItem('token'),req).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  //mark task as in progess
   startTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.startTask(localStorage.getItem('token'),req).subscribe((data) => {
@@ -312,27 +389,31 @@ export class ProjectsComponent implements OnInit {
     }
 
     // sort tasks according to due date
-    this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName)
+    this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName || a.taskName - b.taskName)
     console.log(this.tasks)
 
     // get week details
     var startDate = new Date()
-    var s = this.convertDate(startDate)
+    var endDate = new Date()
+    endDate.setDate(startDate.getDate()+6)
     console.log(startDate)
-    var endDate = startDate.getDate()+1
-    var weekTasks = this.tasks.filter((t : any) => this.formatDate(t.dueDate) == this.formatDate(startDate))
+    var weekTasks = this.tasks.filter((t : any) => t.dueDate > startDate && t.dueDate < endDate)
     console.log(weekTasks)
-    this.tasksNum = this.tasks.length
-
-    this.tasksDone = this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+    this.tasksNum = weekTasks.length
+    this.tasksDone = weekTasks.filter((t : any) => t.taskStatus == 'Completed').length
     this.tasksDue = this.tasksNum - this.tasksDone
 
     this.loading = false
-    this.slides = Math.ceil(this.tasksDue / 4)
+    var taskSlides = this.tasks.length - this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+    this.slides = Math.ceil(taskSlides / 4)
 
 
     // get upcoming tasks
     let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
+    tempTasks.forEach((element : any) => {
+      if (element.dueDate < startDate)
+        element['overdue'] = true
+    });
 
     while (tempTasks.length) {
       this.upcoming.push(tempTasks.splice(0,4))
@@ -534,9 +615,9 @@ export class ProjectsComponent implements OnInit {
         this.teamMembers == []
 
         for (let x = 0; x < this.teams.length; x++) {
-          console.log(this.teams)
+          //console.log(this.teams)
           var temp : Object[] = this.teams[x]['TeamMembers']
-          console.log(temp)
+          //console.log(temp)
         }
       }
 

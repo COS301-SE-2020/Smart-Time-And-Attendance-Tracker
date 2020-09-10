@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {formatDate} from '@angular/common';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class TrackingService {
   EntryID : string
 
   // Add manual time entry
-  public addMTimeEntry(values, token) {
+  public addMTimeEntry(token, values) {
     let epoch = new Date(values.date +" " +values.startTime).getTime();
     values.startTime = epoch;
     epoch = new Date(values.date +" " +values.endTime).getTime();
@@ -47,6 +47,19 @@ export class TrackingService {
       headers: headers
     });
   }
+
+  //Remove time entry
+  public removeTimeEntry(token, values) {
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    let parameters = new HttpParams();
+    parameters = parameters.append('timeEntryID',values);
+    return this.http.delete(this.ROOT_URL+'/userTimeEntry/deleteTimeEntry',  {
+      headers: headers,
+      params: parameters
+    });
+  }
+
   //Get user's projects and tasks
   public getProjectsAndTasks(values){
     const headers = new HttpHeaders()

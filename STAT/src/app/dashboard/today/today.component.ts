@@ -27,12 +27,15 @@ export class TodayComponent implements OnInit {
   sync;
   projectName: string;
   projectID : string;
-  
+
+  eID : string
+  ename : string
+
   panelOpenState = false;
   closeResult: string;
-  autoTracking = true;
   manualTrackingForm : FormGroup
   automaticTrackingForm: FormGroup
+  editEntryForm : FormGroup
 
   projects : []
   tasks : { ID : any, taskName : string }[]
@@ -48,6 +51,9 @@ export class TodayComponent implements OnInit {
 
   pName : string
   tName : string
+  entryToEdit : any
+  editing : boolean = false
+  editingTime : any = 0
 
   entries : Object[]
   week : Object[] = []
@@ -57,6 +63,10 @@ export class TodayComponent implements OnInit {
   date3 : Date = new Date()
   date4 : Date = new Date()
   date5 : Date = new Date()
+
+  activityVal : number = 0
+  entriesVal : number = 0
+  tasksVal : any[] = []
 
   trackingNow =false;
 
@@ -79,7 +89,7 @@ export class TodayComponent implements OnInit {
       activeTime : new FormControl('')
     });
 
-    this.manualTrackingForm.setValidators(this.checkTimes('StartTime', 'EndTime'));
+    this.manualTrackingForm.setValidators(this.checkTimes('startTime', 'endTime'));
 
     this.automaticTrackingForm = new FormGroup({
       description : new FormControl('',[Validators.required]),
@@ -88,6 +98,21 @@ export class TodayComponent implements OnInit {
       projectName : new FormControl(''),
       taskName : new FormControl('')
     });
+
+    this.editEntryForm = new FormGroup({
+      description : new FormControl(''),
+      project : new FormControl(''),
+      taskID : new FormControl(''),
+      //MonetaryValue : new FormControl('', [Validators.required]),
+      date : new FormControl('', [Validators.required]),
+      startTime : new FormControl('', [Validators.required]),
+      endTime : new FormControl('', [Validators.required]),
+      projectName : new FormControl(''),
+      taskName : new FormControl(''),
+      activeTime : new FormControl('')
+    });
+
+    this.editEntryForm.setValidators(this.checkTimes('startTime', 'endTime'));
 
     this.tasks = [ { "ID" : 0, "taskName" : "None" }];
 
@@ -103,9 +128,8 @@ export class TodayComponent implements OnInit {
       this.trackingNow = true;
       this.cd.detectChanges();
       this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
-      this.timing = this.currentlyTracking.activeTime;
-      console.log(this.currentlyTracking);
       this.tracking();
+      console.log(this.currentlyTracking);
     }
     this.reload()
   
@@ -113,6 +137,10 @@ export class TodayComponent implements OnInit {
 
   // reload page data
   reload() {
+    this.entriesVal = 0
+    this.activityVal = 0
+    this.tasksVal = []
+
     this.getProAndTasks()
 
     // get entries
@@ -143,14 +171,12 @@ export class TodayComponent implements OnInit {
     }
   }
 
-  modalForm() {
-    this.autoTracking = !this.autoTracking
-  }
-
   //Add a manual time entry from form
   addManualEntry(form : NgForm)
   {
-    this.service.addMTimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
+    form['date'] = form['date'].replace(/\-/g, '/')
+    this.service.addMTimeEntry(localStorage.getItem('token'), form).subscribe((data) => {
+      console.log(data)
       this.reload()
     },
     error => {
@@ -183,6 +209,23 @@ export class TodayComponent implements OnInit {
 
   }
 
+  editMoney() {
+    var startTime = this.entryToEdit.startTime
+    var endTime = this.entryToEdit.endTime
+    if (startTime && endTime) {
+      startTime = new Date('2020/01/01 ' + startTime)
+      endTime = new Date('2020/01/01 ' + endTime)
+      var diff = endTime.getTime() - startTime.getTime()
+      this.entryToEdit.activeTime = Math.floor( diff / 60000);
+      var hours = diff / 3600000
+      this.entryToEdit.monetaryValue = hours * this.hourlyRate
+    }
+
+    if (isNaN(this.entryToEdit.monetaryValue))
+      this.entryToEdit.monetaryValue = 0
+
+  }
+
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
@@ -192,13 +235,12 @@ export class TodayComponent implements OnInit {
     let now = new Date();
     this.currentlyTracking.activeTime= 0;
     this.currentlyTracking.description = form['description']
-
-    if( form['taskName']!= undefined || form['taskName']!= 'Unspecified')
+    if( form['taskName']!= undefined )
       this.currentlyTracking.taskName =form['taskName'];
 
-    if( form['projectName']!= undefined || form['taskName']!='Unspecified')
+    if( form['projectName']!= undefined )
       this.currentlyTracking.projectName =form['projectName'];
-
+      
     localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
 
     this.startTime = now.getTime();
@@ -213,11 +255,11 @@ export class TodayComponent implements OnInit {
         this.currentlyTracking.activeTime = 1;
         form['activeTime'] = 1;
         form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
-
+        localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
           this.service.EntryID = data['timeEntryID'];
           localStorage.setItem('currentlyTracking', data['timeEntryID']);
-
+          localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
           //var details = {'description' : form['description'], 'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
 
           const options = {
@@ -252,6 +294,7 @@ export class TodayComponent implements OnInit {
     localStorage.removeItem('currentlyTrackingDetails');
     this.updateEntry().subscribe((data) => { },
       error => {
+        console.log(error);
         let errorCode = error['status'];
         if (errorCode == '403')
           this.headerService.kickOut();
@@ -282,6 +325,7 @@ export class TodayComponent implements OnInit {
         this.updateEntry().subscribe((data) => {
         },
         error => {
+          console.log(error);
           let errorCode = error['status'];
           if (errorCode == '403')
             this.headerService.kickOut();
@@ -312,13 +356,107 @@ export class TodayComponent implements OnInit {
     {
       this.monetaryValue = 0
     }
-    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
+    let values = {"timeEntryID" : localStorage.getItem('currentlyTracking'), "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
      return this.service.updateTimeEntry(values, localStorage.getItem('token'));
 
   }
 
+  setEditValues() {
+    this.editing = true
+    this.editingTime = this.entryToEdit.activeTime
+    this.entryToEdit.date = this.entryToEdit.date.replace(/\//g, '-')
+    this.entryToEdit.startTime = new Date(this.entryToEdit.startTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } )
+    this.entryToEdit.endTime = new Date(this.entryToEdit.endTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } )
+    this.mProjectSelected = this.entryToEdit.projectID
+    this.mTaskSelected = this.entryToEdit.taskID
+  }
+
   // edit tracking entry
-  editEntry(form : NgForm) {
+  editEntry() {
+    this.entryToEdit.date = this.entryToEdit.date.replace(/\-/g, '/')
+
+    var startTime = new Date(this.entryToEdit.date + ' ' + this.entryToEdit.startTime); 
+    var endTime = new Date(this.entryToEdit.date + ' ' + this.entryToEdit.endTime);
+    this.entryToEdit.startTime = startTime.valueOf()
+    this.entryToEdit.endTime = endTime.valueOf()
+    var difference = endTime.getTime() - startTime.getTime(); // This will give difference in milliseconds
+    var activeTime = Math.round(difference / 60000);
+    this.editingTime = activeTime - this.editingTime
+    this.entryToEdit.activeTime = activeTime
+
+    if (this.mProjectSelected != null) {
+      this.entryToEdit.projectID = this.mProjectSelected
+      this.entryToEdit.projectName = this.pName
+    }
+
+    if (this.mTaskSelected != null) {
+      this.entryToEdit.taskID = this.mTaskSelected
+      this.entryToEdit.taskName = this.tName
+    }
+
+    console.log(this.entryToEdit)
+
+    this.service.updateTimeEntry(this.entryToEdit, localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+      switch (this.entryToEdit.date) {
+        case this.formatDate(this.date):
+          this.week['today'] = []
+          this.getEntries(this.formatDate(this.date))
+          break
+        case this.formatDate(this.date1):
+          this.week['yesterday'] = []
+          this.getEntries(this.formatDate(this.date1))
+          break
+        case this.formatDate(this.date2):
+          this.week['2days'] = []
+          this.getEntries(this.formatDate(this.date2))
+          break
+        case this.formatDate(this.date3):
+          this.week['3days'] = []
+          this.getEntries(this.formatDate(this.date3))
+          break
+        case this.formatDate(this.date4):
+          this.week['4days'] = []
+          this.getEntries(this.formatDate(this.date4))
+          break
+        case this.formatDate(this.date5):
+          this.week['5days'] = []
+          this.getEntries(this.formatDate(this.date5))
+          break
+      }
+
+      //this.editing = false
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+
+  // delete tracking entry
+  deleteEntry(id : string) {
+
+    this.service.removeTimeEntry(localStorage.getItem('token'), id).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+    this.reload();
 
   }
 
@@ -367,6 +505,23 @@ export class TodayComponent implements OnInit {
   getEntries(date : String) {
     this.amService.getTimeEntries(date, localStorage.getItem('token')).subscribe((data) => {
       console.log(data)
+
+      // values on dashboard
+      if (this.editing == false) {
+        this.entriesVal += data['timeEntries'].length
+      } else {
+        this.activityVal -= - this.editingTime
+      }
+
+      data['timeEntries'].forEach(element => {
+        if (element.taskID != null && !this.tasksVal.includes(element.taskID)) {
+          this.tasksVal.push(element.taskID)
+        }
+
+        if (this.editing == false)
+          this.activityVal += element.activeTime
+      });
+
       if (date == this.formatDate(this.date))
         this.week['today'] = data['timeEntries'].sort((a : any ,b : any) =>
           b.endTime - a.endTime
@@ -463,20 +618,20 @@ export class TodayComponent implements OnInit {
 
   // start time must be at least a minute before end time
   getStartError() {
-    if (this.manualTrackingForm.controls.StartTime.hasError('required')) {
+    if (this.manualTrackingForm.controls.startTime.hasError('required')) {
       return 'Please enter a value';
     }
 
-    return this.manualTrackingForm.controls.StartTime.hasError('mustMatch') ? 'Invalid start time' : '';
+    return this.manualTrackingForm.controls.startTime.hasError('mustMatch') ? 'Invalid start time' : '';
   }
 
   // end time must be at least a minute after start time
   getEndError() {
-    if (this.manualTrackingForm.controls.EndTime.hasError('required')) {
+    if (this.manualTrackingForm.controls.endTime.hasError('required')) {
       return 'Please enter a value';
     }
 
-    return this.manualTrackingForm.controls.EndTime.hasError('mustMatch') ? 'End time must occur at least a minute after start time' : '';
+    return this.manualTrackingForm.controls.endTime.hasError('mustMatch') ? 'End time must occur at least a minute after start time' : '';
   }
 
   // check time values
