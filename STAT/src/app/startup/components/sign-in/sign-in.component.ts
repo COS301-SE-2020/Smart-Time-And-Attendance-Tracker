@@ -152,6 +152,7 @@ export class SignInComponent implements OnInit {
         //console.log(res['roles']);
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
+        //localStorage.setItem('profilePic', res[''])
         this.headerService.isUserLoggedIn.next(true);
         this.router.navigate(['main']);
       });

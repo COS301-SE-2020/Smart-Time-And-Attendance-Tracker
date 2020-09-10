@@ -8,6 +8,7 @@ import { TeamsComponent } from './teams/teams.component';
 import { HistoryComponent } from "./history/history.component";
 import { IOTComponent } from "./iot/iot.component";
 import { UnauthorisedComponent } from "./unauthorised/unauthorised.component";
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path: 'iot', component: IOTComponent},
   { path: 'organisation', component: OrganisationComponent},
   { path: 'teams', component: TeamsComponent},
-  { path: 'history', component: HistoryComponent }
+  { path: 'history', component: HistoryComponent },
+  { path: 'profile', component: ProfileComponent}
 ];
 
 @NgModule({

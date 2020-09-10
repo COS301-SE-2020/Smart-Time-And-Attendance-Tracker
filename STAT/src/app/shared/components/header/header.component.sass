@@ -1,0 +1,43 @@
+.modal-header button:focus 
+    border: none !important
+    outline: none
+    background-color: transparent
+
+
+.modal-footer button 
+    margin-left: 0.5em
+
+
+nav 
+    overflow: hidden
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 50
+
+
+$colors : #7846eb, #00c8ff, #ff2885, #366ceb
+div.pro-pic
+    background-color: nth($colors, random(length($colors)))
+
+.pro-pic
+  margin-left: 0.5em
+  display: inline-block
+  text-align: center
+  align-items: center
+  vertical-align: middle
+  color: #ffffff
+  font-size: 1em
+  letter-spacing: 1px
+  width: 45px
+  height: 45px
+  line-height: 45px
+  margin-right: 0.5em
+  border-radius: 5em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 4px 6px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)
+
+  &:hover
+      cursor: pointer
+
+.float-right
+    float: right !important
