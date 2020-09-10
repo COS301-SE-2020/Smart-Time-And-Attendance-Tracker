@@ -44,8 +44,8 @@ const tensorFlowAnalysis =  require('../analysis/tensorflow.controller');
 //user
 router.post("/user/register", user.register);
 router.post("/user/login", user.login);
-router.get("/user/getRoles",jwtHelper.verifyJWTtoken, user.getRoles);
-router.get("/user/getName",jwtHelper.verifyJWTtoken, user.getName);
+router.get("/user/getRoles",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,user.getRoles);
+router.get("/user/getName",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,user.getName);
 router.get("/user/isAuthenticated",jwtHelper.verifyJWTtoken, user.isAuthenticated);
 router.get("/user/getProjects",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.getProjects);
 router.post("/user/addProfilePicture",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, user.addProfilePicture);
@@ -97,7 +97,7 @@ router.post("/project/complete",  jwtHelper.verifyJWTtoken, userHelper.isTeamLea
 router.delete("/project", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, project.deleteProject);
 router.post("/project/uncomplete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.uncomplete);
 router.post("/project/update",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,project.update);
-router.get("/project/getProjects",jwtHelper.verifyJWTtoken,userHelper.isAuthenticated,project.getProjects);
+router.get("/project/getProjects",jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst,project.getProjects);
 //task
 router.post("/task/start",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.startTask);
 router.post("/task/complete",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,task.completeTask);
