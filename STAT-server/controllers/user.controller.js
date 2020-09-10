@@ -163,7 +163,7 @@ module.exports.getName = (req, res, next) => {
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         else
-            return res.status(200).json({name : result.Name, surname : result.Surname, profilePicture: ProfilePicture});
+            return res.status(200).json({name : result.Name, surname : result.Surname, profilePicture: result.ProfilePicture});
         
     });
 }
@@ -465,7 +465,6 @@ module.exports.getProjects = (req, res, next) => {
                         if(next)
                         {
                             req.projects = projectsOfUser;
-                            console.log("going next");
                             next();
                         }
                         else

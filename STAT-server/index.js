@@ -51,7 +51,7 @@ application.use((err, req, res, next) => {
 });*/
 
 // start server
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 var server
 exports.listen = function (){
     server = application.listen("3000", function () {
@@ -64,33 +64,18 @@ exports.close = function () {
       console.log('Server Closed')
     }); 
     mongoose.connection.close()
-};
+};*/
 
 
 
-
-
-/*
 application.listen("3000"), ()=>{
     console.log("Server started");
 }; 
-*/
 
-
-
-
-
-
-
-
-/*
-application.get('/calendar', (req, res) => {
-    res.sendFile(__dirname + '/tracker/index.html');
-  }); */
 
 
  
-  application.get('/', (req, res) => {
+  /*application.get('/', (req, res) => {
     var valErrors = [1,2,3,4,5,6];
     res.status(200).send(valErrors)
-  }); 
+  }); */
