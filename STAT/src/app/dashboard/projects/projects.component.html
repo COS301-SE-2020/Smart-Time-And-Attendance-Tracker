@@ -63,12 +63,12 @@
                             matTooltip="Change to In Progress"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="above"
-                            (click)="changeProjectStatus(p.ID, 'Completed')">check_circle</mat-icon>
+                            (click)="$event.stopPropagation(); changeProjectStatus(p.ID, p.projectName, 'In Progress')">check_circle</mat-icon>
                   <mat-icon *ngIf="p.completed == false" inline="true" class="p-ip"
                             matTooltip="Mark as Completed"
                             matTooltipClass="pro-tooltip"
                             matTooltipPosition="above"
-                            (click)="changeProjectStatus(p.ID, 'In Progress')">pending</mat-icon>
+                            (click)="$event.stopPropagation(); changeProjectStatus(p.ID, p.projectName, 'Completed')">pending</mat-icon>
 
                     {{p.projectName}}
                   <span class="tag numTasks">{{p.tasks.length}} tasks</span>
@@ -135,7 +135,7 @@
                           [ngClass]="{'tag-ns': t.taskStatus == 'Not Started',
                                       'tag-ip': t.taskStatus == 'In Progress',
                                       'tag-c': t.taskStatus == 'Completed'}"
-                          (click)="changeTaskStatus(t.ID, t.taskStatus)">{{t.taskStatus}}</span>
+                          (click)="changeTaskStatus(t.ID, t.taskName, t.taskStatus)">{{t.taskStatus}}</span>
 
                     <mat-divider></mat-divider>       
                   </li>

@@ -5,6 +5,8 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 import { TeamManagementService } from 'src/app/shared/services/team-management.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-projects',
@@ -13,7 +15,7 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService, private snackbar : MatSnackBar) { }
 
   panelOpenState = false
   name = "John Doe"
@@ -276,24 +278,40 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  changeTaskStatus(taskID : string, status : string) {
-    if (status == 'Not Started')
+  changeTaskStatus(taskID : string, taskName : string, status : string) {
+    if (status == 'Not Started') {
       this.startTask(taskID)
-    else if (status == 'In Progress')
+      this.snackbar.open("Updated " + taskName + "'s status to In Progress", "Dismiss", {
+        duration: 5000,
+      });
+    }
+    else if (status == 'In Progress') {
       this.completeTask(taskID)
-    else
+      this.snackbar.open("Updated " + taskName + "'s status to Completed", "Dismiss", {
+        duration: 5000,
+      });
+    }
+    else {
       this.resetTask(taskID)
+      this.snackbar.open("Updated " + taskName + "'s status to Not Started", "Dismiss", {
+        duration: 5000,
+      });
+    }
     
     this.getProAndTasks()
   }
 
-  changeProjectStatus(projectID : string, status : string) {
-    if (status == 'In Progress')
+  changeProjectStatus(projectID : string, projectName : string, status : string) {
+    if (status == 'Completed') 
       this.completeProject(projectID)
     else
       this.uncompleteProject(projectID)
 
     this.getProAndTasks()
+
+    this.snackbar.open("Updated " + projectName + "'s status to " + status, "Dismiss", {
+      duration: 5000,
+    });
   }
 
   //mark task as not started
