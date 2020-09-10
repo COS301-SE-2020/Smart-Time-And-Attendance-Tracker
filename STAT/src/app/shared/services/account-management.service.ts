@@ -141,6 +141,14 @@ export class AccountManagementService {
     });
   }
 
+  //Add a profile picture
+  public addProfilePicture(token, picture){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/addProfilePicture', JSON.stringify(picture), {
+      headers: headers
+    });
+  }
 
   // edit profile
   // edit settings

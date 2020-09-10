@@ -22,6 +22,11 @@ export class AnalysisComponent implements OnInit {
     console.log('Hello');
     this.getDailyValues();
     this.getProjectDailyValues("5f3d4cdc5f704424503cff44");
+    this.getDailyMoney();
+    this.getDevices();
+    this.getWeeklyProjectsTimes();
+    this.getWeeklyTasksTimes();
+    this.getProjectMembersTotalTime("5f3d4cdc5f704424503cff44");
   }
 
   toggleAnalysis()
@@ -40,6 +45,7 @@ export class AnalysisComponent implements OnInit {
     this.cd.detectChanges();
   }
 
+  //Get user's daily totals for the last week
   getDailyValues()
   {
     this.aService.getDailyValues(localStorage.getItem('token')).subscribe((data) => {
@@ -55,11 +61,91 @@ export class AnalysisComponent implements OnInit {
       }
     });
   }
-
+//Get project's daily totals for the last week (for team lead)
   getProjectDailyValues(projectID : String)
   {
     this.aService.getProjectDailyValues(localStorage.getItem('token'), projectID).subscribe((data) => {
      console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+  //Get user's daily monetary value totals for the last week
+  getDailyMoney()
+  {
+    this.aService.getDailyMoney(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+  //Get user's time for each project for the last week
+  getWeeklyProjectsTimes()
+  {
+    this.aService.getWeeklyProjectsTimes(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+  //Get user's time for each task for the last week
+  getWeeklyTasksTimes()
+  {
+    this.aService.getWeeklyTasksTimes(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+  //Get devices user used for the last week
+  getDevices()
+  {
+    this.aService.getDevices(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+  //Get the amount of time each user spent on the project for the last week (for team lead)
+  getProjectMembersTotalTime(projectID : String)
+  {
+    this.aService.getProjectMembersTotalTime(localStorage.getItem('token'), projectID).subscribe((data) => {
+      console.log(data);
     
     },
     error => {
