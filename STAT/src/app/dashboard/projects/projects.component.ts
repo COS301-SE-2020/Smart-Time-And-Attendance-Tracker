@@ -257,6 +257,25 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
+  //mark project as not completed
+  uncompleteProject(projectID : String) {
+    let req ={"projectID": projectID}
+    this.pmService.uncompleteProject(localStorage.getItem('token'),req).subscribe((data) => {
+      console.log(data);
+
+    },
+    error => {
+      //console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+  }
+
   changeTaskStatus(taskID : string, status : string) {
     if (status == 'Not Started')
       this.startTask(taskID)
@@ -271,7 +290,9 @@ export class ProjectsComponent implements OnInit {
   changeProjectStatus(projectID : string, status : string) {
     if (status == 'In Progress')
       this.completeProject(projectID)
-    
+    else
+      this.uncompleteProject(projectID)
+
     this.getProAndTasks()
   }
 
