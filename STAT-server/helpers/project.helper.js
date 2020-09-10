@@ -27,7 +27,7 @@ const TaskHelper =require('../helpers/task.helper');
 const UserHelper =require('../helpers/user.helper');
 
 /**
- * This function gets a projectsproject.
+ * This function gets a project.
  * @param {String} id ID of project
  * @param {Function} done 
  */

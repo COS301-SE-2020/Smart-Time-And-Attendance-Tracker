@@ -50,13 +50,32 @@ module.exports.startTask = (req, res) => {
  */
 module.exports.completeTask = (req, res) => {
    
-    TaskModel.updateOne({ _id: req.body.taskID},{Status: 'COMPLETED'},(err, result) => {
+    TaskModel.updateOne({ _id: req.body.taskID},{Status: 'Completed'},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + error});
         else if (result.n ==0)
             return res.status(404).send({message: 'Task not found'});
         else
             return res.status(200).json({message: 'Task status updated to "Completed"'});
+
+    });
+}
+
+/**
+ * 
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+module.exports.reset = (req, res) => {
+   
+    TaskModel.updateOne({ _id: req.body.taskID},{Status: 'Not Started'},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + error});
+        else if (result.n ==0)
+            return res.status(404).send({message: 'Task not found'});
+        else
+            return res.status(200).json({message: 'Task status updated to "Not Started"'});
 
     });
 }

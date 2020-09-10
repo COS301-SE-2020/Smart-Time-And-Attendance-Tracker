@@ -28,7 +28,7 @@ const TimeEntryModel = mongoose.model("TimeEntry");
 const UserModel = mongoose.model("User");
 const TimeEntryHelper =  require('../helpers/timeEntry.helper');
 const UserHelper =require('../helpers/user.helper');
-const ProjectModel = mongoose.model("Project");
+const IOTHelper =require('../helpers/iot.helper');
 var Promise = require('promise');
 var async = require("async");
 
@@ -336,8 +336,11 @@ module.exports.updateTimeEntry = (req, res) => {
                         result.StartTime =  req.body.startTime;
 
                     if(req.body.hasOwnProperty('endTime'))
+                    {
                         result.EndTime =  req.body.endTime;
-                        
+                        if(!req.body.hasOwnProperty('activeTime'))
+                            result.ActiveTime = result.EndTime - result.StartTime;
+                    }  
                     if(req.body.hasOwnProperty('activeTime'))
                         result.ActiveTime =  req.body.activeTime;
 
@@ -407,7 +410,7 @@ module.exports.getDailyTimeEntries = (req, res) => {
                             if(date == val.Date)
                             {
                                 count = false;
-                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue, description: val.Description});
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, project: val.ProjectName,task: val.TaskName,  projectID: val.ProjectID,taskID: val.TaskID,activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue, description: val.Description});
                             }
             
                         };
@@ -432,7 +435,7 @@ module.exports.getDailyTimeEntries = (req, res) => {
  * @returns {JSON Object} Success or error message
  */  
 module.exports.deleteTimeEntry = (req, res) => {  
-    if(!req.body.hasOwnProperty('timeEntryID'))
+    if(!req.query.hasOwnProperty('timeEntryID'))
         return res.status(400).send({message: 'No time entry ID provided'}); 
     UserTimeEntryModel.updateOne({  UserID : req.ID},{ $pull: { 'TimeEntries':  req.query.timeEntryID}},(err, result) => {
         if (err) 
@@ -550,6 +553,90 @@ module.exports.getUserTimeEntries = (req, res) => {
         return res.status(400).send({message: 'No user ID provided'});
 
     UserTimeEntryModel.findOne({  UserID : req.query.userID},(err, result) => {
+        if (err) {
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        }
+        else if (!result){
+            return res.status(404).json({ message: 'No time entries for the given user were found' }); 
+        }
+        else{
+            var timeEntries=[];
+            var times = result.TimeEntries.length;
+           
+            if(times == 0){
+                return res.status(404).json({ message: 'No time entries for the given user were found' });
+            }
+            else{
+                if(req.query.hasOwnProperty("minDate"))
+                {
+                    var min = new Date(req.query.minDate).getTime();
+                    if(req.query.hasOwnProperty("maxDate"))
+                    {
+                        var max = new Date(req.query.maxDate);
+                        max.setDate(max.getDate() + 1);
+                        max = max.getTime()
+                    }
+                    else
+                        var max = new Date().getTime(); 
+                
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a], StartTime: {$gte: min,$lte: max}},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
+                }
+                else{
+                    for(var a=0; a<times; a++){
+                        TimeEntryModel.findOne({_id: result.TimeEntries[a]},(err,val)=>{   
+                            count3= count3+1; 
+                            if(err){
+                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+
+                            }
+                            else if(val){
+                                count = false;
+                                timeEntries.push({timeEntryID: val._id, date:val.Date, startTime:val.StartTime, endTime:val.EndTime, duration:val.Duration, description: val.Description,project: val.ProjectName,task: val.TaskName, activeTime: val.ActiveTime, monetaryValue:val.MonetaryValue});
+                            };
+                            if(count3 == times && count){
+                                return res.status(404).json({ message: 'No time entries were found' });
+                            } 
+                            else if(count3== times){
+                                return res.status(200).json({timeEntries}); 
+                            }
+                        });
+                    }
+                }
+                
+            }
+        }
+    });
+}
+
+/**
+ * This function returns all time entries for an IOT device.
+ * @param {HTTP Request} req Parameters - Device ID
+ * @param {HTTP Response} res 
+ * @returns {JSON Object} returns all time entries and entry information in an array ie - name, email
+ */  
+module.exports.getIOTTimeEntries = (req, res) => {  
+    if(!req.query.hasOwnProperty("deviceID"))
+        return res.status(400).send({message: 'No device ID provided'});
+
+    TimeEntryModel.findOne({  UserID : req.query.userID},(err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -808,8 +895,90 @@ module.exports.getAllProjectMembersTimeEntries = async (req, res) => {
     });
 }
 
+/**
+ * Get daily total time for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 
-           
+module.exports.getProjectTotalDailyTime = async(req, res) => {
+
+    if(!req.query.hasOwnProperty("projectID"))
+        return res.status(400).send({message: 'No project ID provided'});
+    
+    var date = new Date();
+
+    var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
+    max = new Date().getTime();
+                
+    try {
+        const  val = await TimeEntryModel.aggregate([
+            { $match: { $and: [{Project: req.query.projectName},{StartTime: {$gte: min,$lte: max}}] } },
+            {
+                $group: {
+                _id: "$Date",
+                totalTime: { $sum: "$ActiveTime"},
+                count: { $sum: 1 }
+                }
+            }
+            ]);
+        return res.status(200).send({totalDailyValues: val})
+    } 
+    catch (error) {
+        return res.status(500).send({message: 'Internal Server Error: ' + error})
+    }
+
+}
+
+ /**
+ * Get daily total time for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
+
+module.exports.getUserDailyTotalTime = async(req, res) => {
+    var userID =req.ID;
+    
+    var date = new Date();
+
+    UserTimeEntryModel.findOne({ UserID: userID }, async(err, result) => {
+        if (err) 
+            return res.status(500).send({ message: 'Internal Server Error: ' + err});
+         else if (!result) 
+            return res.status(404).json({message: 'No time entries for the given user were found'});
+        else {
+            var times = result.TimeEntries.length;
+            if (times == 0) 
+                return res.status(404).json({message: 'No time entries for the given user were found'});
+            else { 
+
+                var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
+                max = new Date().getTime();
+                            
+                try {
+                    const  val = await TimeEntryModel.aggregate([
+                        { $match: { $and: [{_id: { "$in": result.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
+                        {
+                          $group: {
+                            _id: "$Date",
+                            totalTime: { $sum: "$ActiveTime"},
+                            count: { $sum: 1 }
+                          }
+                        }
+                      ]);
+                    return res.status(200).send({totalDailyValues: val})
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+            }
+                       
+        }
+    });
+}
+          
 
 
 

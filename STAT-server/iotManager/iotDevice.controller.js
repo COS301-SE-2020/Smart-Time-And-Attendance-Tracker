@@ -46,7 +46,9 @@ module.exports.register = (req, res) => {
             IOTDevice.DeviceName = req.body.deviceName;
             IOTDevice.MACAddress = req.body.macAddress;
             IOTDevice.RegisteredBy = req.ID;
-            IOTDevice.RegisteredOn = (now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate());
+            if(req.body.hasOwnProperty("description"))
+                IOTDevice.Description = req.body.description;
+            IOTDevice.RegisteredOn = (now.toISOString().slice(0,10)).replace(/-/g,"/");
             IOTDevice.save((err, doc) => {
                 if(!err){
                     return res.status(200).json({ IOTDeviceID : doc._id, message: 'IOT Device successfully registered.' });
@@ -79,7 +81,7 @@ module.exports.register = (req, res) => {
  */
 module.exports.deregister = (req, res) => {
     var now = new Date;
-    var date = now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate();
+    var date = (now.toISOString().slice(0,10)).replace(/-/g,"/");
 
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
     {
@@ -142,13 +144,13 @@ module.exports.getAllDevices = (req, res) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
-            return res.status(404).json({ message: 'No IOT Device found' }); 
+            return res.status(404).json({ message: 'No IOT devices found' }); 
         else
         {
             devices=[];
             for(var a=0; a<result.length; a++)
             {
-                devices.push({'ID' : result[a]._id, 'deviceName' : result[a].DeviceName, 'macAddress' : result[a].MACAddress});
+                devices.push({'ID' : result[a]._id, 'deviceName' : result[a].DeviceName, 'macAddress' : result[a].MACAddress, 'description': result[a].Description});
                     
                 if(devices.length == result.length)
                     return res.status(200).json({ iotDevices: devices});        
@@ -166,12 +168,8 @@ module.exports.getAllDevices = (req, res) => {
  */
 module.exports.stopTimer = (req, res, next) => {
     //change req.ID
-    if(req.body.userID)
-        req.ID = req.body.userID;
-    else
-        req.ID = "";
-    var now = new Date;
-    var date = now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate();
+    if(!req.body.hasOwnProperty("timeEntryID"))
+        return res.status(400).send({message: 'No time entry ID provided'});
 
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
     {
@@ -208,7 +206,7 @@ module.exports.stopTimer = (req, res, next) => {
         });
     }
     else
-        return res.status(400).send({message: 'No project ID provided or device MAC Address provided'});
+        return res.status(400).send({message: 'No device ID or device MAC Address provided'});
 }
 
 /**
@@ -219,12 +217,10 @@ module.exports.stopTimer = (req, res, next) => {
  */
 module.exports.startTimer = (req, res, next) => {
     //change req.ID
-    if(req.body.userID)
-        req.ID = req.body.userID;
-    else
-        req.ID = "";
+    if(!req.body.hasOwnProperty("userID"))
+        return res.status(400).send({message: 'No user ID provided'});
     var now = new Date;
-    var date = now.getFullYear() + "/" + now.getMonth() + "/" + now.getDate();
+    var date = (now.toISOString().slice(0,10)).replace(/-/g,"/");
 
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
     {
@@ -238,8 +234,8 @@ module.exports.startTimer = (req, res, next) => {
                 req.body.date = date;
                 req.body.startTime = now;
                 req.body.endTime = now;
-                req.body.description = result.MACAddress;
-                req.body.device = "IOT Device";
+                req.body.description =  req.body.deviceName;
+                req.body.device = req.body.macAddress;
                 next();
             }
             else
@@ -258,8 +254,8 @@ module.exports.startTimer = (req, res, next) => {
                 req.body.date = date;
                 req.body.startTime = now;
                 req.body.endTime = now;
-                req.body.description = result.MACAddress;
-                req.body.device = "IOT Device";
+                req.body.description = result.deviceName;
+                req.body.device = result.MACAddress;
                 next();
             }
             else
@@ -267,5 +263,5 @@ module.exports.startTimer = (req, res, next) => {
         });
     }
     else
-        return res.status(400).send({message: 'No project ID provided or device MAC Address provided'});
+        return res.status(400).send({message: 'No device ID or device MAC Address provided'});
 }

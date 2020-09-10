@@ -40,6 +40,10 @@ var IOTDeviceSchema = new mongoose.Schema({
         type: String,
         required : "Required"
     },
+    Description:{
+        type: String,
+        default:""
+    },
     DeregisteredBy:{
         type: mongoose.Schema.Types.ObjectId,
         default: null
