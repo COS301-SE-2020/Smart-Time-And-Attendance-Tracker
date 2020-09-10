@@ -83,7 +83,7 @@
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(editProjectModal); popProjectForm(p)">
+                          (click)="$event.stopPropagation(); open(editProjectModal); popProjectForm(p)">
                           <mat-icon inline="true">edit</mat-icon>
                   </button>
                   <button *ngIf="roles.includes('Team Leader')" 
@@ -91,7 +91,7 @@
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(deleteProjectModal); pid = p.ID; pname = p.projectName">
+                          (click)="$event.stopPropagation(); open(deleteProjectModal); pid = p.ID; pname = p.projectName">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
                   </mat-panel-title>
