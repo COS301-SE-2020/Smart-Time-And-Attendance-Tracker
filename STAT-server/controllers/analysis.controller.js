@@ -1,12 +1,12 @@
 /**
-  * @file STAT-server/controllers/predictive.controller.js
+  * @file STAT-server/controllers/analysis.controller.js
   * @author Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
-  * @fileoverview This file handles all the requests regarding predictive analysis
+  * @fileoverview This file handles all the requests regarding analysis
   * @date  26 August 2020
  */
 
 /**
-* Filename:             STAT-server/controllers/predictive.controller.js
+* Filename:             STAT-server/controllers/analysis.controller.js
 *
 * Author:               Vedha Krishna Velthapu, Jana Sander, Jesse Mwiti
 *   
@@ -16,22 +16,16 @@
 *
 * Project:              Smart Time and Attendance Tracker
 *
-* Description:          This file handles all the requests regarding the predictive analysis
+* Description:          This file handles all the requests regarding the analysis
 *
 */
 
 const mongoose = require("mongoose");
-const TaskHelper = require("../helpers/task.helper");
 const ProjectHelper = require("../helpers/project.helper");
 const UserTimeEntryModel = mongoose.model("UserTimeEntry");
 const TimeEntryModel = mongoose.model("TimeEntry");
-const UserModel = mongoose.model("User");
-const TimeEntryHelper = require('../helpers/timeEntry.helper');
-const UserHelper = require('../helpers/user.helper');
-const ProjectModel = mongoose.model("Project");
 var Promise = require('promise');
 var async = require("async");
-const {calendar} = require("googleapis/build/src/apis/calendar");
 
 const AnalysisHelper = require('../helpers/analysis.helper');
 /**
@@ -350,11 +344,6 @@ module.exports.getUserDevices = async (req, res) => {
 
 
 module.exports.getUserWebsites = async (req, res) => {
-    if (!req.query.hasOwnProperty("userID")) 
-        return res.status(400).send({message: 'No user ID provided'});
-    
-
-    var count4 = 0;
 
     var min = new Date(req.query.minDate).getTime();
     if (req.query.hasOwnProperty("maxDate")) {
@@ -368,7 +357,7 @@ module.exports.getUserWebsites = async (req, res) => {
     var urlArray = [];
     var websites = [];
     UserTimeEntryModel.findOne({
-        UserID: req.query.userID
+        UserID: req.ID
     }, async (err, result) => { // console.log(result);
         if (err) {
             return res.status(500).send({
@@ -826,4 +815,209 @@ module.exports.getProjectWebsites = async (req, res) => {
 
     });
 }
+/**
+ * Get daily total time for the past week
+ * @param {HTTP Request} req Request body - ID of task
+ * @param {HTTP Response} res 
+ * @returns {String} Success or error message.
+ */
 
+ module.exports.getUserDailyTotalTime = (req, res) => {
+    var count = true;
+    var count3 = 0;
+    var userID =req.ID;
+    
+    var date = new Date().getTime();
+
+    UserTimeEntryModel.findOne({ UserID: userID }, (err, result) => {
+        if (err) {
+            return res.status(500).send({
+                message: 'Internal Server Error: ' + err
+            });
+        } else if (!result) {
+            return res.status(404).json({message: 'No time entries for the given user were found'});
+        } else {
+            var dailyTotal = 0;
+            var times = result.TimeEntries.length;
+            var totaltime=0;
+            if (times == 0) { // /return average  = 0;
+                return res.status(404).json({message: 'No time entries for the given user were found'});
+            } else { // /set date
+                var date = req.query.date;
+
+                if (req.query.hasOwnProperty("projectID")) { // /return average on a certain project
+                    var totalEntries = 0;
+
+                    for (var a = 0; a < times; a++) {
+                        TimeEntryModel.findOne({
+                            _id: result.TimeEntries[a],
+                            ProjectID: req.query.projectID
+                        }, (err, val) => {
+                            count3 = count3 + 1;
+                            if (err) {
+                                return res.status(500).send({
+                                    message: 'Internal Server Error: ' + error
+                                });
+
+                            } else if (val) {
+                                
+                                if(date == val.Date)
+                                {
+                                    count = false;
+                                    totalEntries = totalEntries + 1;
+                                    dailyTotal = dailyTotal + val.ActiveTime;
+
+                                }
+                                
+
+                            };
+                            if (count3 == times && count) {
+                                return res.status(404).json({message: 'No time entries were found'});
+                            } else if (count3 == times) {
+                                return res.status(200).json({dailyTotal});
+                            }
+                        });
+                    }
+                } else {
+
+                    for (var a = 0; a < times; a++) {
+                        console.log("llllll "+a)
+                        TimeEntryModel.findOne({
+                            _id: result.TimeEntries[a]
+                        }, (err, val) => {
+                            count3 = count3 + 1;
+                            if (err) {
+                                return res.status(500).send({
+                                    message: 'Internal Server Error: ' + error
+                                });
+
+                            } else if (val) {
+                                if(date == val.Date)
+                                {
+                                    count = false;
+                                    dailyTotal = dailyTotal + val.ActiveTime;
+                                }
+                                
+                            };
+                            if (count3 == times && count) {
+                                return res.status(404).json({message: 'No time entries were found'});
+                            } else if (count3 == times) {
+                                return res.status(200).json({dailyTotal});
+                            }
+                        });
+                    }
+                }
+
+            }
+        }
+    });
+}
+
+
+
+
+
+module.exports.getProjectTotalDailyTime = async (req, res) => {
+    if (!req.query.hasOwnProperty("projectID")) 
+        return res.status(400).send({message: 'No project ID provided'});
+    if (!req.query.hasOwnProperty("date")) 
+        return res.status(400).send({message: 'No dates provided'});
+    
+    var count4 = 0;
+
+    var date =  req.query.date;
+
+    var totalCount = 0;
+    var members = 0;
+    var totalTime =0;
+    ProjectHelper.getProject(req.query.projectID, async (err, result) => {
+        if (err) {
+            return res.status(500).send({
+                message: 'Internal Server Error: ' + err
+            });
+        } else if (!result) {
+            return res.status(404).json({message: 'Project not found'});
+        } else {
+            var teamMembers = result.TeamMembers.length;
+            if(teamMembers==0){
+                return res.status(404).send({ message: 'No team members found'  });
+            }
+            console.log(teamMembers)
+            result.TeamMembers.forEach(async function (myDoc) { 
+                UserTimeEntryModel.findOne({
+                    UserID: myDoc._id
+                }, async (err, result) => {
+                    if (err) {
+                        return res.status(500).send({
+                            message: 'Internal Server Error: ' + err
+                        });
+                    } else if (!result) { // return res.status(404).json({ message: 'No time entries for the given user were found' });
+                        members = members + 1;
+                        //console.log(members)
+
+                        if (members == teamMembers) {
+                            return res.status(404).send({ totalTime});
+                        }
+                    } else {
+
+                        var times = result.TimeEntries.length;
+                        var count3 = 0;
+                        if (times == 0) {
+                            members = members + 1;
+                            console.log(members)
+                            if (members == teamMembers) {
+                                return res.status(404).send({ totalTime});
+                            }
+                        } else {
+
+
+                            var totalEntries = 0;
+
+                            result.TimeEntries.forEach(async function (myDoc) {
+
+
+                                TimeEntryModel.findOne({
+                                    _id: myDoc._id,
+                                    ProjectID: req.query.projectID
+                                }, async (err, val) => {
+                                    count3 = count3 + 1;
+
+                                    if (err) {
+                                        return res.status(500).send({
+                                            message: 'Internal Server Error: ' + error
+                                        });
+
+                                    } else if (!val) { // do nothing
+                                    } else if (val) {
+                                        if(date == val.Date)
+                                        {
+                                            count = false;
+                                            totalTime = totalTime + val.ActiveTime;
+                                        }
+                                    };
+                                    if (count3 == times) {
+                                        count3 = 0;
+                                        members = members + 1;
+                                        count=false
+                                        if (members == teamMembers) {
+                                            return res.status(404).send({ totalTime});
+                                        }
+                                    }
+                                });
+
+
+                            });
+
+
+                        }
+                    }
+                });
+
+               
+
+
+            });
+        }
+
+    });
+}

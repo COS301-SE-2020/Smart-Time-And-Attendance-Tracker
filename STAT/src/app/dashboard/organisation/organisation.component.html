@@ -1,0 +1,101 @@
+<div class="row">
+  <section id="organisation-header" class="col-6">
+    <h2>Authorisation Requests</h2>
+    <div class="info row p-0">
+      <div *ngIf="requests && requests?.length == 1" id="total-requests" class="col-auto">
+        <b>1</b><br>REQUEST
+      </div>
+      <div *ngIf="requests && (requests.length == 0 || requests.length > 1)" id="total-requests" class="col-auto">
+        <b>{{requests.length}}</b><br>REQUESTS
+      </div>
+      
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-10">
+          <mat-label>Search Requests</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
+        </mat-form-field>
+
+        <button mat-mini-fab id="sort-menu" 
+                matTooltip="Sort"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="right"
+                [matMenuTriggerFor]="menu">
+          <mat-icon>sort</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('a')">Alphabetically</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('o')">Date (oldest first)</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">Date (newest first)</button>
+        </mat-menu>
+      </div>
+      
+    </div>
+    <div id="requests" class="pr-3 row scroll">
+      <mat-spinner *ngIf="!requests" class="req-spinner"></mat-spinner>
+      <mat-card *ngFor="let r of searchRequests(searchText)" class="request">
+
+          <!-- details -->
+        <mat-card-title>{{r.name}} {{r.surname}}</mat-card-title>
+        <mat-card-subtitle>{{r.email}}</mat-card-subtitle>
+        
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-card-footer class="px-3">
+
+            <!-- accept -->
+            <button mat-mini-fab class="accept-request"
+                    matTooltip="Accept"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="authenticateUser(r.ID)" id="accept">
+              <mat-icon inline="true">check</mat-icon>
+            </button>
+
+            <!-- reject -->
+            <button mat-mini-fab class="reject-request"
+                    matTooltip="Reject"
+                    matTooltipClass="action-tooltip"
+                    matTooltipPosition="below"
+                    (click)="rejectUser(r.ID)" id="reject">
+              <mat-icon inline="true">close</mat-icon>
+            </button>
+          </mat-card-footer>
+      </mat-card>
+
+    </div>
+  </section>
+
+  <section class="col-6">
+    <h2>Members</h2>
+    <div class="info row p-0">
+      <div *ngIf="members && members?.length == 1" id="total-members" class="col-auto">
+        <b>1</b><br>MEMBER
+      </div>
+      <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
+        <b>{{members.length}}</b><br>MEMBERS
+      </div>
+      
+      <div class="col-8">
+        <mat-form-field appearance="standard" class="col-10">
+          <mat-label>Search Members</mat-label>
+          <input matInput type="search" type="text" placeholder="User details" name="searchRequests" [(ngModel)]="searchText" (keyup)="searchRequests(searchText)">
+        </mat-form-field>
+
+        <button mat-mini-fab id="sort-menu" 
+                matTooltip="Sort"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="right"
+                [matMenuTriggerFor]="menuM">
+          <mat-icon>sort</mat-icon>
+        </button>
+
+        <mat-menu #menuM="matMenu">
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('a')">By Name</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('o')">By Surname</button>
+          <button mat-menu-item (click)="getAllUnauthenticatedUsers('n')">By Email</button>
+        </mat-menu>
+      </div>
+      
+    </div>
+  </section>
+</div>

@@ -1,0 +1,183 @@
+.btn
+    display: inline !important
+    float: right
+
+*
+  margin: 0
+  padding: 0
+  list-style: none
+  box-sizing: border-box
+  text-decoration: none
+
+body
+  width: 100%
+  height: 100%
+
+.wrapper
+  background-color: #f2f3f7
+
+.main_body
+  .sidebar_menu
+    position: fixed
+    left: 0
+    top: 4.75em
+    width: 15em
+    height: 120%
+    transition: all 0.3s linear
+    color: black
+    background-color: #fff
+    border-bottom-right-radius: 3em !important
+
+    .inner__sidebar_menu
+      position: relative
+
+    // ul li
+    //  background: rgb(120,70,235)
+    //  background: linear-gradient(0deg, rgba(120,70,235,1) 16%, rgba(40,204,191,1) 100%)
+
+    #stat
+      background: #fff
+
+    ul li a
+      color: #4c585b
+      font-size: 0.8em
+      text-transform: uppercase
+      padding: 1em 1.5em
+      margin-left: 1em
+      display: block
+      white-space: nowrap
+      background-color: white
+      border-radius:  3em 0em 0em 3em 
+
+      .icon
+        margin-right: 0.5em
+        font-size: 1em
+        vertical-align: middle
+
+      span
+        display: inline-block
+
+      &:hover
+        color: #7846eb
+        cursor: pointer
+
+      &.active
+        color: #000
+        background: #f2f3f7        
+        border-radius:  3em -10em -10em 3em 
+        
+      &.active .icon
+        color: #7846eb
+
+    .hamburger
+      position: absolute
+      top: 3px
+      right: -25px
+      width: 50px
+      height: 50px
+      background: #f2f3f7
+      border-radius: 50%
+      cursor: pointer
+
+    .inner_hamburger, .hamburger .arrow
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)
+
+    .inner_hamburger
+      width: 40px
+      border-radius: 50%
+      height: 40px
+      background: #fff
+
+    .hamburger
+      .arrow
+        color: #4c585b
+        font-size: 20px
+        vertical-align: top
+        text-align: center
+        padding-top: 10%
+
+    .right
+      display: none
+
+  .container
+    width: calc(100% - 17em)
+    margin-left: 17em
+    margin-top: 5em
+    max-width: 100vw
+    padding: 1em
+    transition: all 0.5s ease-in-out
+
+    .item_wrap
+      display: flex
+      margin-bottom: 1em
+
+    .inner
+      background-color: rgba(240, 240, 240, 0.7)
+      border-radius: 0.3em
+      padding: 2em
+      font-size: 1em
+      line-height: 22px
+
+    .item
+      padding: 1em
+
+/* after adding active class */
+
+.wrapper.open
+  .sidebar_menu
+    width: 5.5em
+
+  .hamburger
+    .right
+      display: inline-block
+
+    .left
+      display: none
+
+  .sidebar_menu ul li a .list
+    display: none
+
+  .main_body .container
+    width: calc(100% - 7.5em)
+    margin-left: 7.5em
+
+  h1
+    visibility: hidden
+    transition: all 0.3s ease-in-out
+
+  .icon
+    align: center
+
+
+h1
+  padding-top: 0.5em
+  padding-left: 1em
+  color: #4c585b
+
+#addEntry
+  float: right
+  margin-top: 0.5em
+
+.badge
+  padding: 0.5em
+
+
+// UNAUTHORISED
+
+#unauthorised
+
+  .row
+    width: 100%
+    height: 100%
+    padding: 5em
+
+  .col-6
+    display: flex
+    align-items: center
+
+  img
+    width: 90%
+    float: right !important
