@@ -27,6 +27,7 @@ export class AnalysisComponent implements OnInit {
     this.getWeeklyProjectsTimes();
     this.getWeeklyTasksTimes();
     this.getProjectMembersTotalTime("5f3d4cdc5f704424503cff44");
+    this.getPredictionsForWeekForProjects();
   }
 
   toggleAnalysis()
@@ -145,6 +146,23 @@ export class AnalysisComponent implements OnInit {
   getProjectMembersTotalTime(projectID : String)
   {
     this.aService.getProjectMembersTotalTime(localStorage.getItem('token'), projectID).subscribe((data) => {
+      console.log(data);
+    
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  //Get the prediction for next week for all projects (for team lead)
+  getPredictionsForWeekForProjects()
+  {
+    this.aService.getPredictionsForWeek(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
     
     },

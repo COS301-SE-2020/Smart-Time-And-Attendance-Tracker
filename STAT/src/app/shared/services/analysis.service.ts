@@ -78,4 +78,13 @@ export class AnalysisService {
       params:parameters
     });
   }
+
+  //Get the amount of time each user spent on the project for the last week
+  public getPredictionsForWeek(key){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+key);
+    return this.http.get(this.ROOT_URL+ 'analysis/projectWeeklyHoursPrediction', {
+      headers: headers
+    });
+  }
 }
