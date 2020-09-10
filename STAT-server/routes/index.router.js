@@ -38,6 +38,9 @@ const userHelper = require('../helpers/user.helper');
 
 const analysis =  require('../controllers/analysis.controller');
 
+const tensorFlowAnalysis =  require('../analysis/tensorflow.controller');
+
+
 //user
 router.post("/user/register", user.register);
 router.post("/user/login", user.login);
@@ -114,6 +117,11 @@ router.post("/iotDevice/startTimer", iotDevice.startTimer, userTimeEntry.addTime
 router.post("/iotDevice/stopTimer", iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
 
 
+//tensorFlowAnalysis
+//router.post("/analysis/userWeeklyHoursPrediction", jwtHelper.verifyJWTtoken, user.getProjects, tensorFlowAnalysis.getFourWeekData, tensorFlowAnalysis.userWeeklyHoursPrediction);
+
+router.get("/analysis/projectWeeklyHoursPrediction", jwtHelper.verifyJWTtoken,  userHelper.isTeamLeader, user.getProjects, tensorFlowAnalysis.try2);
+
 // annalysis
 //router.get("/analysis/getUserAverageTime", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated ,analysis.getUserAverageTime);
 //router.get("/analysis/getAllProjectDevices", analysis.getAllProjectDevices);
@@ -128,4 +136,5 @@ router.get("/userTimeEntry/getUserWeeklyTimeForProjects",jwtHelper.verifyJWTtoke
 router.get("/userTimeEntry/getUserDevices", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , userTimeEntry.getUserDevices);
 router.get("/userTimeEntry/getUserWeeklyTimeForTasks", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , userTimeEntry.getUserWeeklyTimeForTasks);
 router.get("/userTimeEntry/getProjectMembersTotalTime",jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, userTimeEntry.getProjectMembersTotalTime);
+
 module.exports = router;

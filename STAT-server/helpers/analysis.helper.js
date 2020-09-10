@@ -22,6 +22,8 @@
 *
 */
 const mongoose = require("mongoose");
+const UserTimeEntryModel = mongoose.model("UserTimeEntry");
+const TimeEntryModel = mongoose.model("TimeEntry");
 
 
 module.exports.mostVisitedWebsite =async (arr1 ,done)=>{
@@ -102,3 +104,53 @@ async function mostVisitedWebsite(array){
   return arr;
 
 }*/
+
+/**
+ * this function receives user id and project id and calculates users average time
+ * @param {user id} req 
+ * @param {average time} res 
+ */
+module.exports.getUserTotalTimeForProject = (project, datePassed, done) => {
+    var getTime =  (datePassed.toISOString().slice(0,10)).replace(/-/g,"/");
+    TimeEntryModel.find({
+        ProjectID: project.ID,
+        Date: getTime
+    }, (err, val) => {
+        if (err) {
+            done(err);
+        } 
+        else if (val) {    
+            if(val.length == 0)
+            {
+                var text = {
+                    "ProjectID" : project.ID,
+                    "ProjectName": project.projectName,
+                    "Time" : 0,
+                    "Date": datePassed
+                };
+                done(null, text);
+            }
+            else
+            {
+                const totalEntries = val.length;
+                var averageTime = 0, l =0;
+                for(l=0; l<totalEntries; l++)
+                {
+                    averageTime += val[l].ActiveTime;
+                }
+                if(l == totalEntries)
+                {
+                    var text = {
+                        "ProjectID" : project.ID,
+                        "ProjectName": project.projectName,
+                        "Time" : averageTime,
+                        "Date": datePassed
+                    };
+                    done(null, text);
+                }
+            }
+        }
+    });
+}
+
+
