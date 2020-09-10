@@ -27,7 +27,10 @@ export class TodayComponent implements OnInit {
   sync;
   projectName: string;
   projectID : string;
-  
+
+  eID : string
+  ename : string
+
   panelOpenState = false;
   closeResult: string;
   autoTracking = true;
@@ -103,9 +106,8 @@ export class TodayComponent implements OnInit {
       this.trackingNow = true;
       this.cd.detectChanges();
       this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
-      this.timing = this.currentlyTracking.activeTime;
-      console.log(this.currentlyTracking);
       this.tracking();
+      console.log(this.currentlyTracking);
     }
     this.reload()
   
@@ -192,13 +194,12 @@ export class TodayComponent implements OnInit {
     let now = new Date();
     this.currentlyTracking.activeTime= 0;
     this.currentlyTracking.description = form['description']
-
-    if( form['taskName']!= undefined || form['taskName']!= 'Unspecified')
+    if( form['taskName']!= undefined )
       this.currentlyTracking.taskName =form['taskName'];
 
-    if( form['projectName']!= undefined || form['taskName']!='Unspecified')
+    if( form['projectName']!= undefined )
       this.currentlyTracking.projectName =form['projectName'];
-
+      
     localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
 
     this.startTime = now.getTime();
@@ -213,11 +214,11 @@ export class TodayComponent implements OnInit {
         this.currentlyTracking.activeTime = 1;
         form['activeTime'] = 1;
         form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
-
+        localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
         this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
           this.service.EntryID = data['timeEntryID'];
           localStorage.setItem('currentlyTracking', data['timeEntryID']);
-
+          localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
           //var details = {'description' : form['description'], 'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
 
           const options = {
@@ -250,8 +251,9 @@ export class TodayComponent implements OnInit {
     localStorage.removeItem('trackingNow');
     localStorage.removeItem('currentlyTracking');
     localStorage.removeItem('currentlyTrackingDetails');
-    this.updateEntry().subscribe((data) => { this.stopTracking();},
+    this.updateEntry().subscribe((data) => { },
       error => {
+        console.log(error);
         let errorCode = error['status'];
         if (errorCode == '403')
           this.headerService.kickOut();
@@ -282,6 +284,7 @@ export class TodayComponent implements OnInit {
         this.updateEntry().subscribe((data) => {
         },
         error => {
+          console.log(error);
           let errorCode = error['status'];
           if (errorCode == '403')
             this.headerService.kickOut();
@@ -290,13 +293,8 @@ export class TodayComponent implements OnInit {
       }
       else
       {
-        this.updateEntry().subscribe((data) => { this.stopTracking();},
-        error => {
-          let errorCode = error['status'];
-          if (errorCode == '403')
-            this.headerService.kickOut();
-          });
-      }
+         this.stopTracking();}
+      
     });
 
   }
@@ -317,13 +315,33 @@ export class TodayComponent implements OnInit {
     {
       this.monetaryValue = 0
     }
-    let values = {"timeEntryID" : this.service.EntryID, "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
+    let values = {"timeEntryID" : localStorage.getItem('currentlyTracking'), "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
      return this.service.updateTimeEntry(values, localStorage.getItem('token'));
 
   }
 
   // edit tracking entry
   editEntry(form : NgForm) {
+
+  }
+
+  // delete tracking entry
+  deleteEntry(id : string) {
+
+    this.service.removeTimeEntry(localStorage.getItem('token'), id).subscribe((data) => {
+      console.log(data);
+    },
+    error => {
+      console.log(error);
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
+        this.headerService.kickOut();
+      }
+    });
+    this.reload();
 
   }
 

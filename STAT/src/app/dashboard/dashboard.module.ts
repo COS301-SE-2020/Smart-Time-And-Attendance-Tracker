@@ -7,6 +7,7 @@ import { MaterialComponentsModule } from '../material-components/material-compon
 import { MatIconModule } from '@angular/material/icon';
 import { TodayComponent } from './today/today.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { IOTComponent } from './iot/iot.component';
 import { OrganisationComponent } from './organisation/organisation.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { TeamsComponent } from './teams/teams.component';
@@ -17,7 +18,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
