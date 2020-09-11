@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nyc mocha --timeout 20000 test/a.js",
+    "coverage": "nyc mocha cover _mocha  *",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -37,7 +38,7 @@
     "nyc": "^15.1.0"
   },
   "nyc": {
-    "all": false,
+    "all": true,
     "check-coverage": true,
     "exclude": [
       "tracker/*"
