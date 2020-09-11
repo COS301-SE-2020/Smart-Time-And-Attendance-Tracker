@@ -3,7 +3,7 @@
     <br><br>
     <br><br>
 
-    <input type="file" style="display:none" (change)="handle($event)" accept="image/x-png,image/jpeg">
+    <input type="file" style="display:none" (change)="handle($event.target.files)" accept="image/x-png,image/jpeg,image/jpg">
 
     <div class="card">
         <div class="card-header">
@@ -17,9 +17,9 @@
                 <mat-icon inline="true">edit</mat-icon>
             </button>
 
-            <div *ngIf="!profilePic" class="pro-pic card-avatar">{{name[0]}}{{surname[0]}}</div>
+            <div *ngIf="profilePic == 'none'" class="pro-pic card-avatar">{{name[0]}}{{surname[0]}}</div>
           
-            <img *ngIf="profilePic" class="card-avatar" src="{{profilePic}}" alt="avatar" />  
+            <img *ngIf="profilePic != 'none'" class="card-avatar" src="{{profilePic}}" alt="avatar" />  
             
           </div>
             

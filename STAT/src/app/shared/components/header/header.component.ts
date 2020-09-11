@@ -27,7 +27,6 @@ export class HeaderComponent implements OnInit {
 
     this.name = localStorage.getItem('name')
     this.surname = localStorage.getItem('surname')
-    alert(this.name)
   }
 
   // modal
