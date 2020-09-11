@@ -87,7 +87,7 @@
                         </mat-card-content>
                         <mat-card-footer>
                             <p>Mean daily hours: {{meanDailyHours}}</p>
-                            <p>Mean daily earnings: </p>
+                            <p>Mean daily earnings: {{meanDailyEarnings}} </p>
                         </mat-card-footer>
                     </mat-card>
                 </div>
@@ -156,6 +156,7 @@
                     <ul>
                         <li>{{tasks[3]}} tasks overdue</li>
                         <li>{{projectsBD[2]}} projects overdue</li>
+                        <li>{{numUnder}} underperforming days</li>
                     </ul>
                 </mat-card>
                 </div>

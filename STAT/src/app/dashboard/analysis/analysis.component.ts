@@ -39,11 +39,13 @@ export class AnalysisComponent implements OnInit {
   numOverdue : any = '-'
   numWorked : any = '-'
   numEarned : any = '-'
+  numUnder = 0
 
   // performance - daily number of hours
   dailyValues : any[] = [0, 0, 0, 0, 0, 0, 0]
-  dailyChart : []
+  dailyChart : any = []
   meanDailyHours : number = 0
+  meanDailyEarnings : any = 0
 
   monetaryValues : any[] = [0, 0, 0, 0, 0, 0, 0]
 
@@ -122,7 +124,6 @@ export class AnalysisComponent implements OnInit {
       daily.forEach((element : any) => {
         if (element['_id'] == this.dates[0]) {
           this.dailyValues[0] = element['totalTime']
-          this.monetaryValues[0] = element
         }
 
         if (element['_id'] == this.dates[1]) {
@@ -154,10 +155,13 @@ export class AnalysisComponent implements OnInit {
       let tempWorked = 0
       this.dailyValues.forEach((element : any) => {
         tempWorked += element
+
+        if (element == 0)
+          this.numUnder++
       });
 
       this.numWorked = this.getTime(tempWorked)
-      this.meanDailyHours = this.numWorked / 7 / 60
+      this.meanDailyHours = tempWorked / 7 / 60
       this.meanDailyHours = Math.round((this.meanDailyHours + Number.EPSILON) * 100) / 100
 
       // create chart
@@ -166,9 +170,17 @@ export class AnalysisComponent implements OnInit {
           type: 'line',
           data: { 
             datasets: [{
-              data: this.dailyValues.map(d => Math.round(( (d / 60) + Number.EPSILON) * 100) / 100)
-            }],
+              data: this.dailyValues.map(d => Math.round(( (d / 60) + Number.EPSILON) * 100) / 100),
+              backgroundColor: 'rgba(200,155,200,0.5)',
+              pointBorderColor: '#87CEFA'
+            }
+          ],
             labels: this.dates
+          },
+          options: {
+            legend: {
+              display: false
+            }
           }
         }
       )
@@ -242,6 +254,9 @@ export class AnalysisComponent implements OnInit {
       });
 
       this.numEarned = 'R' + Math.round((tempEarned + Number.EPSILON) * 100) / 100
+      this.meanDailyEarnings = 'R' + Math.round(((tempEarned / this.numProjects ) + Number.EPSILON) * 100) / 100
+
+      //this.dailyChart.datasets.push(this.monetaryValues)
 
     },
     error => {
@@ -272,9 +287,14 @@ export class AnalysisComponent implements OnInit {
           type: 'bar',
           data: { 
             datasets: [{
-              data: this.projectTimes.map(t => t.totalTime)
+              data: this.projectTimes.map(t => Math.round(( (t.totalTime / 60) + Number.EPSILON) * 100) / 100)
             }],
             labels: this.projectTimes.map(t => t._id)
+          },
+          options: {
+            legend: {
+              display: false
+            }
           }
         }
       )      
@@ -459,7 +479,7 @@ export class AnalysisComponent implements OnInit {
                 '#6495ED'
             ]
             }],
-            labels: ['Upcming', 'Completed', 'Overdue']
+            labels: ['Upcoming', 'Completed', 'Overdue']
           },
           options: {
             legend: {
