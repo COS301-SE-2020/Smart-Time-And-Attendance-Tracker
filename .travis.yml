@@ -6,4 +6,5 @@ script:
   - npm test
 before_install:
   - cd STAT-server
-  - npm i
+  - npm i -g mocha
+  
