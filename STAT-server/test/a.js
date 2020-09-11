@@ -1,4 +1,4 @@
-//var server = require ('../index.js'),
+var server = require ('../index.js')
 var assert = require ('assert')
 //var http = require ('http');
 
@@ -32,10 +32,16 @@ describe('test file 1', function() {
         server.close();
     }); 
 */
+after(function(done){
+    done()
+});
     
     describe('test USER', function() {
       require ('./user.js')
     })
+    describe('test PROJECT', function() {
+        require ('./project.js')
+      })
 
     /*
 
@@ -43,9 +49,7 @@ describe('test file 1', function() {
       require ('./userTimeEntries.js')
     })
 
-    describe('test PROJECT', function() {
-      require ('./project.js')
-    })
+  
 
     describe('test TEAM', function() {
       require ('./team.js')
