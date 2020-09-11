@@ -22,6 +22,7 @@
 require('./config/config');
 require('./models/db');
 require('./config/passportConfig');
+const port = process.env.PORT || 3000
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -30,6 +31,7 @@ const passport = require('passport');
 
 const routes = require('./routes/index.router');
 
+
 const application = express();
 
 // middleware
@@ -37,6 +39,10 @@ application.use(bodyParser.json());
 application.use(cors());
 application.use(passport.initialize());
 application.use('/api', routes);
+
+application.listen(port), ()=>{
+  console.log("Server started");
+}; 
 
 
 /*
@@ -66,15 +72,6 @@ exports.close = function () {
     mongoose.connection.close()
 };*/
 
-
-
-application.listen("3000"), ()=>{
-    console.log("Server started");
-}; 
-
-
-
- 
   /*application.get('/', (req, res) => {
     var valErrors = [1,2,3,4,5,6];
     res.status(200).send(valErrors)
