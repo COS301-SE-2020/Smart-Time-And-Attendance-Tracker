@@ -31,6 +31,7 @@ export class AnalysisComponent implements OnInit {
 
   projects : any[] = []
   tasks : any[] = [0, 0, 0, 0]
+  projectsBD : any[] = [0, 0, 0]
 
   // values
   numProjects : any = '-'
@@ -60,6 +61,9 @@ export class AnalysisComponent implements OnInit {
 
   // task breakdown
   tasksBDChart : []
+
+  // project breakdown
+  projectsBDChart : []
 
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
 
@@ -406,14 +410,24 @@ export class AnalysisComponent implements OnInit {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data)
       this.projects = data['projects']
+
       let tempTasks = []
       this.projects.forEach((element : any) => {
+        let due = Date.parse(element.dueDate.replace(/\-/g, '/'))
+        let today = this.date.getTime()
+        if (element.completed == false && due < today)
+          this.projectsBD[2]++
+        else if (element.completed == false)
+          this.projectsBD[0]++
+        else
+          this.projectsBD[1]++
+
         element.tasks.forEach((t : any) => {
           tempTasks.push(t)
         });
       });
 
-      console.log(tempTasks)
+      console.log(this.projectsBD)
 
       // tasks breakdown
       tempTasks.forEach((element : any) => {
@@ -431,7 +445,32 @@ export class AnalysisComponent implements OnInit {
 
       this.numOverdue = this.tasks[3]
 
-      // create chart
+      // create project chart
+      this.projectsBDChart = new Chart(
+        'projectsBDChart', {
+          type: 'pie',
+          data: { 
+            datasets: [{
+              data: this.projectsBD,
+              backgroundColor: [
+                '#87CEFA',
+                '#FF4040',
+                '#FF82AB',
+                '#6495ED'
+            ]
+            }],
+            labels: ['Upcming', 'Completed', 'Overdue']
+          },
+          options: {
+            legend: {
+                position: 'right',
+                labels: {usePointStyle: true, fontSize: 15}
+            }
+          }
+        }
+      )
+
+      // create task chart
       this.tasksBDChart = new Chart(
         'tasksBDChart', {
           type: 'pie',
@@ -442,10 +481,6 @@ export class AnalysisComponent implements OnInit {
                 '#87CEFA',
                 '#FF4040',
                 '#FF82AB',
-                '#FFFAC0',
-                '#EED8AE',
-                '#B8860B',
-                '#90EE90',
                 '#6495ED'
             ]
             }],

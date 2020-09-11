@@ -154,8 +154,8 @@
                 <mat-card id="risk-assessment" class="col-12">
                     <mat-card-title>Risk assessment</mat-card-title>
                     <ul>
-                        <li>5 tasks overdue</li>
-                        <li>4 projects overdue</li>
+                        <li>{{tasks[3]}} tasks overdue</li>
+                        <li>{{projectsBD[2]}} projects overdue</li>
                     </ul>
                 </mat-card>
                 </div>
@@ -204,6 +204,18 @@
                                 <span>Other</span>
                             </div>
                         </div>-->
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="activity-breakdown" class="col-12">
+                        <mat-card-title>Projects Breakdown</mat-card-title>
+                        <!-- chart shows number of hours -->
+                        
+                        <mat-card-content>
+                            <canvas id="projectsBDChart">
+                                {{projectsBDChart}}</canvas>
+                        </mat-card-content>
+
                     </mat-card>
                 </div>
                 <div class="data-card col-12">
