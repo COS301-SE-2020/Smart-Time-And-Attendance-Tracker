@@ -1150,6 +1150,7 @@ module.exports.getUserWeeklyTimeForTasks = async (req, res) => {
                             _id: "$TaskName",
                             totalTime: { $sum: "$ActiveTime"},
                             count: { $sum: 1 }, 
+                            taskID: {$first: '$TaskID'},
                             projectName : { $first: '$ProjectName' },
                           }
                         }
