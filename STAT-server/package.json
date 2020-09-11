@@ -28,5 +28,20 @@
     "passport-local": "^1.0.0",
     "promise": "^8.1.0",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^8.1.3",
+    "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "all": false,
+    "check-coverage": true,
+    "exclude": [
+      "tracker/*"
+    
+    ]
   }
 }
