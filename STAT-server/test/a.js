@@ -53,9 +53,11 @@ describe('test file 1', function() {
        // require ('./team.js')
       })
     describe('test TASK', function() {
-        require ('./task.js')
+        //require ('./task.js')
       })
-
+    describe('iotDevice', function() {
+        require ('./iotDevice.js')
+      })
     /*
 
     describe('test USER TIME ENTRIES', function() {
