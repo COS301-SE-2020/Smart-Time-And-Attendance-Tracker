@@ -471,6 +471,51 @@ module.exports.getProjects = (req, res) => {
         }
     });
 }
+
+/**
+ * This function gets all the projects (and associated details) a user is working on to be used for the predictive analysis.
+ * @param {HTTP Request} req Request - ID of user.
+ * @param {HTTP Response} res 
+ * @param {Function} next 
+ */
+module.exports.getProjects2 = (req, res, next) => {
+    let count = 0;
+    let projectsOfUser = [];
+    UserModel.findOne({ _id: req.ID},{Projects: 1},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            if(result.Projects.length == 0)
+                return res.status(404).json({ message: 'User is not assigned to any projects' });
+
+            for(i=0; i<result.Projects.length; i++)
+            {      
+                ProjectHelper.getTasks(result.Projects[i],(err,val)=> {
+                    count = count +1;
+                    if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                   
+                    else if(val)
+                        projectsOfUser.push(val);
+
+                    if(count == result.Projects.length)
+                    {
+                        req.projects = projectsOfUser;
+                        next();
+                    }
+                    
+                }); 
+                
+            
+            }
+            
+        }
+    });
+}
 /**
  * This function edits a user from the organisation. 
  * Only a security admin can make this request.
