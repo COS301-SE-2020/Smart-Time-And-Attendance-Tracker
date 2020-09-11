@@ -74,17 +74,19 @@
                         <mat-card-title>Performance (daily number of hours)</mat-card-title>
                         <!-- two lines: hours per day + monetary value per day -->
                         <mat-card-content>
-                            <figure class="css-chart" style="--widget-size: 200px;">
+                            <!--<figure class="css-chart" style="--widget-size: 200px;">
                             <ul class="line-chart">
                                 <li style="--x: 20px; --y: 25.3333px;">
                                 <div class="line-segment"
                                     style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
                                 </li>
                             </ul>
-                            </figure>
+                            </figure>-->
+                            <canvas id="chart">
+                                {{dailyChart}}</canvas>
                         </mat-card-content>
                         <mat-card-footer>
-                            <p>Mean daily hours: </p>
+                            <p>Mean daily hours: {{meanDailyHours}}</p>
                             <p>Mean daily earnings: </p>
                         </mat-card-footer>
                     </mat-card>
