@@ -33,6 +33,10 @@ export class AnalysisComponent implements OnInit {
   dailyChart : []
   meanDailyHours : number = 0
 
+  // total task times
+  tasksTimes : any[] = []
+  taskTimesChart : []
+
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
@@ -125,7 +129,7 @@ export class AnalysisComponent implements OnInit {
 
       // create chart
       this.dailyChart = new Chart(
-        'chart', {
+        'dailyChart', {
           type: 'line',
           data: { 
             datasets: [{
@@ -198,7 +202,23 @@ export class AnalysisComponent implements OnInit {
   {
     this.aService.getWeeklyTasksTimes(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
-    
+      this.tasksTimes = data['totalTasksTimes']
+      this.tasksTimes.forEach((element : any) => {
+        if (element._id == 'Unspecified')
+          this.tasksTimes.splice(this.tasksTimes.indexOf(element), 1)
+      });
+      // create chart
+      this.taskTimesChart = new Chart(
+        'taskTimesChart', {
+          type: 'bar',
+          data: { 
+            datasets: [{
+              data: this.tasksTimes.map(t => t.totalTime)
+            }],
+            labels: this.tasksTimes.map(t => t._id)
+          }
+        }
+      )      
     },
     error => {
       console.log(error);
