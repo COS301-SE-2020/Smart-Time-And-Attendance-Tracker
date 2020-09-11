@@ -50,7 +50,10 @@ describe('test file 1', function() {
        // require ('./userTimeEntries.js')
       })
     describe('test TEAM', function() {
-        require ('./team.js')
+       // require ('./team.js')
+      })
+    describe('test TASK', function() {
+        require ('./task.js')
       })
 
     /*
