@@ -51,7 +51,7 @@
                 </mat-card>
                 <mat-card id="overdue" class="col-2">
                     <!-- tasks overdue for this week??? -->
-                    <b>5</b><br>OVERDUE
+                    <b>{{numOverdue}}</b><br>OVERDUE
                 </mat-card>
                 <mat-card id="hours" class="col-2">
                 <!-- number of hours for this week -->
@@ -93,7 +93,7 @@
                 </div>
                 <div class="data-card col-12">
                     <mat-card id="tasks-completed" class="col-12">
-                        <mat-card-title>Tasks (tasks completed)</mat-card-title>
+                        <mat-card-title>Projects (hours for the week)</mat-card-title>
                         <!-- should incorporate overdue tasks -->
                         <mat-card-content>
                             <!--<div class="chart">
@@ -208,26 +208,14 @@
                 </div>
                 <div class="data-card col-12">
                     <mat-card id="activity-breakdown" class="col-12">
-                        <mat-card-title>Activity breakdown (most used descriptions)</mat-card-title>
+                        <mat-card-title>Tasks Breakdown</mat-card-title>
                         <!-- chart shows number of hours -->
-                        <div>
-                            <div class="pie"></div>
-                        </div>
-                        <br>
-                        <div class="mb-5">
-                            <div class="col-12">
-                                <div class="d-inline-block mx-1" style="background-color:deeppink; border-radius:1em; height:1em; width:1em;"></div>
-                                <span>www.mail.google.com</span>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-inline-block mx-1" style="background-color:yellow; border-radius:1em; height:1em; width:1em;"></div>
-                                <span>www.library.up.ac.za</span>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-inline-block mx-1" style="background-color:skyblue; border-radius:1em; height:1em; width:1em;"></div>
-                                <span>Other</span>
-                            </div>
-                        </div>
+                        
+                        <mat-card-content>
+                            <canvas id="tasksBDChart">
+                                {{tasksBDChart}}</canvas>
+                        </mat-card-content>
+
                     </mat-card>
                 </div>
             </div>

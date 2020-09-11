@@ -4,6 +4,7 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 
 // chart.js
 import { Chart } from 'chart.js';
+import { TrackingService } from 'src/app/shared/services/tracking.service';
 
 @Component({
   selector: 'app-analysis',
@@ -27,6 +28,9 @@ export class AnalysisComponent implements OnInit {
   date5 : Date = new Date()
   date6 : Date = new Date()
   dates : any[] = []
+
+  projects : any[] = []
+  tasks : any[] = [0, 0, 0, 0]
 
   // values
   numProjects : any = '-'
@@ -54,7 +58,10 @@ export class AnalysisComponent implements OnInit {
   devices : any[] = []
   devicesChart : []
 
-  constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public headerService: HeaderService) { }
+  // task breakdown
+  tasksBDChart : []
+
+  constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
     console.log('Hello');
@@ -66,6 +73,7 @@ export class AnalysisComponent implements OnInit {
     this.getWeeklyTasksTimes();
     this.getProjectMembersTotalTime("5f3d4cdc5f704424503cff44");
     this.getPredictionsForWeekForProjects();
+    this.getProAndTasks()
 
     // set dates
     this.date1.setDate(this.date.getDate()-1)
@@ -387,6 +395,78 @@ export class AnalysisComponent implements OnInit {
       let errorCode = error['status'];
       if (errorCode == '403')
       {
+        this.headerService.kickOut();
+      }
+    });
+  }
+
+  // get projects and tasks
+  getProAndTasks()
+  {
+    this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
+      console.log(data)
+      this.projects = data['projects']
+      let tempTasks = []
+      this.projects.forEach((element : any) => {
+        element.tasks.forEach((t : any) => {
+          tempTasks.push(t)
+        });
+      });
+
+      console.log(tempTasks)
+
+      // tasks breakdown
+      tempTasks.forEach((element : any) => {
+        let due = Date.parse(element.dueDate.replace(/\-/g, '/'))
+        let today = this.date.getTime()
+        if (element.taskStatus.toUpperCase() != 'COMPLETED' &&  due < today) // if overdue
+          this.tasks[3]++
+        else if (element.taskStatus == 'Not Started')
+          this.tasks[0]++
+        else if (element.taskStatus == 'In Progress')
+          this.tasks[1]++
+        else
+          this.tasks[2]++
+      });
+
+      this.numOverdue = this.tasks[3]
+
+      // create chart
+      this.tasksBDChart = new Chart(
+        'tasksBDChart', {
+          type: 'pie',
+          data: { 
+            datasets: [{
+              data: this.tasks,
+              backgroundColor: [
+                '#87CEFA',
+                '#FF4040',
+                '#FF82AB',
+                '#FFFAC0',
+                '#EED8AE',
+                '#B8860B',
+                '#90EE90',
+                '#6495ED'
+            ]
+            }],
+            labels: ['Not Started', 'In Progress', 'Completed', 'Overdue']
+          },
+          options: {
+            legend: {
+                position: 'right',
+                labels: {usePointStyle: true, fontSize: 15}
+            }
+          }
+        }
+      )
+
+    },
+    error => {
+      let errorCode = error['status'];
+      if (errorCode == '403')
+      {
+        //console.log("Your session has expired. Please sign in again.");
+        // kick user out
         this.headerService.kickOut();
       }
     });
