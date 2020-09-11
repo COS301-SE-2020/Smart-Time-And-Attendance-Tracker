@@ -7,3 +7,6 @@ STAT/node_modules/*
 .idea/
 .vs/
 .vscode/
+
+mockIOT/node_modules
+mockIOT/node_modules/*
