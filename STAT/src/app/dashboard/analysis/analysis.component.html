@@ -180,7 +180,13 @@
                     <mat-card id="device-breakdown" class="col-12">
                         <mat-card-title>Devices (most used devices)</mat-card-title>
                         <!-- chart shows number of hours -->
-                        <div>
+
+                        <mat-card-content>
+                        <canvas id="devicesChart">
+                            {{devicesChart}}</canvas>
+                        </mat-card-content>
+
+                        <!--<div>
                             <div class="pie"></div>
                         </div>
                         <br>
@@ -197,7 +203,7 @@
                                 <div class="d-inline-block mx-1" style="background-color:skyblue; border-radius:1em; height:1em; width:1em;"></div>
                                 <span>Other</span>
                             </div>
-                        </div>
+                        </div>-->
                     </mat-card>
                 </div>
                 <div class="data-card col-12">

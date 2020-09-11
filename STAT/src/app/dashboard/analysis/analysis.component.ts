@@ -37,6 +37,10 @@ export class AnalysisComponent implements OnInit {
   tasksTimes : any[] = []
   taskTimesChart : []
 
+  // device breakdown
+  devices : any[] = []
+  devicesChart : []
+
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
@@ -234,6 +238,37 @@ export class AnalysisComponent implements OnInit {
   {
     this.aService.getDevices(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
+
+      this.devices = data['totalDevices']
+
+      // create chart
+      this.devicesChart = new Chart(
+        'devicesChart', {
+          type: 'pie',
+          data: { 
+            datasets: [{
+              data: this.devices.map(t => t.count),
+              backgroundColor: [
+                '#87CEFA',
+                '#FF4040',
+                '#FF82AB',
+                '#FFFAC0',
+                '#EED8AE',
+                '#B8860B',
+                '#90EE90',
+                '#6495ED'
+            ]
+            }],
+            labels: this.devices.map(t => t._id)
+          },
+          options: {
+            legend: {
+                position: 'right',
+                labels: {usePointStyle: true, fontSize: 15}
+            }
+          }
+        }
+      )
     
     },
     error => {
