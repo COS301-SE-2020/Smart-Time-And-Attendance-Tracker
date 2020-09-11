@@ -39,7 +39,7 @@ module.exports.add = (req, res) => {
         var role = new RoleModel();
         role.ID = currentID;
         role.Role = req.body.role;
-        role.save((err, doc) => {
+        role.updateOne((err, doc) => {
             if(!err)
                 return res.status(201).json({ message: "Role created"});
             
