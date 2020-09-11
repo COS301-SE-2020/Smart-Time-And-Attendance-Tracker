@@ -1,5 +1,8 @@
 language: node_js
 node_js:
 - "9"
-after_success:
+
+script:
+  - npm test
+before_install:
   - cd STAT-server
