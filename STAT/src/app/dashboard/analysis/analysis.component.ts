@@ -68,8 +68,11 @@ export class AnalysisComponent implements OnInit {
   projectsBDChart : []
 
   // project view
-  dailyProjects : any = new Array()
+  dailyProjects : any[] = []
   projectCharts : any[] = []
+
+  // predictive
+  predictions : any[] = []
 
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
 
@@ -203,7 +206,8 @@ export class AnalysisComponent implements OnInit {
   {
     this.aService.getProjectDailyValues(localStorage.getItem('token'), projectID).subscribe((data) => {
       //console.log(data);
-      this.dailyProjects[projectID].daily = data['totalDailyValues']
+      let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
+      this.dailyProjects[index].daily = data['totalDailyValues']
       console.log(this.dailyProjects)
     },
     error => {
@@ -417,7 +421,7 @@ export class AnalysisComponent implements OnInit {
   {
     this.aService.getPredictionsForWeek(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
-    
+      
     },
     error => {
       console.log(error);
@@ -522,7 +526,7 @@ export class AnalysisComponent implements OnInit {
 
       // project analysis
       this.projects.forEach((element : any) => {
-        this.dailyProjects[element.ID] = element
+        this.dailyProjects.push(element)
         this.getProjectDailyValues(element.ID)
       });
     },
@@ -563,10 +567,16 @@ export class AnalysisComponent implements OnInit {
         }
       )
 
-      this.projectCharts.push(temp)
+      let values = {'ID': element.ID, 'chart': temp}
+      this.projectCharts.push(values)
     });
     
     console.log(this.projectCharts)
+  }
+
+  // predictive analysis
+  getPredictive() {
+
   }
 
   // get time spent
