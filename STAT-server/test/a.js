@@ -47,7 +47,10 @@ describe('test file 1', function() {
        // require ('./project.js')
       })
     describe('test USER TIME ENTRIES', function() {
-        require ('./userTimeEntries.js')
+       // require ('./userTimeEntries.js')
+      })
+    describe('test TEAM', function() {
+        require ('./team.js')
       })
 
     /*
