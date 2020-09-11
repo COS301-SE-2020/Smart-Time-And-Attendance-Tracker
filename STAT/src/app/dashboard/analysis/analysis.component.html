@@ -43,11 +43,11 @@
             <div class="info col-12 p-0">
                 <mat-card id="projects" class="col-2">
                 <!-- number of hours for this week -->
-                <b>14</b><br>PROJECTS
+                <b>{{numProjects}}</b><br>PROJECTS
                 </mat-card>
                 <mat-card id="tasks" class="col-2">
                 <!-- monetary value for this week -->
-                <b>285</b><br>TASKS
+                <b>{{numTasks}}</b><br>TASKS
                 </mat-card>
                 <mat-card id="overdue" class="col-2">
                     <!-- tasks overdue for this week??? -->
@@ -55,11 +55,11 @@
                 </mat-card>
                 <mat-card id="hours" class="col-2">
                 <!-- number of hours for this week -->
-                <b>38h 20m</b><br>HOURS
+                <b>{{numWorked}}</b><br>WORKED
                 </mat-card>
                 <mat-card id="money" class="col-2">
                 <!-- monetary value for this week -->
-                <b>R 4086,25</b><br>EARNED
+                <b>{{numEarned}}</b><br>EARNED
                 </mat-card>
             </div>
         </div>
@@ -105,8 +105,8 @@
                                 <div class="bar-6"></div>
                                 <div class="bar-7"></div>
                             </div>-->
-                            <canvas id="taskTimesChart">
-                                {{taskTimesChart}}</canvas>
+                            <canvas id="projectTimesChart">
+                                {{projectTimesChart}}</canvas>
                             </mat-card-content>
                         <mat-card-footer>
                             <p>Mean daily tasks: </p>

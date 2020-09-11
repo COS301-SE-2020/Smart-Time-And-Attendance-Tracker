@@ -28,10 +28,23 @@ export class AnalysisComponent implements OnInit {
   date6 : Date = new Date()
   dates : any[] = []
 
+  // values
+  numProjects : any = '-'
+  numTasks : any = '-'
+  numOverdue : any = '-'
+  numWorked : any = '-'
+  numEarned : any = '-'
+
   // performance - daily number of hours
   dailyValues : any[] = [0, 0, 0, 0, 0, 0, 0]
   dailyChart : []
   meanDailyHours : number = 0
+
+  monetaryValues : any[] = [0, 0, 0, 0, 0, 0, 0]
+
+  // total project times
+  projectTimes : any = []
+  projectTimesChart : []
 
   // total task times
   tasksTimes : any[] = []
@@ -96,39 +109,43 @@ export class AnalysisComponent implements OnInit {
       let daily = data['totalDailyValues']
       daily.forEach((element : any) => {
         if (element['_id'] == this.dates[0]) {
-          this.dailyValues[0] = element['totalTime'] / 60
+          this.dailyValues[0] = element['totalTime']
+          this.monetaryValues[0] = element
         }
 
         if (element['_id'] == this.dates[1]) {
-          this.dailyValues[1] = element['totalTime'] / 60
+          this.dailyValues[1] = element['totalTime']
         }
 
         if (element['_id'] == this.dates[2]) {
-          this.dailyValues[2] = element['totalTime'] / 60
+          this.dailyValues[2] = element['totalTime']
         }
 
         if (element['_id'] == this.dates[3]) {
-          this.dailyValues[3] = element['totalTime'] / 60
+          this.dailyValues[3] = element['totalTime']
         }
 
         if (element['_id'] == this.dates[4]) {
-          this.dailyValues[4] = element['totalTime'] / 60
+          this.dailyValues[4] = element['totalTime']
         }
 
         if (element['_id'] == this.dates[5]) {
-          this.dailyValues[5] = element['totalTime'] / 60
+          this.dailyValues[5] = element['totalTime']
         }
 
         if (element['_id'] == this.dates[6]) {
-          this.dailyValues[6] = element['totalTime'] / 60
+          this.dailyValues[6] = element['totalTime']
         }
       });
       console.log(this.dailyValues)
 
+      let tempWorked = 0
       this.dailyValues.forEach((element : any) => {
-        this.meanDailyHours += element
+        tempWorked += element
       });
-      this.meanDailyHours = this.meanDailyHours / 7
+
+      this.numWorked = this.getTime(tempWorked)
+      this.meanDailyHours = this.numWorked / 7 / 60
       this.meanDailyHours = Math.round((this.meanDailyHours + Number.EPSILON) * 100) / 100
 
       // create chart
@@ -137,7 +154,7 @@ export class AnalysisComponent implements OnInit {
           type: 'line',
           data: { 
             datasets: [{
-              data: this.dailyValues
+              data: this.dailyValues.map(d => Math.round(( (d / 60) + Number.EPSILON) * 100) / 100)
             }],
             labels: this.dates
           }
@@ -175,6 +192,45 @@ export class AnalysisComponent implements OnInit {
     this.aService.getDailyMoney(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
     
+      let daily = data['totalDailyValues']
+      daily.forEach((element : any) => {
+        if (element['_id'] == this.dates[0]) {
+          this.monetaryValues[0] = element['totalAmount']
+        }
+
+        if (element['_id'] == this.dates[1]) {
+          this.monetaryValues[1] = element['totalAmount']
+        }
+
+        if (element['_id'] == this.dates[2]) {
+          this.monetaryValues[2] = element['totalAmount']
+        }
+
+        if (element['_id'] == this.dates[3]) {
+          this.monetaryValues[3] = element['totalAmount']
+        }
+
+        if (element['_id'] == this.dates[4]) {
+          this.monetaryValues[4] = element['totalAmount']
+        }
+
+        if (element['_id'] == this.dates[5]) {
+          this.monetaryValues[5] = element['totalAmount']
+        }
+
+        if (element['_id'] == this.dates[6]) {
+          this.monetaryValues[6] = element['totalAmount']
+        }
+      });
+      console.log(this.monetaryValues)
+
+      let tempEarned = 0
+      this.monetaryValues.forEach(element => {
+        tempEarned += element
+      });
+
+      this.numEarned = 'R' + Math.round((tempEarned + Number.EPSILON) * 100) / 100
+
     },
     error => {
       console.log(error);
@@ -190,7 +246,26 @@ export class AnalysisComponent implements OnInit {
   {
     this.aService.getWeeklyProjectsTimes(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
-    
+
+      this.projectTimes = data['totalProjectsTimes']
+      this.numProjects = this.projectTimes.length
+      this.projectTimes.forEach((element : any) => {
+        if (element._id == 'Unspecified')
+          --this.numProjects
+      });
+
+      // create chart
+      this.projectTimesChart = new Chart(
+        'projectTimesChart', {
+          type: 'bar',
+          data: { 
+            datasets: [{
+              data: this.projectTimes.map(t => t.totalTime)
+            }],
+            labels: this.projectTimes.map(t => t._id)
+          }
+        }
+      )      
     },
     error => {
       console.log(error);
@@ -207,9 +282,12 @@ export class AnalysisComponent implements OnInit {
     this.aService.getWeeklyTasksTimes(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.tasksTimes = data['totalTasksTimes']
+      this.numTasks = this.tasksTimes.length
       this.tasksTimes.forEach((element : any) => {
-        if (element._id == 'Unspecified')
+        if (element._id == 'Unspecified') {
+          --this.numTasks
           this.tasksTimes.splice(this.tasksTimes.indexOf(element), 1)
+        }
       });
       // create chart
       this.taskTimesChart = new Chart(
@@ -312,6 +390,13 @@ export class AnalysisComponent implements OnInit {
         this.headerService.kickOut();
       }
     });
+  }
+
+  // get time spent
+  getTime(mins : number) {
+    var hours = Math.floor(mins / 60)
+    var rem = mins % 60
+    return (hours + 'h ' + rem + 'm')
   }
 
   formatDate(date : Date) {
