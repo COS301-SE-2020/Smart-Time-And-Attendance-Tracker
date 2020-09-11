@@ -67,12 +67,16 @@ export class AnalysisComponent implements OnInit {
   // project breakdown
   projectsBDChart : []
 
+  // project view
+  dailyProjects : any = new Array()
+  projectCharts : any[] = []
+
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
     console.log('Hello');
     this.getDailyValues();
-    this.getProjectDailyValues("5f3d4cdc5f704424503cff44");
+    //this.getProjectDailyValues("5f3d4cdc5f704424503cff44");
     this.getDailyMoney();
     this.getDevices();
     this.getWeeklyProjectsTimes();
@@ -195,11 +199,12 @@ export class AnalysisComponent implements OnInit {
     });
   }
 //Get project's daily totals for the last week (for team lead)
-  getProjectDailyValues(projectID : String)
+  getProjectDailyValues(projectID : string)
   {
     this.aService.getProjectDailyValues(localStorage.getItem('token'), projectID).subscribe((data) => {
-     console.log(data);
-    
+      //console.log(data);
+      this.dailyProjects[projectID].daily = data['totalDailyValues']
+      console.log(this.dailyProjects)
     },
     error => {
       console.log(error);
@@ -515,6 +520,11 @@ export class AnalysisComponent implements OnInit {
         }
       )
 
+      // project analysis
+      this.projects.forEach((element : any) => {
+        this.dailyProjects[element.ID] = element
+        this.getProjectDailyValues(element.ID)
+      });
     },
     error => {
       let errorCode = error['status'];
@@ -525,6 +535,38 @@ export class AnalysisComponent implements OnInit {
         this.headerService.kickOut();
       }
     });
+  }
+
+  // project analysis
+  getProjectAnalysis() {
+
+    // generate charts
+    console.log(this.dailyProjects)
+    this.dailyProjects.forEach((element : any) => {
+      let temp = new Chart(
+        element.ID, {
+          type: 'line',
+          data: { 
+            datasets: [{
+              data: element.daily.map(d => Math.round(( (d.totalTime / 60) + Number.EPSILON) * 100) / 100),
+              backgroundColor: 'rgba(200,155,200,0.5)',
+              pointBorderColor: '#87CEFA'
+            }
+          ],
+            labels: this.dates
+          },
+          options: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      )
+
+      this.projectCharts.push(temp)
+    });
+    
+    console.log(this.projectCharts)
   }
 
   // get time spent
