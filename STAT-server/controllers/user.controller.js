@@ -277,7 +277,7 @@ module.exports.getAllUsers = (req, res) => {
     }
     else
     {
-        UserModel.find({ Authenticate : true},(err, result) => {
+        UserModel.find({ Authenticate : true, Removed: false},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + err});
             else if (!result)
@@ -395,7 +395,7 @@ module.exports.remove = (req, res, next) => {
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                         else
                         {
-                            UserModel.updateOne({ _id: req.body.userID},{Authenticate: false, Removed : true, DateOfRemoval :new Date().getTime()},
+                            UserModel.updateOne({ _id: req.body.userID},{Name: "[Deleted]", Surname: "[Deleted]", Email: "[Deleted]", Password: null, ProfilePicture: "none", Authenticate: false, Removed : true, DateOfRemoval :new Date().getTime()},
                                 (err, result) => {
                                 if (err) 
                                     return res.status(500).send({message: 'Internal Server Error: ' + err});
