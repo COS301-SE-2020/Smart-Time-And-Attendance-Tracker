@@ -171,6 +171,9 @@ module.exports.stopTimer = (req, res, next) => {
     if(!req.body.hasOwnProperty("timeEntryID"))
         return res.status(400).send({message: 'No time entry ID provided'});
 
+    if(!req.body.hasOwnProperty("userID"))
+        return res.status(400).send({message: 'No user ID provided'});
+
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
     {
         IOTDeviceModel.findOne({MACAddress : req.body.macAddress, DeviceName : req.body.deviceName}, function(err, result) {
@@ -180,8 +183,8 @@ module.exports.stopTimer = (req, res, next) => {
                 return res.status(404).send({message: 'IOT Device not found'});
             else if(result.DeregisteredBy == null && result.DeregisteredOn == "")
             {
-                req.body.endTime = new Date;
-
+                req.body.endTime = new Date().getTime();
+                req.ID = req.body.userID;
                 next();
             }
             else
@@ -197,8 +200,8 @@ module.exports.stopTimer = (req, res, next) => {
                 return res.status(404).send({message: 'IOT Device not found'});
             else if(result.DeregisteredBy == null && result.DeregisteredOn == "")
             {
-                req.body.endTime = new Date;
-
+                req.body.endTime = new Date().getTime();
+                req.ID = req.body.userID;
                 next();
             }
             else
@@ -236,6 +239,7 @@ module.exports.startTimer = (req, res, next) => {
                 req.body.endTime = now;
                 req.body.description =  req.body.deviceName;
                 req.body.device = req.body.macAddress;
+                req.ID = req.body.userID;
                 next();
             }
             else
@@ -254,8 +258,9 @@ module.exports.startTimer = (req, res, next) => {
                 req.body.date = date;
                 req.body.startTime = now;
                 req.body.endTime = now;
-                req.body.description = result.deviceName;
+                req.body.description = result.DeviceName;
                 req.body.device = result.MACAddress;
+                req.ID = req.body.userID;
                 next();
             }
             else
