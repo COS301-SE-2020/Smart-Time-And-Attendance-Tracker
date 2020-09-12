@@ -163,7 +163,7 @@ module.exports.getName = (req, res, next) => {
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         else
-            return res.status(200).json({name : result.Name, surname : result.Surname, profilePicture: ProfilePicture});
+            return res.status(200).json({name : result.Name, surname : result.Surname, profilePicture: result.ProfilePicture});
         
     });
 }
@@ -277,7 +277,7 @@ module.exports.getAllUsers = (req, res) => {
     }
     else
     {
-        UserModel.find({ Authenticate : true},(err, result) => {
+        UserModel.find({ Authenticate : true, Removed: false},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + err});
             else if (!result)
@@ -395,7 +395,7 @@ module.exports.remove = (req, res, next) => {
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                         else
                         {
-                            UserModel.updateOne({ _id: req.body.userID},{Authenticate: false, Removed : true, DateOfRemoval :new Date().getTime()},
+                            UserModel.updateOne({ _id: req.body.userID},{Name: "[Deleted]", Surname: "[Deleted]", Email: "[Deleted]", Password: null, ProfilePicture: "none", Authenticate: false, Removed : true, DateOfRemoval :new Date().getTime()},
                                 (err, result) => {
                                 if (err) 
                                     return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -436,7 +436,49 @@ module.exports.isAuthenticated = (req, res) => {
  * @param {HTTP Response} res 
  * @return {Http Response} - Array with all projects and tasks objects
  */
-module.exports.getProjects = (req, res, next) => {
+module.exports.getProjects = (req, res) => {
+    let count = 0;
+    let projectsOfUser = [];
+    UserModel.findOne({ _id: req.ID},{Projects: 1},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            if(result.Projects.length == 0)
+                return res.status(404).json({ message: 'User is not assigned to any projects' });
+
+            for(i=0; i<result.Projects.length; i++)
+            {      
+                ProjectHelper.getTasks(result.Projects[i],(err,val)=> {
+                    count = count +1;
+                    if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                   
+                    else if(val)
+                        projectsOfUser.push(val);
+
+                    if(count == result.Projects.length)
+                         return res.status(200).json({projects : projectsOfUser});
+                    
+                }); 
+                
+            
+            }
+            
+        }
+    });
+}
+
+/**
+ * This function gets all the projects (and associated details) a user is working on to be used for the predictive analysis.
+ * @param {HTTP Request} req Request - ID of user.
+ * @param {HTTP Response} res 
+ * @param {Function} next 
+ */
+module.exports.getProjects2 = (req, res, next) => {
     let count = 0;
     let projectsOfUser = [];
     UserModel.findOne({ _id: req.ID},{Projects: 1},(err, result) => {
@@ -462,15 +504,10 @@ module.exports.getProjects = (req, res, next) => {
 
                     if(count == result.Projects.length)
                     {
-                        if(next)
-                        {
-                            req.projects = projectsOfUser;
-                            console.log("going next");
-                            next();
-                        }
-                        else
-                            return res.status(200).json({projects : projectsOfUser});
-                    };
+                        req.projects = projectsOfUser;
+                        next();
+                    }
+                    
                 }); 
                 
             
