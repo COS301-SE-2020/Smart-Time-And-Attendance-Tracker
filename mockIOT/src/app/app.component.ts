@@ -34,18 +34,19 @@ export class AppComponent {
     this.users['Zac'] = new User("5f22e51469e3286568da894d");
     }
 
-  tracking(user)
+  tracking(user: string)
   {
-    if(this.users[user.id].tracking)
+    if(!this.users[user].tracking)
     {
-      var obj = {"deviceID": this.deviceID, "userID": user.id};
+      var obj = {"deviceID": this.deviceID, "userID": this.users[user].id};
         const headers = new HttpHeaders()
       .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+localStorage.getItem('token'));
       this.http.post(this.ROOT_URL+'iotDevice/startTimer',JSON.stringify(obj), {
         headers: headers,
       }).subscribe((data) => { 
         console.log(data);
-        this.users[user.id].trackingID = data['timeEntryID'];     
+        this.users[user].trackingID = data['timeEntryID'];  
+        this.users[user].tracking = true;   
       },
       error => {
         console.log(error);
@@ -55,14 +56,16 @@ export class AppComponent {
 
     else
     {
-      var obj2 = {"deviceID": this.deviceID, "timeEntryID": this.users[user.id].trackingID};
+      var obj2 = {"deviceID": this.deviceID, "userID": this.users[user].id, "timeEntryID": this.users[user].trackingID};
         const headers = new HttpHeaders()
       .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+localStorage.getItem('token'));
       this.http.post(this.ROOT_URL+'iotDevice/stopTimer',JSON.stringify(obj2), {
         headers: headers,
       }).subscribe((data) => { 
         console.log(data);  
-      },
+        this.users[user].trackingID = null;  
+        this.users[user].tracking = false; 
+       },
       error => {
         console.log(error);
         

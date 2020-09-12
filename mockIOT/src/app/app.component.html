@@ -1,49 +1,39 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+
+<table>
+  <tr>
+    <td>
+    <img id= "Henry" src="./assets/Henry.jpg" alt="Henry" (click)="tracking('Henry')">
+  </td>
+  <td>
+    <img id="Zendaya" src="./assets/Zendaya.jpg" alt="Zendaya" (click)="tracking('Zendaya')">
+  </td>
+  <td>
+    <img id="Zac" src="./assets/Zac.jpg" alt="Zac" (click)="tracking('Zac')">
+  </td>
+</tr>
+</table>
+
 
 <style>
-/* The grid: Four equal columns that floats next to each other */
-.column {
-  float: left;
-  width: 25%;
-  padding: 10px;
-}
+  /* The grid: Four equal columns that floats next to each other */
 
-/* Style the images inside the grid */
-.column img {
-  opacity: 0.8;
-  cursor: pointer;
-}
+  
+  /* Style the images inside the grid */
+  img {
+    opacity: 0.9;
+    cursor: pointer;
+    width: 300px;
+    height: 300px;
+  }
+  
+  img:hover {
+    opacity: 1;
+  }
 
-.column img:hover {
-  opacity: 1;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>
-
-<div class="row">
-  <div class="column">
-    <img id= "Henry" src="./assets/Henry.jpg" alt="Henry" onclick="tracking(this);">
-  </div>
-  <div class="column">
-    <img id="Zendaya" src="./assets/Zendaya.jpg" alt="Zendaya" onclick="tracking(this);">
-  </div>
-  <div class="column">
-    <img id="Zac" src="./assets/Zac.jpg" alt="Zac" onclick="tracking(this);">
-  </div>
-</div>
-
-
+  table{
+    margin: auto;
+  }
+  
+  </style>
 

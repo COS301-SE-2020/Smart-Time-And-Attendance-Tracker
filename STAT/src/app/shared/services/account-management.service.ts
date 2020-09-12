@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 export class AccountManagementService {
 
-  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
+  private ROOT_URL = "http://localhost:3000/api/";
 
   public roles = localStorage.getItem('roles');
 
