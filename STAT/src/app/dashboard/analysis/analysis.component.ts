@@ -73,21 +73,13 @@ export class AnalysisComponent implements OnInit {
 
   // predictive
   predictions : any[] = []
+  predictiveCharts : any[] = []
 
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
-    console.log('Hello');
-    this.getDailyValues();
-    //this.getProjectDailyValues("5f3d4cdc5f704424503cff44");
-    this.getDailyMoney();
-    this.getDevices();
-    this.getWeeklyProjectsTimes();
-    this.getWeeklyTasksTimes();
-    this.getProjectMembersTotalTime("5f3d4cdc5f704424503cff44");
-    this.getPredictionsForWeekForProjects();
-    this.getProAndTasks()
-
+    this.reset()
+    
     // set dates
     this.date1.setDate(this.date.getDate()-1)
     this.date2.setDate(this.date.getDate()-2)
@@ -106,12 +98,34 @@ export class AnalysisComponent implements OnInit {
 
   }
 
+  reset() {
+    this.getDailyValues();
+    //this.getProjectDailyValues("5f3d4cdc5f704424503cff44");
+    this.getDailyMoney();
+    this.getDevices();
+    this.getWeeklyProjectsTimes();
+    this.getWeeklyTasksTimes();
+    //this.getProjectMembersTotalTime("5f3d4cdc5f704424503cff44");
+    this.getPredictionsForWeekForProjects();
+    this.getProAndTasks()
+
+    // reset variables
+    this.numProjects = '-'
+    this.numTasks = '-'
+    this.numOverdue = '-'
+    this.numWorked = '-'
+    this.numEarned = '-'
+    this.numUnder = 0
+  }
+
   toggleAnalysis()
   {
     let temp = this.graphical;
     this.graphical = this.predictive;
     this.predictive = temp;
     this.cd.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    //this.reset()
   }
 
   toggleView()
@@ -120,6 +134,9 @@ export class AnalysisComponent implements OnInit {
     this.meView = this.projectView;
     this.projectView = temp;
     this.cd.detectChanges();
+    window.dispatchEvent(new Event('resize'));
+    if (this.meView == true)
+      this.reset()
   }
 
   //Get user's daily totals for the last week
@@ -184,6 +201,7 @@ export class AnalysisComponent implements OnInit {
           ],
             labels: this.dates
           },
+          responsive: false,
           options: {
             legend: {
               display: false
@@ -206,6 +224,7 @@ export class AnalysisComponent implements OnInit {
   {
     this.aService.getProjectDailyValues(localStorage.getItem('token'), projectID).subscribe((data) => {
       //console.log(data);
+
       let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
       this.dailyProjects[index].daily = data['totalDailyValues']
       console.log(this.dailyProjects)
@@ -421,7 +440,8 @@ export class AnalysisComponent implements OnInit {
   {
     this.aService.getPredictionsForWeek(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
-      
+      this.predictions = data['results']
+      console.log(this.predictions)
     },
     error => {
       console.log(error);
@@ -441,6 +461,7 @@ export class AnalysisComponent implements OnInit {
       this.projects = data['projects']
 
       let tempTasks = []
+      this.projectsBD = [0,0,0]
       this.projects.forEach((element : any) => {
         let due = Date.parse(element.dueDate.replace(/\-/g, '/'))
         let today = this.date.getTime()
@@ -459,6 +480,7 @@ export class AnalysisComponent implements OnInit {
       console.log(this.projectsBD)
 
       // tasks breakdown
+      this.tasks = [0,0,0,0]
       tempTasks.forEach((element : any) => {
         let due = Date.parse(element.dueDate.replace(/\-/g, '/'))
         let today = this.date.getTime()
@@ -525,6 +547,7 @@ export class AnalysisComponent implements OnInit {
       )
 
       // project analysis
+      this.dailyProjects = []
       this.projects.forEach((element : any) => {
         this.dailyProjects.push(element)
         this.getProjectDailyValues(element.ID)
@@ -546,6 +569,7 @@ export class AnalysisComponent implements OnInit {
 
     // generate charts
     console.log(this.dailyProjects)
+    this.projectCharts = []
     this.dailyProjects.forEach((element : any) => {
       let temp = new Chart(
         element.ID, {
@@ -567,16 +591,40 @@ export class AnalysisComponent implements OnInit {
         }
       )
 
-      let values = {'ID': element.ID, 'chart': temp}
-      this.projectCharts.push(values)
+      element.chart = temp
     });
-    
-    console.log(this.projectCharts)
   }
 
   // predictive analysis
   getPredictive() {
+    // generate charts
+    console.log(this.predictions)
+    this.predictiveCharts = []
+    this.predictions.forEach((element : any) => {
+      element.ID = 'p' + element.projectID
+      let temp = new Chart(
+        element.ID, {
+          type: 'line',
+          data: { 
+            datasets: [{
+              data: element.predictions.map(d => Math.round(( (d / 60) + Number.EPSILON) * 100) / 100),
+              backgroundColor: 'rgba(200,155,200,0.5)',
+              pointBorderColor: '#87CEFA'
+            }
+          ],
+            labels: this.dates
+          },
+          options: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      )
 
+      element.chart = temp
+    });
+    
   }
 
   // get time spent

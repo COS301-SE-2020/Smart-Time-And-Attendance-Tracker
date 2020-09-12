@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="col-6 float-left">
                 <h2>Analysis</h2>
-                <h3><mat-slide-toggle (click)="toggleAnalysis(); getPredictive();">Predictive analysis</mat-slide-toggle></h3>
+                <h3><mat-slide-toggle (click)="toggleAnalysis(); getPredictive()">Predictive analysis</mat-slide-toggle></h3>
             </div>
             <div class="col-lg-6 col-12 float-right text-right">
                 <mat-form-field appearance="standard" class="col-6" *ngIf="projectView">
@@ -74,14 +74,6 @@
                         <mat-card-title>Performance (daily number of hours)</mat-card-title>
                         <!-- two lines: hours per day + monetary value per day -->
                         <mat-card-content>
-                            <!--<figure class="css-chart" style="--widget-size: 200px;">
-                            <ul class="line-chart">
-                                <li style="--x: 20px; --y: 25.3333px;">
-                                <div class="line-segment"
-                                    style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
-                                </li>
-                            </ul>
-                            </figure>-->
                             <canvas id="dailyChart">
                                 {{dailyChart}}</canvas>
                         </mat-card-content>
@@ -247,7 +239,7 @@
                         <!-- two lines: hours per day + monetary value per day -->
                         <mat-card-content>
                             <canvas id="{{p.ID}}">
-                                {{projectCharts[p.ID]}}</canvas>
+                                {{p.chart}}</canvas>
                         </mat-card-content>
                         <mat-card-footer>
                             <p>Mean daily hours: </p>
@@ -394,19 +386,14 @@
     <!-- predictive analysis -->
     <section class="col-12" *ngIf="predictive">
         <div class="charts">
-            <div class="data-card-row">
+            <div *ngFor="let p of predictions" class="data-card-row">
                 <div class="data-card col-12 p-2">
                     <mat-card id="performance" class="col-12">
-                        <mat-card-title>Performance (daily number of hours - for all projects?)</mat-card-title>
+                        <mat-card-title>Expected performance for {{p.projectName}}</mat-card-title>
                         <!-- two lines: hours per day + monetary value per day -->
                         <mat-card-content>
-                            <figure class="css-chart" style="--widget-size: 200px;">
-                                <ul class="line-chart">
-                                    <li style="--x: 20px; --y: 25.3333px;">
-                                        <div class="line-segment" style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
-                                    </li>
-                                </ul>
-                            </figure>
+                            <canvas id="{{p.ID}}">
+                                {{p.chart}}</canvas>
                         </mat-card-content>
                         <mat-card-footer>
                             <p>Mean daily hours: </p>
