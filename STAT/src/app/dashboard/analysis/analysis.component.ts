@@ -48,6 +48,7 @@ export class AnalysisComponent implements OnInit {
   meanDailyEarnings : any = 0
 
   monetaryValues : any[] = [0, 0, 0, 0, 0, 0, 0]
+  monetaryChart : any = []
 
   // total project times
   projectTimes : any = []
@@ -71,6 +72,9 @@ export class AnalysisComponent implements OnInit {
 
   // project breakdown
   projectsBDChart : []
+
+  // progress bars
+  progress : any[] = []
 
   // project view
   dailyProjects : any[] = []
@@ -200,8 +204,10 @@ export class AnalysisComponent implements OnInit {
           data: { 
             datasets: [{
               data: this.dailyValues.map(d => Math.round(( (d / 60) + Number.EPSILON) * 100) / 100),
-              backgroundColor: 'rgba(57, 192, 255, 0.4)',
-              pointColor: '#39c0ff'
+              backgroundColor: 'rgba(54, 108, 235, 0.4)',
+              pointColor: '#366ceb',
+              borderColor: '#366ceb',
+              borderWidth: 1
             }
           ],
             labels: this.dates
@@ -289,7 +295,29 @@ export class AnalysisComponent implements OnInit {
       this.numEarned = 'R' + Math.round((tempEarned + Number.EPSILON) * 100) / 100
       this.meanDailyEarnings = 'R' + Math.round(((tempEarned / this.numProjects ) + Number.EPSILON) * 100) / 100
 
-      //this.dailyChart.datasets.push(this.monetaryValues)
+      //  generate chart
+      this.monetaryChart = new Chart(
+        'monetaryChart', {
+          type: 'line',
+          data: { 
+            datasets: [{
+              data: this.monetaryValues,
+              backgroundColor: 'rgba(23, 232, 131, 0.4)',
+              pointColor: '#17e883',
+              borderColor: '#17e883',
+              borderWidth: 1
+            }
+          ],
+            labels: this.dates
+          },
+          responsive: false,
+          options: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      )
 
     },
     error => {
@@ -370,19 +398,13 @@ export class AnalysisComponent implements OnInit {
           --this.numTasks
           this.tasksTimes.splice(this.tasksTimes.indexOf(element), 1)
         }
+
+        if (element._id != 'Unspecified' && element.projectName != 'Unspecified')
+          this.progress.push(element)
       });
-      // create chart
-      this.taskTimesChart = new Chart(
-        'taskTimesChart', {
-          type: 'bar',
-          data: { 
-            datasets: [{
-              data: this.tasksTimes.map(t => t.totalTime)
-            }],
-            labels: this.tasksTimes.map(t => t._id)
-          }
-        }
-      )      
+      
+      console.log(this.tasksTimes)
+      console.log(this.progress)
     },
     error => {
       console.log(error);

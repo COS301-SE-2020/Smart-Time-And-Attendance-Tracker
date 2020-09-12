@@ -107,35 +107,10 @@
                 </div>
                 <div class="data-card col-12">
                     <mat-card id="project-status" class="col-12">
-                        <mat-card-title>Projects summary</mat-card-title>
+                        <mat-card-title>Earnings</mat-card-title>
                         <mat-card-content>
-                            <div class="mb-5">
-                                <div class="col-6 float-left">
-                                    <div class="col-12 d-inline-block">
-                                        <div class="d-inline-block mx-1"
-                                            style="background-color:deeppink; border-radius:1em; height:1em; width:1em;">
-                                        </div><span>Completed</span>
-                                    </div>
-                                    <div class="col-12 d-inline-block">
-                                        <div class="d-inline-block mx-1"
-                                            style="background-color:yellow; border-radius:1em; height:1em; width:1em;">
-                                        </div><span>In progress</span>
-                                    </div>
-                                    <div class="col-12 d-inline-block">
-                                        <div class="d-inline-block mx-1"
-                                            style="background-color:red; border-radius:1em; height:1em; width:1em;">
-                                        </div><span>Overdue</span>
-                                    </div>
-                                    <div class="col-12 d-inline-block">
-                                        <div class="d-inline-block mx-1"
-                                            style="background-color:skyblue; border-radius:1em; height:1em; width:1em;">
-                                        </div><span>Not started</span>
-                                    </div>
-                                </div>
-                                <div class="col-6 float-right">
-                                    <div class="pie"></div>
-                                </div>
-                            </div>
+                            <canvas id="monetaryChart">
+                                {{monetaryChart}}</canvas>
                         </mat-card-content>
                     </mat-card>
                 </div>
@@ -184,36 +159,7 @@
                     </ul>
                 </mat-card>
                 </div>-->
-                <div class="data-card col-12">
-                    <mat-card id="device-breakdown" class="col-12">
-                        <mat-card-title>Devices (most used devices)</mat-card-title>
-                        <!-- chart shows number of hours -->
-
-                        <mat-card-content>
-                        <canvas id="devicesChart">
-                            {{devicesChart}}</canvas>
-                        </mat-card-content>
-
-                        <!--<div>
-                            <div class="pie"></div>
-                        </div>
-                        <br>
-                        <div class="mb-5">
-                            <div class="col-12">
-                                <div class="d-inline-block mx-1" style="background-color:deeppink; border-radius:1em; height:1em; width:1em;"></div>
-                                <span>Camera - Lobby</span>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-inline-block mx-1" style="background-color:yellow; border-radius:1em; height:1em; width:1em;"></div>
-                                <span>Smart watch</span>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-inline-block mx-1" style="background-color:skyblue; border-radius:1em; height:1em; width:1em;"></div>
-                                <span>Other</span>
-                            </div>
-                        </div>-->
-                    </mat-card>
-                </div>
+                
                 <div class="data-card col-12">
                     <mat-card id="activity-breakdown" class="col-12">
                         <mat-card-title>Projects Breakdown</mat-card-title>
@@ -236,6 +182,30 @@
                                 {{tasksBDChart}}</canvas>
                         </mat-card-content>
 
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="device-breakdown" class="col-12">
+                        <mat-card-title>Projects & Tasks</mat-card-title>
+                        <!-- chart shows number of hours -->
+
+                        <mat-card-content>
+                        <canvas id="devicesChart">
+                            {{devicesChart}}</canvas>
+                        </mat-card-content>
+                      
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="device-breakdown" class="col-12">
+                        <mat-card-title>Devices (most used devices)</mat-card-title>
+                        <!-- chart shows number of hours -->
+
+                        <mat-card-content>
+                        <canvas id="devicesChart">
+                            {{devicesChart}}</canvas>
+                        </mat-card-content>
+                      
                     </mat-card>
                 </div>
             </div>
