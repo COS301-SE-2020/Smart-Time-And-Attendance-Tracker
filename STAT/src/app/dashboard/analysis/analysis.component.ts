@@ -52,6 +52,11 @@ export class AnalysisComponent implements OnInit {
   // total project times
   projectTimes : any = []
   projectTimesChart : []
+  barChartColors : any = [
+    'rgba(54, 108, 235, 0.4)',
+    'rgba(255, 40, 133, 0.4)'
+  ]
+  borderColors : any = ['#366ceb', '#ff2885']
 
   // total task times
   tasksTimes : any[] = []
@@ -195,8 +200,8 @@ export class AnalysisComponent implements OnInit {
           data: { 
             datasets: [{
               data: this.dailyValues.map(d => Math.round(( (d / 60) + Number.EPSILON) * 100) / 100),
-              backgroundColor: 'rgba(200,155,200,0.5)',
-              pointBorderColor: '#87CEFA'
+              backgroundColor: 'rgba(57, 192, 255, 0.4)',
+              pointColor: '#39c0ff'
             }
           ],
             labels: this.dates
@@ -309,13 +314,30 @@ export class AnalysisComponent implements OnInit {
           --this.numProjects
       });
 
+      let colors = []
+      let borders = []
+      let count = 0
+      for (let i = 0; i < this.projectTimes.length; i++) {
+        if (this.projectTimes[i].totalTime == 0) {
+          colors.push('#000000')
+          borders.push('#000000')
+        } else {
+          colors.push(this.barChartColors[count % this.barChartColors.length])
+          borders.push(this.borderColors[count % this.borderColors.length])
+          count++
+        }
+      }
+
       // create chart
       this.projectTimesChart = new Chart(
         'projectTimesChart', {
           type: 'bar',
           data: { 
             datasets: [{
-              data: this.projectTimes.map(t => Math.round(( (t.totalTime / 60) + Number.EPSILON) * 100) / 100)
+              data: this.projectTimes.map(t => Math.round(( (t.totalTime / 60) + Number.EPSILON) * 100) / 100),
+              backgroundColor: colors,
+              borderWidth: 1,
+              borderColor : borders
             }],
             labels: this.projectTimes.map(t => t._id)
           },
@@ -387,14 +409,10 @@ export class AnalysisComponent implements OnInit {
             datasets: [{
               data: this.devices.map(t => t.count),
               backgroundColor: [
-                '#87CEFA',
-                '#FF4040',
-                '#FF82AB',
-                '#FFFAC0',
-                '#EED8AE',
-                '#B8860B',
-                '#90EE90',
-                '#6495ED'
+                '#ff2885',
+                '#366ceb',
+                '#8368fc',
+                '#39c0ff'
             ]
             }],
             labels: this.devices.map(t => t._id)
@@ -504,10 +522,9 @@ export class AnalysisComponent implements OnInit {
             datasets: [{
               data: this.projectsBD,
               backgroundColor: [
-                '#87CEFA',
-                '#FF4040',
-                '#FF82AB',
-                '#6495ED'
+                '#39c0ff',
+                '#17e883',
+                '#ff444e'
             ]
             }],
             labels: ['Upcoming', 'Completed', 'Overdue']
@@ -529,10 +546,10 @@ export class AnalysisComponent implements OnInit {
             datasets: [{
               data: this.tasks,
               backgroundColor: [
-                '#87CEFA',
-                '#FF4040',
-                '#FF82AB',
-                '#6495ED'
+                '#ff2885',
+                '#39c0ff',
+                '#17e883',
+                '#ff444e'
             ]
             }],
             labels: ['Not Started', 'In Progress', 'Completed', 'Overdue']
@@ -577,7 +594,7 @@ export class AnalysisComponent implements OnInit {
           data: { 
             datasets: [{
               data: element.daily.map(d => Math.round(( (d.totalTime / 60) + Number.EPSILON) * 100) / 100),
-              backgroundColor: 'rgba(200,155,200,0.5)',
+              backgroundColor: 'rgba(200,155,200,0.7)',
               pointBorderColor: '#87CEFA'
             }
           ],

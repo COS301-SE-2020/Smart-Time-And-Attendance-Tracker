@@ -144,11 +144,26 @@
             <div class="col-4 float-right data-summary p-0">
                 <div class="data-card col-12">
                 <mat-card id="risk-assessment" class="col-12">
-                    <mat-card-title>Risk assessment</mat-card-title>
+                    <mat-icon class="float-right">feedback</mat-icon>
+
+                    <mat-card-title>Risk assessment
+                    </mat-card-title>
                     <ul>
-                        <li>{{tasks[3]}} tasks overdue</li>
-                        <li>{{projectsBD[2]}} projects overdue</li>
-                        <li>{{numUnder}} underperforming days</li>
+                        <li>
+                            <mat-icon class="risk-warn" *ngIf="tasks[3] > 0">priority_high</mat-icon>
+                            <mat-icon class="risk-done" *ngIf="tasks[3] == 0">done</mat-icon>
+                            {{tasks[3]}} tasks overdue
+                        </li>
+                        <li>
+                            <mat-icon class="risk-warn" *ngIf="projectsBD[2] > 0">priority_high</mat-icon>
+                            <mat-icon class="risk-done" *ngIf="projectsBD[2] == 0">done</mat-icon>
+                            {{projectsBD[2]}} projects overdue
+                        </li>
+                        <li>
+                            <mat-icon class="risk-warn" *ngIf="numUnder > 0">priority_high</mat-icon>
+                            <mat-icon class="risk-done" *ngIf="numUnder == 0">done</mat-icon>
+                            {{numUnder}} unproductive days
+                        </li>
                     </ul>
                 </mat-card>
                 </div>
