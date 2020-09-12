@@ -222,7 +222,7 @@ module.exports.startTimer = (req, res, next) => {
     //change req.ID
     if(!req.body.hasOwnProperty("userID"))
         return res.status(400).send({message: 'No user ID provided'});
-    var now = new Date;
+    var now = new Date();
     var date = (now.toISOString().slice(0,10)).replace(/-/g,"/");
 
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
@@ -234,9 +234,10 @@ module.exports.startTimer = (req, res, next) => {
                 return res.status(404).send({message: 'IOT Device not found'});
             else if(result.DeregisteredBy == null && result.DeregisteredOn == "")
             {
+                var time = new Date().getTime();
                 req.body.date = date;
-                req.body.startTime = now;
-                req.body.endTime = now;
+                req.body.startTime = time;
+                req.body.endTime = time;
                 req.body.description =  req.body.deviceName;
                 req.body.device = req.body.macAddress;
                 req.ID = req.body.userID;
@@ -255,9 +256,10 @@ module.exports.startTimer = (req, res, next) => {
                 return res.status(404).send({message: 'IOT Device not found'});
             else if(result.DeregisteredBy == null && result.DeregisteredOn == "")
             {
+                var time = new Date().getTime();
                 req.body.date = date;
-                req.body.startTime = now;
-                req.body.endTime = now;
+                req.body.startTime = time;
+                req.body.endTime = time;
                 req.body.description = result.DeviceName;
                 req.body.device = result.MACAddress;
                 req.ID = req.body.userID;

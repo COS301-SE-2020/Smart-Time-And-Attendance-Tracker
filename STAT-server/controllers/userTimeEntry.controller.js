@@ -339,7 +339,11 @@ module.exports.updateTimeEntry = (req, res) => {
                     {
                         result.EndTime =  req.body.endTime;
                         if(!req.body.hasOwnProperty('activeTime'))
-                            result.ActiveTime = result.EndTime - result.StartTime;
+                        {
+                            var val = result.EndTime - result.StartTime;
+                            result.ActiveTime = Math.round(val/60000);
+                        }
+
                     }  
                     if(req.body.hasOwnProperty('activeTime'))
                         result.ActiveTime =  req.body.activeTime;
