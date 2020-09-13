@@ -79,6 +79,18 @@ export class AnalysisComponent implements OnInit {
   // project view
   dailyProjects : any[] = []
   projectCharts : any[] = []
+  projectColors : any = [
+    'rgba(54, 108, 235, 0.4)',
+    'rgba(255, 40, 133, 0.4)',
+    'rgba(54, 108, 235, 0.4)',
+    'rgba(131, 104, 252, 0.4)'
+  ]
+  projectBorderColors : any = [
+    'rgba(54, 108, 235, 1)',
+    'rgba(255, 40, 133, 1)',
+    'rgba(54, 108, 235, 1)',
+    'rgba(131, 104, 252, 1)'
+  ]
 
   // predictive
   predictions : any[] = []
@@ -609,9 +621,47 @@ export class AnalysisComponent implements OnInit {
   // project analysis
   getProjectAnalysis() {
 
+    this.dailyProjects.forEach((element : any) => {
+
+      // daily performance values
+      for (let i = 0; i < this.dates.length; i++) {
+        let index = element.daily.findIndex((a : any) => a._id === this.dates[i])
+        if (index == -1 )
+          element.daily.push({'_id' : this.dates[i], 'totalTime' : 0})
+      }
+      element.daily = element.daily.sort((a : any ,b : any) => Date.parse(b._id) - Date.parse(a._id));
+
+      // overdue tasks
+      element.overdue = 0
+      element.completed = 0
+      element.tasks.forEach((t : any) => {
+        if (Date.parse(t.dueDate) < this.date.getTime() && t.taskStatus != 'Completed')
+          element.overdue++
+
+        if (t.taskStatus == 'Completed')
+          element.completed++
+      });
+
+      element.completed = Math.round(((element.completed / element.tasks.length) + Number.EPSILON) * 100)
+
+      // total and average
+      element.total = 0
+      element.average = 0
+      element.daily.forEach((d : any) => {
+        element.total += d.totalTime
+      });
+
+      element.average = Math.round(((element.total / 7 / 60) + Number.EPSILON) * 100) / 100
+
+      // monetary values
+      element.monetary = Math.round((((element.total / 60) * element.hourlyRate) + Number.EPSILON) * 100) / 100
+
+    });
+
     // generate charts
     console.log(this.dailyProjects)
     this.projectCharts = []
+    let count = 0
     this.dailyProjects.forEach((element : any) => {
       let temp = new Chart(
         element.ID, {
@@ -619,8 +669,10 @@ export class AnalysisComponent implements OnInit {
           data: { 
             datasets: [{
               data: element.daily.map(d => Math.round(( (d.totalTime / 60) + Number.EPSILON) * 100) / 100),
-              backgroundColor: 'rgba(200,155,200,0.7)',
-              pointBorderColor: '#87CEFA'
+              backgroundColor: this.projectColors[count % 4],
+              pointColor: this.projectBorderColors[count % 4],
+              borderColor: this.projectBorderColors[count % 4],
+              borderWidth: 1
             }
           ],
             labels: this.dates
@@ -634,6 +686,7 @@ export class AnalysisComponent implements OnInit {
       )
 
       element.chart = temp
+      count++
     });
   }
 

@@ -227,8 +227,7 @@
                                 {{p.chart}}</canvas>
                         </mat-card-content>
                         <mat-card-footer>
-                            <p>Mean daily hours: </p>
-                            <p>Mean daily earnings: </p>
+                            <p>Mean daily hours: {{p.average}}</p>
                         </mat-card-footer>
                     </mat-card>
                 </div>
@@ -237,12 +236,30 @@
             <div class="col-4 float-right data-summary p-0">
                 <div class="data-card col-12">
                     <mat-card id="risk-assessment" class="col-12">
+                        <mat-icon class="float-right">feedback</mat-icon>
                         <mat-card-title>Risk assessment</mat-card-title>
                         <ul>
-                            <li>53% complete</li>
-                            <li>3 tasks overdue</li>
-                            <li>100 hrs accumulated</li>
-                            <li>R 344,592.75 earned</li>
+                            <li>
+                                <mat-icon class="risk-warn" *ngIf="p.completed == 0">priority_high</mat-icon>
+                                <mat-icon class="risk-pending" *ngIf="p.completed > 0">more_horiz</mat-icon>
+                                <mat-icon class="risk-done" *ngIf="p.completed == 100">done</mat-icon>
+                                {{p.completed}}% complete
+                            </li>
+                            <li>
+                                <mat-icon class="risk-warn" *ngIf="p.overdue > 0">priority_high</mat-icon>
+                                <mat-icon class="risk-done" *ngIf="p.overdue == 0">done</mat-icon>
+                                {{p.overdue}} tasks overdue
+                            </li>
+                            <li>
+                                <mat-icon class="risk-warn" *ngIf="p.total == 0">priority_high</mat-icon>
+                                <mat-icon class="risk-done" *ngIf="p.total > 0">done</mat-icon>
+                                {{getTime(p.total)}} accumulated
+                            </li>
+                            <li>
+                                <mat-icon class="risk-warn" *ngIf="p.total == 0">priority_high</mat-icon>
+                                <mat-icon class="risk-done" *ngIf="p.total > 0">done</mat-icon>
+                                R{{p.monetary}} earned
+                            </li>
                         </ul>
                     </mat-card>
                 </div>
@@ -250,122 +267,7 @@
         </div>
         <mat-divider></mat-divider>
 
-        <div id="pid1" class="col-12 h-auto my-3">
-            <h2 class="m-3">Project name</h2>
-            <div class="data-charts col-8 float-left p-0">
-                <div class="data-card col-12">
-                    <mat-card id="performance" class="col-12">
-                        <mat-card-title>Performance</mat-card-title>
-                        <!-- two lines: hours per day + monetary value per day -->
-                        <mat-card-content>
-                            <figure class="css-chart" style="--widget-size: 200px;">
-                                <ul class="line-chart">
-                                    <li style="--x: 20px; --y: 25.3333px;">
-                                        <div class="line-segment" style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
-                                    </li>
-                                </ul>
-                            </figure>
-                        </mat-card-content>
-                        <mat-card-footer>
-                            <p>Mean daily hours: </p>
-                            <p>Mean daily earnings: </p>
-                        </mat-card-footer>
-                    </mat-card>
-                </div>
-            </div>
-            <!-- DATA SUMMARY -->
-            <div class="col-4 float-right data-summary p-0">
-                <div class="data-card col-12">
-                    <mat-card id="risk-assessment" class="col-12">
-                        <mat-card-title>Risk assessment</mat-card-title>
-                        <ul>
-                            <li>53% complete</li>
-                            <li>3 tasks overdue</li>
-                            <li>100 hrs accumulated</li>
-                            <li>R 344,592.75 earned</li>
-                        </ul>
-                    </mat-card>
-                </div>
-            </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div id="pid2" class="col-12 h-auto my-3">
-            <h2 class="m-3">Project name</h2>
-            <div class="data-charts col-8 float-left p-0">
-                <div class="data-card col-12">
-                    <mat-card id="performance" class="col-12">
-                        <mat-card-title>Performance</mat-card-title>
-                        <!-- two lines: hours per day + monetary value per day -->
-                        <mat-card-content>
-                            <figure class="css-chart" style="--widget-size: 200px;">
-                                <ul class="line-chart">
-                                    <li style="--x: 20px; --y: 25.3333px;">
-                                        <div class="line-segment" style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
-                                    </li>
-                                </ul>
-                            </figure>
-                        </mat-card-content>
-                        <mat-card-footer>
-                            <p>Mean daily hours: </p>
-                            <p>Mean daily earnings: </p>
-                        </mat-card-footer>
-                    </mat-card>
-                </div>
-            </div>
-            <!-- DATA SUMMARY -->
-            <div class="col-4 float-right data-summary p-0">
-                <div class="data-card col-12">
-                    <mat-card id="risk-assessment" class="col-12">
-                        <mat-card-title>Risk assessment</mat-card-title>
-                        <ul>
-                            <li>53% complete</li>
-                            <li>3 tasks overdue</li>
-                            <li>100 hrs accumulated</li>
-                            <li>R 344,592.75 earned</li>
-                        </ul>
-                    </mat-card>
-                </div>
-            </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div id="pid3" class="col-12 h-auto my-3">
-            <h2 class="m-3">Project name</h2>
-            <div class="data-charts col-8 float-left p-0">
-                <div class="data-card col-12">
-                    <mat-card id="performance" class="col-12">
-                        <mat-card-title>Performance</mat-card-title>
-                        <!-- two lines: hours per day + monetary value per day -->
-                        <mat-card-content>
-                            <figure class="css-chart" style="--widget-size: 200px;">
-                                <ul class="line-chart">
-                                    <li style="--x: 20px; --y: 25.3333px;">
-                                        <div class="line-segment" style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
-                                    </li>
-                                </ul>
-                            </figure>
-                        </mat-card-content>
-                        <mat-card-footer>
-                            <p>Mean daily hours: </p>
-                            <p>Mean daily earnings: </p>
-                        </mat-card-footer>
-                    </mat-card>
-                </div>
-          </div>
-          <!-- DATA SUMMARY -->
-            <div class="col-4 float-right data-summary p-0">
-                <div class="data-card col-12">
-                    <mat-card id="risk-assessment" class="col-12">
-                        <mat-card-title>Risk assessment</mat-card-title>
-                        <ul>
-                            <li>53% complete</li>
-                            <li>3 tasks overdue</li>
-                            <li>100 hrs accumulated</li>
-                            <li>R 344,592.75 earned</li>
-                        </ul>
-                    </mat-card>
-                </div>
-            </div>
-        </div>
+      
     </section>
 
     <!-- predictive analysis -->
