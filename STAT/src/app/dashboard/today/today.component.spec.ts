@@ -12,7 +12,8 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 import { of } from 'rxjs';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { MaterialComponentsModule } from 'src/app/material-components/material-components.module';
-import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('Unit tests', () => {
 describe('TodayComponent', () => {
@@ -32,11 +33,14 @@ describe('TodayComponent', () => {
           FormsModule,
           ReactiveFormsModule,
           MaterialComponentsModule,
-          MatCardModule
+          MatProgressSpinnerModule,
+          BrowserAnimationsModule
         ],
       providers: [
         MaterialComponentsModule,
-        MatCardModule
+        MaterialComponentsModule,
+        MatProgressSpinnerModule,
+        BrowserAnimationsModule
       ]
     })
     .compileComponents().then(()=>
@@ -59,27 +63,29 @@ describe('TodayComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should call the open method when the add button is pressed', async(() => {
+
+  /*it('should call the open method when the add button is pressed', async(() => {
     component.trackingNow=false;
+
     spyOn(component,'open');
     el = fixture.debugElement.query(By.css(".start-tracking")).nativeElement;
     el.click();
     expect(component.open).toHaveBeenCalledTimes(1);
   }));
 
-  /*it("should call the addManualEntry method when the 'Create an Entry' button is pressed", async(() => {
+  it("should call the addManualEntry method when the 'Create an Entry' button is pressed", async(() => {
     component.autoTracking=false;
     spyOn(component,'addManualEntry');
     el = fixture.debugElement.query(By.css("#m-tracking")).nativeElement;
     el.click();
     expect(component.addManualEntry).toHaveBeenCalledTimes(1);
-  }));*/
+  }));
 
 
   // **************************
     // INVALID MANUAL TRACKING FORM TESTS
     // **************************
-    /*describe('Manual Tracking Form', () => {
+    describe('Manual Tracking Form', () => {
       it('should be invalid with empty details', async(() => {
         component.autoTracking=false;
         component.manualTrackingForm.controls['Description'].setValue('');
@@ -110,13 +116,13 @@ describe('TodayComponent', () => {
         expect(component.manualTrackingForm.controls.password.hasError('StartTime')).toBeFalsy();
         expect(component.manualTrackingForm.controls.passwordConf.hasError('EndTime')).toBeFalsy();
       }));
-    });*/
+    });
     // ****************************************** END
 
     // **************************
     // INVALID AUTOMATIC TRACKING FORM TESTS
     // **************************
-    /*describe('Automatic Tracking Form', () => {
+    describe('Automatic Tracking Form', () => {
       component = fixture.componentInstance;
       fixture.detectChanges();
       component.autoTracking=true;
@@ -138,11 +144,11 @@ describe('TodayComponent', () => {
         expect(component.automaticTrackingForm.controls.password.hasError('TaskID')).toBeFalsy();
       }));
 
-    });*/
+    });
     // ****************************************** END
 });
 });
-/*describe('Integration tests:', () => {
+describe('Integration tests:', () => {
   describe('TodayComponent', () => {
 
     let component: TodayComponent;
@@ -202,6 +208,6 @@ describe('TodayComponent', () => {
       expect(component.service.addMTimeEntry).toHaveBeenCalledTimes(1);
     }));
 
-    });
+    });*/
 });
-});*/
+});

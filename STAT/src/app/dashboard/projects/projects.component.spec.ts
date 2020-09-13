@@ -269,12 +269,14 @@ describe('ProjectsComponent', () => {
       el.click();
       expect(component.deleteProject).toHaveBeenCalledTimes(1);
     }));
+
     it("should call the deleteTask method when the 'Yes' button is pressed", async(() => {
       spyOn(component,'deleteTask');
       el = fixture.debugElement.query(By.css("#deleteTask")).nativeElement;
       el.click();
       expect(component.deleteTask).toHaveBeenCalledTimes(1);
     }));
+
       describe('Add Project Form', () => {
         it('should be invalid with empty details', async(() => {
           component.addProjectForm.controls['projectName'].setValue('');
@@ -285,6 +287,7 @@ describe('ProjectsComponent', () => {
           expect(component.addProjectForm.controls.password.hasError('dueDate')).toBe(true);
           expect(component.addProjectForm.controls.email.hasError('hourlyRate')).toBe(true);
         }));
+
       });
       // ****************************************** END
       describe('Add Task Form', () => {
@@ -299,3 +302,4 @@ describe('ProjectsComponent', () => {
       // ****************************************** END
   });
   });
+
