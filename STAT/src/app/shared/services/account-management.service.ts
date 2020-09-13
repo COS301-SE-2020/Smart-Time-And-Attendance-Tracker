@@ -17,7 +17,7 @@ export class AccountManagementService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
 
-    return this.http.post(this.ROOT_URL+'user/isAuthenticated', {
+    return this.http.get(this.ROOT_URL+'user/isAuthenticated', {
       headers: headers
     });
   }

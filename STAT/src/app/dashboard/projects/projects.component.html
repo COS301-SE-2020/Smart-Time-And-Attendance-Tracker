@@ -59,11 +59,20 @@
                 <mat-expansion-panel-header>
 
                   <mat-panel-title>
-                  <mat-icon *ngIf="p.completed == true" inline="true">check_circle</mat-icon>
+                  <mat-icon *ngIf="p.completed == true" inline="true" class="p-comp"
+                            matTooltip="Change to In Progress"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="above"
+                            (click)="$event.stopPropagation(); changeProjectStatus(p.ID, p.projectName, 'In Progress')">check_circle</mat-icon>
+                  <mat-icon *ngIf="p.completed == false" inline="true" class="p-ip"
+                            matTooltip="Mark as Completed"
+                            matTooltipClass="pro-tooltip"
+                            matTooltipPosition="above"
+                            (click)="$event.stopPropagation(); changeProjectStatus(p.ID, p.projectName, 'Completed')">pending</mat-icon>
+
                     {{p.projectName}}
                   <span class="tag numTasks">{{p.tasks.length}} tasks</span>
-                  <button *ngIf="roles.includes('Team Leader')" 
-                          mat-button class="pro-btn"
+                  <button mat-button class="pro-btn"
                           matTooltip="R{{p.hourlyRate}} per hour"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above">
@@ -74,7 +83,7 @@
                           matTooltip="Edit"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(editProjectModal); popProjectForm(p)">
+                          (click)="$event.stopPropagation(); open(editProjectModal); popProjectForm(p)">
                           <mat-icon inline="true">edit</mat-icon>
                   </button>
                   <button *ngIf="roles.includes('Team Leader')" 
@@ -82,12 +91,13 @@
                           matTooltip="Delete"
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="above"
-                          (click)="open(deleteProjectModal); pid = p.ID; pname = p.projectName">
+                          (click)="$event.stopPropagation(); open(deleteProjectModal); pid = p.ID; pname = p.projectName">
                           <mat-icon inline="true">delete</mat-icon>
                   </button>
                   </mat-panel-title>
                   
-                <span class="due-date float-right">Due {{formatDate(p.dueDate)}}</span>      
+                <span class="due-date float-right">Due {{formatDate(p.dueDate)}}</span>   
+   
                 </mat-expansion-panel-header>
                 
                 <mat-divider></mat-divider><br>
@@ -97,7 +107,8 @@
                   <li>No tasks</li>
                 </ul>
                 <ul *ngIf="p.tasks != 'no tasks'" class="tasks">
-                  <li *ngFor="let t of sortProTasks(p.tasks)">{{t.taskName}}
+                  <li *ngFor="let t of sortProTasks(p.tasks)">
+                    {{t.taskName}}
                     <button *ngIf="roles.includes('Team Leader')" 
                             mat-button class="pro-btn"
                             matTooltip="Edit"
@@ -114,11 +125,17 @@
                             (click)="open(deleteTaskModal); pid = p.ID; tid = t.ID; tname = t.taskName">
                             <mat-icon inline="true">delete</mat-icon>
                     </button>
-                     <span class="float-right t-dueDate">{{formatDate(t.dueDate)}}</span> 
+                     <span class="float-right t-dueDate" [ngClass]="{'task-od-date': t.overdue == true}" >{{formatDate(t.dueDate)}}</span> 
+                     
                      <span class="float-right tag" 
+                          [matTooltip]="t.taskStatus == 'Not Started' ? 'Change to In Progress' :
+                                        (t.taskStatus == 'In Progress' ? 'Mark as Completed' : 'Change to Not Started')"
+                          matTooltipClass="pro-tooltip"
+                          matTooltipPosition="above"
                           [ngClass]="{'tag-ns': t.taskStatus == 'Not Started',
                                       'tag-ip': t.taskStatus == 'In Progress',
-                                      'tag-c': t.taskStatus == 'Completed'}">{{t.taskStatus}}</span>
+                                      'tag-c': t.taskStatus == 'Completed'}"
+                          (click)="changeTaskStatus(t.ID, t.taskName, t.taskStatus)">{{t.taskStatus}}</span>
 
                     <mat-divider></mat-divider>       
                   </li>
@@ -221,7 +238,7 @@
         </div>
       </div><br>
 
-      <h2>Upcoming Tasks</h2>
+      <h2>Tasks</h2>
         <div id="tasks">
           <mat-spinner *ngIf="upcoming.length == 0 && !error" class="req-spinner"></mat-spinner>
           <i *ngIf="error == 'Not Found'">You have no upcoming tasks.</i>
@@ -229,7 +246,10 @@
             <ng-template ngbSlide *ngFor="let u of upcoming">
               <div>
                 <ul class="tasks">
-                  <li *ngFor="let t of u"><small>{{t.projectName}} <span class="float-right">{{formatDate(t.dueDate)}}</span> </small> <span>{{t.taskName}}</span></li>
+                  <li [ngClass]="{'task-od': t.overdue == true}" *ngFor="let t of u">
+                    <small> {{t.projectName}} 
+                      <span class="float-right">{{formatDate(t.dueDate)}}</span> 
+                    </small> <span>{{t.taskName}}</span></li>
                 </ul>
               </div>
             </ng-template>
