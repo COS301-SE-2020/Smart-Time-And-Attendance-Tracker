@@ -151,7 +151,7 @@
                           matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]" 
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
-                    <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg"
+                    <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}"
                           matTooltip="{{m.name}} {{m.surname}}" 
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="below">
