@@ -494,7 +494,7 @@ module.exports.getProjects2 = (req, res, next) => {
 
             for(i=0; i<result.Projects.length; i++)
             {      
-                ProjectHelper.getTasks(result.Projects[i],(err,val)=> {
+                ProjectHelper.getProjectDetails(result.Projects[i],(err,val)=> {
                     count = count +1;
                     if(err)
                         return res.status(500).send({message: 'Internal Server Error: ' + err});

@@ -246,3 +246,28 @@ module.exports.getTasks = (id, done)=>{
     });
 }
 
+/**
+ * This function returns the tasks of the project, and additional details about the project such as, 
+ * project name, project ID, due date of project, and the hourly rate of the project.
+ * @param {String} id ID of project.
+ * @param {*} done Returns the tasks of the project, and additional details about the project such as, 
+ * project name, project ID, due date of project, and the hourly rate of the project.
+ */
+module.exports.getProjectDetails = (id, done)=>{
+    ProjectModel.findOne({ _id: id},(err, result) => {
+        if(err) 
+            done(err);
+        else if (!result)
+            done(null,false);
+        else if(result)
+        {
+            text = {
+                'ID': result._id,
+                'projectName': result.ProjectName
+            }
+            done(null, text);
+        }         
+        
+    });
+}
+

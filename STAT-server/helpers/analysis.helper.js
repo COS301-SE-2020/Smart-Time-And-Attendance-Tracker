@@ -110,47 +110,42 @@ async function mostVisitedWebsite(array){
  * @param {user id} req 
  * @param {average time} res 
  */
-module.exports.getUserTotalTimeForProject = (project, datePassed, done) => {
+module.exports.getUserTotalTimeForProject = async(project, datePassed, done) => {
     var getTime =  (datePassed.toISOString().slice(0,10)).replace(/-/g,"/");
-    TimeEntryModel.find({
-        ProjectID: project.ID,
-        Date: getTime
-    }, (err, val) => {
-        if (err) {
-            done(err);
-        } 
-        else if (val) {    
-            if(val.length == 0)
+
+    try {
+        const  val = await TimeEntryModel.aggregate([
+            { $match: { $and: [{ProjectID: new mongoose.Types.ObjectId(project.ID)}, {Date: getTime}] } },
             {
+              $group: {
+                _id: "$ProjectID",
+                Time: { $sum: "$ActiveTime"},
+              }
+            }
+          ]);
+          if(val.length == 0)
+            { 
+               var text = {
+                "ProjectID" : project.ID,
+                "ProjectName": project.projectName,
+                "Time" : 0,
+                "Date": datePassed};
+            }
+        
+            else{
                 var text = {
                     "ProjectID" : project.ID,
                     "ProjectName": project.projectName,
-                    "Time" : 0,
+                    "Time" : val[0].Time,
                     "Date": datePassed
-                };
-                done(null, text);
-            }
-            else
-            {
-                const totalEntries = val.length;
-                var averageTime = 0, l =0;
-                for(l=0; l<totalEntries; l++)
-                {
-                    averageTime += val[l].ActiveTime;
-                }
-                if(l == totalEntries)
-                {
-                    var text = {
-                        "ProjectID" : project.ID,
-                        "ProjectName": project.projectName,
-                        "Time" : averageTime,
-                        "Date": datePassed
-                    };
-                    done(null, text);
-                }
             }
         }
-    });
+        done(null, text);
+    } 
+    catch (error) {
+       done(error);
+    }
+    
 }
 
 
