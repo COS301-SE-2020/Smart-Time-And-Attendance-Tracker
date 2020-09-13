@@ -182,13 +182,24 @@
                     </mat-card>
                 </div>
                 <div class="data-card col-12">
-                    <mat-card id="device-breakdown" class="col-12">
+                    <mat-card id="projectsAndTasks" class="col-12">
                         <mat-card-title>Projects & Tasks</mat-card-title>
                         <!-- chart shows number of hours -->
 
                         <mat-card-content>
-                        <canvas id="devicesChart">
-                            {{devicesChart}}</canvas>
+                            <div *ngFor="let p of progress">
+                                <h3>{{p.projectName}}</h3>
+                                <div class="progress">
+                                    <div *ngFor="let t of p.taskTimes" class="progress-bar" role="progressbar" 
+                                        [style.width]="t.percent"
+                                        [style.background-color]="t.color"
+                                        matTooltip="{{t._id}}" 
+                                        matTooltipClass="pro-tooltip"
+                                        matTooltipPosition="above">
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
                         </mat-card-content>
                       
                     </mat-card>
@@ -257,6 +268,25 @@
                                 <mat-icon class="risk-done" *ngIf="p.total > 0">done</mat-icon>
                                 R{{p.monetary}} earned
                             </li>
+                        </ul>
+                    </mat-card>
+                    <mat-card id="members-times" class="col-12">
+                        <mat-card-title>Team Members' Performance</mat-card-title>
+                        <ul>
+                            <li *ngFor="let m of p.membersTimes">
+                                {{m.name}} {{m.surname}}
+                            </li>
+                            <mat-card-subtitle>Unproductive Members</mat-card-subtitle>
+                            <span *ngFor="let u of p.unproductive" class="proj-member">
+                                <div *ngIf="p.profilePicture == 'none'" class="pro-pic proj"
+                                      matTooltip="{{p.name}} {{p.surname}} [{{p.role}}]" 
+                                      matTooltipClass="pro-tooltip"
+                                      matTooltipPosition="below">{{p.name[0]}}{{p.surname[0]}}</div>
+                                <img *ngIf="p.profilePicture != 'none'" src="assets/proPic3.jpg"
+                                      matTooltip="{{p.name}} {{p.surname}}" 
+                                      matTooltipClass="pro-tooltip"
+                                      matTooltipPosition="below">
+                            </span>
                         </ul>
                     </mat-card>
                 </div>
