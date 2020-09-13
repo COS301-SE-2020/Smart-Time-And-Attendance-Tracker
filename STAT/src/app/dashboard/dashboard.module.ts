@@ -20,7 +20,7 @@ import { UnauthorisedComponent } from './unauthorised/unauthorised.component';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -28,7 +28,8 @@ import { UnauthorisedComponent } from './unauthorised/unauthorised.component';
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatIconModule
   ]
 })
 export class DashboardModule { }

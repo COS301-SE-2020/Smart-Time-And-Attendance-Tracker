@@ -25,6 +25,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     SharedModule,
     StartupModule,
     MaterialComponentsModule,
+    MatIconModule,
     FormsModule,
     DashboardModule,
     HttpClientModule,

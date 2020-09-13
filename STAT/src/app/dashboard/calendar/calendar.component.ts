@@ -4,6 +4,8 @@ import { Component, OnInit,
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
+declare const gapi: any; // only for ng test
+
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
