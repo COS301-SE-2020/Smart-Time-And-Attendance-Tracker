@@ -20,6 +20,7 @@ describe('test file 1', function() {
     describe('test USER', function() {
        require ('./user.js')
     })
+    /*
     describe('test PROJECT', function() {
        require ('./project.js')
       })
@@ -38,6 +39,6 @@ describe('test file 1', function() {
     describe('iotDevice', function() {
         require ('./role.js')
       })
-
+*/
 
   })
