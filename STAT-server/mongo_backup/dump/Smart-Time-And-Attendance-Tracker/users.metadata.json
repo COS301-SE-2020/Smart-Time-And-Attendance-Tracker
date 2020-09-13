@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Smart-Time-And-Attendance-Tracker.users"},{"v":{"$numberInt":"2"},"unique":true,"key":{"Email":{"$numberInt":"1"}},"name":"Email_1","ns":"Smart-Time-And-Attendance-Tracker.users","background":true}],"uuid":"3bec35ed61a344489aecadce2bfd3b3f"}

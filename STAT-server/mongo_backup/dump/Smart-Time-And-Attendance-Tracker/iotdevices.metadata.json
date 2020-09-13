@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Smart-Time-And-Attendance-Tracker.iotdevices"},{"v":{"$numberInt":"2"},"unique":true,"key":{"MACAddress":{"$numberInt":"1"}},"name":"MACAddress_1","background":true,"ns":"Smart-Time-And-Attendance-Tracker.iotdevices"}],"uuid":"e10908907e144240beae8ce5fc07afe4"}

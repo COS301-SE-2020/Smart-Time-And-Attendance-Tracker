@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"Smart-Time-And-Attendance-Tracker.projects"}],"uuid":"8bc6f8d8bff84028b3db0a983f497b7a"}
