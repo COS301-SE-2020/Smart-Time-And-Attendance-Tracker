@@ -75,6 +75,11 @@ export class AnalysisComponent implements OnInit {
 
   // progress bars
   progress : any[] = []
+  progressColors = [
+    '#0ac2f0', '#4b6ebf', '#d372f3', '#ff4db8',
+    '#70D2FF', '#FF70AE', '#b128de', '#3A0FFA',
+    '#6b4bfb', '#0AB1FF', '#1652DF', '#F5006A'
+  ]
 
   // project view
   dailyProjects : any[] = []
@@ -445,11 +450,11 @@ export class AnalysisComponent implements OnInit {
         });
       });
 
+      let count = 0
       this.progress.forEach((element : any) => {
-        let count = 0
         element.taskTimes.forEach((t : any) => {
           t.percent = ((t.totalTime / element.totalTime) * 100) + '%'
-          t.color = this.projectBorderColors[count % 4]
+          t.color = this.progressColors[count % 12]
           count++
         });
       });
