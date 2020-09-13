@@ -15,11 +15,20 @@ chai.use(chaiHttp)
 
 describe('test file 1', function() {
 
+    before(function () {
+      server.listen();
+  });
+
+  after(function () {
+      server.close();
+  }); 
+
 
     
     describe('test USER', function() {
        require ('./user.js')
     })
+  /*
     describe('test PROJECT', function() {
        require ('./project.js')
       })
@@ -36,8 +45,8 @@ describe('test file 1', function() {
         require ('./iotDevice.js')
       })
     describe('iotDevice', function() {
-        require ('./role.js')
+        //require ('./role.js')
       })
-
+*/
 
   })
