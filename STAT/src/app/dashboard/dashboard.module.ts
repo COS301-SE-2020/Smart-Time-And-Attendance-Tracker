@@ -23,9 +23,11 @@ import {
   AngularFireStorageModule,
   AngularFireStorageReference,
   AngularFireUploadTask} from "@angular/fire/storage";
+import { ProfileComponent } from './profile/profile.component';
+
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent, ProfileComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

@@ -147,6 +147,7 @@ export class SignUpComponent implements OnInit {
     
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
+        localStorage.setItem('profilePic', res['profilePicture'])
         this.headerService.isUserLoggedIn.next(true);
         this.router.navigate(['main']);
       });
@@ -171,6 +172,7 @@ export class SignUpComponent implements OnInit {
 
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
+        localStorage.setItem('profilePic', res['profilePicture'])
         this.headerService.isUserLoggedIn.next(true);
         this.router.navigate(['main']);
         });

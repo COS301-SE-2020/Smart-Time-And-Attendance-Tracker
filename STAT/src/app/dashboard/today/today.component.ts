@@ -470,6 +470,7 @@ export class TodayComponent implements OnInit {
     },
     error => {
       let errorCode = error['status'];
+      console.log(error)
       if (errorCode == '403')
       {
         //console.log("Your session has expired. Please sign in again.");
