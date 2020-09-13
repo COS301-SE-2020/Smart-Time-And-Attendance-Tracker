@@ -115,7 +115,7 @@ export class AnalysisComponent implements OnInit {
     this.getWeeklyProjectsTimes();
     this.getWeeklyTasksTimes();
     //this.getProjectMembersTotalTime("5f3d4cdc5f704424503cff44");
-    this.getPredictionsForWeekForProjects();
+    //this.getPredictionsForWeekForProjects();
     this.getProAndTasks()
 
     // reset variables
@@ -238,7 +238,10 @@ export class AnalysisComponent implements OnInit {
 
       let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
       this.dailyProjects[index].daily = data['totalDailyValues']
-      console.log(this.dailyProjects)
+      //console.log(this.dailyProjects)
+      //5f5ddcc24687873aa8e7eb89
+      // project - 5f5ddda04687873aa8e7eb8a
+      // task 
     },
     error => {
       console.log(error);

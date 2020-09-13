@@ -20,7 +20,7 @@ import { UnauthorisedComponent } from './unauthorised/unauthorised.component';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
