@@ -68,7 +68,7 @@ export class TrackingService {
       headers: headers
     });
   }
-  public saveSharedLocalStorage(iframe, saveKey, data)
+ /* public saveSharedLocalStorage(iframe, saveKey, data)
   { 
     iframe.contentWindow.postMessage({
       action: 'save',
@@ -82,6 +82,6 @@ public getSharedLocalStorage(iframe,getKey)
       return iframe.contentWindow.postMessage({
       action: 'get',
       key: getKey
-  });
+  });*/
 }
 }
