@@ -4,7 +4,7 @@ matrix:
     node_js:
     - 12.18.2
     script:
-    - cd STAT-server
+    - cd STAT
     - npm install
     - ng test-headlesss
   branches:
