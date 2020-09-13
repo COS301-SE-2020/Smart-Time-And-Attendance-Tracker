@@ -1,6 +1,7 @@
 {
   "name": "stat",
   "version": "0.0.0",
+  "lockfileVersion": 1,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
