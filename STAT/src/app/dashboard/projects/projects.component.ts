@@ -33,6 +33,7 @@ export class ProjectsComponent implements OnInit {
   // forms
   addProjectForm : FormGroup
   addTaskForm : FormGroup
+  editTaskForm :  FormGroup
   pid : string
   tid : string
   pname : string
@@ -84,6 +85,12 @@ export class ProjectsComponent implements OnInit {
       taskName : new FormControl('', [Validators.required]),
       dueDate : new FormControl('', [Validators.required]),
       projectID : new FormControl('')
+    });
+
+    this.editTaskForm = new FormGroup({
+      taskName : new FormControl('', [Validators.required]),
+      dueDate : new FormControl('', [Validators.required]),
+      taskID : new FormControl('')
     });
 
     this.getProAndTasks()
