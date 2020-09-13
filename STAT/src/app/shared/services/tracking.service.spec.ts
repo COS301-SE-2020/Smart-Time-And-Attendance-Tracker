@@ -21,20 +21,20 @@ describe('TrackingService', () => {
   describe('addMTimeEntry()', () => {
     it('should return a response object from the API via POST', async() => {
       const req ={
-        "Date" : "2020/07/14",
-        "TaskID" : "5f1061ff3ded01867476c682",
-        "ProjectID": "5f12ed1495236d59d08bc98d",
-        "TaskName": "Eat Again",
-        "ProjectName": "Demo 2",
-         "StartTime": 1593956841,
-         "EndTime":1593956858,
-         "ActiveTime" :44,
-         "Description" : "Manual entry",
-         "Device" : "Website"
+        "date" : "2020/07/14",
+        "taskID" : "5f1061ff3ded01867476c682",
+        "projectID": "5f12ed1495236d59d08bc98d",
+        "taskName": "Eat Again",
+        "projectName": "Demo 2",
+         "startTime": "15:30",
+         "endTime":"16:30",
+         "activeTime" :44,
+         "description" : "Manual entry",
+         "device" : "Website"
      };
       const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res = { message: 'Task successfully added to project '};
-      service.addMTimeEntry(req,token).subscribe(
+      service.addMTimeEntry(token,req).subscribe(
         response=> {
           expect(response).toBe(res);
         }
@@ -47,16 +47,16 @@ describe('TrackingService', () => {
 
     it('should return an error object from the API via POST if request is incomplete', async() => {
       const req ={
-        "Date" : "2020/07/14",
-        "TaskID" : "5f1061ff3ded01867476c682",
-        "ProjectID": "5f12ed1495236d59d08bc98d",
-        "TaskName": "Eat Again",
-        "ProjectName": "Demo 2",
-         "StartTime": 1593956841,
-         "EndTime":1593956858,
-         "ActiveTime" :44,
-         "Description" : "Manual entry",
-         "Device" : "Website"
+        "date" : "2020/07/14",
+        "taskID" : "5f1061ff3ded01867476c682",
+        "projectID": "5f12ed1495236d59d08bc98d",
+        "taskName": "Eat Again",
+        "projectName": "Demo 2",
+         "startTime": "15:30",
+         "endTime":"16:30",
+         "activeTime" :44,
+         "description" : "Manual entry",
+         "device" : "Website"
      };
       const token ="";
       const res = { message: 'No token provided'};
@@ -102,7 +102,7 @@ describe('TrackingService', () => {
         }
       );
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'user/getTasks');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getProjects');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -115,7 +115,7 @@ describe('TrackingService', () => {
           expect(err).toBe(res);
         });
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'user/getTasks');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getProjects');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
