@@ -1,4 +1,9 @@
 <iframe #iframe [src] = "sanitizer.bypassSecurityTrustResourceUrl('../../../assets/iframe.html')" height="0" width="0"></iframe>
+
+<!-- HOTKEYS -->
+<div (document:keydown.shift.b)="addAutomaticEntry(automaticTrackingForm.value)"></div>
+<div (document:keydown.shift.e)="stopTracking()"></div>
+
 <div class="row">
   <!-- CURRENTLY TRACKING -->
   <section id="currently-tracking" class="col-6 float-left">

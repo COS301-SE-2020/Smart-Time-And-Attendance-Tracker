@@ -425,6 +425,7 @@ export class TodayComponent implements OnInit {
           this.getEntries(this.formatDate(this.date5))
           break
       }
+      this.reload()
 
       //this.editing = false
     },
