@@ -1062,7 +1062,8 @@ module.exports.getUserWeeklyTimeForProjects = async(req, res) => {
                           $group: {
                             _id: "$ProjectName",
                             totalTime: { $sum: "$ActiveTime"},
-                            count: { $sum: 1 }
+                            count: { $sum: 1 },
+                            projectID: {$first: "$ProjectID"}
                           }
                         }
                       ]);
