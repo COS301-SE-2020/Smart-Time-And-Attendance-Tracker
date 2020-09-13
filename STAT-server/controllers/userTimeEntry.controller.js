@@ -1204,10 +1204,10 @@ module.exports.getProjectMembersTotalTime = async (req, res) => {
                             if (err) 
                                 return res.status(500).send({ message: 'Internal Server Error: ' + err});
                              else if (!timeResult) 
-                             final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : 0, numberOfEntries: 0});
+                             final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : 0, numberOfEntries: 0});
                             else {
                                 if (timeResult.TimeEntries.length == 0) 
-                                final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture,timeSpent : 0, numberOfEntries: 0});
+                                final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture,timeSpent : 0, numberOfEntries: 0});
                                 else { 
                     
                                     var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
@@ -1224,7 +1224,7 @@ module.exports.getProjectMembersTotalTime = async (req, res) => {
                                               }
                                             }
                                           ]);
-                                        final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
+                                        final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
                                         if(final.length == result.length)
                                              return res.status(200).send({membersTotalTime:final})
                                     } 
