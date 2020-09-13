@@ -1,0 +1,282 @@
+*
+  font-size: 1em
+
+button:focus, button:active, button, #viewToggle *
+  border: none !important
+  outline: none !important
+  outline-style: none !important
+
+//.data-summary, .data-charts
+
+mat-icon
+  font-size: 1.2em
+
+h1
+  font-size: 2.5em
+  font-weight: bolder
+
+h2
+  font-size: 1.8em
+  color: #4c585b
+
+h3
+  font-size: 1.1em
+  color: #777777
+
+.info
+  display: inline-flex
+  flex-direction: row
+  justify-content: center
+  text-align: center
+  color: #fff
+
+  b
+      font-size: 1.4em
+
+  #projects
+    background-color: #8368fc
+
+  #tasks
+    background-color: #39c0ff
+
+  #overdue
+    background-color: #ff444e
+
+  #hours
+    background-color: #366ceb
+
+  #money
+    background-color: #17e883
+
+  mat-card
+    color: #fff
+    display: inline-block
+
+mat-card
+    background-color: white
+    display: inline-block
+    margin-bottom: 0.5em
+    margin-left: 0.25em 
+    margin-right: 0.25em
+    margin-top: 0.5em
+    padding: 1.5em
+    padding-bottom: 2.25em
+    padding-top: 2.25em
+    border-radius: 2px
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+
+mat-card-footer
+  margin: 0.05em
+  padding-top: 0.5em
+  font-size: 0.9em
+
+mat-card-title
+  color: #777777
+  font-size: 1.1em
+  margin: 1.5em
+  margin-left: 0em
+  margin-right: 0em
+
+mat-card-subtitle
+  font-size: 0.9em
+  color: #f2f3f750
+
+mat-card-content
+  font-size: 0.9em
+
+mat-divider
+  margin-bottom: 1.5em
+  margin-top: 1em
+  border-top-color: #f2f3f750
+
+.row
+  padding: 2em
+  padding-top: 0
+
+  >
+    section#header-row
+      padding: 2em
+
+      div
+        display: inline-block
+
+    section
+      padding: 1em
+
+.data-card-row
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  position: relative
+
+  .data-card
+    display: flex
+    padding: 0em
+
+    >
+      mat-card
+        display: flex
+        flex-direction: column
+        margin: 0em
+
+section
+  align-items: stretch
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+
+section.float-left
+  padding-right: 0em !important
+
+.charts
+  margin: 0em auto
+  padding: 0em
+  width: 100%
+
+.scroll
+  overflow-x: hidden
+  overflow-y: scroll
+  padding: 0 1.5em 0.2em 0.8em
+  height: 68vh
+
+.scroll::-webkit-scrollbar
+  border-radius: 0.5em
+  background-color: #ffffff
+  width: 0.5em
+
+.scroll::-webkit-scrollbar-track::hover
+  cursor: pointer
+
+.scroll::-webkit-scrollbar-thumb
+  border-radius: 0.5em
+  background-color: #4c585b70
+
+.scroll::-webkit-scrollbar-track
+  border-radius: 0.5em
+  background-color: #ffffff
+
+ul
+  list-style: none
+
+
+
+
+.chart
+  display: grid
+  grid-template-columns: repeat(7, 1fr)
+  grid-column-gap: 2.5%
+  height: 15em
+  margin: 0em auto
+  width: 100%
+  padding: 5px 10px
+
+[class*="bar"]
+  margin: 0
+  padding: 0
+  transition: all .6s ease
+  grid-row-end: 102
+
+  &:hover
+    opacity: .5
+    cursor: pointer
+
+.bar-1
+  grid-row-start: 1
+
+.bar-2
+  grid-row-start: 30
+
+.bar-3
+  grid-row-start: 20
+
+.bar-4
+  grid-row-start: 50
+
+.bar-5
+  grid-row-start: 60
+
+.bar-6
+  grid-row-start: 20
+
+.bar-7
+  grid-row-start: 30
+
+.bar-8
+  grid-row-start: 10
+
+.bar-9
+  grid-row-start: 80
+
+.bar-10
+  grid-row-start: 40
+
+.bar-11
+  grid-row-start: 20
+
+.bar-12
+  grid-row-start: 60
+
+[class*="bar"]:nth-child(odd)
+ background-color: orange
+
+[class*="bar"]:nth-child(even)
+ background-color: indigo
+
+
+
+
+.css-chart
+  border-bottom: 1.5px dashed
+  border-color: #CCCCCC
+  display: block
+  height: var(--widget-size)
+  margin: 0em auto
+  padding: 0
+  position: relative
+  width: 80%
+
+
+
+
+.line-chart
+  list-style: none
+  margin: 0
+  padding: 0
+
+.line-segment
+  background-color: lightgreen
+  bottom: var(--y)
+  height: 3px
+  left: var(--x)
+  position: absolute
+  border-radius: 12px
+  transform: rotate(calc(var(--angle) * 1deg))
+  transform-origin: left bottom
+  width: calc(var(--hypotenuse) * 1px)
+
+
+
+.pie
+  display: block
+  margin: 0em auto
+  width: 10em
+  height: 10em
+  border-radius: 50%
+  background: conic-gradient(yellow 20%, skyblue 0, skyblue 30%, deeppink 0)
+
+
+#risk-assessment 
+  >mat-icon
+    color: #ff444e
+    font-size: 2em
+    top: -0.2em
+    position: relative
+
+  ul 
+    padding-left: 20px
+
+  .risk-warn
+    color: #ff444e
+
+  .risk-done
+    color: #17e883

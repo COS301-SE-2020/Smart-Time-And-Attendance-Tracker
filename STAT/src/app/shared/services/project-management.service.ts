@@ -79,6 +79,14 @@ export class ProjectManagementService {
       headers: headers
     });
   }
+  //mark project as not completed
+  public uncompleteProject(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'project/uncomplete', JSON.stringify(values), {
+      headers: headers
+    });
+  }
   //mark task as completed
   public completeTask(token, values) {
     const headers = new HttpHeaders()
@@ -92,6 +100,14 @@ export class ProjectManagementService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.post(this.ROOT_URL+'task/start', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+  //mark task as not started
+  public resetTask(token, values) {
+    const headers = new HttpHeaders()
+    .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+'task/reset', JSON.stringify(values), {
       headers: headers
     });
   }

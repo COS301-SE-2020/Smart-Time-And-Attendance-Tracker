@@ -5,7 +5,7 @@ import { async } from 'rxjs/internal/scheduler/async';
 
 describe('Unit tests:', () => {
 
-  describe('TeamManagementService', () => {
+  describe( 'TeamManagementService', async() => {
     let service: TeamManagementService;
     let HttpMock: HttpTestingController;
     let ROOT_URL = "http://localhost:3000/api/";

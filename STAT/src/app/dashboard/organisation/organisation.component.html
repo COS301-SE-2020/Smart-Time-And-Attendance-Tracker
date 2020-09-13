@@ -128,7 +128,7 @@
         <li *ngFor="let r of m.records" class="member">
           <div *ngIf="r.profilePicture == 'none'" class="pro-pic">{{r.name[0]}}{{r.surname[0]}}</div>
           <img *ngIf="r.profilePicture != 'none'" src="assets/proPic3.jpg">
-          <span>{{r.name}} {{r.surname}} <br> <i>{{r.email}}</i></span>
+          <span>{{r.name}} {{r.surname}}<br> <i>{{r.email}}</i></span>
           <span class="member-edit">
             <button mat-button class="teams-btn"
                     matTooltip="Edit"
@@ -144,8 +144,13 @@
                     (click)="open(removeMemberModal); mid = r.ID; memberName = r.name + ' ' + r.surname;">
                     <mat-icon inline="true">remove_circle</mat-icon>
             </button>
-          </span>
-          <span *ngIf="r.role[0] != 'General Team Member'" class="float-right tag role">{{r.role[0]}}</span>
+          </span><br>
+          <div class="member-roles">
+          <span *ngIf="r.role.includes('System Administrator')" class="tag role sys">System Administrator</span>
+          <span *ngIf="r.role.includes('Security Administrator')" class="tag role sec">Security Administrator</span>
+          <span *ngIf="r.role.includes('Team Leader')" class="tag role tl">Team Leader</span>
+          <span *ngIf="r.role.includes('Data Analyst')" class="tag role da">Data Analyst</span>
+          </div>
         </li>
       </ul>
     </div>

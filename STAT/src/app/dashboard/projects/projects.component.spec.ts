@@ -181,7 +181,6 @@ describe('ProjectsComponent', () => {
           component.projects = projects;
           component.getTasks();
         });
-
         fixture.detectChanges();
         de = fixture.debugElement.query(By.css('.row'));
         el = de.nativeElement;*/
@@ -264,7 +263,6 @@ describe('ProjectsComponent', () => {
       el.click();
       expect(component.editProject).toHaveBeenCalledTimes(1);
     }));
-
     it("should call the deleteProject method when the 'Yes' button is pressed", async(() => {
       spyOn(component,'deleteProject');
       el = fixture.debugElement.query(By.css("#deleteProject")).nativeElement;
@@ -284,7 +282,6 @@ describe('ProjectsComponent', () => {
           component.addProjectForm.controls['projectName'].setValue('');
           component.addProjectForm.controls['Project'].setValue('');
           component.addProjectForm.controls['hourlyRate'].setValue('');
-
           expect(component.addProjectForm.valid).toBeFalsy();
           expect(component.addProjectForm.controls.email.hasError('projectName')).toBe(true);
           expect(component.addProjectForm.controls.password.hasError('dueDate')).toBe(true);
@@ -293,18 +290,16 @@ describe('ProjectsComponent', () => {
 
       });
       // ****************************************** END
-
       describe('Add Task Form', () => {
         it('should be invalid with empty details', async(() => {
           component.addTaskForm.controls['taskName'].setValue('');
           component.addTaskForm.controls['dueDate'].setValue('');
-
           expect(component.addTaskForm.valid).toBeFalsy();
           expect(component.addTaskForm.controls.taskName.hasError('taskName')).toBe(true);
           expect(component.addTaskForm.controls.dueDate.hasError('dueDate')).toBe(true);
         }));
-
       });*/
       // ****************************************** END
   });
   });
+

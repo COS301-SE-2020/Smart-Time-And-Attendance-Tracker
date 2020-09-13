@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {formatDate} from '@angular/common';
 
 @Injectable({
@@ -12,14 +12,14 @@ export class TrackingService {
   EntryID : string
 
   // Add manual time entry
-  public addMTimeEntry(values, token) {
-    let epoch = new Date(values.Date +" " +values.StartTime).getTime();
-    values.StartTime = epoch;
-    epoch = new Date(values.Date +" " +values.EndTime).getTime();
-    values.EndTime = epoch;
-    if(!values.Description)
-      values.Description = "Manual Entry";
-    values.Device = "Website";
+  public addMTimeEntry(token, values) {
+    let epoch = new Date(values.date +" " +values.startTime).getTime();
+    values.startTime = epoch;
+    epoch = new Date(values.date +" " +values.endTime).getTime();
+    values.endTime = epoch;
+    if(!values.description)
+      values.description = "Manual Entry";
+    values.device = "Website";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
@@ -28,37 +28,60 @@ export class TrackingService {
     });
   }
   //Add "automatic" time entry
-  /*public addATimeEntry(values, token) {
-    let date =  new Date()
-    let epoch = date.getTime();
-    let dateStr = formatDate(date, 'yyyy/MM/dd', 'en');
-    values.Date = dateStr;
-    values.StartTime = epoch;
-    if(!values.Description)
-      values.Description = "Timed Entry";
-    values.Device = "Website";
+  public addATimeEntry(values, token) {
+    if(!values.description)
+      values.description = "Timed Entry";
+    values.device = "Website";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
     return this.http.post(this.ROOT_URL+'userTimeEntry/addTimeEntry', JSON.stringify(values), {
       headers: headers
     });
-  }*/
+  }
   //Update time entry
-  /*public updateTimeEntry(values, token) {
+  public updateTimeEntry(values, token) {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.post(this.ROOT_URL+'userTimeEntry/updateTimeEntry', JSON.stringify(values), {
       headers: headers
     });
-  }*/
+  }
+
+  //Remove time entry
+  public removeTimeEntry(token, values) {
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    let parameters = new HttpParams();
+    parameters = parameters.append('timeEntryID',values);
+    return this.http.delete(this.ROOT_URL+'/userTimeEntry/deleteTimeEntry',  {
+      headers: headers,
+      params: parameters
+    });
+  }
+
   //Get user's projects and tasks
   public getProjectsAndTasks(values){
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
-    return this.http.get(this.ROOT_URL+ 'user/getTasks', {
+    return this.http.get(this.ROOT_URL+ 'user/getProjects', {
       headers: headers
     });
   }
-  
+  public saveSharedLocalStorage(iframe, saveKey, data)
+  { 
+    iframe.contentWindow.postMessage({
+      action: 'save',
+      key: saveKey,
+      value: data
+  });
+}
+public getSharedLocalStorage(iframe,getKey)
+  {
+    console.log("gettttt"+ getKey);
+      return iframe.contentWindow.postMessage({
+      action: 'get',
+      key: getKey
+  });
+}
 }

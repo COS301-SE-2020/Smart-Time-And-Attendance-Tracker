@@ -1,5 +1,5 @@
+<iframe #iframe [src] = "sanitizer.bypassSecurityTrustResourceUrl('../../../assets/iframe.html')" height="0" width="0"></iframe>
 <div class="row">
-
   <!-- CURRENTLY TRACKING -->
   <section id="currently-tracking" class="col-6 float-left">
     <h2>Currently Tracking
@@ -12,24 +12,56 @@
       </button>
     </h2>
     <div>
+      <!-- AUTOMATIC TRACKING FORM ************************************************ -->
+      <form [formGroup]="automaticTrackingForm" id="auto-tracking-form" method="post">
+        <mat-form-field appearance="standard" class="col-12">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" type="text" placeholder="Research" name="description" required>
+        </mat-form-field>
+  
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Project</mat-label>
+          <mat-select [(value)]="aProjectSelected" formControlName="projectID">
+            <mat-option (click)="tName = 'Unspecified'">None</mat-option>
+            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a'); pName = p.projectName" >{{p.projectName}}</mat-option>
+          </mat-select>
+          <mat-error>Please select a value</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="standard" class="col-6">
+          <mat-label>Task</mat-label>
+          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="taskID">
+          <mat-option (click)="tName = 'Unspecified'">None</mat-option>
+          <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
+          </mat-select>
+          <mat-error>Please select a value</mat-error>
+
+          <input hidden formControlName="projectName" [(ngModel)]="pName" [value]="pName">
+          <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
+        </mat-form-field>
+
+        <button mat-raised-button color="accent" class="float-right" 
+              (click)="editing = false; addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
+              [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
+      </form>
+      <br><br>
       <!-- ENTRIES -->
-      <ngb-carousel [showNavigationArrows]="false" interval="0">
-        <ng-template ngbSlide>
+      <!--<ngb-carousel *ngIf= "trackingNow" [showNavigationArrows]="false" interval="0">
+        <ng-template ngbSlide>-->
           <div>
-            <mat-card>
-              <button mat-mini-fab class="stop-tracking"><mat-icon inline="true">stop</mat-icon></button>
-              <mat-card-title>Browser - Firefox</mat-card-title>
-              <mat-card-subtitle>www.clickup.com</mat-card-subtitle>
+            <mat-card *ngIf= "trackingNow == true">
+              <button mat-mini-fab class="stop-tracking"  (click)="stopTracking()"><mat-icon inline="true">stop</mat-icon></button>
+              <mat-card-title>{{currentlyTracking.description}}</mat-card-title>
+              <mat-card-subtitle>{{getTime(currentlyTracking.activeTime)}}</mat-card-subtitle>
               <mat-divider [inset]="true"></mat-divider>
               <mat-card-footer>
-                <span>July 05, 2020 | 08:59</span>
-                <span class="float-right">00:13:31</span>
-                <br>
-                <span class="float-left pro">Project Name</span>
-                <span class="float-left tag">Task Name</span>
+                <!-- <span>{{currentlyTracking.date}} | {{currentlyTracking.startTime}}</span>
+                  <span class="float-right">{{getTime(currentlyTracking.activeTime)}}</span>-->
+                <span class="float-left pro">{{currentlyTracking.projectName}}</span>
+                <span class="float-left tag">{{currentlyTracking.taskName}}</span>
               </mat-card-footer>
             </mat-card>
-            <mat-card>
+            <!--<mat-card>
               <button mat-mini-fab class="stop-tracking"><mat-icon>stop</mat-icon></button>
               <mat-card-title>Browser - Google Chrome</mat-card-title>
               <mat-card-subtitle>www.instagram.com</mat-card-subtitle>
@@ -41,28 +73,11 @@
                 <span class="float-left pro">Project Name</span>
                 <span class="float-left tag">Task Name</span>
               </mat-card-footer>
-            </mat-card>
+            </mat-card>-->
             <br><br>
           </div>
-        </ng-template>
-        <ng-template ngbSlide>
-          <div>
-            <mat-card>
-              <button mat-mini-fab class="stop-tracking"><mat-icon>stop</mat-icon></button>
-              <mat-card-title>Email Client</mat-card-title>
-              <mat-card-subtitle>Outlook</mat-card-subtitle>
-              <mat-divider [inset]="true"></mat-divider>
-              <mat-card-footer>
-                <span>July 05, 2020 | 18:56</span>
-                <span class="float-right">00:01:53</span>
-                <br>
-                <span class="float-left pro">Project Name</span>
-                <span class="float-left tag">Task Name</span>
-              </mat-card-footer>
-            </mat-card>
-          </div>
-        </ng-template>
-      </ngb-carousel>
+        <!--</ng-template>
+      </ngb-carousel>-->
       
       
     </div>
@@ -70,19 +85,40 @@
 
   <!-- HISTORY -->
   <section id="history" class="col-6">
+    <h2>This Week</h2>
+
     <div class="info row">
-      <div id="activity" class="col-4">
-        <b>17h 20m</b><br>ACTIVITY
+
+      <!-- ACTIVITY -->
+      <div *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" id="activity" class="col-4">
+        <b>-</b><br>ACTIVITY
       </div>
-      <div id="entries" class="col-4">
-        <b>12</b><br>ENTRIES
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days']" id="activity" class="col-4">
+        <b>{{getTime(activityVal)}}</b><br>ACTIVITY
       </div>
-      <div id="tasks" class="col-4">
-        <b>3</b><br>TASKS
+
+      <!-- ENTIRES -->
+      <div *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" id="entries" class="col-4">
+        <b>-</b><br>ENTRIES
+      </div>
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && entriesVal == 1" id="entries" class="col-4">
+        <b>1</b><br>ENTRY
+      </div>
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && (entriesVal == 0 || entriesVal > 1)" id="entries" class="col-4">
+        <b>{{entriesVal}}</b><br>ENTRIES
+      </div>
+      
+      <!-- TASKS -->
+      <div *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" id="tasks" class="col-4">
+        <b>-</b><br>TASKS
+      </div>
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && tasksVal.length == 1" id="tasks" class="col-4">
+        <b>1</b><br>TASK
+      </div>
+      <div *ngIf="week['today'] && week['yesterday'] && week['2days'] && week['3days'] && week['4days'] && week['5days'] && (tasksVal.length == 0 || tasksVal.length > 1)" id="tasks" class="col-4">
+        <b>{{tasksVal.length}}</b><br>TASKS
       </div>
     </div>
-
-    <h2>This Week</h2>
 
     <div class="scroll">
       <mat-spinner *ngIf="!week['today'] || !week['yesterday'] || !week['2days'] || !week['3days'] || !week['4days'] || !week['5days']" class="req-spinner"></mat-spinner>
@@ -98,15 +134,25 @@
             <span *ngIf="week['today'] != 'no entries'" class="tag numEntries">{{week['today'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['today'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['today']">{{e.task}}
+            <li *ngFor="let e of week['today']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="right"
-                      (click)="open(editModal)">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
+              <button   mat-button class="edit-btn"
+                          matTooltip="Delete"
+                          matTooltipClass="entry-tooltip"
+                          matTooltipPosition="above"
+                          (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                          <mat-icon inline="true">delete</mat-icon>
+                  </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['today'] == 'no entries'" class="entries">
@@ -126,15 +172,25 @@
             <span *ngIf="week['yesterday'] != 'no entries'" class="tag numEntries">{{week['yesterday'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['yesterday'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['yesterday']">{{e.task}} 
+            <li *ngFor="let e of week['yesterday']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="right"
-                      (click)="open(editModal)">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
+              <button   mat-button class="edit-btn"
+                          matTooltip="Delete"
+                          matTooltipClass="entry-tooltip"
+                          matTooltipPosition="above"
+                          (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                          <mat-icon inline="true">delete</mat-icon>
+                  </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['yesterday'] == 'no entries'" class="entries">
@@ -154,14 +210,25 @@
             <span *ngIf="week['2days'] != 'no entries'" class="tag numEntries">{{week['2days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['2days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['2days']">{{e.task}} 
+            <li *ngFor="let e of week['2days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="right">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
+              <button   mat-button class="edit-btn"
+                matTooltip="Delete"
+                matTooltipClass="entry-tooltip"
+                matTooltipPosition="above"
+                (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                <mat-icon inline="true">delete</mat-icon>
+              </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['2days'] == 'no entries'" class="entries">
@@ -181,14 +248,25 @@
             <span *ngIf="week['3days'] != 'no entries'" class="tag numEntries">{{week['3days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['3days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['3days']">{{e.task}} 
+            <li *ngFor="let e of week['3days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="right">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
+              <button   mat-button class="edit-btn"
+                    matTooltip="Delete"
+                    matTooltipClass="entry-tooltip"
+                    matTooltipPosition="above"
+                    (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                    <mat-icon inline="true">delete</mat-icon>
+               </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['3days'] == 'no entries'" class="entries">
@@ -208,14 +286,25 @@
             <span *ngIf="week['4days'] != 'no entries'" class="tag numEntries">{{week['4days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['4days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['4days']">{{e.task}} 
+            <li *ngFor="let e of week['4days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="right">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
+              <button   mat-button class="edit-btn"
+                    matTooltip="Delete"
+                    matTooltipClass="entry-tooltip"
+                    matTooltipPosition="above"
+                    (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                    <mat-icon inline="true">delete</mat-icon>
+              </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['4days'] == 'no entries'" class="entries">
@@ -235,15 +324,25 @@
             <span *ngIf="week['5days'] != 'no entries'" class="tag numEntries">{{week['5days'].length}}</span>
           </mat-expansion-panel-header>
           <ul *ngIf="week['5days'] != 'no entries'" class="entries">
-            <li *ngFor="let e of week['5days']">{{e.task}} 
+            <li *ngFor="let e of week['5days']">
+              <span class="float-left pro">{{e.project}}</span>
+              <span class="float-left tag">{{e.task}}</span>
               <button mat-button class="edit-btn"
                       matTooltip="Edit"
                       matTooltipClass="entry-tooltip"
-                      matTooltipPosition="right"
-                      (click)="open(editModal)">
+                      matTooltipPosition="above"
+                      (click)="open(editModal); entryToEdit = e; setEditValues();">
                       <mat-icon inline="true">edit</mat-icon>
               </button>
+              <button   mat-button class="edit-btn"
+                      matTooltip="Delete"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="above"
+                      (click)="editing = false; open(deleteEntryModal); eID = e.timeEntryID; ename = e.description">
+                      <mat-icon inline="true">delete</mat-icon>
+              </button>
               <span class="float-right">{{getTime(e.activeTime)}}</span>
+              <br><i>{{e.description}}</i>
             </li>
           </ul>
           <ul *ngIf="week['5days'] == 'no entries'" class="entries">
@@ -262,29 +361,25 @@
 <ng-template #trackingModal let-modal id="tracking-form">
   <div class="modal-content">
     <div class="modal-header">
-      <h2 *ngIf="autoTracking==false" class="modal-title">Create an entry
+      <h2 class="modal-title">Create an entry
         <br><h4>Tell us what you've been working on during the week</h4>
       </h2>
-      <h2 *ngIf="autoTracking==true" class="modal-title">Let's start tracking
-        <br><h4>Tell us what you're working on and we'll handle the rest</h4>
-      </h2>
-      <button (click)="modal.dismiss('Cross click'); manualTrackingForm.reset(); automaticTrackingForm.reset(); autoTracking = true">
+      <button (click)="modal.dismiss('Cross click'); manualTrackingForm.reset();">
         <mat-icon>close</mat-icon>
       </button>
     </div>
 
     <div class="modal-body">
-
       <!-- MANUAL TRACKING FORM ************************************************ -->
-      <form [formGroup]="manualTrackingForm" *ngIf="autoTracking==false" id="manual-tracking-form" (ngSubmit)="addManualEntry(manualTrackingForm.value)">
+      <form [formGroup]="manualTrackingForm" id="manual-tracking-form" (ngSubmit)="addManualEntry(manualTrackingForm.value)">
         <mat-form-field appearance="standard" class="col-12">
           <mat-label>Description</mat-label>
-          <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
+          <input matInput formControlName="description" type="text" placeholder="Research" name="description">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select [(value)]="mProjectSelected" formControlName="Project">
+          <mat-select [(value)]="mProjectSelected" formControlName="project">
             <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'm'); pName = p.projectName">{{p.projectName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
@@ -292,7 +387,7 @@
   
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Task</mat-label>
-          <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected" formControlName="TaskID">
+          <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected" formControlName="taskID">
           <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
@@ -300,75 +395,43 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Monetary value</mat-label>
-          <input matInput readonly [value]="monetaryValue" formControlName="MonetaryValue" type="text" placeholder="0.00" name="monetary-value">
+          <input matInput readonly [value]="monetaryValue" formControlName="monetaryValue" type="text" placeholder="0.00">
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Date</mat-label>
-          <input matInput formControlName="Date" type="date" placeholder="0.00" name="monetary-value" [min]="formatDate(date5)" [max]="formatDate(date)" required>
+          <input matInput formControlName="date" type="date" placeholder="0.00" [min]="formatDate(date5)" [max]="formatDate(date)" required>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Start time</mat-label>
-          <input matInput formControlName="StartTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
+          <input matInput formControlName="startTime" type="time" placeholder="0.00" required (change)="calculateMoney()">
           <mat-error>{{getStartError()}}</mat-error>
         </mat-form-field>
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>End time</mat-label>
-          <input matInput formControlName="EndTime" type="time" placeholder="0.00" name="monetary-value" required (change)="calculateMoney()">
+          <input matInput formControlName="endTime" type="time" placeholder="0.00" required (change)="calculateMoney()">
           <mat-error>{{getEndError()}}</mat-error>
         </mat-form-field>
 
-        <input hidden formControlName="ProjectName" [(ngModel)]="pName" [value]="pName">
-        <input hidden formControlName="TaskName" [(ngModel)]="tName" [value]="tName">
-        <input hidden formControlName="ActiveTime" [(ngModel)]="activeTime" [value]="activeTime">
+        <input hidden formControlName="projectName" [(ngModel)]="pName" [value]="pName">
+        <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
+        <input hidden formControlName="activeTime" [(ngModel)]="activeTime" [value]="activeTime">
       </form>
       <!-- END ***************************************************************** -->
-   
-      <!-- AUTOMATIC TRACKING FORM ************************************************ -->
-      <form [formGroup]="automaticTrackingForm" *ngIf="autoTracking==true" id="auto-tracking-form" method="post">
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Description</mat-label>
-          <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
-        </mat-form-field>
-  
-        <mat-form-field appearance="standard" class="col-6">
-          <mat-label>Project</mat-label>
-          <mat-select [(value)]="aProjectSelected" formControlName="Project">
-            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a')">{{p.projectName}}</mat-option>
-          </mat-select>
-          <mat-error>Please select a value</mat-error>
-        </mat-form-field>
-  
-        <mat-form-field appearance="standard" class="col-6">
-          <mat-label>Task</mat-label>
-          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="TaskID">
-          <mat-option *ngFor="let t of tasks" [value]="t.ID">{{t.taskName}}</mat-option>
-          </mat-select>
-          <mat-error>Please select a value</mat-error>
-        </mat-form-field>
-      </form>
     </div>
 
     <div class="modal-footer">
-      <div id="toggle" class="float-left">
-       <mat-slide-toggle checked="checked" (click)="modalForm()">Automatic tracking</mat-slide-toggle>
-      </div>
-      <button *ngIf="autoTracking==false" 
-              mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
-              [disabled]="manualTrackingForm.invalid", id= "m-tracking">Create an Entry
-      </button>
-      <button *ngIf="autoTracking==true" 
-              mat-raised-button color="primary" 
-              (click)="modal.close('Save click');"
-              [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
-      <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset(); automaticTrackingForm.reset(); autoTracking = true">Cancel</button>
+      <button mat-raised-button color="primary" 
+              (click)="editing = false; modal.close('Save click'); addManualEntry(manualTrackingForm.value); manualTrackingForm.reset()" 
+              [disabled]="manualTrackingForm.invalid" id= "m-tracking">Create an Entry
+      </button>    
+      <button mat-raised-button color="accent"(click)="modal.close('Save click'); manualTrackingForm.reset();">Cancel</button>
     </div>
 
-  </div> 
+  </div>
 </ng-template>
 
 <ng-template #editModal let-modal id="edit-form">
@@ -384,36 +447,89 @@
 
     <div class="modal-body">
       <!-- EDIT TRACKING ENTRY FORM ************************************************ -->
-      <form #editEntryForm="ngForm" id="edit-entry-form" method="post">
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Description</mat-label>
-          <input matInput formControlName="Description" type="text" placeholder="Research" name="description">
-        </mat-form-field>
+      <form #editEntryForm="ngForm" id="edit-entry-form" (ngSubmit)="addManualEntry(editEntryForm.value)">
+          <mat-form-field appearance="standard" class="col-12">
+            <mat-label>Description</mat-label>
+            <input matInput [(ngModel)]="entryToEdit.description" [value]="entryToEdit.description" type="text" placeholder="Research" name="description">
+          </mat-form-field>
+      
+          <mat-form-field appearance="standard" class="col-6">
+            <mat-label>Project</mat-label>
+            <mat-select [(value)]="mProjectSelected">
+              <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'm'); pName = p.projectName; hourlyRate = p.hourlyRate">{{p.projectName}}</mat-option>
+            </mat-select>
+            <mat-error>Please select a value</mat-error>
+          </mat-form-field>
+    
+          <mat-form-field appearance="standard" class="col-6">
+            <mat-label>Task</mat-label>
+            <mat-select [disabled]="mTasksDisabled" [(value)]="mTaskSelected">
+            <mat-option *ngFor="let t of tasks" [value]="t.ID" (click)="tName = t.taskName">{{t.taskName}}</mat-option>
+            </mat-select>
+            <mat-error>Please select a value</mat-error>
+          </mat-form-field>
+      
+          <mat-form-field appearance="standard" class="col-6">
+            <mat-label>Monetary value</mat-label>
+            <input matInput readonly [(ngModel)]="entryToEdit.monetaryValue" [value]="entryToEdit.monetaryValue" type="text" placeholder="0.00" name="monetaryValue">
+          </mat-form-field>
+      
+          <mat-form-field appearance="standard" class="col-6">
+            <mat-label>Date</mat-label>
+            <input matInput type="date" [(ngModel)]="entryToEdit.date" [value]="entryToEdit.date" placeholder="0.00" [min]="formatDate(date5)" [max]="formatDate(date)" required name="date">
+            <mat-error>Please select a value</mat-error>
+          </mat-form-field>
+      
+          <mat-form-field appearance="standard" class="col-6">
+            <mat-label>Start time</mat-label>
+            <input matInput type="time" [(ngModel)]="entryToEdit.startTime" [value]="entryToEdit.startTime" placeholder="0.00" required (change)="editMoney()" name="startTime">
+            <mat-error>{{getStartError()}}</mat-error>
+          </mat-form-field>
+      
+          <mat-form-field appearance="standard" class="col-6">
+            <mat-label>End time</mat-label>
+            <input matInput type="time" [(ngModel)]="entryToEdit.endTime" [value]="entryToEdit.endTime" placeholder="0.00" required (change)="editMoney()" name="endTime">
+            <mat-error>{{getEndError()}}</mat-error>
+          </mat-form-field>
   
-        <mat-form-field appearance="standard" class="col-6">
-          <mat-label>Project</mat-label>
-          <mat-select [(value)]="aProjectSelected" formControlName="Project">
-            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'a')">{{p.projectName}}</mat-option>
-          </mat-select>
-          <mat-error>Please select a value</mat-error>
-        </mat-form-field>
-  
-        <mat-form-field appearance="standard" class="col-6">
-          <mat-label>Task</mat-label>
-          <mat-select [disabled]="aTasksDisabled" [(value)]="aTaskSelected" formControlName="TaskID">
-          <mat-option *ngFor="let t of tasks" [value]="t.ID">{{t.taskName}}</mat-option>
-          </mat-select>
-          <mat-error>Please select a value</mat-error>
-        </mat-form-field>
+          <input hidden [(ngModel)]="pName" [value]="pName" name="projectName">
+          <input hidden [(ngModel)]="tName" [value]="tName" name="taskName">
+          <input hidden [(ngModel)]="activeTime" [value]="activeTime" name="activeTime">
       </form>
     </div>
 
     <div class="modal-footer">
       <button mat-raised-button color="primary" 
-              (click)="modal.close('Save click'); editEntry(editEntryForm.value)">Save Changes</button>
+              (click)="modal.close('Save click'); editEntry()">Save Changes</button>
       <button mat-raised-button color="accent"(click)="modal.close('Save click'); editEntryForm.reset();">Cancel</button>
     </div>
 
   </div>
 </ng-template>
-  
+
+<!-- DELETE ENTRY *******************************-->
+
+<ng-template #deleteEntryModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Delete {{ename}}
+        <br>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      Are you sure you want to delete this time entry?
+    </div>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deleteEntry(eID)" id="deleteProject">Yes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+
+  </div>
+</ng-template>
+
+<!-- ****************************************** -->

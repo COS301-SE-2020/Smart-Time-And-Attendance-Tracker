@@ -1,0 +1,392 @@
+<div class="row">
+    <section class="col-12" id="header-row">
+        <div class="col-12">
+            <div class="col-6 float-left">
+                <h2>Analysis</h2>
+                <h3><mat-slide-toggle (click)="toggleAnalysis(); getPredictive()">Predictive analysis</mat-slide-toggle></h3>
+            </div>
+            <div class="col-lg-6 col-12 float-right text-right">
+                <mat-form-field appearance="standard" class="col-6" *ngIf="projectView">
+                    <mat-label>Project</mat-label>
+                    <mat-select>
+                        <mat-option value="all" selected>All projects</mat-option>
+                        <mat-option value="pid">Capstone</mat-option>
+                        <mat-option value="pid">Bot Music</mat-option>
+                        <mat-option value="pid">Game Design</mat-option>
+                        <mat-option value="pid">CocaCola Rebranding</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="standard" class="col-6">
+                    <mat-label>Date</mat-label>
+                    <mat-select>
+                        <mat-option value="week4" selected>This week</mat-option>
+                        <mat-option value="week3">Last week</mat-option>
+                        <mat-option value="week2">2 weeks ago</mat-option>
+                        <mat-option value="week1">3 weeks ago</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br>
+                <mat-button-toggle-group id="viewToggle" appearance="legacy" name="view" aria-label="View data for"
+                class="float-right">
+                    <mat-button-toggle value="me" checked (click)="toggleView()">
+                        <mat-icon>person</mat-icon>Me
+                    </mat-button-toggle>
+                    <mat-button-toggle value="project" (click)="toggleView(); getProjectAnalysis()">
+                        <mat-icon>people</mat-icon>Project
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+    </section>
+    <section class="col-12">
+        <div class="col-12 p-0">
+            <div class="info col-12 p-0">
+                <mat-card id="projects" class="col-2">
+                <!-- number of hours for this week -->
+                <b>{{numProjects}}</b><br>PROJECTS
+                </mat-card>
+                <mat-card id="tasks" class="col-2">
+                <!-- monetary value for this week -->
+                <b>{{numTasks}}</b><br>TASKS
+                </mat-card>
+                <mat-card id="overdue" class="col-2">
+                    <!-- tasks overdue for this week??? -->
+                    <b>{{numOverdue}}</b><br>OVERDUE
+                </mat-card>
+                <mat-card id="hours" class="col-2">
+                <!-- number of hours for this week -->
+                <b>{{numWorked}}</b><br>WORKED
+                </mat-card>
+                <mat-card id="money" class="col-2">
+                <!-- monetary value for this week -->
+                <b>{{numEarned}}</b><br>EARNED
+                </mat-card>
+            </div>
+        </div>
+    </section>
+
+    <!-- graphical analysis | me view -->
+    <section class="col-12 row" *ngIf="graphical && meView">
+        <div class="col-12 scroll">
+            <div class="data-charts col-8 float-left p-0">
+                <div class="data-card col-12">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Performance (daily number of hours)</mat-card-title>
+                        <!-- two lines: hours per day + monetary value per day -->
+                        <mat-card-content>
+                            <canvas id="dailyChart">
+                                {{dailyChart}}</canvas>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <p>Mean daily hours: {{meanDailyHours}}</p>
+                            <p>Mean daily earnings: {{meanDailyEarnings}} </p>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="tasks-completed" class="col-12">
+                        <mat-card-title>Projects (hours for the week)</mat-card-title>
+                        <!-- should incorporate overdue tasks -->
+                        <mat-card-content>
+                            <!--<div class="chart">
+                                <div class="bar-1"></div>
+                                <div class="bar-2"></div>
+                                <div class="bar-3"></div>
+                                <div class="bar-4"></div>
+                                <div class="bar-5"></div>
+                                <div class="bar-6"></div>
+                                <div class="bar-7"></div>
+                            </div>-->
+                            <canvas id="projectTimesChart">
+                                {{projectTimesChart}}</canvas>
+                            </mat-card-content>
+                        <mat-card-footer>
+                            <p>Mean daily tasks: </p>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="project-status" class="col-12">
+                        <mat-card-title>Earnings</mat-card-title>
+                        <mat-card-content>
+                            <canvas id="monetaryChart">
+                                {{monetaryChart}}</canvas>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+            <!-- DATA SUMMARY -->
+            <div class="col-4 float-right data-summary p-0">
+                <div class="data-card col-12">
+                <mat-card id="risk-assessment" class="col-12">
+                    <mat-icon class="float-right">feedback</mat-icon>
+
+                    <mat-card-title>Risk assessment
+                    </mat-card-title>
+                    <ul>
+                        <li>
+                            <mat-icon class="risk-warn" *ngIf="tasks[3] > 0">priority_high</mat-icon>
+                            <mat-icon class="risk-done" *ngIf="tasks[3] == 0">done</mat-icon>
+                            {{tasks[3]}} tasks overdue
+                        </li>
+                        <li>
+                            <mat-icon class="risk-warn" *ngIf="projectsBD[2] > 0">priority_high</mat-icon>
+                            <mat-icon class="risk-done" *ngIf="projectsBD[2] == 0">done</mat-icon>
+                            {{projectsBD[2]}} projects overdue
+                        </li>
+                        <li>
+                            <mat-icon class="risk-warn" *ngIf="numUnder > 0">priority_high</mat-icon>
+                            <mat-icon class="risk-done" *ngIf="numUnder == 0">done</mat-icon>
+                            {{numUnder}} unproductive days
+                        </li>
+                    </ul>
+                </mat-card>
+                </div>
+                <!--<div class="data-card col-12">
+                <mat-card id="tasks-completed" class="col-12">
+                    <mat-card-title>Team analysis (best and worst performers)</mat-card-title>
+                    <p>Top performers</p>
+                    <ul>
+                    <li>Chadwick Boseman</li>
+                    <li>Jason Momoa</li>
+                    <li>Idris Elba</li>
+                    </ul>
+                    <p>Poor performers</p>
+                    <ul>
+                    <li>London Tipton</li>
+                    <li>Sasha Grey</li>
+                    <li>Scott McCall</li>
+                    </ul>
+                </mat-card>
+                </div>-->
+                
+                <div class="data-card col-12">
+                    <mat-card id="activity-breakdown" class="col-12">
+                        <mat-card-title>Projects Breakdown</mat-card-title>
+                        <!-- chart shows number of hours -->
+                        
+                        <mat-card-content>
+                            <canvas id="projectsBDChart">
+                                {{projectsBDChart}}</canvas>
+                        </mat-card-content>
+
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="activity-breakdown" class="col-12">
+                        <mat-card-title>Tasks Breakdown</mat-card-title>
+                        <!-- chart shows number of hours -->
+                        
+                        <mat-card-content>
+                            <canvas id="tasksBDChart">
+                                {{tasksBDChart}}</canvas>
+                        </mat-card-content>
+
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="device-breakdown" class="col-12">
+                        <mat-card-title>Projects & Tasks</mat-card-title>
+                        <!-- chart shows number of hours -->
+
+                        <mat-card-content>
+                        <canvas id="devicesChart">
+                            {{devicesChart}}</canvas>
+                        </mat-card-content>
+                      
+                    </mat-card>
+                </div>
+                <div class="data-card col-12">
+                    <mat-card id="device-breakdown" class="col-12">
+                        <mat-card-title>Devices (most used devices)</mat-card-title>
+                        <!-- chart shows number of hours -->
+
+                        <mat-card-content>
+                        <canvas id="devicesChart">
+                            {{devicesChart}}</canvas>
+                        </mat-card-content>
+                      
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- graphical analysis | project view -->
+    <section class="col-12 scroll" *ngIf="graphical && projectView">
+
+        <div id="pid1" *ngFor="let p of dailyProjects" class="col-12 h-auto my-3">
+            <h2 class="m-3">{{p.projectName}}</h2>
+            <div class="data-charts col-8 float-left p-0">
+                <div class="data-card col-12">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Performance</mat-card-title>
+                        <!-- two lines: hours per day + monetary value per day -->
+                        <mat-card-content>
+                            <canvas id="{{p.ID}}">
+                                {{p.chart}}</canvas>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <p>Mean daily hours: </p>
+                            <p>Mean daily earnings: </p>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+            </div>
+            <!-- DATA SUMMARY -->
+            <div class="col-4 float-right data-summary p-0">
+                <div class="data-card col-12">
+                    <mat-card id="risk-assessment" class="col-12">
+                        <mat-card-title>Risk assessment</mat-card-title>
+                        <ul>
+                            <li>53% complete</li>
+                            <li>3 tasks overdue</li>
+                            <li>100 hrs accumulated</li>
+                            <li>R 344,592.75 earned</li>
+                        </ul>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div id="pid1" class="col-12 h-auto my-3">
+            <h2 class="m-3">Project name</h2>
+            <div class="data-charts col-8 float-left p-0">
+                <div class="data-card col-12">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Performance</mat-card-title>
+                        <!-- two lines: hours per day + monetary value per day -->
+                        <mat-card-content>
+                            <figure class="css-chart" style="--widget-size: 200px;">
+                                <ul class="line-chart">
+                                    <li style="--x: 20px; --y: 25.3333px;">
+                                        <div class="line-segment" style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
+                                    </li>
+                                </ul>
+                            </figure>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <p>Mean daily hours: </p>
+                            <p>Mean daily earnings: </p>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+            </div>
+            <!-- DATA SUMMARY -->
+            <div class="col-4 float-right data-summary p-0">
+                <div class="data-card col-12">
+                    <mat-card id="risk-assessment" class="col-12">
+                        <mat-card-title>Risk assessment</mat-card-title>
+                        <ul>
+                            <li>53% complete</li>
+                            <li>3 tasks overdue</li>
+                            <li>100 hrs accumulated</li>
+                            <li>R 344,592.75 earned</li>
+                        </ul>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div id="pid2" class="col-12 h-auto my-3">
+            <h2 class="m-3">Project name</h2>
+            <div class="data-charts col-8 float-left p-0">
+                <div class="data-card col-12">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Performance</mat-card-title>
+                        <!-- two lines: hours per day + monetary value per day -->
+                        <mat-card-content>
+                            <figure class="css-chart" style="--widget-size: 200px;">
+                                <ul class="line-chart">
+                                    <li style="--x: 20px; --y: 25.3333px;">
+                                        <div class="line-segment" style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
+                                    </li>
+                                </ul>
+                            </figure>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <p>Mean daily hours: </p>
+                            <p>Mean daily earnings: </p>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+            </div>
+            <!-- DATA SUMMARY -->
+            <div class="col-4 float-right data-summary p-0">
+                <div class="data-card col-12">
+                    <mat-card id="risk-assessment" class="col-12">
+                        <mat-card-title>Risk assessment</mat-card-title>
+                        <ul>
+                            <li>53% complete</li>
+                            <li>3 tasks overdue</li>
+                            <li>100 hrs accumulated</li>
+                            <li>R 344,592.75 earned</li>
+                        </ul>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div id="pid3" class="col-12 h-auto my-3">
+            <h2 class="m-3">Project name</h2>
+            <div class="data-charts col-8 float-left p-0">
+                <div class="data-card col-12">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Performance</mat-card-title>
+                        <!-- two lines: hours per day + monetary value per day -->
+                        <mat-card-content>
+                            <figure class="css-chart" style="--widget-size: 200px;">
+                                <ul class="line-chart">
+                                    <li style="--x: 20px; --y: 25.3333px;">
+                                        <div class="line-segment" style="--hypotenuse: 375.33333333333333; --angle:-23.07535558394876;"></div>
+                                    </li>
+                                </ul>
+                            </figure>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <p>Mean daily hours: </p>
+                            <p>Mean daily earnings: </p>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+          </div>
+          <!-- DATA SUMMARY -->
+            <div class="col-4 float-right data-summary p-0">
+                <div class="data-card col-12">
+                    <mat-card id="risk-assessment" class="col-12">
+                        <mat-card-title>Risk assessment</mat-card-title>
+                        <ul>
+                            <li>53% complete</li>
+                            <li>3 tasks overdue</li>
+                            <li>100 hrs accumulated</li>
+                            <li>R 344,592.75 earned</li>
+                        </ul>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- predictive analysis -->
+    <section class="col-12" *ngIf="predictive">
+        <div class="charts">
+            <div *ngFor="let p of predictions" class="data-card-row">
+                <div class="data-card col-12 p-2">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Expected performance for {{p.projectName}}</mat-card-title>
+                        <!-- two lines: hours per day + monetary value per day -->
+                        <mat-card-content>
+                            <canvas id="{{p.ID}}">
+                                {{p.chart}}</canvas>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <p>Mean daily hours: </p>
+                            <p>Mean daily earnings: </p>
+                        </mat-card-footer>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, HostListener } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class AccountManagementService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+values);
 
-    return this.http.post(this.ROOT_URL+'user/isAuthenticated', {
+    return this.http.get(this.ROOT_URL+'user/isAuthenticated', {
       headers: headers
     });
   }
@@ -106,6 +106,7 @@ export class AccountManagementService {
     return this.http.get(this.ROOT_URL+ 'user/getAllUsers', {
       headers: headers
     });
+
   }
   //Remove user from organisation
   public removeUser(token, userID){
@@ -136,6 +137,15 @@ export class AccountManagementService {
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     return this.http.post(this.ROOT_URL+ 'user/editUser', JSON.stringify(values), {
+      headers: headers
+    });
+  }
+
+  //Add a profile picture
+  public addProfilePicture(token, picture){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
+    return this.http.post(this.ROOT_URL+ 'user/addProfilePicture', JSON.stringify(picture), {
       headers: headers
     });
   }

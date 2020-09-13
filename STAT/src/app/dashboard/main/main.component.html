@@ -1,6 +1,5 @@
 <body>
 <div id="wrapper" class="wrapper">
-
     <div class="main_body">
       <div class="sidebar_menu">
             <div class="inner__sidebar_menu bg-white">
@@ -19,7 +18,7 @@
                   </a>
                 </li>
                 <li>
-                  <a id="schedule" (click)="setActive('schedule')" class="prev">
+                  <a id="calendar" (click)="setActive('calendar')" class="prev">
                     <span class="icon">
                       <mat-icon>today</mat-icon>
                     </span>
@@ -91,10 +90,13 @@
         <!-- dashboard -->
         <div class="container">
           <app-today *ngIf="active=='today'"></app-today>
+          <app-calendar *ngIf="active=='calendar'"></app-calendar>
           <app-projects *ngIf="active=='projects'"></app-projects>
+          <app-iot *ngIf="active=='iot'"></app-iot>
           <app-organisation *ngIf="active=='organisation'"></app-organisation>
           <app-teams *ngIf="active=='teams'"></app-teams>
           <app-history *ngIf="active=='history'"></app-history>
+          <app-analysis *ngIf="active=='analysis'"></app-analysis>
         </div>
 
     </div>
@@ -102,13 +104,3 @@
 
 </body>
 
-<!--<body id="unauthorised">
-  <div class="row">
-    <div class="col-6">
-      <h1>Our system administrator will authenticate you shortly.</h1>
-    </div>
-    <div class="col-6">
-      <img src="assets/unauthorised.jpg">
-    </div>
-  </div>
-</body>-->

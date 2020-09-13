@@ -52,7 +52,7 @@ describe('TodayComponent', () => {
       fixture.detectChanges();
       de = fixture.debugElement.query(By.css('.row'));
       el = de.nativeElement;
-      component.autoTracking=false;
+      component.trackingNow=false;
 
     });
   }));
@@ -63,8 +63,10 @@ describe('TodayComponent', () => {
     fixture.detectChanges();
   }));
 
+
   /*it('should call the open method when the add button is pressed', async(() => {
-    component.autoTracking=false;
+    component.trackingNow=false;
+
     spyOn(component,'open');
     el = fixture.debugElement.query(By.css(".start-tracking")).nativeElement;
     el.click();

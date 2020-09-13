@@ -99,7 +99,11 @@ mat-divider
       display: block
       color: #4c585b80
 
+  .task-od
+    border-left: 0.3em solid #FF0F3F !important
+    background-color: #FF0F3F10 !important
 
+    
 .info
     text-align: center
     color: #4c585b90
@@ -174,6 +178,9 @@ mat-divider
   border-radius: 10em
 
 .tasks 
+  .task-od-date
+    color: #FF0F3F !important
+
   .pro-btn
     font-size: 0.8em
     padding: 0.3em
@@ -273,18 +280,35 @@ mat-accordion .tasks
 
   .tag
     margin-right: 0.8em
+    border: 2px solid white
+    padding: 0.4em 0
+    display: flex
+    align-items: center
+    align-content: center
+  
+    &:hover
+      cursor: pointer
 
   .tag-c
     background-color: #17e88340
     color: #17e883
 
+    &:hover
+      border: 2px solid #17e883
+
   .tag-ip
     background-color: #00c8ff40
     color: #00c8ff
+
+    &:hover
+      border: 2px solid #00c8ff
   
   .tag-ns
     background-color: #ff288540
     color: #ff2885
+
+    &:hover
+      border: 2px solid #ff2885
 
 $colors : #7846eb, #00c8ff, #ff2885, #366ceb
 @for $i from 0 through 10
@@ -398,7 +422,18 @@ mat-panel-title
   > mat-icon
     margin-right: 0.5em
     font-size: 1.2em
-    color: #17e883
+
+  .p-comp
+    color: #17e88390
+
+    &:hover
+      color: #17e883
+
+  .p-ip
+    color: #7846eb90
+
+    &:hover
+      color: #7846eb
 
 
 // ******************************************************************************************
