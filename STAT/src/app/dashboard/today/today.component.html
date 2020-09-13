@@ -49,6 +49,10 @@
               (click)="editing = false; addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
       </form>
+      <span id="shortcuts">
+        <b>Speed up your tracking with our keyboard shortcuts</b>
+        <br> Just hit <span>shift</span>+<span>b</span> to begin tracking and <span>shift</span>+<span>e</span> to end
+      </span>
       <br><br>
       <!-- ENTRIES -->
       <!--<ngb-carousel *ngIf= "trackingNow" [showNavigationArrows]="false" interval="0">
