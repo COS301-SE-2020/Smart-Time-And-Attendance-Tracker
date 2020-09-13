@@ -198,11 +198,15 @@ export class AnalysisComponent implements OnInit {
       console.log(this.dailyValues)
 
       let tempWorked = 0
+      let count = 0
       this.dailyValues.forEach((element : any) => {
         tempWorked += element
 
-        if (element == 0)
+        let d = new Date(this.dates[count]).getDay()
+        console.log(d)
+        if (element < 240 && d != 0 && d != 6)
           this.numUnder++
+        count++
       });
 
       this.numWorked = this.getTime(tempWorked)

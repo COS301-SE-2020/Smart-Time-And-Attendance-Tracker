@@ -40,7 +40,7 @@
     </section>
     <section class="col-12">
         <div class="col-12 p-0">
-            <div class="info col-12 p-0">
+            <div *ngIf="graphical && meView" class="info col-12 p-0">
                 <mat-card id="projects" class="col-2">
                 <!-- number of hours for this week -->
                 <b>{{numProjects}}</b><br>PROJECTS
@@ -100,9 +100,6 @@
                             <canvas id="projectTimesChart">
                                 {{projectTimesChart}}</canvas>
                             </mat-card-content>
-                        <mat-card-footer>
-                            <p>Mean daily tasks: </p>
-                        </mat-card-footer>
                     </mat-card>
                 </div>
                 <div class="data-card col-12">
@@ -137,7 +134,7 @@
                         <li>
                             <mat-icon class="risk-warn" *ngIf="numUnder > 0">priority_high</mat-icon>
                             <mat-icon class="risk-done" *ngIf="numUnder == 0">done</mat-icon>
-                            {{numUnder}} unproductive days
+                            {{numUnder}} unproductive working days
                         </li>
                     </ul>
                 </mat-card>
@@ -213,7 +210,7 @@
     </section>
 
     <!-- graphical analysis | project view -->
-    <section class="col-12 scroll" *ngIf="graphical && projectView">
+    <section id="project-view" class="col-12 scroll" *ngIf="graphical && projectView">
 
         <div id="pid1" *ngFor="let p of dailyProjects" class="col-12 h-auto my-3">
             <h2 class="m-3">{{p.projectName}}</h2>
