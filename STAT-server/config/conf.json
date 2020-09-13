@@ -1,0 +1,5 @@
+{
+    "development": {
+        "JWT_EXP": "24h"
+    }
+}
