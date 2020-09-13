@@ -27,6 +27,7 @@
     "@types/gapi.auth2": "0.0.52",
     "@types/source-map": "^0.5.2",
     "bootstrap": "^4.5.0",
+    "chart.js": "^2.9.3",
     "font-awesome": "^4.7.0",
     "gapi": "0.0.3",
     "gapi-client": "0.0.3",

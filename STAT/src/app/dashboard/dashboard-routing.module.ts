@@ -6,9 +6,9 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { OrganisationComponent } from './organisation/organisation.component';
 import { TeamsComponent } from './teams/teams.component';
 import { HistoryComponent } from "./history/history.component";
+import { AnalysisComponent } from "./analysis/analysis.component";
 import { IOTComponent } from "./iot/iot.component";
 import { UnauthorisedComponent } from "./unauthorised/unauthorised.component";
-
 
 const routes: Routes = [
   { path: 'main', component: MainComponent },
@@ -18,7 +18,8 @@ const routes: Routes = [
   { path: 'iot', component: IOTComponent},
   { path: 'organisation', component: OrganisationComponent},
   { path: 'teams', component: TeamsComponent},
-  { path: 'history', component: HistoryComponent }
+  { path: 'history', component: HistoryComponent },
+  { path: 'analysis', component: AnalysisComponent }
 ];
 
 @NgModule({

@@ -15,6 +15,7 @@ import { HistoryComponent } from './history/history.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { AnalysisComponent } from './analysis/analysis.component';
 import { UnauthorisedComponent } from './unauthorised/unauthorised.component';
 
 
