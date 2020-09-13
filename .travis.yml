@@ -6,7 +6,7 @@ matrix:
     script:
     - cd STAT
     - npm install
-    - ng test-headlesss
+    - ng test
   branches:
     only:
       - master
