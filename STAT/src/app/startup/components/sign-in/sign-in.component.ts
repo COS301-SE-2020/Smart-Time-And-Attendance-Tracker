@@ -189,6 +189,7 @@ export class SignInComponent implements OnInit {
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
         localStorage.setItem('profilePic', res['profilePicture'])
+        localStorage.setItem('email', form['email'])
         this.headerService.isUserLoggedIn.next(true);
         //this.router.navigate(['main']);
       });

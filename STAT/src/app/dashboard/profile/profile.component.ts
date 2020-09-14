@@ -28,6 +28,7 @@ export class ProfileComponent implements OnInit {
     this.surname = localStorage.getItem('surname')
     this.roles = localStorage.getItem('roles')
     this.profilePic = localStorage.getItem('profilePic')
+    this.email = localStorage.getItem('email')
     if (this.profilePic == 'none')
       this.cover = '../../../assets/STAT-logo.png'
     else
