@@ -54,15 +54,17 @@ describe('Unit tests:', () => {
       spyOn(component,'signUp');
       el = fixture.debugElement.query(By.css("#sign_up")).nativeElement;
       el.click();
-      expect(component.signUp).toHaveBeenCalledTimes(1);
+      fixture.whenStable().then(() => {
+        expect(component.signUp).toHaveBeenCalledTimes(1);
+      });
     }));
 
-    it('should call the signIn method when sign in button is pressed', async(() => {
+    it('should call the signIn method when sign in button is pressed', () => {
       spyOn(component,'signIn');
       el = fixture.debugElement.query(By.css("#sign_in")).nativeElement;
       el.click();
       expect(component.signIn).toHaveBeenCalledTimes(1);
-    }));
+    });
 
     // **************************
     // INVALID SIGN UP FORM TESTS
@@ -196,6 +198,7 @@ describe('Integration tests:', () => {
           {provide: Router, useValue: {navigate: () => {}}},
           {provide: AccountManagementService, useValue: {
             getName: () => of({name: "Suzie", surname: "Smith"}),
+            isAuthenticated: () => {},
             signUp: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign up successful."}),
             signIn: () => of({token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18", message: "Sign in successful."}),
             getRoles: () => of({roles: ["General Team Member, Team Leader, System Administrator, Security Administrator"]})
@@ -228,6 +231,7 @@ describe('Integration tests:', () => {
         component.signUpForm.controls['passwordConf'].setValue('12345678');
         spyOn(ACService, 'signUp').and.callThrough();
         spyOn(router, 'navigate').and.callThrough();
+        spyOn(ACService, 'isAuthenticated').and.returnValue(of({authenticated: true}));
         component.signUp( component.signUpForm.value);
         fixture.detectChanges();
 
@@ -239,6 +243,26 @@ describe('Integration tests:', () => {
         expect(router.navigate).toHaveBeenCalledWith(['main']);
       }));
 
+      it('should redirect if unauthorised', async(() => {
+        component.signUpForm.controls['name'].setValue('Jane');
+        component.signUpForm.controls['surname'].setValue('Doe');
+        component.signUpForm.controls['email'].setValue('janeDoe@mail.com');
+        component.signUpForm.controls['password'].setValue('12345678');
+        component.signUpForm.controls['passwordConf'].setValue('12345678');
+        spyOn(ACService, 'signUp').and.callThrough();
+        spyOn(ACService, 'isAuthenticated').and.returnValue(of({authenticated: false}));
+        spyOn(router, 'navigate').and.callThrough();
+        component.signUp( component.signUpForm.value);
+        fixture.detectChanges();
+  
+        expect(localStorage.getItem('token')).toBe("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18");
+        expect(localStorage.getItem('loggedIn')).toBe('true');
+        expect(localStorage.getItem('roles')).toBe("General Team Member, Team Leader, System Administrator, Security Administrator");
+        expect(localStorage.getItem('name')).toBe("Suzie");
+        expect(localStorage.getItem('surname')).toBe("Smith");
+        expect(router.navigate).toHaveBeenCalledWith(['unauthorised']);
+      }));
+
       it('should store correct variables when invalid', async(() => {
         component.signUpForm.controls['name'].setValue('Jane');
         component.signUpForm.controls['surname'].setValue('Doe');
@@ -246,7 +270,7 @@ describe('Integration tests:', () => {
         component.signUpForm.controls['password'].setValue('12345678');
         component.signUpForm.controls['passwordConf'].setValue('12345678');
         spyOn(router, 'navigate').and.callThrough();
-
+        spyOn(ACService, 'isAuthenticated').and.returnValue(of({authenticated: true}));
         spyOn(ACService, 'signUp').and.returnValue(throwError({error:{message: "User already registered."}}));
         component.signUp( component.signUpForm.value);
         fixture.detectChanges();
@@ -267,6 +291,7 @@ describe('Integration tests:', () => {
 
       spyOn(ACService, 'signIn').and.callThrough();
       spyOn(router, 'navigate').and.callThrough();
+      spyOn(ACService, 'isAuthenticated').and.returnValue(of({authenticated: true}));
       component.signIn( component.signInForm.value);
       fixture.detectChanges();
 
@@ -276,13 +301,30 @@ describe('Integration tests:', () => {
       expect(router.navigate).toHaveBeenCalledWith(['main']);
     }));
 
+    it('should redirect if unauthorised', async(() => {
+      component.signInForm.controls['email'].setValue('janeDoe@mail.com');
+      component.signInForm.controls['password'].setValue('12345678');
+      spyOn(ACService, 'signIn').and.callThrough();
+      spyOn(ACService, 'isAuthenticated').and.returnValue(of({authenticated: false}));
+      spyOn(router, 'navigate').and.callThrough();
+      component.signIn( component.signInForm.value);
+      fixture.detectChanges();
+  
+      expect(localStorage.getItem('token')).toBe("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18");
+      expect(localStorage.getItem('loggedIn')).toBe('true');
+      expect(localStorage.getItem('roles')).toBe("General Team Member, Team Leader, System Administrator, Security Administrator");
+      expect(localStorage.getItem('name')).toBe("Suzie");
+      expect(localStorage.getItem('surname')).toBe("Smith");
+      expect(router.navigate).toHaveBeenCalledWith(['unauthorised']);
+    }));
+
     it('should store correct variables when invalid', async(() => {
 
       component.signInForm.controls['email'].setValue('janeDoe@mail.com');
       component.signInForm.controls['password'].setValue('123456789');
 
       spyOn(router, 'navigate').and.callThrough();
-
+      spyOn(ACService, 'isAuthenticated').and.returnValue(of({authenticated: true}));
       spyOn(ACService, 'signIn').and.returnValue(throwError({error:{message: "Incorrect password."}}));
       component.signIn( component.signInForm.value);
       fixture.detectChanges();

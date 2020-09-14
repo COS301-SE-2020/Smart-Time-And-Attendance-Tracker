@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { HeaderService } from './header.service';
 import { RouterTestingModule } from '@angular/router/testing';
-describe('Unit Tests:', () => {
+describe('Integration Tests:', () => {
 describe('HeaderService', () => {
   let service: HeaderService;
   let router: Router;
