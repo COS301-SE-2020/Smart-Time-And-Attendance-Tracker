@@ -912,11 +912,11 @@ module.exports.getProjectDailyTotalTime = async(req, res) => {
         return res.status(400).send({message: 'No project ID provided'});
     
     var date = new Date();
-    var val2;
+
     var min = (new Date( date.setDate(date.getDate() - 8) )).getTime();
     max = new Date().getTime();           
     try {
-          val2 = await TimeEntryModel.aggregate([
+        const  val = await TimeEntryModel.aggregate([
             { $match: { $and: [{ProjectID: new mongoose.Types.ObjectId(req.query.projectID)},{StartTime: {$gte: min,$lte: max}}] } },
             {
                 $group: {
@@ -926,71 +926,11 @@ module.exports.getProjectDailyTotalTime = async(req, res) => {
                 }
             }
             ]);
+        return res.status(200).send({totalDailyValues: val})
     } 
     catch (error) {
         return res.status(500).send({message: 'Internal Server Error: ' + error})
     }
-    var date = new Date();
-    final = [];
-    ProjectHelper.getMembers(req.query.projectID, (err, result) => {
-        if (err) {
-            return res.status(500).send({message: 'Internal Server Error: ' + err});
-        }
-        else if (!result){
-            return res.status(404).json({ message: 'Project not found' }); 
-        }
-        else{
-            result.forEach( async function(myDoc){ 
-
-                UserHelper.getUserDetails(myDoc, async(err, userResult) => {
-                    if (err) { 
-                        return res.status(500).send({message: 'Internal Server Error: ' + err});
-                    }
-                    else{
-
-                        UserTimeEntryModel.findOne({ UserID: myDoc._id }, async(err, timeResult) => {
-                            if (err) 
-                                return res.status(500).send({ message: 'Internal Server Error: ' + err});
-                             else if (!timeResult) 
-                             final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : 0, numberOfEntries: 0});
-                            else {
-                                if (timeResult.TimeEntries.length == 0) 
-                                final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture,timeSpent : 0, numberOfEntries: 0});
-                                else { 
-                    
-                                    var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
-                                    max = new Date().getTime();
-                                                
-                                    try {
-                                        const  val = await TimeEntryModel.aggregate([
-                                            { $match: { $and: [{ProjectID: new mongoose.Types.ObjectId(req.query.projectID)},{_id: { "$in": timeResult.TimeEntries }}, {StartTime: {$gte: min,$lte: max}}] } },
-                                            {
-                                              $group: {
-                                                _id: "$ProjectName",
-                                                totalTime: { $sum: "$ActiveTime"},
-                                                count: { $sum: 1 }
-                                              }
-                                            }
-                                          ]);
-                                        if(val.length == 0)
-                                             final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : 0, numberOfEntries: 0});
-                                        else
-                                            final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
-                                        if(final.length == result.length)
-                                             return res.status(200).send({totalDailyValues: val2,membersTotalTime:final})
-                                    } 
-                                    catch (error) {
-                                        return res.status(500).send({message: 'Internal Server Error: ' + error})
-                                    }
-                                }
-                                           
-                            }
-                        });
-                      }
-                });
-            });
-        }
-    });
 
 }
 
