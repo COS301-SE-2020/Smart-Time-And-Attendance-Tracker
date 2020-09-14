@@ -151,7 +151,7 @@
                           matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]" 
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
-                    <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}"
+                    <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}" class="pro-pic proj"
                           matTooltip="{{m.name}} {{m.surname}}" 
                           matTooltipClass="pro-tooltip"
                           matTooltipPosition="below">
@@ -504,7 +504,7 @@
               </mat-option>
               <mat-option class="member-button" *ngFor="let m of members" (click)="addMember(m)">
                 <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}">
                 <span>{{m.name}} {{m.surname}}</span>
               </mat-option>
             </mat-select>
@@ -515,7 +515,7 @@
             <li *ngFor="let m of addMembers">
               <div class="col-7">
                 <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}">
                 <span>{{m.name}} {{m.surname}}</span>
 
                 <!-- role -->
@@ -572,7 +572,7 @@
             <li *ngFor="let m of editTeamMembers" class="editing">
               <div class="col-7">
                 <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}">
                 <span>{{m.name}} {{m.surname}}</span>
 
                 <!-- role -->

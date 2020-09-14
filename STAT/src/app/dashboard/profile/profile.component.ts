@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   surname : string
   email : string
   roles : any 
-  profilePic : string = 'hi'
+  profilePic : string
   cover : string = '../../../assets/STAT-logo.png'
   fileToUpload : File = null
 
@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit {
     this.name = localStorage.getItem('name')
     this.surname = localStorage.getItem('surname')
     this.roles = localStorage.getItem('roles')
-    //this.profilePic = localStorage.getItem('profilePic')
+    this.profilePic = localStorage.getItem('profilePic')
   }
 
   openFile() {
@@ -52,6 +52,7 @@ export class ProfileComponent implements OnInit {
             if (url) {
               this.fb = url;
               this.profilePic = url
+              localStorage.setItem('profilePic', url)
               this.addPic(url)
             }
           });

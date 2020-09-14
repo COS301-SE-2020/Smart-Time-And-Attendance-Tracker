@@ -19,7 +19,7 @@
 
             <div *ngIf="profilePic == 'none'" class="pro-pic card-avatar">{{name[0]}}{{surname[0]}}</div>
           
-            <img *ngIf="profilePic != 'none'" class="card-avatar" src="https://firebasestorage.googleapis.com/v0/b/stat-images.appspot.com/o/profilePictures%2F1600032548741?alt=media&token=502c17a3-03c1-43ab-8754-e3d1b3121110" alt="avatar" />  
+            <img *ngIf="profilePic != 'none'" class="card-avatar" src="{{profilePic}}" alt="avatar" />  
             
           </div>
             
