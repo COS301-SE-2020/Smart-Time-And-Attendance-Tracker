@@ -12,6 +12,7 @@
     </div>
     <div *ngIf="isLoggedIn" class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
+        <a class="nav-item nav-link" [routerLink]="['main']">Dashboard</a>
       </div>
   </div>
     <button *ngIf="!isLoggedIn" mat-raised-button color="primary" [routerLink]="['sign-in']">Sign In</button>

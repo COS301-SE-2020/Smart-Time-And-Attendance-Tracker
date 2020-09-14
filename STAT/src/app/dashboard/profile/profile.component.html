@@ -41,4 +41,8 @@
         </div>
     </div>
 
+    <div id="picProgress" class="progress">
+      <div class="progress-bar progress-bar-striped bg-info active" role="progressbar" [style.width]="(uploadProgress | async) + '%'" [attr.aria-valuenow]="(uploadProgress | async)" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
 </body>
