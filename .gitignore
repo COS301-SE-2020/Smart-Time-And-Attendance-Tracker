@@ -4,6 +4,8 @@ STAT-server/node_modules/
 STAT-server/node_modules/*
 STAT/node_modules/
 STAT/node_modules/*
+STAT-desktop/node_modules/
+STAT-desktop/node_modules/*
 .idea/
 .vs/
 .vscode/
