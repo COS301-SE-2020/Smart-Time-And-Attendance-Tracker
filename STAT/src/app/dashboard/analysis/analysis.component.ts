@@ -324,7 +324,7 @@ export class AnalysisComponent implements OnInit {
       });
 
       this.numEarned = 'R' + Math.round((tempEarned + Number.EPSILON) * 100) / 100
-      this.meanDailyEarnings = 'R' + Math.round(((tempEarned / this.numProjects ) + Number.EPSILON) * 100) / 100
+      this.meanDailyEarnings = 'R' + Math.round(((tempEarned / 7 ) + Number.EPSILON) * 100) / 100
 
       //  generate chart
       this.monetaryChart = new Chart(
@@ -700,6 +700,9 @@ export class AnalysisComponent implements OnInit {
       });
 
       element.completed = Math.round(((element.completed / element.tasks.length) + Number.EPSILON) * 100)
+
+      if (isNaN(element.completed))
+        element.completed = 0
 
       // total and average
       element.total = 0
