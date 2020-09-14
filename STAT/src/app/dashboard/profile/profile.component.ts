@@ -67,6 +67,7 @@ export class ProfileComponent implements OnInit {
               this.cover = url
               localStorage.setItem('profilePic', url)
               this.addPic(url)
+              location.reload()
             }
           });
         })

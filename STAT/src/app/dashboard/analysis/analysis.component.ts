@@ -5,6 +5,7 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 // chart.js
 import { Chart } from 'chart.js';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
+import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-analysis',
@@ -105,6 +106,8 @@ export class AnalysisComponent implements OnInit {
   // view
   view : string = 'me'
 
+  observables : Observable<any>[] = []
+
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
@@ -135,13 +138,7 @@ export class AnalysisComponent implements OnInit {
     this.getWeeklyProjectsTimes();
     this.getWeeklyTasksTimes();
     this.getProAndTasks()
-    this.getPredictionsForWeekForProjects();
-
-    this.dailyProjects.forEach((element : any) => {
-      if (element.ID != '5f5f08c550e2ad0cc8e1cfc7')
-        this.getProjectMembersTotalTime(element.ID)
-    });
-          
+    this.getPredictionsForWeekForProjects();          
   
     // reset variables
     this.numProjects = '-'
@@ -184,7 +181,7 @@ export class AnalysisComponent implements OnInit {
   getDailyValues()
   {
     this.aService.getDailyValues(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       let daily = data['totalDailyValues']
       daily.forEach((element : any) => {
         if (element['_id'] == this.dates[0]) {
@@ -215,7 +212,7 @@ export class AnalysisComponent implements OnInit {
           this.dailyValues[6] = element['totalTime']
         }
       });
-      console.log(this.dailyValues)
+      //console.log(this.dailyValues)
 
       let tempWorked = 0
       let count = 0
@@ -223,7 +220,6 @@ export class AnalysisComponent implements OnInit {
         tempWorked += element
 
         let d = new Date(this.dates[count]).getDay()
-        console.log(d)
         if (element < 240 && d != 0 && d != 6)
           this.numUnder++
         count++
@@ -269,8 +265,7 @@ export class AnalysisComponent implements OnInit {
   getProjectDailyValues(projectID : string)
   {
     this.aService.getProjectDailyValues(localStorage.getItem('token'), projectID).subscribe((data) => {
-      //console.log(data);
-
+      console.log(data);
       let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
       this.dailyProjects[index].daily = data['totalDailyValues']
       console.log(this.dailyProjects)
@@ -289,7 +284,7 @@ export class AnalysisComponent implements OnInit {
   getDailyMoney()
   {
     this.aService.getDailyMoney(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
     
       let daily = data['totalDailyValues']
       daily.forEach((element : any) => {
@@ -321,7 +316,7 @@ export class AnalysisComponent implements OnInit {
           this.monetaryValues[6] = element['totalAmount']
         }
       });
-      console.log(this.monetaryValues)
+      //console.log(this.monetaryValues)
 
       let tempEarned = 0
       this.monetaryValues.forEach(element => {
@@ -369,7 +364,7 @@ export class AnalysisComponent implements OnInit {
   getWeeklyProjectsTimes()
   {
     this.aService.getWeeklyProjectsTimes(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
       this.projectTimes = data['totalProjectsTimes']
       this.numProjects = this.projectTimes.length
@@ -419,7 +414,7 @@ export class AnalysisComponent implements OnInit {
             let pIndex = this.projectTimes.findIndex((a : any) => a.projectID === t.projectID)
             let projectTotal = this.projectTimes[pIndex].totalTime
             t.percentage = t.totalTime / projectTotal * 100  
-            console.log(t)
+            //console.log(t)
         });
       }
     },
@@ -436,7 +431,7 @@ export class AnalysisComponent implements OnInit {
   getWeeklyTasksTimes()
   {
     this.aService.getWeeklyTasksTimes(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.tasksTimes = data['totalTasksTimes']
       this.numTasks = this.tasksTimes.length
       this.tasksTimes.forEach((element : any) => {
@@ -446,7 +441,7 @@ export class AnalysisComponent implements OnInit {
         }
       });
       
-      console.log(this.tasksTimes)
+      //console.log(this.tasksTimes)
 
       this.progress = []
       this.tasksTimes.forEach((element : any) => {
@@ -475,7 +470,7 @@ export class AnalysisComponent implements OnInit {
         });
       });
 
-      console.log(this.progress)
+      //console.log(this.progress)
 
 
     },
@@ -493,7 +488,7 @@ export class AnalysisComponent implements OnInit {
   getDevices()
   {
     this.aService.getDevices(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+     // console.log(data);
 
       this.devices = data['totalDevices']
 
@@ -532,13 +527,43 @@ export class AnalysisComponent implements OnInit {
       }
     });
   }
+
+  showTeam(pid : string, show : boolean) {
+    let index = this.dailyProjects.findIndex((a : any) => a.ID === pid)
+    this.dailyProjects[index].showTeam = show
+
+    if (show) {
+      this.getProjectMembersTotalTime(pid)
+    }
+  }
+
   //Get the amount of time each user spent on the project for the last week (for team lead)
   getProjectMembersTotalTime(projectID : String)
   {
-    this.aService.getProjectMembersTotalTime(localStorage.getItem('token'), projectID).subscribe((data) => {
+
+    this.aService.getProjectMembersTotalTime(localStorage.getItem('token'), projectID).subscribe(data => {
       console.log(data)
       let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
-      this.dailyProjects[index].membersTimes = data['membersTotalTime']
+      let element = this.dailyProjects[index]
+      element.membersTimes = data['membersTotalTime']
+      // members
+      element.unproductive = []
+      //console.log(this.dailyProjects)
+      let count = 0
+      if (element.membersTimes) {
+        element.membersTimes.forEach((m : any) => {
+          if (m.timeSpent == 0) {
+            element.unproductive.push(m)
+            element.membersTimes.splice(element.membersTimes.indexOf(m), 1)
+          }
+        });
+
+        element.membersTimes.forEach((m : any) => {
+          m.percent = ((m.timeSpent / element.total) * 100) + '%'
+          m.color = this.progressColors[count % 12]
+          count++
+        });
+      }
       console.log(this.dailyProjects)
     },
     error => {
@@ -555,9 +580,9 @@ export class AnalysisComponent implements OnInit {
   getPredictionsForWeekForProjects()
   {
     this.aService.getPredictionsForWeek(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.predictions = data['results']
-      console.log(this.predictions)
+      //console.log(this.predictions)
     },
     error => {
       console.log(error);
@@ -569,12 +594,16 @@ export class AnalysisComponent implements OnInit {
     });
   }
 
+
   // get projects and tasks
   getProAndTasks()
   {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       this.projects = data['projects']
+
+      let p = ['5f5ddda04687873aa8e7eb8a', '5f5e07ab89f29228683341cd']
+      let count = this.projects.length
 
       // project analysis
       this.dailyProjects = []
@@ -582,6 +611,7 @@ export class AnalysisComponent implements OnInit {
         this.dailyProjects.push(element)
         this.getProjectDailyValues(element.ID)
       });
+
 
       let tempTasks = []
       this.projectsBD = [0,0,0]
@@ -600,7 +630,7 @@ export class AnalysisComponent implements OnInit {
         });
       });
 
-      console.log(this.projectsBD)
+      //console.log(this.projectsBD)
 
       // tasks breakdown
       this.tasks = [0,0,0,0]
@@ -691,6 +721,9 @@ export class AnalysisComponent implements OnInit {
           element.daily.push({'_id' : this.dates[i], 'totalTime' : 0})
       }
       element.daily = element.daily.sort((a : any ,b : any) => Date.parse(b._id) - Date.parse(a._id));
+      element.showTeam = false
+      element.membersTimes = []
+      element.unproductive = []
 
       // overdue tasks
       element.overdue = 0
@@ -720,22 +753,10 @@ export class AnalysisComponent implements OnInit {
       // monetary values
       element.monetary = Math.round((((element.total / 60) * element.hourlyRate) + Number.EPSILON) * 100) / 100
 
-      // members
-      element.unproductive = []
-      console.log(this.dailyProjects)
-      if (element.membersTimes) {
-        element.membersTimes.forEach((m : any) => {
-          if (m.timeSpent == 0) {
-            element.unproductive.push(m)
-            element.membersTimes.splice(element.membersTimes.indexOf(m), 1)
-          }
-        });
-      }
-
     });
 
     // generate charts
-    console.log(this.dailyProjects)
+    //console.log(this.dailyProjects)
     this.projectCharts = []
     let count = 0
     this.dailyProjects.forEach((element : any) => {
@@ -806,7 +827,7 @@ export class AnalysisComponent implements OnInit {
       let values = element.predictions.map(d => Math.abs(Math.round(( ((d / 60) + Number.EPSILON) * 100) * rate) / 100))
       element.pMoney = Math.round(( (values.reduce((a, b) => a + b, 0)) + Number.EPSILON) * 100) / 100
       element.pTime = Math.abs(element.predictions.reduce((a, b) => a + b, 0))
-      console.log(values)
+      //console.log(values)
 
       let chartName = 'monetary' + counter.toString()
       element.chartName = chartName
@@ -839,7 +860,7 @@ export class AnalysisComponent implements OnInit {
     });
 
     // generate charts
-    console.log(this.predictions)
+    //console.log(this.predictions)
     this.predictiveCharts = []
     count = 0
     this.predictions.forEach((element : any) => {
