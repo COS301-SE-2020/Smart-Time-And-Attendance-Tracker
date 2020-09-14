@@ -92,11 +92,13 @@ SelectTask.onclick = function() {
             }
             else
             {
+                var monetaryValue = user.getInstance().getHourlyRate(ProjectID);
                 var text = '{'
                 + '"projectName": "'+ ProjectName+ '",'  
                 + '"projectID": "'+ projectsDropdown.value+ '",' 
                 + '"taskName": "'+ TaskName + '",'  
                 + '"taskID": "'+ tasksDropdown.value+ '",'
+                + '"taskName": "'+ monetaryValue + '",'  
                 + '"processed": "false"' 
                 + '}';
                 chrome.extension.getBackgroundPage().History[currentID][0][4] = text;

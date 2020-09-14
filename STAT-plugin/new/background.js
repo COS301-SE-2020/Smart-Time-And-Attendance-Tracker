@@ -137,8 +137,10 @@ function HandleUpdate(tabID, changeInfo, tab) {
       if(chrome.extension.getBackgroundPage().History[tabID][0][2] != "")
       {
         var currentDuration = parseInt(chrome.extension.getBackgroundPage().History[tabID][0][0]);// + parseInt(getCookie("historyTime"+tabID)); 
+        //alert(currentDuration);
         if(currentDuration>60)
         {
+          
           UpdateTimeEntry(new Date(), tabID, currentDuration, false);
         }
       }

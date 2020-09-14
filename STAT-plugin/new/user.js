@@ -18,6 +18,7 @@ class User {
     }
 
     set allProject(projects) {
+        //alert("this._allProject");
         this._allProject = projects;
     }
 
@@ -28,6 +29,20 @@ class User {
             if(obj.projects[p].ID == projectID)
             {
                 return obj.projects[p].tasks;
+            }
+        }
+        return undefined;
+    }
+
+    getHourlyRate(projectID) {
+        ///alert("Projects: ");
+        //console.log(this._allProject);
+        let obj = JSON.parse(this._allProject);
+        for(var p in obj.projects)
+        {
+            if(obj.projects[p].ID == projectID)
+            {
+                return obj.projects[p].hourlyRate;
             }
         }
         return undefined;

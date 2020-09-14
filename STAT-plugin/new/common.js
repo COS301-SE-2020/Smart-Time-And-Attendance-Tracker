@@ -71,7 +71,7 @@ processDisplay();
               AddTimeEntry(chrome.extension.getBackgroundPage().History[tabID][0][1], now , new Date(), tabID, duration);
 
             }
-          }, 60000);
+          }, 60*1000);
         }
 
       }
@@ -130,21 +130,23 @@ var stopStartBtn = document.getElementById("start_stop");
 
 function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
   var today = new Date();
-  //alert(today);
+//  alert(today);
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0
   var yyyy = today.getFullYear();
-
+  var activeTime = getMinutesFromSeconds(duration);
+//  alert("activeTime  : " + activeTime);
   var http = new XMLHttpRequest();
   var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
   var text = '{ "description": "'+ url + '",'
           + '"startTime": "'+ startTime.getTime() + '",'
           + '"endTime": "'+ endTime.getTime() + '",'
           + '"device": "Browser",'
-          + '"activeTime":' + getMinutesFromSeconds(duration) + ','
+          + '"activeTime":' + activeTime + ','
           + '"date": "'+  (yyyy + '/' + mm + '/' + dd) + '"'
           + '}';
 
+//  alert(text);
   http.open('POST', apiURL, true);
 
   http.setRequestHeader('Content-type', 'application/json');
@@ -198,13 +200,23 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
 function UpdateTimeEntry(endTime,currentID, duration, stop) {
   //alert("currentID  " + currentID)
   var http = new XMLHttpRequest();
+  var activeTime = getMinutesFromSeconds(duration);
+  var monetaryValue = 0;
+  if(chrome.extension.getBackgroundPage().History[currentID][0][4])
+  {
+    var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
+    monetaryValue = obj.monetaryValue * activeTime;
+  }
+  
+  
   var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
   var text = '{'
           + '"timeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'
           + '"endTime": "'+ endTime.getTime() + '",'
+          + '"monetaryValue": "'+ monetaryValue + '",'
           + '"activeTime":'+ getMinutesFromSeconds(duration)
           + '}';
-
+  //alert(text);
   http.open('POST', apiURL, true);
   http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
@@ -250,7 +262,7 @@ function getProjects() {
         if(http.readyState == 4 && http.status == 200) {
             if(user.getInstance().allProject == undefined)
               user.getInstance().allProject = http.responseText;
-            console.log(http.responseText);
+              console.log(http.responseText);
 
             processProjects(http.responseText, false);
 
@@ -425,11 +437,13 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
     if(http.readyState == 4 && http.status == 200) {
+      var monetaryValue = user.getInstance().getHourlyRate(ProjectID);
       text = '{'
         + '"projectName": "'+ ProjectName+ '",'
         + '"projectID": "'+ ProjectID+ '",'
         + '"taskName": "'+ TaskName + '",'
         + '"taskID": "'+ TaskID+ '",'
+        + '"monetaryValue": "'+ monetaryValue+ '",'
         + '"processed": "true"'
         + '}';
       chrome.extension.getBackgroundPage().History[currentID][0][4] =text;
@@ -439,6 +453,7 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
         + '"projectID": "'+ ProjectID+ '",'
         + '"taskName": "'+ TaskName + '",'
         + '"taskID": "'+ TaskID+ '",'
+        + '"monetaryValue": "'+ monetaryValue+ '",'
         + '"processed": "false"'
         + '}';
       localStorage.setItem('currentlyTrackingDetails', text);
