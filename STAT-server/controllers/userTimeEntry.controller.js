@@ -339,7 +339,11 @@ module.exports.updateTimeEntry = (req, res) => {
                     {
                         result.EndTime =  req.body.endTime;
                         if(!req.body.hasOwnProperty('activeTime'))
-                            result.ActiveTime = result.EndTime - result.StartTime;
+                        {
+                            var val = result.EndTime - result.StartTime;
+                            result.ActiveTime = Math.round(val/60000);
+                        }
+
                     }  
                     if(req.body.hasOwnProperty('activeTime'))
                         result.ActiveTime =  req.body.activeTime;
@@ -1058,7 +1062,8 @@ module.exports.getUserWeeklyTimeForProjects = async(req, res) => {
                           $group: {
                             _id: "$ProjectName",
                             totalTime: { $sum: "$ActiveTime"},
-                            count: { $sum: 1 }
+                            count: { $sum: 1 },
+                            projectID: {$first: "$ProjectID"}
                           }
                         }
                       ]);
@@ -1152,6 +1157,7 @@ module.exports.getUserWeeklyTimeForTasks = async (req, res) => {
                             count: { $sum: 1 }, 
                             taskID: {$first: '$TaskID'},
                             projectName : { $first: '$ProjectName' },
+                            projectID : { $first: '$ProjectID' },
                           }
                         }
                       ]);
@@ -1198,10 +1204,10 @@ module.exports.getProjectMembersTotalTime = async (req, res) => {
                             if (err) 
                                 return res.status(500).send({ message: 'Internal Server Error: ' + err});
                              else if (!timeResult) 
-                             final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, timeSpent : 0, numberOfEntries: 0});
+                             final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : 0, numberOfEntries: 0});
                             else {
                                 if (timeResult.TimeEntries.length == 0) 
-                                final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, timeSpent : 0, numberOfEntries: 0});
+                                final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture,timeSpent : 0, numberOfEntries: 0});
                                 else { 
                     
                                     var min = (new Date( date.setDate(date.getDate() - 7) )).getTime();
@@ -1218,7 +1224,10 @@ module.exports.getProjectMembersTotalTime = async (req, res) => {
                                               }
                                             }
                                           ]);
-                                        final.push({name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
+                                        if(val.length == 0)
+                                             final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : 0, numberOfEntries: 0});
+                                        else
+                                            final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
                                         if(final.length == result.length)
                                              return res.status(200).send({membersTotalTime:final})
                                     } 
