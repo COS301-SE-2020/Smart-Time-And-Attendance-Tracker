@@ -141,7 +141,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
   var text = '{ "description": "'+ url + '",'
           + '"startTime": "'+ startTime.getTime() + '",'
           + '"endTime": "'+ endTime.getTime() + '",'
-          + '"device": "Browser",'
+          + '"device": "Chrome Plugin",'
           + '"activeTime":' + activeTime + ','
           + '"date": "'+  (yyyy + '/' + mm + '/' + dd) + '"'
           + '}';
