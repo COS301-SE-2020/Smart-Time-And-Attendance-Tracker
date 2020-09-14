@@ -15,6 +15,13 @@ chai.use(chaiHttp)
 
 describe('test file 1', function() {
 
+  before(function () {
+    server.listen();
+ });
+
+ after(function () {
+     server.close();
+ }); 
 
     
     describe('test USER', function() {

@@ -48,12 +48,29 @@ application.use((err, req, res, next) => {
     
 });
 
+/*
 // start server
 application.listen("3000"), ()=>{
     console.log("Server started");
 };  
-
+*/
 
 application.get('/calendar', (req, res) => {
     res.sendFile(__dirname + '/tracker/index.html');
   });
+
+  // start server
+const mongoose = require('mongoose');
+var server
+exports.listen = function (){
+    server = application.listen("3000", function () {
+    console.log('Server available listening at: 3000');
+    })
+ };
+
+exports.close = function () {
+    server.close(function (){
+      console.log('Server Closed')
+    }); 
+    mongoose.connection.close()
+};
