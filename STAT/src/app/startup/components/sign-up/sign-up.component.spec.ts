@@ -50,21 +50,6 @@ describe('Unit tests:', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should call the signUp method when sign up button is pressed', async(() => {
-      spyOn(component,'signUp');
-      el = fixture.debugElement.query(By.css("#sign_up")).nativeElement;
-      el.click();
-      fixture.whenStable().then(() => {
-        expect(component.signUp).toHaveBeenCalledTimes(1);
-      });
-    }));
-
-    it('should call the signIn method when sign in button is pressed', () => {
-      spyOn(component,'signIn');
-      el = fixture.debugElement.query(By.css("#sign_in")).nativeElement;
-      el.click();
-      expect(component.signIn).toHaveBeenCalledTimes(1);
-    });
 
     // **************************
     // INVALID SIGN UP FORM TESTS
@@ -169,7 +154,48 @@ describe('Unit tests:', () => {
       expect(component.getEmailErrorSI()).toBe('');
       expect(component.getPassErrorSI()).toBe('');
     }));
+
+    it('should not call the signUp method when sign up button is pressed and form is invalid', async(() => {
+      spyOn(component,'signUp');
+      el = fixture.debugElement.query(By.css("#sign_up")).nativeElement;
+      el.click();
+      fixture.whenStable().then(() => {
+        expect(component.signUp).toHaveBeenCalledTimes(0);
+      });
+    }));
+
+    it('should not call the signIn method when sign in button is pressed and form is invalid', () => {
+      spyOn(component,'signIn');
+      el = fixture.debugElement.query(By.css("#sign_in")).nativeElement;
+      el.click();
+      expect(component.signIn).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call the signUp method when sign up button is pressed and form is valid', async(() => {
+      spyOn(component,'signUp');
+      component.signUpForm.controls['name'].setValue('Jane');
+      component.signUpForm.controls['surname'].setValue('Doe');
+      component.signUpForm.controls['email'].setValue('janeDoe@mail.com');
+      component.signUpForm.controls['password'].setValue('12345678');
+      component.signUpForm.controls['passwordConf'].setValue('12345678');
+      fixture.detectChanges();
+      el = fixture.debugElement.query(By.css("#sign_up")).nativeElement;
+      el.click();
+        expect(component.signUp).toHaveBeenCalledTimes(1);
+    }));
+
+    it('should call the signIn method when sign in button is pressed and form is valid', () => {
+      spyOn(component,'signIn');
+      component.signInForm.controls['email'].setValue('john@mail.com');
+      component.signInForm.controls['password'].setValue('12345678');
+      fixture.detectChanges();
+      el = fixture.debugElement.query(By.css("#sign_in")).nativeElement;
+      el.click();
+      expect(component.signIn).toHaveBeenCalledTimes(1);
+    });
+    
   });
+
 });
 
 describe('Integration tests:', () => {

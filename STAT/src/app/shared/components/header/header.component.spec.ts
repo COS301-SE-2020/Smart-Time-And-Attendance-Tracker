@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header.component';
 import { HeaderService } from '../../services/header.service';
 import { Router } from '@angular/router';
-import { DebugElement } from '@angular/core';
 
 describe('Unit Tests:', () => {
 describe('HeaderComponent', () => {
@@ -35,9 +34,7 @@ describe('Integration Tests:', () => {
   describe('HeaderComponent', () => {
     let component: HeaderComponent;
     let fixture: ComponentFixture<HeaderComponent>;
-    let de: DebugElement;
-    let el: HTMLElement;
-    let service;
+    var service: HeaderService;
     let router: Router;
   
     beforeEach((async () => {
@@ -45,20 +42,18 @@ describe('Integration Tests:', () => {
         declarations: [ HeaderComponent ],
         imports:
         [RouterTestingModule],
-        providers: [
-          {provide: Router, useValue: {navigate: () => {}}},
-          {provide: HeaderService, useValue: {
-            kickOut: () =>  () => {}
-          }}
-         ]
+        providers: [ HeaderService, RouterTestingModule]
+          /*{provide: Router, useValue: {navigate: () => {}}},
+          {provide: HeaderService, useValue: {kickOut: () => {}}}
+         ]*/
         })
       .compileComponents().then(()=>
       {
         fixture = TestBed.createComponent(HeaderComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        service = TestBed.get(HeaderService);
-        router = TestBed.get(Router);
+        /*router = TestBed.get(Router);
+        service = TestBed.get(HeaderService);*/
       });
     }));
   
@@ -67,9 +62,7 @@ describe('Integration Tests:', () => {
       it('should remove the appropriate variables', async(() => {
        
         spyOn(service, 'kickOut').and.callThrough();
-        component.logout();
-        fixture.detectChanges();
-  
+        component.logout();  
         expect(component.logout).toHaveBeenCalledTimes(1);
         expect(localStorage.getItem('loggedIn')).toBe(null);
         expect(localStorage.getItem('roles')).toBe(null);
