@@ -1,0 +1,477 @@
+@font-face
+  font-family: Chivo
+  src: url(fonts/chivo/Chivo-Bold.ttf)
+
+@font-face
+  font-family: OpenSans
+  src: url(fonts/open-sans/OpenSans-Regular.ttf)
+
+// -------------------------------------------------------------------------------------------- * ----------
+
+$primary-color: #FFFFFF
+$color-orange: #FF8D00
+$color-purple: #7846EB
+$color-lightblue: #00C8FF
+$color-blue: #366CEB
+$color-pink: #FF2885
+$color-grey: #4C585B
+$color-black: #232323
+$color-white: #FFFFFF
+$color-gold: #C5AE86
+$transparent: rgba(0, 0, 0, 0)
+
+$head-font: Righteous
+$body-font: Titillium Web
+
+.background-pink
+  background-color: $color-pink
+
+.background-blue
+  background-color: $color-blue
+
+.background-green
+  background-color: $color-lightblue
+
+  mat-card-title
+    color: $color-lightblue
+
+.background-purple
+  background-color: $color-purple
+
+.background-black
+  background-color: $color-black
+
+// -------------------------------------------------------------------------------------------- * ----------
+
+*
+  font-family: $body-font
+  font-size: 1.035em
+  width: 100%
+
+// -------------------------------------------------------------------------------------------- A ----------
+
+a
+  padding: 0em
+  text-decoration: none
+
+a:hover
+  text-decoration: none
+
+a.mat-raised-button
+  background-color: $color-white
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)
+  color: $color-grey !important
+  font-family: Roboto, "Helvetica Neue", sans-serif
+  font-size: 0.9em
+  font-weight: 500
+  margin: 0.5em
+  padding-bottom: 0.1em
+  padding-top: 0.1em
+  right: 0em
+  width: 6.5em
+  float: right
+
+// -------------------------------------------------------------------------------------------- B ----------
+
+body
+  background-color: white
+  color: white
+  margin: 0em auto
+  padding-bottom: 0em
+  top: 0em
+  width: 100%
+
+#brought-to-you
+  text-align: center
+
+button
+  background-color: rgba(0, 0, 0, 0)
+  border: 0.15em solid white
+  border-radius: 3.5px 3.5px 3.5px 3.5px
+  color: #FFFFFF
+  display: inline-block
+  float: right
+  font-size: 0.85em
+  font-weight: bold
+  height: 3.5em
+  padding: 0.5em
+  right: 1em
+  text-transform: uppercase
+  max-width: 10em
+  width: 15em
+
+// -------------------------------------------------------------------------------------------- C ----------
+
+.card
+  box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.5)
+  color: black
+  padding: 1em
+
+.card-title
+  text-align: center
+
+#container
+  margin: 0em
+  margin-top: 2em
+
+// -------------------------------------------------------------------------------------------- D ----------
+
+div
+  display: block
+  height: auto
+  margin-top: 2em
+  min-height: 5vh
+
+  #container
+    left: 0
+    max-width: 100%
+    position: relative
+    text-align: center
+    top: 0
+    width: 100vw
+
+// -------------------------------------------------------------------------------------------- F ----------
+
+.feature
+  background-color: $color-pink
+  color: black
+  display: inline-block
+  margin: 0em
+  padding: 0.5em
+  text-align: left
+  width: 48%
+
+  >
+    img
+      display: block
+      margin: 3em auto
+      height: auto
+      height: 12em
+      width: auto
+
+#feature-cards
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
+  margin: 0 auto
+  margin-bottom: 1.5em
+  width: 100%
+  text-align: center
+
+#features
+
+  mat-card
+    background-color: $color-white
+    border-radius: 2px
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+    display: inline-block
+    margin: 1em 0
+    padding: 1.5em
+    padding-bottom: 2.25em
+
+    &:nth-child(even)
+      margin-left: 1.5em
+
+    &:nth-child(odd)
+      margin-left: 0
+
+    mat-card-content
+      font-size: 0.9em
+
+footer
+  background-color: $color-white
+  color: $color-grey
+  display: flex
+  height: 6em
+  max-width: 100%
+  text-align: center
+  width: 100%
+  padding: 0
+  margin: 0 !important
+
+  button
+    margin: 1em
+
+
+  #footer-logo
+    img
+      height: 6em
+      width: auto
+      filter: invert(0.7)
+
+  div
+    margin: 0
+    display: flex
+    align-items: center
+    justify-content: center
+    text-align: center
+
+  p
+    text-align: center
+
+    b
+      letter-spacing: 0.5em
+
+  .teamLinks
+    font-size: 2em
+
+    a
+      color: $color-white
+      transition: all 0.3s ease-in
+
+  #email
+    background-color: $color-gold
+    color: $color-white
+    transition: all 0.3s ease-in
+
+    &:hover
+      background-color: $color-white
+
+      a
+        color: $color-gold
+
+  #github
+    background-color: $color-grey
+    color: $color-white
+    transition: all 0.3s ease-in
+
+    &:hover
+      background-color: $color-white
+
+      a
+        color: $color-gold
+
+
+// -------------------------------------------------------------------------------------------- I ----------
+
+
+// -------------------------------------------------------------------------------------------- H ----------
+
+h1
+  font-family: Chivo
+  font-size: 20em
+  text-align: center
+  text-transform: uppercase
+  margin-bottom: 0.5em
+  margin-top: 0.25em
+  max-width: 100%
+
+h2
+  font-family: Chivo
+  font-size: 5em
+  text-align: center
+  text-transform: uppercase
+  margin-bottom: 0.75em
+  margin-top: 0.5em
+  max-width: 100%
+
+h3
+  font-family: Chivo
+  font-size: 2em
+  margin-bottom: 0.5em
+
+header
+  align-content: center
+  color: white
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+  max-width: 100%
+  justify-content: center
+  margin: 0em
+  padding: 2.5em
+  text-align: center
+  width: 100%
+
+.header-content
+  display: flex
+  flex-direction: column
+  height: 100%
+  margin: 0em auto
+  min-height: 100%
+  text-align: center
+  width: 100%
+  color: $color-black
+
+  h3
+    text-align: center
+
+  p
+    text-align: center
+    color: $color-white
+
+  div
+    margin-bottom: 0.25em
+
+#home a:link #home, a:visited
+  color: white
+
+// -------------------------------------------------------------------------------------------- M ----------
+
+mat-card
+  background-color: $transparent
+  border: 0.02em solid $color-white
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0, 0, 0, 0.12)
+  padding: 5em
+
+  mat-card-image
+    left: 0em
+
+mat-card-title
+  font-family: $head-font
+  font-size: 2em
+
+#meet-the-team
+  align-content: center
+  justify-content: center
+  text-align: center
+
+  mat-expension-panel-header
+
+    >
+      span
+        flex-direction: column
+        text-align: center
+
+.member-card
+  background-color: white
+  color: black
+  display: inline-block
+  margin: 0.5em auto
+  padding: 1em
+  width: 80%
+
+// -------------------------------------------------------------------------------------------- P ----------
+
+p
+  text-align: left
+
+// -------------------------------------------------------------------------------------------- R ----------
+
+
+
+// -------------------------------------------------------------------------------------------- S ----------
+
+section
+  align-content: center
+  background-color: white
+  box-shadow: 0em 0.25em 0.2em rgba(0, 0, 0, 0.3)
+  display: flex
+  height: auto
+  max-width: 100%
+  min-height: 100vh
+  padding: 2.5em
+  width: 100vw
+
+.section-content
+  align-self: center
+  background-color: rgba(0, 0, 0, 0)
+  display: flex
+  flex-direction: column
+  margin: 0em auto
+  padding: 2.5em
+  text-align: left
+  right: 2em
+  width: 80%
+
+  >
+    h2
+      text-align: left
+
+    p
+      margin: 0.5em
+      margin-bottom: 1.5em
+
+#splash
+  background-image: url("../../../../assets/splash.png")
+  background-size: 100% auto
+  background-position: center
+  background-repeat: no-repeat
+  color: $color-black !important
+  margin: 0em auto
+  top: 0em
+
+.social-icons
+    margin: 0 auto
+    padding: 0.5em
+    width: fit-content
+
+    li
+      display: inline-block !important
+      list-style: none
+      margin: 0 0.5em
+      width: fit-content
+
+    a
+      border-radius: 50%
+      text-decoration: none
+      color: $color-white
+      font-size: 1.5em
+      width: fit-content
+      text-align: center
+      transition: all 0.2s ease-in
+      display: inline-block
+
+    a:visited
+      color: $color-white
+
+// -------------------------------------------------------------------------------------------- T ----------
+
+.team-member
+  text-align: center !important
+  display: inline-block
+  width: 20%
+  min-height: 50vh
+  font-size: 0.8em
+  justify-content: center
+
+  p
+    text-align: center
+
+  .avatar
+    border-radius: 50%
+    padding: 1.5em
+    width: 80%
+    height: 80%
+    margin: 0 auto 1em auto
+
+  .badge
+    float: right !important
+    background-color: $color-black
+    text-transform: uppercase
+
+  &:nth-child(1)
+    .avatar
+      background-color: $color-lightblue
+
+    .social-icons a:hover
+      color: $color-lightblue
+
+  &:nth-child(2)
+    .avatar
+      background-color: $color-purple
+
+    .social-icons a:hover
+      color: $color-purple
+
+  &:nth-child(3)
+    .avatar
+      background-color: #28ccbf
+
+    .social-icons a:hover
+      color: #28ccbf
+
+  &:nth-child(4)
+    .avatar
+      background-color: $color-pink
+
+    .social-icons a:hover
+      color: $color-pink
+
+  &:nth-child(5)
+    .avatar
+      background-color: $color-blue
+
+    .social-icons a:hover
+      color: $color-blue

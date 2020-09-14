@@ -1,0 +1,49 @@
+<script src="https://cdn.jsdelivr.net/npm/moment@2/moment.min.js"></script>
+ <script src="https://apis.google.com/js/api.js"></script>
+ <script src="https://apis.google.com/js/client.js"></script>
+ <script src="https://www.googleapis.com/auth/userinfo.email"></script>
+ <script src="https://www.googleapis.com/auth/userinfo.profile"></script>
+
+<div class="row">
+  <section>
+    <h2>Calendar
+      <button id="sync-button"
+              *ngIf="authorised"
+              mat-mini-fab
+              matTooltip="Sync calendar"
+              matTooltipClass="action-tooltip"
+              matTooltipPosition="right"
+              (click)="refresh()">
+        <mat-icon inline="true">sync</mat-icon>
+      </button>
+    </h2>
+    <div *ngIf="loading" class="col-12 mx-auto justify-content-center">
+      <mat-spinner class="mx-auto"></mat-spinner>
+    </div>
+    <div *ngIf="!loading && !authorised" class="col-12 justify-content-center">
+      <p class="col-12 text-center mx-auto">Would you like to STAT view your calendar?</p>
+      <div class="justify-content-center mx-auto">
+        <button id="authorize-button"
+                class="align-self-center d-block mx-auto"
+                mat-raised-button color="primary"
+                matTooltip="Authorise syncing"
+                matTooltipClass="action-tooltip"
+                matTooltipPosition="right"
+                (click)="checkAuth()"> Allow
+        </button>
+      </div>
+    </div>
+    <div *ngIf="authorised" id="calendar" class="justify-content-center">
+      <div id="frame-border">
+        <div id="frame-background">
+          <iframe id="calendar-frame"
+                  class="mx-auto"
+                  style="border: 0" frameborder="0"
+                  width="100%" height="500em"
+                  scrolling="no">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

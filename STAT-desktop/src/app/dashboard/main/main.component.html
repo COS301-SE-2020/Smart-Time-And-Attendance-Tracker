@@ -1,0 +1,106 @@
+<body>
+<div id="wrapper" class="wrapper">
+    <div class="main_body">
+      <div class="sidebar_menu">
+            <div class="inner__sidebar_menu bg-white">
+              <ul>
+                <li id="stat">
+                  <h1>STAT</h1>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <a id="today" (click)="setActive('today')">
+                    <span class="icon">
+                      <mat-icon>alarm</mat-icon>
+                    </span>
+                    <span class="list">Tracking</span>
+                  </a>
+                </li>
+                <li>
+                  <a id="calendar" (click)="setActive('calendar')" class="prev">
+                    <span class="icon">
+                      <mat-icon>today</mat-icon>
+                    </span>
+                    <span class="list">Calendar</span>
+
+                  </a>
+                </li>
+                <li>
+                  <a id="projects" (click)="setActive('projects')">
+                    <span class="icon">
+                      <mat-icon>assignment</mat-icon>
+                    </span>
+                    <span class="list">Projects</span>
+                  </a>
+                </li>
+                <li>
+                  <a id="history" (click)="setActive('history')">
+                    <span class="icon">
+                      <mat-icon>history</mat-icon>
+                    </span>
+                    <span class="list">History</span>
+                  </a>
+                </li>
+                <li>
+                  <a id="teams" (click)="setActive('teams')">
+                    <span class="icon">
+                      <mat-icon>group</mat-icon>
+                    </span>
+                    <span class="list">Teams</span>
+                  </a>
+                </li>
+                <li>
+                  <a id="analysis" (click)="setActive('analysis')">
+                    <span class="icon">
+                      <mat-icon>bar_chart</mat-icon>
+                    </span>
+                    <span class="list">Analysis</span>
+                  </a>
+                </li>
+                <li *ngIf="roles && (roles.includes('Data Analyst') || roles.includes('System Administrator'))">
+                    <a id="iot" (click)="setActive('iot')">
+                        <span class="icon">
+                          <mat-icon>devices</mat-icon>
+                        </span>
+                        <span class="list">IOT Devices</span>
+                    </a>
+                </li>
+                <li *ngIf="roles && roles.includes('Security Administrator')">
+                  <a id="organisation" (click)="setActive('organisation')">
+                    <span class="icon">
+                      <mat-icon>supervisor_account</mat-icon>
+                    </span>
+                    <span class="list">Organisation</span>
+                  </a>
+                </li>
+              </ul>
+
+              <div id="hamburger" class="hamburger">
+                <div class="inner_hamburger">
+                    <span class="arrow">
+                      <mat-icon class="left">chevron_left</mat-icon>
+                      <mat-icon class="right">chevron_right</mat-icon>
+                    </span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- dashboard -->
+        <div class="container">
+          <app-today *ngIf="active=='today'"></app-today>
+          <app-calendar *ngIf="active=='calendar'"></app-calendar>
+          <app-projects *ngIf="active=='projects'"></app-projects>
+          <app-iot *ngIf="active=='iot'"></app-iot>
+          <app-organisation *ngIf="active=='organisation'"></app-organisation>
+          <app-teams *ngIf="active=='teams'"></app-teams>
+          <app-history *ngIf="active=='history'"></app-history>
+          <app-analysis *ngIf="active=='analysis'"></app-analysis>
+        </div>
+
+    </div>
+  </div>
+
+</body>
+
