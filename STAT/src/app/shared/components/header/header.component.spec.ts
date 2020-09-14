@@ -52,8 +52,8 @@ describe('Integration Tests:', () => {
         fixture = TestBed.createComponent(HeaderComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        /*router = TestBed.get(Router);
-        service = TestBed.get(HeaderService);*/
+        router = TestBed.get(RouterTestingModule);
+        service = TestBed.get(HeaderService);
       });
     }));
   
