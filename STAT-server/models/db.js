@@ -24,7 +24,7 @@ const mongoose = require('mongoose');
 require("../config/config.js");
 mongoose.set('useNewUrlParser', true);
 
-console.log("check if mongouri exists---------------- "+process.env.MONGODB_URI)
+console.log("check if mongouri exists---------------- "+process.env.MONGODB_URI+" JWT= "+process.env.JWT_SECRET)
 
 
 mongoose.connect(decodeURIComponent(process.env.MONGODB_URI), (err) => {
