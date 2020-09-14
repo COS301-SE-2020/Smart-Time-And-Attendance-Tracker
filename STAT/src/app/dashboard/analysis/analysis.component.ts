@@ -44,7 +44,7 @@ export class AnalysisComponent implements OnInit {
   // performance - daily number of hours
   dailyValues : any[] = [0, 0, 0, 0, 0, 0, 0]
   dailyChart : any = []
-  meanDailyHours : number = 0
+  meanDailyHours : any = 0
   meanDailyEarnings : any = 0
 
   monetaryValues : any[] = [0, 0, 0, 0, 0, 0, 0]
@@ -224,8 +224,7 @@ export class AnalysisComponent implements OnInit {
       });
 
       this.numWorked = this.getTime(tempWorked)
-      this.meanDailyHours = tempWorked / 7 / 60
-      this.meanDailyHours = Math.round((this.meanDailyHours + Number.EPSILON) * 100) / 100
+      this.meanDailyHours = this.getTime(tempWorked / 7)
 
       // create chart
       this.dailyChart = new Chart(
@@ -711,7 +710,7 @@ export class AnalysisComponent implements OnInit {
         element.total += d.totalTime
       });
 
-      element.average = Math.round(((element.total / 7 / 60) + Number.EPSILON) * 100) / 100
+      element.average = this.getTime(element.total / 7)
 
       // monetary values
       element.monetary = Math.round((((element.total / 60) * element.hourlyRate) + Number.EPSILON) * 100) / 100
@@ -869,7 +868,7 @@ export class AnalysisComponent implements OnInit {
   // get time spent
   getTime(mins : number) {
     var hours = Math.floor(mins / 60)
-    var rem = mins % 60
+    var rem = Math.floor(mins % 60)
     return (hours + 'h ' + rem + 'm')
   }
 
