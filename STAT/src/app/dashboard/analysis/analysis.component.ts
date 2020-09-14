@@ -137,6 +137,12 @@ export class AnalysisComponent implements OnInit {
     this.getProAndTasks()
     this.getPredictionsForWeekForProjects();
 
+    this.dailyProjects.forEach((element : any) => {
+      if (element.ID != '5f5f08c550e2ad0cc8e1cfc7')
+        this.getProjectMembersTotalTime(element.ID)
+    });
+          
+  
     // reset variables
     this.numProjects = '-'
     this.numTasks = '-'
@@ -530,6 +536,7 @@ export class AnalysisComponent implements OnInit {
   getProjectMembersTotalTime(projectID : String)
   {
     this.aService.getProjectMembersTotalTime(localStorage.getItem('token'), projectID).subscribe((data) => {
+      console.log(data)
       let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
       this.dailyProjects[index].membersTimes = data['membersTotalTime']
       console.log(this.dailyProjects)
@@ -568,6 +575,13 @@ export class AnalysisComponent implements OnInit {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data)
       this.projects = data['projects']
+
+      // project analysis
+      this.dailyProjects = []
+      this.projects.forEach((element : any) => {
+        this.dailyProjects.push(element)
+        this.getProjectDailyValues(element.ID)
+      });
 
       let tempTasks = []
       this.projectsBD = [0,0,0]
@@ -654,14 +668,6 @@ export class AnalysisComponent implements OnInit {
         }
       )
 
-      // project analysis
-      this.dailyProjects = []
-      this.projects.forEach((element : any) => {
-        this.dailyProjects.push(element)
-        this.getProjectDailyValues(element.ID)
-        this.getProjectMembersTotalTime(element.ID)
-      });
-
     },
     error => {
       let errorCode = error['status'];
@@ -676,7 +682,6 @@ export class AnalysisComponent implements OnInit {
 
   // project analysis
   getProjectAnalysis() {
-
     this.dailyProjects.forEach((element : any) => {
 
       // daily performance values
@@ -799,6 +804,8 @@ export class AnalysisComponent implements OnInit {
       let rate = this.dailyProjects[index].hourlyRate
 
       let values = element.predictions.map(d => Math.abs(Math.round(( ((d / 60) + Number.EPSILON) * 100) * rate) / 100))
+      element.pMoney = Math.round(( (values.reduce((a, b) => a + b, 0)) + Number.EPSILON) * 100) / 100
+      element.pTime = this.getTime(Math.abs(element.predictions.reduce((a, b) => a + b, 0)))
       console.log(values)
 
       let chartName = 'monetary' + counter.toString()
@@ -843,9 +850,9 @@ export class AnalysisComponent implements OnInit {
           data: { 
             datasets: [{
               data: element.predictions.map(d => Math.abs(Math.round(( (d / 60) + Number.EPSILON) * 100) / 100)),
-              backgroundColor: this.projectColors[count % 4],
-              pointColor: this.projectBorderColors[count % 4],
-              borderColor: this.projectBorderColors[count % 4],
+              backgroundColor: 'rgba(54, 108, 235, 0.4)',
+              pointColor: '#366ceb',
+              borderColor: '#366ceb',
               borderWidth: 1
             }
           ],

@@ -304,8 +304,9 @@
     <section id="predictive-analysis" class="col-12" *ngIf="predictive">
         <div class="charts">
             <div *ngFor="let p of predictions" class="col-12">
-                <h2 class="m-3">{{p.projectName}}</h2>
-                <div class="data-card float-left col-6 p-2">
+                <h2>{{p.projectName}}</h2>
+                <div>
+                <div class="data-card float-left col-5 p-2">
                     <mat-card id="performance" class="col-12">
                         <mat-card-title>Expected performance</mat-card-title>
                         <!-- two lines: hours per day + monetary value per day -->
@@ -315,7 +316,7 @@
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <div class="data-card float-left col-6 p-2">
+                <div class="data-card float-left col-5 p-2">
                     <mat-card id="performance" class="col-12">
                         <mat-card-title>Expected earnings</mat-card-title>
                         <!-- two lines: hours per day + monetary value per day -->
@@ -324,6 +325,19 @@
                                 {{p.mchart}}</canvas>
                         </mat-card-content>
                     </mat-card>
+                </div>
+                <div class="data-card float-left col-2 p-2">
+                    <mat-card id="hours" class="col-12">
+                    <!-- number of hours for this week -->
+                    <mat-icon>alarm_on</mat-icon><br>
+                    <b>{{p.pTime}}</b><br>
+                    </mat-card><br>
+                    <mat-card id="money" class="col-12">
+                    <!-- monetary value for this week -->
+                    <mat-icon>payment</mat-icon><br>
+                    <b>R{{p.pMoney}}</b><br>
+                    </mat-card><br>
+                </div>
                 </div>
                 <mat-divider></mat-divider>
             </div>
