@@ -1224,7 +1224,10 @@ module.exports.getProjectMembersTotalTime = async (req, res) => {
                                               }
                                             }
                                           ]);
-                                        final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
+                                        if(val.length == 0)
+                                             final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : 0, numberOfEntries: 0});
+                                        else
+                                            final.push({userID: userResult.ID,name : userResult.name, surname:userResult.surname, email: userResult.email, role:userResult.role, profilePicture: userResult.profilePicture, timeSpent : val[0].totalTime, numberOfEntries: val[0].count});
                                         if(final.length == result.length)
                                              return res.status(200).send({membersTotalTime:final})
                                     } 
