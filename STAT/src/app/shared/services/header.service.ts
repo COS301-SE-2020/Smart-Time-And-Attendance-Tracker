@@ -17,6 +17,7 @@ export class HeaderService {
     localStorage.removeItem('token');
     localStorage.removeItem('roles');
     localStorage.removeItem('loggedIn');
+    localStorage.removeItem('profilePic')
     this.isUserLoggedIn.next(false);
 
     this.router.navigate(['/sign-in']);

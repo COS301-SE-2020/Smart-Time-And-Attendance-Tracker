@@ -31,7 +31,7 @@ h3
   color: #fff
 
   b
-      font-size: 1.4em
+    font-size: 1.4em
 
   #projects
     background-color: #8368fc
@@ -280,3 +280,121 @@ ul
 
   .risk-done
     color: #17e883
+
+  .risk-pending
+    color: #39c0ff
+
+#pid1, #project-view
+  margin-top: 0 !important
+  padding-top: 0 !important
+
+mat-button-toggle, mat-button-toggle-group, .mat-button-toggle-checked
+  border: none !important
+  outline: none !important
+  outline-style: none !important
+
+$colors : #7846eb, #00c8ff, #ff2885, #366ceb
+@for $i from 0 through 10
+  .proj-member:nth-child(#{$i}) div.pro-pic
+    background-color: nth($colors, random(length($colors)))
+
+img, .pro-pic
+  display: inline-block
+  text-align: center
+  align-items: center
+  vertical-align: middle
+  color: #ffffff
+  font-size: 0.8em
+  letter-spacing: 1px
+  width: 45px
+  height: 45px
+  line-height: 45px
+  margin-right: 0.5em
+  border-radius: 5em
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 4px 6px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)
+
+.proj
+  font-size: 1em
+  width: 45px
+  height: 45px
+  line-height: 45px
+  margin-left: -1em 
+  border-radius: 5em
+  white-space: pre-line
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+
+#projectsAndTasks
+  h3
+    margin-bottom: 0
+
+#predictive-analysis
+  top: -3.5em
+
+  .data-card
+    margin-bottom: 2.5em
+
+  h2
+    display: block !important
+
+  .charts>div>div
+    display: flex
+    align-content: center
+    align-items: center
+
+  #hours, #money
+    text-align: center
+    color: #fff
+
+    b
+      font-size: 1.4em
+
+  #hours
+    background-color: #366ceb
+
+  #money
+    background-color: #17e883
+
+  .bad
+    background-color: #ff444e !important
+
+  mat-icon
+    font-size: 1.7em
+
+#team-members
+  margin-left: 1em
+
+  img, .pro-pic
+    width: 45px !important
+    height: 45px !important
+    line-height: 45px !important
+
+  #show-comp, #hide-comp
+    vertical-align: bottom
+    margin: auto
+
+    mat-icon 
+      margin-right: 0.5em
+
+.float-right button
+  padding: 0
+  color: #4c585b90
+  text-transform: uppercase
+  font-size: 0.8em
+  line-height: normal
+  min-width: fit-content
+  margin-left: 1.5em
+
+  &:focus
+    outline: none
+
+  mat-icon
+    font-size: 1.2em !important
+    vertical-align: top !important
+
+#members-times
+  mat-card-subtitle
+    color: #4c585b
+
+  ul 
+    margin-left: 0em
+    padding-left: 10px

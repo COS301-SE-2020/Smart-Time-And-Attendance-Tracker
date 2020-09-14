@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ɵConsole } from '@angular/core';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup } from '@angular/forms';
@@ -78,9 +78,9 @@ export class TodayComponent implements OnInit {
   ngOnInit(): void {
     this.manualTrackingForm = new FormGroup({
       description : new FormControl(''),
-      project : new FormControl(''),
+      projectID : new FormControl(''),
       taskID : new FormControl(''),
-      //MonetaryValue : new FormControl('', [Validators.required]),
+      monetaryValue : new FormControl(''),
       date : new FormControl('', [Validators.required]),
       startTime : new FormControl('', [Validators.required]),
       endTime : new FormControl('', [Validators.required]),
@@ -174,6 +174,7 @@ export class TodayComponent implements OnInit {
   //Add a manual time entry from form
   addManualEntry(form : NgForm)
   {
+    console.log(form.value)
     form['date'] = form['date'].replace(/\-/g, '/')
     this.service.addMTimeEntry(localStorage.getItem('token'), form).subscribe((data) => {
       console.log(data)
@@ -424,6 +425,7 @@ export class TodayComponent implements OnInit {
           this.getEntries(this.formatDate(this.date5))
           break
       }
+      this.reload()
 
       //this.editing = false
     },
@@ -468,6 +470,7 @@ export class TodayComponent implements OnInit {
     },
     error => {
       let errorCode = error['status'];
+      console.log(error)
       if (errorCode == '403')
       {
         //console.log("Your session has expired. Please sign in again.");

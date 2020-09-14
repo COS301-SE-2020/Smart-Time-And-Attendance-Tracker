@@ -1,4 +1,9 @@
 <iframe #iframe [src] = "sanitizer.bypassSecurityTrustResourceUrl('../../../assets/iframe.html')" height="0" width="0"></iframe>
+
+<!-- HOTKEYS -->
+<div (document:keydown.shift.b)="addAutomaticEntry(automaticTrackingForm.value)"></div>
+<div (document:keydown.shift.e)="stopTracking()"></div>
+
 <div class="row">
   <!-- CURRENTLY TRACKING -->
   <section id="currently-tracking" class="col-6 float-left">
@@ -44,6 +49,10 @@
               (click)="editing = false; addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
       </form>
+      <span id="shortcuts">
+        <b>Speed up your tracking with our keyboard shortcuts</b>
+        <br> Just hit <span>shift</span>+<span>b</span> to begin tracking and <span>shift</span>+<span>e</span> to end
+      </span>
       <br><br>
       <!-- ENTRIES -->
       <!--<ngb-carousel *ngIf= "trackingNow" [showNavigationArrows]="false" interval="0">
@@ -379,8 +388,8 @@
     
         <mat-form-field appearance="standard" class="col-6">
           <mat-label>Project</mat-label>
-          <mat-select [(value)]="mProjectSelected" formControlName="project">
-            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="getTasks(p.ID, 'm'); pName = p.projectName">{{p.projectName}}</mat-option>
+          <mat-select [(value)]="mProjectSelected" formControlName="projectID">
+            <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="mProjectSelected = p.ID; getTasks(p.ID, 'm'); pName = p.projectName">{{p.projectName}}</mat-option>
           </mat-select>
           <mat-error>Please select a value</mat-error>
         </mat-form-field>

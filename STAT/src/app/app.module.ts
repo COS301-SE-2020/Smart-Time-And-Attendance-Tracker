@@ -13,6 +13,12 @@ import { MatIconModule } from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { AngularFireModule } from "@angular/fire";
+import { environment } from "../environments/environment";
+import {
+  AngularFireStorageModule,
+  AngularFireStorageReference,
+  AngularFireUploadTask} from "@angular/fire/storage";
 
 @NgModule({
   declarations: [
@@ -30,7 +36,9 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     HttpClientModule,
     ReactiveFormsModule,
     NgbModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    AngularFireStorageModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, "cloud")
   ],
   providers: [],
   bootstrap: [AppComponent]

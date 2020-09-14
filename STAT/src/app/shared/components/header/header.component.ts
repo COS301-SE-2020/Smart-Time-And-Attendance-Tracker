@@ -5,12 +5,15 @@ import { HeaderService } from '../../services/header.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.sass']
 })
 export class HeaderComponent implements OnInit {
 
   closeResult: string;
   isLoggedIn: boolean;
+  name : string = null
+  surname : string = null
+  profilePic : any
 
   constructor(private modalService: NgbModal, private headerService : HeaderService) {
     this.headerService.isUserLoggedIn.subscribe( value => {
@@ -21,6 +24,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem('loggedIn') == 'true') {
       this.headerService.isUserLoggedIn.next(true);
+      this.profilePic = localStorage.getItem('profilePic')
+      this.name = localStorage.getItem('name')
+      this.surname = localStorage.getItem('surname')
     }
   }
 

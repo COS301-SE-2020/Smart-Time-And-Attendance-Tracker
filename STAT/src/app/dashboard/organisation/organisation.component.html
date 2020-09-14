@@ -127,7 +127,7 @@
         <li class="list-alpha">{{m.alphabet}}</li>
         <li *ngFor="let r of m.records" class="member">
           <div *ngIf="r.profilePicture == 'none'" class="pro-pic">{{r.name[0]}}{{r.surname[0]}}</div>
-          <img *ngIf="r.profilePicture != 'none'" src="assets/proPic3.jpg">
+          <img *ngIf="r.profilePicture != 'none'" class="pro-pic" src="{{r.profilePicture}}">
           <span>{{r.name}} {{r.surname}}<br> <i>{{r.email}}</i></span>
           <span class="member-edit">
             <button mat-button class="teams-btn"

@@ -17,10 +17,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { AnalysisComponent } from './analysis/analysis.component';
 import { UnauthorisedComponent } from './unauthorised/unauthorised.component';
+import { AngularFireModule } from "@angular/fire";
+import { environment } from "../../environments/environment";
+import {
+  AngularFireStorageModule,
+  AngularFireStorageReference,
+  AngularFireUploadTask} from "@angular/fire/storage";
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent, ProfileComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -28,7 +35,9 @@ import { UnauthorisedComponent } from './unauthorised/unauthorised.component';
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    AngularFireStorageModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, "cloud")
   ]
 })
 export class DashboardModule { }
