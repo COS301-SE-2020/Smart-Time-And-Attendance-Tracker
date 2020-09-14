@@ -14,7 +14,7 @@ function createWindow() {
         y: 0,
         width: size.width,
         height: size.height,
-        icon: 'src/football.ico',
+        icon: 'src/favicon.ico',
         webPreferences: {
             nodeIntegration: true,
             allowRunningInsecureContent: (serve) ? true : false,
