@@ -102,6 +102,9 @@ export class AnalysisComponent implements OnInit {
   predictions : any[] = []
   predictiveCharts : any[] = []
 
+  // view
+  view : string = 'me'
+
   constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
 
   ngOnInit(): void {
@@ -131,8 +134,8 @@ export class AnalysisComponent implements OnInit {
     this.getDevices();
     this.getWeeklyProjectsTimes();
     this.getWeeklyTasksTimes();
-    //this.getPredictionsForWeekForProjects();
     this.getProAndTasks()
+    this.getPredictionsForWeekForProjects();
 
     // reset variables
     this.numProjects = '-'
@@ -143,6 +146,7 @@ export class AnalysisComponent implements OnInit {
     this.numUnder = 0
   }
 
+
   toggleAnalysis()
   {
     let temp = this.graphical;
@@ -150,7 +154,13 @@ export class AnalysisComponent implements OnInit {
     this.predictive = temp;
     this.cd.detectChanges();
     window.dispatchEvent(new Event('resize'));
-    //this.reset()
+    
+    if (this.predictive == false) {
+      this.meView = true
+      this.projectView = false
+      this.reset()
+    }
+
   }
 
   toggleView()
@@ -433,6 +443,7 @@ export class AnalysisComponent implements OnInit {
       
       console.log(this.tasksTimes)
 
+      this.progress = []
       this.tasksTimes.forEach((element : any) => {
         let index = this.progress.findIndex((a : any) => a.projectID === element.projectID)
         if (index == -1) {
@@ -750,22 +761,93 @@ export class AnalysisComponent implements OnInit {
 
   // predictive analysis
   getPredictive() {
-    // generate charts
-    console.log(this.predictions)
-    this.predictiveCharts = []
+    // dates
+    let date1 : Date = new Date()
+    let date2 : Date = new Date()
+    let date3 : Date = new Date()
+    let date4 : Date = new Date()
+    let date5 : Date = new Date()
+    let date6 : Date = new Date()
+    let date7 : Date = new Date()
+
+    // set dates
+    date1.setDate(this.date.getDate()+1)
+    date2.setDate(this.date.getDate()+2)
+    date3.setDate(this.date.getDate()+3)
+    date4.setDate(this.date.getDate()+4)
+    date5.setDate(this.date.getDate()+5)
+    date6.setDate(this.date.getDate()+6)
+    date7.setDate(this.date.getDate()+7)
+
+    let tempDates = []
+
+    tempDates.push(this.formatDate(date1))
+    tempDates.push(this.formatDate(date2))
+    tempDates.push(this.formatDate(date3))
+    tempDates.push(this.formatDate(date4))
+    tempDates.push(this.formatDate(date5))
+    tempDates.push(this.formatDate(date6))
+    tempDates.push(this.formatDate(date7))
+
+    // monetary values
+    let counter = 0
+    let count = 0
     this.predictions.forEach((element : any) => {
-      element.ID = 'p' + element.projectID
+      let index = this.dailyProjects.findIndex((a : any) => a.ID === element.projectID)
+      let rate = this.dailyProjects[index].hourlyRate
+
+      let values = element.predictions.map(d => Math.abs(Math.round(( ((d / 60) + Number.EPSILON) * 100) * rate) / 100))
+      console.log(values)
+
+      let chartName = 'monetary' + counter.toString()
+      element.chartName = chartName
+
       let temp = new Chart(
-        element.ID, {
+        element.projectName, {
           type: 'line',
           data: { 
             datasets: [{
-              data: element.predictions.map(d => Math.round(( (d / 60) + Number.EPSILON) * 100) / 100),
-              backgroundColor: 'rgba(200,155,200,0.5)',
-              pointBorderColor: '#87CEFA'
+              data: values,
+              backgroundColor: 'rgba(23, 232, 131, 0.4)',
+              pointColor: '#17e883',
+              borderColor: '#17e883',
+              borderWidth: 1
             }
           ],
-            labels: this.dates
+            labels: tempDates
+          },
+          options: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      )
+
+      element.mchart = temp
+      counter++
+
+    });
+
+    // generate charts
+    console.log(this.predictions)
+    this.predictiveCharts = []
+    count = 0
+    this.predictions.forEach((element : any) => {
+      //element.ID = 'p' + element.projectID
+      let temp = new Chart(
+        element.projectID, {
+          type: 'line',
+          data: { 
+            datasets: [{
+              data: element.predictions.map(d => Math.abs(Math.round(( (d / 60) + Number.EPSILON) * 100) / 100)),
+              backgroundColor: this.projectColors[count % 4],
+              pointColor: this.projectBorderColors[count % 4],
+              borderColor: this.projectBorderColors[count % 4],
+              borderWidth: 1
+            }
+          ],
+            labels: tempDates
           },
           options: {
             legend: {
@@ -776,6 +858,7 @@ export class AnalysisComponent implements OnInit {
       )
 
       element.chart = temp
+      count++
     });
     
   }

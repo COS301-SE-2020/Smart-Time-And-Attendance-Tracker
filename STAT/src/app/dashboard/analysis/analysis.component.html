@@ -6,7 +6,7 @@
                 <h3><mat-slide-toggle (click)="toggleAnalysis(); getPredictive()">Predictive analysis</mat-slide-toggle></h3>
             </div>
             <div class="col-lg-6 col-12 float-right text-right">
-                <mat-form-field appearance="standard" class="col-6" *ngIf="projectView">
+                <!--<mat-form-field appearance="standard" class="col-6" *ngIf="projectView">
                     <mat-label>Project</mat-label>
                     <mat-select>
                         <mat-option value="all" selected>All projects</mat-option>
@@ -24,9 +24,9 @@
                         <mat-option value="week2">2 weeks ago</mat-option>
                         <mat-option value="week1">3 weeks ago</mat-option>
                     </mat-select>
-                </mat-form-field>
+                </mat-form-field>-->
                 <br>
-                <mat-button-toggle-group id="viewToggle" appearance="legacy" name="view" aria-label="View data for"
+                <mat-button-toggle-group *ngIf="graphical" id="viewToggle" appearance="legacy" name="view" aria-label="View data for"
                 class="float-right">
                     <mat-button-toggle value="me" checked (click)="toggleView()">
                         <mat-icon>person</mat-icon>Me
@@ -299,23 +299,31 @@
     </section>
 
     <!-- predictive analysis -->
-    <section class="col-12" *ngIf="predictive">
+    <section id="predictive-analysis" class="col-12" *ngIf="predictive">
         <div class="charts">
-            <div *ngFor="let p of predictions" class="data-card-row">
-                <div class="data-card col-12 p-2">
+            <div *ngFor="let p of predictions" class="col-12">
+                <h2 class="m-3">{{p.projectName}}</h2>
+                <div class="data-card float-left col-6 p-2">
                     <mat-card id="performance" class="col-12">
-                        <mat-card-title>Expected performance for {{p.projectName}}</mat-card-title>
+                        <mat-card-title>Expected performance</mat-card-title>
                         <!-- two lines: hours per day + monetary value per day -->
                         <mat-card-content>
-                            <canvas id="{{p.ID}}">
+                            <canvas id="{{p.projectID}}">
                                 {{p.chart}}</canvas>
                         </mat-card-content>
-                        <mat-card-footer>
-                            <p>Mean daily hours: </p>
-                            <p>Mean daily earnings: </p>
-                        </mat-card-footer>
                     </mat-card>
                 </div>
+                <div class="data-card float-left col-6 p-2">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Expected earnings</mat-card-title>
+                        <!-- two lines: hours per day + monetary value per day -->
+                        <mat-card-content>
+                            <canvas id="{{p.projectName}}">
+                                {{p.mchart}}</canvas>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <mat-divider></mat-divider>
             </div>
         </div>
     </section>
