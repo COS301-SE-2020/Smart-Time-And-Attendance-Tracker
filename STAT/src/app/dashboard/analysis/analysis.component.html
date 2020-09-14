@@ -327,12 +327,12 @@
                     </mat-card>
                 </div>
                 <div class="data-card float-left col-2 p-2">
-                    <mat-card id="hours" class="col-12">
+                    <mat-card id="hours" class="col-12" [ngClass]="{'bad': p.pTime < 300}">
                     <!-- number of hours for this week -->
                     <mat-icon>alarm_on</mat-icon><br>
-                    <b>{{p.pTime}}</b><br>
+                    <b>{{getTime(p.pTime)}}</b><br>
                     </mat-card><br>
-                    <mat-card id="money" class="col-12">
+                    <mat-card id="money" class="col-12" [ngClass]="{'bad': p.pMoney < 1000}">
                     <!-- monetary value for this week -->
                     <mat-icon>monetization_on</mat-icon><br>
                     <b>R{{p.pMoney}}</b><br>

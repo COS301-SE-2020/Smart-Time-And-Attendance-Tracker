@@ -805,7 +805,7 @@ export class AnalysisComponent implements OnInit {
 
       let values = element.predictions.map(d => Math.abs(Math.round(( ((d / 60) + Number.EPSILON) * 100) * rate) / 100))
       element.pMoney = Math.round(( (values.reduce((a, b) => a + b, 0)) + Number.EPSILON) * 100) / 100
-      element.pTime = this.getTime(Math.abs(element.predictions.reduce((a, b) => a + b, 0)))
+      element.pTime = Math.abs(element.predictions.reduce((a, b) => a + b, 0))
       console.log(values)
 
       let chartName = 'monetary' + counter.toString()
