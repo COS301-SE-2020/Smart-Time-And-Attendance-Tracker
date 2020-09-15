@@ -210,18 +210,18 @@ describe('AnalysisService:', () => {
 
    ////////////////////////////////////
 
-   describe('getProjectDailyValues()', () => {
+   describe('getProjectMembersTotalTime()', () => {
     it('should return a response object from the API via GET', async() => {
       var values= '5f17f6f4a3fe98481c47394f';
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={ membersTotalTime: [] };
-      service.getProjectDailyValues(req,values).subscribe(
+      service.getProjectMembersTotalTime(req,values).subscribe(
         response=> {
           expect(response).toBe(res);
         }
       );
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'userTimeEntry/getProjectDailyTotalTime?projectID=5f17f6f4a3fe98481c47394f');
+      const req2 = HttpMock.expectOne(ROOT_URL+'userTimeEntry/getProjectMembersTotalTime?projectID=5f17f6f4a3fe98481c47394f');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -230,12 +230,12 @@ describe('AnalysisService:', () => {
       var values=  '5f17f6f4a3fe98481c47394f';
       const res ={ message: "No token provided" };
 
-      service.getProjectDailyValues(req,values).subscribe(
+      service.getProjectMembersTotalTime(req,values).subscribe(
         () => {}, err => {
           expect(err).toBe(res);
         });
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'userTimeEntry/getProjectDailyTotalTime?projectID=5f17f6f4a3fe98481c47394f');
+      const req2 = HttpMock.expectOne(ROOT_URL+'userTimeEntry/getProjectMembersTotalTime?projectID=5f17f6f4a3fe98481c47394f');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });

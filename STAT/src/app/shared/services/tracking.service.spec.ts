@@ -55,7 +55,6 @@ describe('TrackingService', () => {
          "startTime": "15:30",
          "endTime":"16:30",
          "activeTime" :44,
-         "description" : "Manual entry",
          "device" : "Website"
      };
       const token ="";

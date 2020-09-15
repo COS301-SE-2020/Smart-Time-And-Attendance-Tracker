@@ -366,6 +366,40 @@ describe('ProjectManagementService', () => {
   });
 
   ////////////////////
+  describe('uncompleteProject()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        "projectID": "5f1302bd16a15a17140103f1" };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Project marked as uncompleted '};
+      service.uncompleteProject(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/uncomplete');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        "projectID": "5f1302bd16a15a17140103f1" };
+      const token ="";
+      const res = { message: 'No token provided'};
+      service.uncompleteProject(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/uncomplete');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+
+  ////////////////////
   describe('completeTask()', () => {
     it('should return a response object from the API via POST', async() => {
       const req ={
@@ -427,6 +461,40 @@ describe('ProjectManagementService', () => {
         }
       );
       const req2 = HttpMock.expectOne(ROOT_URL+'task/start');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+
+  //////////////////////////
+  describe('resetTask()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        "taskID": "5f1302bd16a15a17140103f1" };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Task status updated to "In Progress"'};
+      service.resetTask(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'task/reset');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        "taskID": "5f1302bd16a15a17140103f1" };
+      const token ="";
+      const res = { message: 'No token provided'}
+      service.resetTask(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'task/reset');
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
     });

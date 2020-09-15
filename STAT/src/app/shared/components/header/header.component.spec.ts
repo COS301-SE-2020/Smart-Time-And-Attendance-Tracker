@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './header.component';
 import { HeaderService } from '../../services/header.service';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('Unit Tests:', () => {
 describe('HeaderComponent', () => {
@@ -44,7 +45,7 @@ describe('Integration Tests:', () => {
         [RouterTestingModule],
         providers: [ HeaderService, RouterTestingModule]
           /*{provide: Router, useValue: {navigate: () => {}}},
-          {provide: HeaderService, useValue: {kickOut: () => {}}}
+          {provide: HeaderService, useValue: {kickOut: () => of({})}}
          ]*/
         })
       .compileComponents().then(()=>
@@ -62,11 +63,11 @@ describe('Integration Tests:', () => {
       it('should remove the appropriate variables', async(() => {
        
         spyOn(service, 'kickOut').and.callThrough();
+        spyOn(component, 'logout');
         component.logout();  
+        fixture.detectChanges();
         expect(component.logout).toHaveBeenCalledTimes(1);
-        expect(localStorage.getItem('loggedIn')).toBe(null);
-        expect(localStorage.getItem('roles')).toBe(null);
-        expect(localStorage.getItem('token')).toBe(null);
+        expect(service.kickOut).toHaveBeenCalledTimes(1);
       }));
     });
   });
