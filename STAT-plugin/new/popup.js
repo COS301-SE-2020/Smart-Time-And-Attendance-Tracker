@@ -7,7 +7,7 @@ function showTime() {
     var timer = document.getElementById("timer");
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
-        if(tabs[0].url.includes("localhost:4200"))
+        if(tabs[0].url.includes(WEBSITE_USRL))
         {
             document.getElementById("select_task_form").style.display="none";
             document.getElementById("reselect_task").style.display="none";
@@ -69,7 +69,7 @@ SelectTask.onclick = function() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
         var url = tabs[0].url;
-        if(tabs[0].url.includes("localhost:4200"))
+        if(tabs[0].url.includes(WEBSITE_USRL))
         {
             document.getElementById("select_task_form").style.display="none";
             document.getElementById("reselect_task").style.display="none";
@@ -127,7 +127,7 @@ stopStartBtn.onclick = function(){
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
         var url = tabs[0].url
-        if(tabs[0].url.includes("localhost:4200"))
+        if(tabs[0].url.includes(WEBSITE_USRL))
         {
             document.getElementById("select_task_form").style.display="none";
             document.getElementById("reselect_task").style.display="none";
@@ -189,7 +189,7 @@ stopStartBtn.onclick = function(){
 function displayButton() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         currentID = tabs[0].id;
-        if(tabs[0].url.includes("localhost:4200"))
+        if(tabs[0].url.includes(WEBSITE_USRL))
         {
             document.getElementById("select_task_form").style.display="none";
             document.getElementById("reselect_task").style.display="none";

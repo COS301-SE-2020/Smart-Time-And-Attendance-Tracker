@@ -1,3 +1,5 @@
+const WEBSITE_USRL = "localhost:4200";
+
 const BASE_URL = "http://localhost:3000/api";
 var user = new User();
 
@@ -27,7 +29,7 @@ processDisplay();
         document.getElementById("popup").style.display = "block";
         chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
           currentID = tabs[0].id;
-          if(tabs[0].url.includes("localhost:4200"))
+          if(tabs[0].url.includes(WEBSITE_USRL))
           {
               document.getElementById("select_task_form").style.display="none";
               document.getElementById("start_stop").style.display = "none";
