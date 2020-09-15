@@ -52,7 +52,7 @@ function Update(t, tabID, url) {
         else{
           //alert( "prob");
         }
-      }, 60*1000);
+      }, 60*1000); //making the time entry after 1 mintute
 
       var history_limit = parseInt(localStorage["history_size"]);
       if (! history_limit) {
@@ -140,7 +140,6 @@ function HandleUpdate(tabID, changeInfo, tab) {
         //alert(currentDuration);
         if(currentDuration>60)
         {
-          
           UpdateTimeEntry(new Date(), tabID, currentDuration, false);
         }
       }

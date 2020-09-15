@@ -202,6 +202,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
   var http = new XMLHttpRequest();
   var activeTime = getMinutesFromSeconds(duration);
   var monetaryValue = 0;
+  //getting hourly rate and calutaiting the monetaryValue
   if(chrome.extension.getBackgroundPage().History[currentID][0][4])
   {
     var obj = JSON.parse(chrome.extension.getBackgroundPage().History[currentID][0][4]);
@@ -224,7 +225,6 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
     //alert(http.readyState + "  " + http.status);
     if(http.readyState == 4 && http.status == 200) {
       const obj = JSON.parse(http.responseText);
-      //alert("message :   " + obj.message);
       if(stop)
       {
         stopStartBtn.name = "start";
