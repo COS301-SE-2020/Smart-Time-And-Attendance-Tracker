@@ -1,18 +1,12 @@
-- language: node_js
+matrix:
+  include:
+  - language: node_js
     node_js:
     - 12.18.2
-  
-jobs:
-  include:
-    script: cd STAT
-  - name: "Angular-build"
     script:
-    - ng serve
-  - name: "Angular-tests"
-    script:
+    - cd STAT
     - npm install
     - npm run test-headless
-    
   branches:
     only:
       - master
