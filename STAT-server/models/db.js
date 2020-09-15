@@ -26,8 +26,9 @@ mongoose.set('useNewUrlParser', true);
 
 console.log("check if mongouri exists---------------- "+process.env.MONGODB_URI+" JWT= "+process.env.JWT_SECRET)
 
+///decodeURIComponent(process.env.MONGODB_URI)
 
-mongoose.connect(decodeURIComponent(process.env.MONGODB_URI), (err) => {
+mongoose.connect(process.env.MONGODB_URI, (err) => {
     if (!err) { console.log('MongoDB connection succeeded.'); }
     else { console.log('Error in MongoDB connection : ' + JSON.stringify(err, undefined, 2)); }
 });

@@ -109,17 +109,6 @@ router.post("/iotDevice/startTimer", jwtHelper.verifyJWTtoken, userHelper.isAuth
 router.post("/iotDevice/stopTimer", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated,  userHelper.isSecurityAdmin, iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
 
 
-//tensorFlowAnalysis
-//router.post("/analysis/userWeeklyHoursPrediction", jwtHelper.verifyJWTtoken, user.getProjects, tensorFlowAnalysis.getFourWeekData, tensorFlowAnalysis.userWeeklyHoursPrediction);
-
-router.get("/analysis/projectWeeklyHoursPrediction", jwtHelper.verifyJWTtoken,  userHelper.isTeamLeader, user.getProjects2, tensorFlowAnalysis.try2);
-
-// annalysis
-//router.get("/analysis/getUserAverageTime", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated ,analysis.getUserAverageTime);
-//router.get("/analysis/getAllProjectDevices", analysis.getAllProjectDevices);
-//router.get("/analysis/getUserWebsites", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated , analysis.getUserWebsites);
-//router.get("/analysis/getProjectDevices", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader , analysis.getProjectDevices);
-//router.get("/analysis/getProjectWebsites", jwtHelper.verifyJWTtoken, userHelper.isTeamLeader , analysis.getProjectWebsites);
 
 router.get("/userTimeEntry/getUserDailyTotalTime",jwtHelper.verifyJWTtoken, userHelper.isAuthenticated, userTimeEntry.getUserDailyTotalTime);
 router.get("/userTimeEntry/getProjectDailyTotalTime",jwtHelper.verifyJWTtoken, userHelper.isTeamLeader, userTimeEntry.getProjectDailyTotalTime);

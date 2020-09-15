@@ -376,7 +376,7 @@ describe("TIME ENTRIES endpoints", ()=>{
              })
     });
     
-
+/*
     it("get all system users entries", (done) =>{    ////take 10 seconds
         chai.request('http://localhost:3000')
              .get("/api/userTimeEntry/getAllUsersTimeEntries")
@@ -404,7 +404,49 @@ describe("TIME ENTRIES endpoints", ()=>{
             done(); 
              })
     });
+*/
+
+////////////////////////////////////////////////    ANALYSIS
+    it("get User Daily Total Time ", (done) =>{    
+        chai.request('http://localhost:3000')
+             .get("/api/userTimeEntry/getUserDailyTotalTime")
+             .set("Authorization", "Bearer " + adminToken)
+             .query({projectID: projectID }) 
+             .end((err,res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('totalDailyValues')
+            done(); 
+             })
+    });
+
     
+
+    it("get Project Daily Total Time ", (done) =>{    
+        chai.request('http://localhost:3000')
+             .get("/api/userTimeEntry/getProjectDailyTotalTime")
+             .set("Authorization", "Bearer " + adminToken)
+             .query({projectID: projectID }) 
+             .end((err,res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('totalDailyValues')
+            done(); 
+             })
+    });
+
+    it("get project users entries ", (done) =>{    
+        chai.request('http://localhost:3000')
+             .get("/api/userTimeEntry/getProjectDailyTotalTime")
+             .set("Authorization", "Bearer " + adminToken)
+             .end((err,res) => {
+                res.should.have.status(400);
+                res.body.message.should.be.eq('No project ID provided')
+            done(); 
+             })
+    });
+
+
+
+
 
         
     });
