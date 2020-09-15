@@ -42,7 +42,10 @@
     "all": true,
     "check-coverage": true,
     "exclude": [
-      "tracker/*"
+      "tracker/*",
+      "analysis/*",
+      "helpers/*",
+      "controllers/analysis.controller.js"
     ]
   }
 }

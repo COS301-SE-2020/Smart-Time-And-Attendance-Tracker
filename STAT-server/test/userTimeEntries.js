@@ -218,7 +218,7 @@ describe("TIME ENTRIES endpoints", ()=>{
                  .query({date: date, }) 
                  .end((err,res) => {
                     res.body.should.be.a('object');
-                    res.should.have.status(400);
+                    res.should.have.status(200);
                     res.body.timeEntries.length.should.be.eq(5) ////
                 done(); 
                  })
@@ -231,8 +231,8 @@ describe("TIME ENTRIES endpoints", ()=>{
                  .set("Authorization", "Bearer " + user1Token)
                  .end((err,res) => {
                     res.body.should.be.a('object');
-                    res.should.have.status(200);
-                    res.body.message.length.should.be.eq('No date provided') ////
+                    res.should.have.status(400);
+                    res.body.message.should.be.eq('No date provided') ////
                 done(); 
                  })
         });

@@ -23,7 +23,7 @@ describe('test file 1', function() {
      server.close();
  }); 
 
- /*   
+ 
     describe('test USER', function() {
        require ('./user.js')
     })
@@ -31,12 +31,11 @@ describe('test file 1', function() {
     describe('test PROJECT', function() {
        require ('./project.js')
       })
- */     
+    
     describe('test USER TIME ENTRIES', function() {
        require ('./userTimeEntries.js')
       })
-
- /*     
+   
     describe('test TEAM', function() {
        require ('./team.js')
       })
@@ -46,9 +45,11 @@ describe('test file 1', function() {
     describe('iotDevice', function() {
         require ('./iotDevice.js')
       })
+
+    
     describe('test ROLE', function() {
-        //require ('./role.js')
+         require ('./role.js')
       })
-*/
+
 
   })
