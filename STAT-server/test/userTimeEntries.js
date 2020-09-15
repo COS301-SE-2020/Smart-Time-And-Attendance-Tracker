@@ -376,7 +376,7 @@ describe("TIME ENTRIES endpoints", ()=>{
              })
     });
     
-/*
+/////THESE TWO RUN VERY SLOW - NEED MORE SECONDS FROM MOCHA
     it("get all system users entries", (done) =>{    ////take 10 seconds
         chai.request('http://localhost:3000')
              .get("/api/userTimeEntry/getAllUsersTimeEntries")
@@ -404,7 +404,7 @@ describe("TIME ENTRIES endpoints", ()=>{
             done(); 
              })
     });
-*/
+
 
 ////////////////////////////////////////////////    ANALYSIS
     it("get User Daily Total Time ", (done) =>{    
