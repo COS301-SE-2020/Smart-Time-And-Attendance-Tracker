@@ -7,4 +7,7 @@ matrix:
     - cd STAT-server
     - npm install
     - npm test
- 
+  branches:
+    only:
+      - master
+      - /^(?i:server)-.*$/
