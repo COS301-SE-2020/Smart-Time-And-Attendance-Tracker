@@ -1,4 +1,4 @@
-
+const BASE_URL = "http://localhost:3000/api";
 var user = new User();
 
 var userLogin = document.getElementById("login");
@@ -48,7 +48,7 @@ processDisplay();
   userLogin.onclick = function() {
     document.getElementById("errorMessage").innerHTML= "Loading...";
     var http = new XMLHttpRequest();
-    var url = 'http://localhost:3000/api/user/login';
+    var url = BASE_URL + '/user/login';
     http.open('POST', url, true);
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange = function()
@@ -94,7 +94,7 @@ processDisplay();
 
 function getUserName(){
   var http = new XMLHttpRequest();
-  var url = 'http://localhost:3000/api/user/getName';
+  var url = BASE_URL + '/user/getName';
   http.open('GET', url, true);
   http.setRequestHeader('Authorization', `Bearer ${localStorage.getItem("token")}` );
   http.onreadystatechange = function()
@@ -137,7 +137,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
   var activeTime = getMinutesFromSeconds(duration);
 //  alert("activeTime  : " + activeTime);
   var http = new XMLHttpRequest();
-  var apiURL = 'http://localhost:3000/api/userTimeEntry/addTimeEntry';
+  var apiURL = BASE_URL + '/userTimeEntry/addTimeEntry';
   var text = '{ "description": "'+ url + '",'
           + '"startTime": "'+ startTime.getTime() + '",'
           + '"endTime": "'+ endTime.getTime() + '",'
@@ -210,7 +210,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
   }
   
   
-  var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
+  var apiURL = BASE_URL + '/userTimeEntry/updateTimeEntry';
   var text = '{'
           + '"timeEntryID": "'+ chrome.extension.getBackgroundPage().History[currentID][0][2] + '",'
           + '"endTime": "'+ endTime.getTime() + '",'
@@ -253,7 +253,7 @@ function getProjects() {
   if(!user.getInstance().allProject)
   {
     var http = new XMLHttpRequest();
-    var apiURL = 'http://localhost:3000/api/user/getProjects';
+    var apiURL = BASE_URL + '/user/getProjects';
     http.open('GET', apiURL, true);
 
     http.setRequestHeader('Content-type', 'application/json');
@@ -431,7 +431,7 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
     + taskDetails + '}';
 
   var http = new XMLHttpRequest();
-  var apiURL = 'http://localhost:3000/api/userTimeEntry/updateTimeEntry';
+  var apiURL = BASE_URL + '/userTimeEntry/updateTimeEntry';
   http.open('POST', apiURL, true);
   http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
