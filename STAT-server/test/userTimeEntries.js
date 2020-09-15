@@ -444,7 +444,31 @@ describe("TIME ENTRIES endpoints", ()=>{
              })
     });
 
+    
+    it("get Project Daily Total Time ", (done) =>{    
+        chai.request('http://localhost:3000')
+             .get("/api/userTimeEntry/getUserDailyTotalMoney")
+             .set("Authorization", "Bearer " + adminToken)
+             .query({projectID: projectID }) 
+             .end((err,res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('totalDailyValues')
+            done(); 
+             })
+    });
 
+    
+    it("get Project Daily Total Time ", (done) =>{    
+        chai.request('http://localhost:3000')
+             .get("/api/userTimeEntry/getUserWeeklyTimeForProjects")
+             .set("Authorization", "Bearer " + adminToken)
+             .query({projectID: projectID }) 
+             .end((err,res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('totalProjectsTimes')
+            done(); 
+             })
+    });
 
 
 
