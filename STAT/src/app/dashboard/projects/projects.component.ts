@@ -137,7 +137,7 @@ export class ProjectsComponent implements OnInit {
   // add project
   addProject(form : NgForm) {
     this.pmService.addProject(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -154,9 +154,9 @@ export class ProjectsComponent implements OnInit {
   //add task
   addTask(form : NgForm) {
     form['projectID'] = this.pid
-    console.log(form);
+    //console.log(form);
     this.pmService.addTask(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -173,9 +173,9 @@ export class ProjectsComponent implements OnInit {
 
   // edit project (projectID must be added to body)
   editProject(form : NgForm) {
-    console.log(form)
+    //console.log(form)
     this.pmService.editProject(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {

@@ -10,7 +10,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProjectManagementService } from 'src/app/shared/services/project-management.service';
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { HeaderService } from 'src/app/shared/services/header.service';
+import {NO_ERRORS_SCHEMA} from "@angular/core"
 
 describe('ProjectsComponent', () => {
 describe('Unit tests:', () => {
@@ -34,7 +36,8 @@ describe('Unit tests:', () => {
           MaterialComponentsModule,
           MatProgressSpinnerModule,
           BrowserAnimationsModule
-        ]
+        ],
+        schemas:[NO_ERRORS_SCHEMA]
     })
     .compileComponents().then(()=>
     {
@@ -111,6 +114,7 @@ describe('ProjectsComponent', () => {
     let projects;
     let tasks;
     let pmService;
+    let hService;
     let amService;
     let roles;
 
@@ -132,7 +136,8 @@ describe('ProjectsComponent', () => {
           MaterialComponentsModule,
           MatProgressSpinnerModule,
           BrowserAnimationsModule
-        ]
+        ],
+        schemas:[NO_ERRORS_SCHEMA]
       })
       .compileComponents().then(()=>
       {
@@ -162,6 +167,8 @@ describe('ProjectsComponent', () => {
 
         fixture.detectChanges();
         pmService = TestBed.get(ProjectManagementService);
+        hService = TestBed.get(HeaderService);
+        amService = TestBed.get(AccountManagementService);
         de = fixture.debugElement.query(By.css('.row'));
         el = de.nativeElement;
 
@@ -257,6 +264,104 @@ describe('ProjectsComponent', () => {
       expect(pmService.editTask).toHaveBeenCalledTimes(1);
     }));
 
+    describe('getProAndTasks()', () => {
+
+      it('should save the projects if called successfully', async(() => {
+
+        spyOn(amService, 'getProjectsAndTasks').and.returnValue(of({projects: []}));
+        spyOn(component, 'getTasks');
+        component.getProAndTasks();
+        
+        fixture.detectChanges();
+        expect(component.allProjects).toEqual([]);
+        expect(component.getTasks).toHaveBeenCalled();
+
+      }));
+
+      it('should catch error and call appropriate functions', async(() => {
+        
+        spyOn(hService, 'kickOut');
+        spyOn(component, 'getTasks');
+        spyOn(amService, 'getProjectsAndTasks').and.returnValue(throwError({
+          status: 403,
+          error: {
+            message: 'Access denied'
+          }
+        }));
+        component.getProAndTasks();
+        fixture.detectChanges();
+        expect(component.getTasks).not.toHaveBeenCalled();
+        expect(hService.kickOut).toHaveBeenCalled();
+      }));
+
+      describe('addProject()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+          component.addProjectForm.controls['projectName'].setValue('Unit tests');
+          component.addProjectForm.controls['dueDate'].setValue('2020-12-15');
+          component.addProjectForm.controls['hourlyRate'].setValue('2.50');
+          spyOn(pmService, 'addProject').and.returnValue(of({message: "Project added successfully"}));
+          spyOn(component, 'getProAndTasks');
+          component.addProject(component.addProjectForm.value);
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(component, 'getTasks');
+          spyOn(pmService, 'addProject').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.addProject(component.addProjectForm.value);
+          fixture.detectChanges();
+          expect(component.getTasks).not.toHaveBeenCalled();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('editProject()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+          component.addProjectForm.controls['projectName'].setValue('Unit tests');
+          component.addProjectForm.controls['dueDate'].setValue('2020-12-15');
+          component.addProjectForm.controls['hourlyRate'].setValue('2.50');
+          spyOn(pmService, 'editProject').and.returnValue(of({message: "Project added successfully"}));
+          spyOn(component, 'getProAndTasks').and.callThrough();
+          component.editProject(component.addProjectForm.value);
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(component, 'getProAndTasks');
+          spyOn(pmService, 'editProject').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.editProject(component.addProjectForm.value);
+          fixture.detectChanges();
+          expect(component.getProAndTasks).not.toHaveBeenCalled();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+  });
+
+
   /*  it("should call the editProject method when the 'Edit Project' button is pressed", async(() => {
       spyOn(component,'editProject');
       el = fixture.debugElement.query(By.css("#editProject")).nativeElement;
@@ -301,5 +406,5 @@ describe('ProjectsComponent', () => {
       });*/
       // ****************************************** END
   });
-  });
+});
 

@@ -28,6 +28,11 @@ describe('HeaderComponent', () => {
   it('should be created', async () => {
     expect(component).toBeTruthy();
   });
+
+  it('should be follow correct path OnInit if logged in', async () => {
+    localStorage.setItem("loggedIn",'true');
+    expect(component).toBeTruthy();
+  });
 });
 });
 
@@ -62,7 +67,7 @@ describe('Integration Tests:', () => {
 
       it('should remove the appropriate variables', async(() => {
        
-        spyOn(service, 'kickOut').and.callThrough();
+        spyOn(service, 'kickOut');
         spyOn(component, 'logout');
         component.logout();  
         fixture.detectChanges();
