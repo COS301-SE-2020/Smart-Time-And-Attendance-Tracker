@@ -29,9 +29,11 @@ export class AppComponent {
   private ROOT_URL = "http://localhost:3000/api/";
 
   constructor(public http: HttpClient) {
-    this.users['Zendaya'] = new User("5f22b835dc9bb242f4e27a79");
-    this.users['Henry'] = new User("5f22e40769e3286568da894c");
-    this.users['Zac'] = new User("5f22e51469e3286568da894d");
+    this.users['Vianka'] = new User("5f22b835dc9bb242f4e27a79");
+    this.users['Jana'] = new User("5f22e40769e3286568da894c");
+    this.users['Jesse'] = new User("5f22e51469e3286568da894d");
+    this.users['Mushi'] = new User("5f22e51469e3286568da894d");
+    this.users['Vedha'] = new User("5f22e51469e3286568da894d");
     }
 
   tracking(user: string)
@@ -44,7 +46,7 @@ export class AppComponent {
       this.http.post(this.ROOT_URL+'iotDevice/startTimer',JSON.stringify(obj), {
         headers: headers,
       }).subscribe((data) => { 
-        console.log(data);
+        console.log("Tracking started for "+ user);
         this.users[user].trackingID = data['timeEntryID'];  
         this.users[user].tracking = true;   
       },
@@ -62,7 +64,7 @@ export class AppComponent {
       this.http.post(this.ROOT_URL+'iotDevice/stopTimer',JSON.stringify(obj2), {
         headers: headers,
       }).subscribe((data) => { 
-        console.log(data);  
+        console.log("Tracking stopped for "+ user);
         this.users[user].trackingID = null;  
         this.users[user].tracking = false; 
        },
