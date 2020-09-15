@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService, private snackbar : MatSnackBar) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService, public snackbar : MatSnackBar) { }
 
   panelOpenState = false
   name = "John Doe"
@@ -212,7 +212,7 @@ export class ProjectsComponent implements OnInit {
   deleteProject(projectID : String) {
     this.pmService.deleteProject(localStorage.getItem('token'),projectID).subscribe((data) => {
       //console.log('ID' + projectID)
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -229,7 +229,7 @@ export class ProjectsComponent implements OnInit {
   // delete task
   deleteTask(taskID : String, projectID : String) {
     this.pmService.deleteTask(localStorage.getItem('token'),taskID,projectID).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -248,7 +248,7 @@ export class ProjectsComponent implements OnInit {
   completeProject(projectID : String) {
     let req ={"projectID": projectID}
     this.pmService.completeProject(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -267,7 +267,7 @@ export class ProjectsComponent implements OnInit {
   uncompleteProject(projectID : String) {
     let req ={"projectID": projectID}
     this.pmService.uncompleteProject(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -322,7 +322,7 @@ export class ProjectsComponent implements OnInit {
   resetTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.resetTask(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -341,7 +341,7 @@ export class ProjectsComponent implements OnInit {
   startTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.startTask(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -359,7 +359,7 @@ export class ProjectsComponent implements OnInit {
   completeTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.completeTask(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
     },
     error => {
       //console.log(error);
@@ -394,7 +394,7 @@ export class ProjectsComponent implements OnInit {
 
     // sort tasks according to due date
     this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName || a.taskName - b.taskName)
-    console.log(this.tasks)
+    //console.log(this.tasks)
 
     // get week details
     var startDate = new Date()
@@ -516,7 +516,7 @@ export class ProjectsComponent implements OnInit {
             a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
           );
           this.members = this.allMembers
-          console.log(this.allMembers)
+          //console.log(this.allMembers)
         },
         error => {
           //console.log(error);
@@ -532,7 +532,7 @@ export class ProjectsComponent implements OnInit {
 
       // search members
       searchMembers(text : string) {
-        console.log(this.searchMem)
+        //console.log(this.searchMem)
         if (!this.searchMem)
           this.members = this.availMembers
         this.members = this.availMembers.filter((x : any) =>
@@ -558,7 +558,7 @@ export class ProjectsComponent implements OnInit {
       getTeam() {
         console.log('here')
         this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
-          console.log(data)
+         // console.log(data)
           this.teams = data['teams']
           this.teams.sort((a : any ,b : any) =>
               a.teamName.localeCompare(b.teamName)

@@ -102,6 +102,29 @@ describe('Unit tests:', () => {
     expect(component.addProjectForm.valid).toBeFalse();
   }));
 
+  it('add project form should be valid', async(() => {
+    component.addProjectForm.controls['projectName'].setValue('Test');
+    component.addProjectForm.controls['dueDate'].setValue("2020/08/15");
+    component.addProjectForm.controls['hourlyRate'].setValue(0);
+    expect(component.addProjectForm.valid).toBeTruthy();
+  }));
+
+  it('add project form should be invalid', async(() => {
+    component.addProjectForm.controls['dueDate'].setValue("2020/08/15");
+    component.addProjectForm.controls['hourlyRate'].setValue(0);
+    expect(component.addProjectForm.valid).toBeFalsy();
+  }));
+
+  it('add task form should be valid', async(() => {
+    component.addTaskForm.controls['taskName'].setValue('Test');
+    component.addTaskForm.controls['dueDate'].setValue("2020/08/15");
+    expect(component.addTaskForm.valid).toBeTruthy();
+  }));
+
+  it('add task form should be invalid', async(() => {
+    component.addTaskForm.controls['dueDate'].setValue("2020/08/15");
+    expect(component.addTaskForm.valid).toBeFalsy();
+  }));
 });
 });
 
@@ -175,13 +198,13 @@ describe('ProjectsComponent', () => {
         // pmService = TestBed.get(ProjectManagementService);
         // amService = TestBed.get(AccountManagementService);
 
-        var store = {
+        /*var store = {
           token : 'GOOSE'
         };
 
         spyOn(localStorage, 'getItem').and.callFake(function (key) {console.log("DUCK");
           return store[key];
-        });
+        });*/
 
         /*spyOn(component, 'getProAndTasks').and.callFake(function () {console.log("GOOSE");
           component.allProjects = projects;
@@ -293,6 +316,7 @@ describe('ProjectsComponent', () => {
         expect(component.getTasks).not.toHaveBeenCalled();
         expect(hService.kickOut).toHaveBeenCalled();
       }));
+    });
 
       describe('addProject()', () => {
 
@@ -359,8 +383,356 @@ describe('ProjectsComponent', () => {
         }));
 
       });
-  });
 
+      describe('addTask()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+
+          spyOn(pmService, 'addTask').and.returnValue(of({message: "Task added successfully"}));
+          spyOn(component, 'getProAndTasks').and.callThrough();
+          component.addTask(component.addTaskForm.value);
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(component, 'getProAndTasks');
+          spyOn(pmService, 'addTask').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.addTask(component.addTaskForm.value);
+          fixture.detectChanges();
+          expect(component.getProAndTasks).not.toHaveBeenCalled();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('editTask()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+          spyOn(pmService, 'editTask').and.returnValue(of({message: "Task updated successfully"}));
+          spyOn(component, 'getProAndTasks').and.callThrough();
+          component.editTask(component.addTaskForm.value);
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(component, 'getProAndTasks');
+          spyOn(pmService, 'editTask').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.editTask(component.addTaskForm.value);
+          fixture.detectChanges();
+          expect(component.getProAndTasks).not.toHaveBeenCalled();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('deleteProject()', () => {
+
+        it('should call the correct functions if valid project is successfully passed', async(() => {
+          spyOn(pmService, 'deleteProject').and.returnValue(of({message: "Project deleted successfully"}));
+          spyOn(component, 'getProAndTasks').and.callThrough();
+          component.deleteProject("0ad21v20f515adad1c5s12cv0v");
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(component, 'getProAndTasks');
+          spyOn(pmService, 'deleteProject').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.deleteProject("0ad21v20f515adad1c5s12cv0v");
+          fixture.detectChanges();
+          expect(component.getProAndTasks).not.toHaveBeenCalled();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+      });
+
+      describe('deleteTask()', () => {
+
+        it('should call the correct functions if valid task is successfully passed', async(() => {
+          spyOn(pmService, 'deleteTask').and.returnValue(of({message: "Task deleted successfully"}));
+          spyOn(component, 'getProAndTasks').and.callThrough();
+          component.deleteTask("0ad21v20f515adad1c5s12cv0v", "0ad21v20f515adad1c5s12cv0v");
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(component, 'getProAndTasks');
+          spyOn(pmService, 'deleteTask').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.deleteTask("0ad21v20f515adad1c5s12cv0v","0ad21v20f515adad1c5s12cv0v");
+          fixture.detectChanges();
+          expect(component.getProAndTasks).not.toHaveBeenCalled();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('resetTask()', () => {
+
+        it('should call the correct functions if valid task is successfully passed', async(() => {
+          spyOn(pmService, 'resetTask').and.returnValue(of({message: "Task deleted successfully"}));
+          spyOn(hService, 'kickOut');
+          component.resetTask("0ad21v20f515adad1c5s12cv0v");
+          
+          fixture.detectChanges();
+          expect(hService.kickOut).not.toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(pmService, 'resetTask').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.resetTask("0ad21v20f515adad1c5s12cv0v");
+          fixture.detectChanges();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+      });
+
+        describe('completeTask()', () => {
+
+          it('should call the correct functions if valid task is successfully passed', async(() => {
+            spyOn(pmService, 'completeTask').and.returnValue(of({message: "Task deleted successfully"}));
+            spyOn(hService, 'kickOut');
+            component.completeTask("0ad21v20f515adad1c5s12cv0v");
+            
+            fixture.detectChanges();
+            expect(hService.kickOut).not.toHaveBeenCalled();
+    
+          }));
+    
+          it('should catch error and call appropriate functions', async(() => {
+            
+            spyOn(hService, 'kickOut');
+            spyOn(pmService, 'completeTask').and.returnValue(throwError({
+              status: 403,
+              error: {
+                message: 'Access denied'
+              }
+            }));
+            component.completeTask("0ad21v20f515adad1c5s12cv0v");
+            fixture.detectChanges();
+            expect(hService.kickOut).toHaveBeenCalled();
+          }));
+
+      });
+
+      describe('startTask()', () => {
+
+        it('should call the correct functions if valid task is successfully passed', async(() => {
+          spyOn(pmService, 'startTask').and.returnValue(of({message: "Task status successfully changed"}));
+          spyOn(hService, 'kickOut');
+          component.startTask("0ad21v20f515adad1c5s12cv0v");
+          
+          fixture.detectChanges();
+          expect(hService.kickOut).not.toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(pmService, 'startTask').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.startTask("0ad21v20f515adad1c5s12cv0v");
+          fixture.detectChanges();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('completeProject()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+          spyOn(hService, 'kickOut');
+          spyOn(pmService, 'completeProject').and.returnValue(of({message: "Project marked as completed"}));
+          component.completeProject("0ad21v20f515adad1c5s12cv0v");
+          
+          fixture.detectChanges();
+          expect(hService.kickOut).not.toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(pmService, 'completeProject').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.completeProject("0ad21v20f515adad1c5s12cv0v");
+          fixture.detectChanges();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('uncompleteProject()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+          spyOn(hService, 'kickOut');
+          spyOn(pmService, 'uncompleteProject').and.returnValue(of({message: "Project marked as completed"}));
+          component.uncompleteProject("0ad21v20f515adad1c5s12cv0v");
+          
+          fixture.detectChanges();
+          expect(hService.kickOut).not.toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+          
+          spyOn(hService, 'kickOut');
+          spyOn(pmService, 'uncompleteProject').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.uncompleteProject("0ad21v20f515adad1c5s12cv0v");
+          fixture.detectChanges();
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+      });
+
+      describe('changeTaskStatus()', () => {
+
+        it("should call the correct functions if status is 'Not Started'", async(() => {
+          spyOn(component, 'startTask');
+          spyOn(component.snackbar, 'open');
+          spyOn(component, 'getProAndTasks');
+          component.changeTaskStatus("0ad21v20f515adad1c5s12cv0v", "name",'Not Started' );
+          
+          fixture.detectChanges();
+          expect(component.startTask).toHaveBeenCalled();
+          expect(component.snackbar.open).toHaveBeenCalled();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+        }));
+  
+        it("should call the correct functions if status is 'In Progress'", async(() => {
+          spyOn(component, 'completeTask');
+          spyOn(component.snackbar, 'open');
+          spyOn(component, 'getProAndTasks');
+          component.changeTaskStatus("0ad21v20f515adad1c5s12cv0v", "name",'In Progress' );
+          
+          fixture.detectChanges();
+          expect(component.completeTask).toHaveBeenCalled();
+          expect(component.snackbar.open).toHaveBeenCalled();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+        }));
+
+        it("should call the correct functions if status is 'Completed'", async(() => {
+          spyOn(component, 'resetTask');
+          spyOn(component.snackbar, 'open');
+          spyOn(component, 'getProAndTasks');
+          component.changeTaskStatus("0ad21v20f515adad1c5s12cv0v", "name",'Completed' );
+          
+          fixture.detectChanges();
+          expect(component.resetTask).toHaveBeenCalled();
+          expect(component.snackbar.open).toHaveBeenCalled();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+        }));
+      });
+
+      describe('changeProjectStatus()', () => {
+
+        it("should call the correct functions if status is 'Completed'", async(() => {
+          spyOn(component, 'completeProject');
+          spyOn(component.snackbar, 'open');
+          spyOn(component, 'getProAndTasks');
+          component.changeProjectStatus("0ad21v20f515adad1c5s12cv0v", "name",'Completed' );
+          
+          fixture.detectChanges();
+          expect(component.completeProject).toHaveBeenCalled();
+          expect(component.snackbar.open).toHaveBeenCalled();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+        }));
+  
+        it("should call the correct functions if status is 'Not Started'", async(() => {
+          spyOn(component, 'uncompleteProject');
+          spyOn(component.snackbar, 'open');
+          spyOn(component, 'getProAndTasks');
+          component.changeTaskStatus("0ad21v20f515adad1c5s12cv0v", "name","Not Started" );
+          
+          fixture.detectChanges();
+          expect(component.uncompleteProject).toHaveBeenCalled();
+          expect(component.snackbar.open).toHaveBeenCalled();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('getMembers()', () => {
+
+        it("should set the correct variables if users are returned", async(() => {
+          spyOn(amService, 'getAllUsers').and.returnValue(of({users: ["data"]}));
+          component.getMembers();
+          
+          fixture.detectChanges();          
+          expect(component.members).toEqual(["data"]);
+        }));
+  
+        it("should call the correct functions if error is received", async(() => {
+          spyOn(amService, 'getAllUsers').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          component.getMembers();
+          
+          fixture.detectChanges();
+          expect(component.members).not.toBeDefined();
+        }));
+
+      });
 
   /*  it("should call the editProject method when the 'Edit Project' button is pressed", async(() => {
       spyOn(component,'editProject');
@@ -407,4 +779,3 @@ describe('ProjectsComponent', () => {
       // ****************************************** END
   });
 });
-
