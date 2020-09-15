@@ -68,10 +68,10 @@ describe('Integration Tests:', () => {
       it('should remove the appropriate variables', async(() => {
        
         spyOn(service, 'kickOut');
-        spyOn(component, 'logout');
+        spyOn(service.isUserLoggedIn, 'next');
         component.logout();  
         fixture.detectChanges();
-        expect(component.logout).toHaveBeenCalledTimes(1);
+        expect(service.isUserLoggedIn.next).toHaveBeenCalledTimes(1);
         expect(service.kickOut).toHaveBeenCalledTimes(1);
       }));
     });

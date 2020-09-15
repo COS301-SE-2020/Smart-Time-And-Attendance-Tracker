@@ -13,6 +13,7 @@ import { AccountManagementService } from 'src/app/shared/services/account-manage
 import { of, throwError } from 'rxjs';
 import { HeaderService } from 'src/app/shared/services/header.service';
 import {NO_ERRORS_SCHEMA} from "@angular/core"
+import { TeamManagementService } from 'src/app/shared/services/team-management.service';
 
 describe('ProjectsComponent', () => {
 describe('Unit tests:', () => {
@@ -125,6 +126,26 @@ describe('Unit tests:', () => {
     component.addTaskForm.controls['dueDate'].setValue("2020/08/15");
     expect(component.addTaskForm.valid).toBeFalsy();
   }));
+
+  it('resetProjectForm() should reset project form', async(() => {
+    component.resetProjectForm();
+    expect(component.projectToEdit).toEqual({'projectID' : '', 'projectName' : '', 'dueDate' : '', 'hourlyRate' : 0});
+  }));
+
+  it('resetTaskForm() should reset task form', async(() => {
+    component.resetTaskForm();
+    expect(component.taskToEdit).toEqual({'taskID' : '', 'taskName' : '', 'dueDate' : ''});
+  }));
+
+  it('popProjectForm() should populate the project form', async(() => {
+    component.popProjectForm({'ID' : "s2gf5adf5d2g0d2gq2g", 'projectName' : 'Test', 'dueDate' : '2020/08/15', 'hourlyRate' : 250});
+    expect(component.projectToEdit).toEqual({'projectID' : "s2gf5adf5d2g0d2gq2g", 'projectName' : 'Test', 'dueDate' : '2020-08-14', 'hourlyRate' : 250});
+  }));
+
+  it('popTaskForm() should populate the task form', async(() => {
+    component.popTaskForm({'ID' : 'ad1gv5a2d0gsf6a2fad', 'taskName' : 'Cry', 'dueDate' : '2020/09/26'});
+    expect(component.taskToEdit).toEqual({'taskID' : 'ad1gv5a2d0gsf6a2fad', 'taskName' : 'Cry', 'dueDate' : '2020-09-25'});
+  }));
 });
 });
 
@@ -139,6 +160,7 @@ describe('ProjectsComponent', () => {
     let pmService;
     let hService;
     let amService;
+    let tmService;
     let roles;
 
     beforeEach(async(() => {
@@ -192,6 +214,7 @@ describe('ProjectsComponent', () => {
         pmService = TestBed.get(ProjectManagementService);
         hService = TestBed.get(HeaderService);
         amService = TestBed.get(AccountManagementService);
+        tmService = TestBed.get(TeamManagementService);
         de = fixture.debugElement.query(By.css('.row'));
         el = de.nativeElement;
 
@@ -726,12 +749,218 @@ describe('ProjectsComponent', () => {
               message: 'Access denied'
             }
           }));
+          spyOn(hService, 'kickOut');
           component.getMembers();
           
           fixture.detectChanges();
           expect(component.members).not.toBeDefined();
+          expect(hService.kickOut).toHaveBeenCalled();
         }));
 
+      });
+
+      describe('getTeam()', () => {
+
+        it("should set the correct variables if users are returned", async(() => {
+          spyOn(tmService, 'getTeams').and.returnValue(of({teams: ["data"]}));
+          component.getTeam();
+          
+          fixture.detectChanges();          
+          expect(component.teams).toEqual(["data"]);
+          expect(component.availTeams).toEqual(["data"]);
+        }));
+  
+        it("should call the correct functions if error is received", async(() => {
+          spyOn(tmService, 'getTeams').and.returnValue(throwError({
+            status: 403,
+            error: {
+              message: 'Access denied'
+            }
+          }));
+          spyOn(hService, 'kickOut');
+          component.getTeam();
+          
+          fixture.detectChanges();
+          expect(component.teams).not.toBeDefined();
+          expect(component.availTeams).toEqual([]);
+          expect(hService.kickOut).toHaveBeenCalled();
+        }));
+
+      });
+
+      describe('addTeam()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+          component.pid = "sfnvjsfg02sb2s0fg";
+          component.tid ="dg0v0sf1g5sf1b20s2fg0";
+      
+          spyOn(pmService, 'addTeam').and.returnValue(of({message: "Team added successfully"}));
+          spyOn(component, 'getProAndTasks');
+          component.addTeam();
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+            component.pid = "sfnvjsfg02sb2s0fg";
+            component.tid ="dg0v0sf1g5sf1b20s2fg0";
+        
+            spyOn(pmService, 'addTeam').and.returnValue(throwError({
+              status: 403,
+              error: {
+                message: 'Access denied'
+              }
+            }));
+            spyOn(component, 'getProAndTasks');
+            spyOn(hService, 'kickOut');
+            component.addTeam();
+            
+            fixture.detectChanges();
+            expect(component.getProAndTasks).not.toHaveBeenCalled();
+          expect(hService.kickOut).toHaveBeenCalled();
+
+        }));
+      });
+
+      describe('addTeamMember()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+      
+          spyOn(pmService, 'addTeamMember').and.returnValue(of({message: "Team added successfully"}));
+          spyOn(component, 'getProAndTasks');
+          component.addTeamMember("dag45g0a2d05a2d", "sd5gv02sg5qd02ad0", "Coder");
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+            spyOn(pmService, 'addTeamMember').and.returnValue(throwError({
+              status: 403,
+              error: {
+                message: 'Access denied'
+              }
+            }));
+            spyOn(component, 'getProAndTasks');
+            spyOn(hService, 'kickOut');
+            component.addTeamMember("dag45g0a2d05a2d", "sd5gv02sg5qd02ad0", "Coder");
+            
+            fixture.detectChanges();
+            expect(component.getProAndTasks).not.toHaveBeenCalled();
+            expect(hService.kickOut).toHaveBeenCalled();
+
+        }));
+      });
+
+      describe('addMembersToProject()', () => {
+
+        it('should call the correct functions for the array elements', async(() => {
+      
+         component.addMembers = [{ID: "0s25g15s1d0g21",role: "Tester" },{ID: "0s25g15s1d0g22",role: "Coder" }];
+         component.pid ="0sfg31w2f0w0f";
+          spyOn(component, 'addTeamMember');
+          component.addMembersToProject();
+          
+          fixture.detectChanges();
+          expect(component.addTeamMember).toHaveBeenCalledTimes(2);
+  
+        }));
+      });
+      
+      describe('removeProjectMember()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+      
+          spyOn(pmService, 'removeTeamMember').and.returnValue(of({message: "Member removed successfully"}));
+          spyOn(component, 'getProAndTasks');
+          component.removeProjectMember("dag45g0a2d05a2d");
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+            spyOn(pmService, 'removeTeamMember').and.returnValue(throwError({
+              status: 403,
+              error: {
+                message: 'Access denied'
+              }
+            }));
+            spyOn(component, 'getProAndTasks');
+            spyOn(hService, 'kickOut');
+            component.removeProjectMember("dag45g0a2d05a2d");
+            
+            fixture.detectChanges();
+            expect(component.getProAndTasks).not.toHaveBeenCalled();
+            expect(hService.kickOut).toHaveBeenCalled();
+
+        }));
+      });
+
+      describe('removeMembersFromProject()', () => {
+
+        it('should call the correct functions for the array elements', async(() => {
+      
+         component.removeMembers = [{ID: "0s25g15s1d0g21",role: "Tester" },{ID: "0s25g15s1d0g22",role: "Coder" }];
+          spyOn(component, 'removeProjectMember');
+          component.removeMembersFromProject();
+          
+          fixture.detectChanges();
+          expect(component.removeProjectMember).toHaveBeenCalledTimes(2);
+          expect(component.removeMembers).toEqual([]);
+  
+        }));
+      });
+
+      describe('changeRole()', () => {
+
+        it('should call the correct functions if valid form is successfully passed', async(() => {
+      
+          spyOn(pmService, 'changeRole').and.returnValue(of({message: "Member role changed successfully"}));
+          spyOn(component, 'getProAndTasks');
+          component.changeRole("dag45g0a2d05a2d","sd5gv02sg5qd02ad0", "Coder");
+          
+          fixture.detectChanges();
+          expect(component.getProAndTasks).toHaveBeenCalled();
+  
+        }));
+  
+        it('should catch error and call appropriate functions', async(() => {
+            spyOn(pmService, 'changeRole').and.returnValue(throwError({
+              status: 403,
+              error: {
+                message: 'Access denied'
+              }
+            }));
+            spyOn(component, 'getProAndTasks');
+            spyOn(hService, 'kickOut');
+            component.changeRole("dag45g0a2d05a2d","sd5gv02sg5qd02ad0", "Coder");
+            
+            fixture.detectChanges();
+            expect(component.getProAndTasks).not.toHaveBeenCalled();
+            expect(hService.kickOut).toHaveBeenCalled();
+
+        }));
+      });
+
+      describe('editMemberRoles()', () => {
+
+        it('should call the correct functions for the array elements', async(() => {
+      
+         component.editRoles = [{ID: "0s25g15s1d0g21",role: "Tester" },{ID: "0s25g15s1d0g22",role: "Coder" }];
+         component.pid = "woijrgsf03w5100";
+          spyOn(component, 'changeRole');
+          component.editMemberRoles();
+          
+          fixture.detectChanges();
+          expect(component.changeRole).toHaveBeenCalledTimes(2);
+          expect(component.editRoles).toEqual([]);
+  
+        }));
       });
 
   /*  it("should call the editProject method when the 'Edit Project' button is pressed", async(() => {

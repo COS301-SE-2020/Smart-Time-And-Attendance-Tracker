@@ -550,13 +550,13 @@ export class ProjectsComponent implements OnInit {
         for (let i = 0; i < this.availMembers.length; i++)
           this.availMembers[i]['role'] = ''
         this.members = this.availMembers
-        console.log(members)
-        console.log(this.members)
+        //console.log(members)
+        //console.log(this.members)
       }
 
       // get teams
       getTeam() {
-        console.log('here')
+        //console.log('here')
         this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
          // console.log(data)
           this.teams = data['teams']
@@ -564,7 +564,7 @@ export class ProjectsComponent implements OnInit {
               a.teamName.localeCompare(b.teamName)
           );
           this.availTeams = this.teams
-          console.log(this.teams)
+          //console.log(this.teams)
           this.getTeamMembers();
         },
         error => {
@@ -594,7 +594,7 @@ export class ProjectsComponent implements OnInit {
 
         this.availTeams = []
 
-        console.log(this.availTeams)
+        //console.log(this.availTeams)
 
         this.teams.forEach((t : any) => {
           let match = false
@@ -629,7 +629,7 @@ export class ProjectsComponent implements OnInit {
       addTeam() {
         let req = { 'projectID' : this.pid, 'teamID' : this.tid}
         this.pmService.addTeam(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks()
         },
         error => {
@@ -648,7 +648,7 @@ export class ProjectsComponent implements OnInit {
       addTeamMember(uID : string, pID: string, role : string) {
         let req = {"userID" : uID, "projectID" : pID, "userRole" : role};
         this.pmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks();
         },
         error => {
@@ -664,30 +664,30 @@ export class ProjectsComponent implements OnInit {
       }
 
       addMember(m : any) {
-        console.log(m)
+        //console.log(m)
         let index = this.addMembers.findIndex(a => a == m)
         if (index == -1)
           this.addMembers.push(m)
         else
           this.addMembers.splice(index, 1)
-        console.log(this.addMembers)
+        //console.log(this.addMembers)
       }
 
       addRole(m : any, role : string) {
         let index = this.addMembers.findIndex(a => a == m)
         m['role'] = role
         this.addMembers[index] = m
-        console.log(this.addMembers)
+        //console.log(this.addMembers)
       }
 
       typeRole(event) {
         this.role = event.target.value
-        console.log(this.role)
+        //console.log(this.role)
       }
 
       addMembersToProject() {
         this.addMembers.forEach((m : any) => {
-          console.log(m)
+          //console.log(m)
           this.addTeamMember(m.ID, this.pid, m.role)
         });
       }
@@ -696,7 +696,7 @@ export class ProjectsComponent implements OnInit {
       removeProjectMember(userID : string) {
         let req = {"userID": userID, "projectID" : this.pid};
         this.pmService.removeTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks();
         },
         error => {
@@ -712,18 +712,18 @@ export class ProjectsComponent implements OnInit {
       }
 
       removeMember(m : any) {
-        console.log(m)
+        //console.log(m)
         let index = this.removeMembers.findIndex(a => a == m)
         if (index == -1)
           this.removeMembers.push(m)
         else
           this.removeMembers.splice(index, 1)
-        console.log(this.removeMembers)
+        //console.log(this.removeMembers)
       }
 
       removeMembersFromProject() {
         this.removeMembers.forEach((m : any) => {
-          console.log(m)
+          //console.log(m)
           this.removeProjectMember(m.ID)
         });
         this.removeMembers= []
@@ -734,18 +734,18 @@ export class ProjectsComponent implements OnInit {
         if (index == -1)
           this.editRoles.push(m)
 
-        console.log(this.editRoles)
+        //console.log(this.editRoles)
 
         index = this.editRoles.findIndex(a => a == m)
         m['role'] = role
         this.editRoles[index] = m
-        console.log(this.editRoles)
+        //console.log(this.editRoles)
       }
 
       changeRole(uID : string, pID: string, role : string) {
         let req = {"userID" : uID, "projectID" : pID, "userRole" : role};
         this.pmService.changeRole(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks();
         },
         error => {
@@ -762,7 +762,7 @@ export class ProjectsComponent implements OnInit {
 
       editMemberRoles() {
         this.editRoles.forEach((m : any) => {
-          console.log(m)
+          //console.log(m)
           this.changeRole(m.ID, this.pid, m.role)
         });
         this.editRoles = []
