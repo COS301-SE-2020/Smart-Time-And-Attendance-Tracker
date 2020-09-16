@@ -4,6 +4,8 @@ import { Component, OnInit,
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
+declare const gapi: any; // only for ng test
+
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -19,7 +21,7 @@ export class CalendarComponent implements OnInit {
   private email;
   private user;
   private clientID;
-  private ROOT_URL = "http://localhost:3000/api/";
+  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
   public roles = localStorage.getItem('roles');
 
   constructor(public http: HttpClient, public headerService : HeaderService, private cd: ChangeDetectorRef) { }
