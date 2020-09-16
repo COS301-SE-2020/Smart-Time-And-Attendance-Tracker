@@ -48,6 +48,7 @@ processDisplay();
     }
   }
   userLogin.onclick = function() {
+    var now = new Date();
     document.getElementById("errorMessage").innerHTML= "Loading...";
     var http = new XMLHttpRequest();
     var url = BASE_URL + '/user/login';
