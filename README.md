@@ -36,6 +36,8 @@
 - [Demo 1](#demo-1)
 - [Demo 2](#demo-2)
 - [Demo 3](#demo-3)
+- [Demo 4](#demo-3)
+- [Deployed links](#project-management-tools)
 - [Project Management Tools](#project-management-tools)
 - [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
@@ -88,6 +90,19 @@ STAT accepts tracking data in various formats so you can track how you spend you
 - Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
 - Video: https://drive.google.com/file/d/1zUjqtTmcJDGeoipVc3awsqgtnbAcBrvC/view?usp=sharing
 - SRS Document: https://drive.google.com/file/d/1eyT3XSIN02zO8fkohkQpa3Wz4tB2BQYe/view?usp=sharing
+
+## Demo 4
+- Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
+- Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
+- Testing Policy: 
+- User Manual: 
+- Video: 
+- SRS Document: 
+
+## Deployed links
+- Web Application: 
+- Mobile Application: 
+- Plugin: 
 
 ## Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
