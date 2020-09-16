@@ -1,6 +1,6 @@
 const WEBSITE_USRL = "localhost:4200";
 //
-const BASE_URL = "https://stat-server.azurewebsites.net/api"
+const BASE_URL = "https://stat-server.azurewebsites.net/api";
 var user = new User();
 
 var userLogin = document.getElementById("login");
@@ -52,6 +52,7 @@ processDisplay();
     var http = new XMLHttpRequest();
     var url = BASE_URL + '/user/login';
     http.open('POST', url, true);
+    http.setRequestHeader('Access-Control-Allow-Origin', BASE_URL);
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange = function()
     {
@@ -98,6 +99,7 @@ function getUserName(){
   var http = new XMLHttpRequest();
   var url = BASE_URL + '/user/getName';
   http.open('GET', url, true);
+  http.setRequestHeader('Access-Control-Allow-Origin', BASE_URL);
   http.setRequestHeader('Authorization', `Bearer ${localStorage.getItem("token")}` );
   http.onreadystatechange = function()
   {
@@ -150,7 +152,7 @@ function AddTimeEntry(url,startTime, endTime,currentID, duration ) {
 
 //  alert(text);
   http.open('POST', apiURL, true);
-
+  http.setRequestHeader('Access-Control-Allow-Origin', BASE_URL);
   http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
@@ -221,6 +223,7 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
           + '}';
   //alert(text);
   http.open('POST', apiURL, true);
+  http.setRequestHeader('Access-Control-Allow-Origin', BASE_URL);
   http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
@@ -257,7 +260,7 @@ function getProjects() {
     var http = new XMLHttpRequest();
     var apiURL = BASE_URL + '/user/getProjects';
     http.open('GET', apiURL, true);
-
+    http.setRequestHeader('Access-Control-Allow-Origin', BASE_URL);
     http.setRequestHeader('Content-type', 'application/json');
     http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
     http.onreadystatechange = function() {
@@ -436,6 +439,7 @@ function updateTask(currentID, ProjectID, ProjectName, TaskID, TaskName){
   var apiURL = BASE_URL + '/userTimeEntry/updateTimeEntry';
   http.open('POST', apiURL, true);
   http.setRequestHeader('Content-type', 'application/json');
+  http.setRequestHeader('Access-Control-Allow-Origin', BASE_URL);
   http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function() {
     if(http.readyState == 4 && http.status == 200) {
