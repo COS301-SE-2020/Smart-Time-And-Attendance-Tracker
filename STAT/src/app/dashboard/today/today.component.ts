@@ -25,6 +25,8 @@ export class TodayComponent implements OnInit {
   hours: number;
   count;
   sync;
+  syncSub;
+  countSub;
   projectName: string;
   projectID : string;
 
@@ -123,8 +125,10 @@ export class TodayComponent implements OnInit {
     this.date4.setDate(this.date.getDate()-4)
     this.date5.setDate(this.date.getDate()-5)
 
+    console.log(localStorage.getItem('trackingNow'));
     if(localStorage.getItem('trackingNow')== 'true')
     {
+      console.log("welcome back");
       this.trackingNow = true;
       this.cd.detectChanges();
       this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
@@ -230,6 +234,7 @@ export class TodayComponent implements OnInit {
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
+    console.log("start");
     this.trackingNow =true;
     localStorage.setItem('trackingNow', 'true');
     this.stop = false;
@@ -289,18 +294,28 @@ export class TodayComponent implements OnInit {
     console.log("Stop");
     this.stop = true;
     this.trackingNow =false;
-
-    localStorage.removeItem('trackingNow');
-    localStorage.removeItem('currentlyTracking');
-    localStorage.removeItem('currentlyTrackingDetails');
-    this.updateEntry().subscribe((data) => { },
+  
+    this.updateEntry().subscribe((data) => {
+      this.service.EntryID = null;
+      localStorage.removeItem('trackingNow');
+      localStorage.removeItem('currentlyTracking');
+      localStorage.removeItem('currentlyTrackingDetails');
+    },
       error => {
+        this.service.EntryID = null;
+        localStorage.removeItem('trackingNow');
+        localStorage.removeItem('currentlyTracking');
+        localStorage.removeItem('currentlyTrackingDetails');
         console.log(error);
         let errorCode = error['status'];
         if (errorCode == '403')
           this.headerService.kickOut();
         });
-    this.getEntries(this.formatDate(this.date))
+        this.countSub.unsubscribe();
+        this.syncSub.unsubscribe();
+        setTimeout(() => {
+          this.getEntries(this.formatDate(this.date));
+      }, 1000);
   }
   
   tracking()
@@ -309,20 +324,17 @@ export class TodayComponent implements OnInit {
     this.trackingNow =true;
     console.log("tracking");
     this.count = timer(60000);
-    this.count.subscribe(x => {
-      if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
-      { 
+    this.countSub =this.count.subscribe(x => {
+       
         this.currentlyTracking.activeTime =  this.currentlyTracking.activeTime+1;
         this.cd.detectChanges();
         localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
         console.log(this.currentlyTracking.activeTime);
         this.tracking();
-      }
     });
     this.sync = timer(600000);
-    this.sync.subscribe(x => {
-      if(localStorage.getItem('currentlyTracking') == this.service.EntryID)
-      { 
+    this.syncSub =this.sync.subscribe(x => {
+      
         this.updateEntry().subscribe((data) => {
         },
         error => {
@@ -332,10 +344,6 @@ export class TodayComponent implements OnInit {
             this.headerService.kickOut();
     
         });
-      }
-      else
-      {
-         this.stopTracking();}
       
     });
 
