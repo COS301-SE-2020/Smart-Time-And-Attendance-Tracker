@@ -1,0 +1,1 @@
+jmeter -n -t C:\Users\User\demo4\Smart-Time-And-Attendance-Tracker\STAT-server\jmeter\load\50\load.jmx   -l C:\Users\User\demo4\Smart-Time-And-Attendance-Tracker\STAT-server\jmeter\load\50\load.csv -e -o C:\Users\User\demo4\Smart-Time-And-Attendance-Tracker\STAT-server\jmeter\load\50\HTML
