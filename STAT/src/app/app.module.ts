@@ -31,6 +31,7 @@ import {
     SharedModule,
     StartupModule,
     MaterialComponentsModule,
+    MatIconModule,
     FormsModule,
     DashboardModule,
     HttpClientModule,

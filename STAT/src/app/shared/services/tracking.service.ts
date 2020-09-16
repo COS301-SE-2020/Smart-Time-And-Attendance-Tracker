@@ -54,7 +54,7 @@ export class TrackingService {
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
     parameters = parameters.append('timeEntryID',values);
-    return this.http.delete(this.ROOT_URL+'/userTimeEntry/deleteTimeEntry',  {
+    return this.http.delete(this.ROOT_URL+'userTimeEntry/deleteTimeEntry',  {
       headers: headers,
       params: parameters
     });
@@ -68,7 +68,7 @@ export class TrackingService {
       headers: headers
     });
   }
-  public saveSharedLocalStorage(iframe, saveKey, data)
+ /* public saveSharedLocalStorage(iframe, saveKey, data)
   { 
     iframe.contentWindow.postMessage({
       action: 'save',
@@ -82,6 +82,6 @@ public getSharedLocalStorage(iframe,getKey)
       return iframe.contentWindow.postMessage({
       action: 'get',
       key: getKey
-  });
-}
+  });*/
+
 }

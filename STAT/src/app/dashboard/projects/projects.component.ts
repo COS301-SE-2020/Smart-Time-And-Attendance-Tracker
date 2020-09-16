@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService, private snackbar : MatSnackBar) { }
+  constructor(private modalService: NgbModal, public headerService : HeaderService, public amService : AccountManagementService, public pmService : ProjectManagementService, public tmService : TeamManagementService, public snackbar : MatSnackBar) { }
 
   panelOpenState = false
   name = "John Doe"
@@ -33,6 +33,7 @@ export class ProjectsComponent implements OnInit {
   // forms
   addProjectForm : FormGroup
   addTaskForm : FormGroup
+  editTaskForm :  FormGroup
   pid : string
   tid : string
   pname : string
@@ -67,7 +68,6 @@ export class ProjectsComponent implements OnInit {
     this.resetTaskForm()
 
     this.roles = localStorage.getItem('roles');
-
     /**********
     FORM GROUPS
     ***********/
@@ -84,6 +84,12 @@ export class ProjectsComponent implements OnInit {
       taskName : new FormControl('', [Validators.required]),
       dueDate : new FormControl('', [Validators.required]),
       projectID : new FormControl('')
+    });
+
+    this.editTaskForm = new FormGroup({
+      taskName : new FormControl('', [Validators.required]),
+      dueDate : new FormControl('', [Validators.required]),
+      taskID : new FormControl('')
     });
 
     this.getProAndTasks()
@@ -105,8 +111,7 @@ export class ProjectsComponent implements OnInit {
   *********/
 
   // get projects and tasks
-  getProAndTasks()
-  {
+  getProAndTasks() {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       console.log(data);
       this.allProjects = data['projects']
@@ -131,9 +136,8 @@ export class ProjectsComponent implements OnInit {
 
   // add project
   addProject(form : NgForm) {
-    console.log(form);
     this.pmService.addProject(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -150,9 +154,9 @@ export class ProjectsComponent implements OnInit {
   //add task
   addTask(form : NgForm) {
     form['projectID'] = this.pid
-    console.log(form);
+    //console.log(form);
     this.pmService.addTask(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -169,9 +173,9 @@ export class ProjectsComponent implements OnInit {
 
   // edit project (projectID must be added to body)
   editProject(form : NgForm) {
-    console.log(form)
+    //console.log(form)
     this.pmService.editProject(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -187,9 +191,9 @@ export class ProjectsComponent implements OnInit {
   }
   // edit task (taskID must be added to body)
   editTask(form : NgForm) {
-    console.log(form)
+    //console.log(form)
     this.pmService.editTask(localStorage.getItem('token'),form).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -208,7 +212,7 @@ export class ProjectsComponent implements OnInit {
   deleteProject(projectID : String) {
     this.pmService.deleteProject(localStorage.getItem('token'),projectID).subscribe((data) => {
       //console.log('ID' + projectID)
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -225,7 +229,7 @@ export class ProjectsComponent implements OnInit {
   // delete task
   deleteTask(taskID : String, projectID : String) {
     this.pmService.deleteTask(localStorage.getItem('token'),taskID,projectID).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getProAndTasks()
     },
     error => {
@@ -244,7 +248,7 @@ export class ProjectsComponent implements OnInit {
   completeProject(projectID : String) {
     let req ={"projectID": projectID}
     this.pmService.completeProject(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -263,7 +267,7 @@ export class ProjectsComponent implements OnInit {
   uncompleteProject(projectID : String) {
     let req ={"projectID": projectID}
     this.pmService.uncompleteProject(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -318,7 +322,7 @@ export class ProjectsComponent implements OnInit {
   resetTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.resetTask(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -337,7 +341,7 @@ export class ProjectsComponent implements OnInit {
   startTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.startTask(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
 
     },
     error => {
@@ -355,7 +359,7 @@ export class ProjectsComponent implements OnInit {
   completeTask(taskID : String) {
     let req ={"taskID": taskID}
     this.pmService.completeTask(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
     },
     error => {
       //console.log(error);
@@ -390,7 +394,7 @@ export class ProjectsComponent implements OnInit {
 
     // sort tasks according to due date
     this.tasks.sort((a : any, b : any) => a.dueDate - b.dueDate || a.taskName - b.taskName || a.taskName - b.taskName)
-    console.log(this.tasks)
+    //console.log(this.tasks)
 
     // get week details
     var startDate = new Date()
@@ -512,7 +516,7 @@ export class ProjectsComponent implements OnInit {
             a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
           );
           this.members = this.allMembers
-          console.log(this.allMembers)
+          //console.log(this.allMembers)
         },
         error => {
           //console.log(error);
@@ -528,7 +532,7 @@ export class ProjectsComponent implements OnInit {
 
       // search members
       searchMembers(text : string) {
-        console.log(this.searchMem)
+        //console.log(this.searchMem)
         if (!this.searchMem)
           this.members = this.availMembers
         this.members = this.availMembers.filter((x : any) =>
@@ -540,27 +544,27 @@ export class ProjectsComponent implements OnInit {
 
       // get all the members that are not in the team already
       getAvailableMembers(members : []) {
-        
+
         this.availMembers = this.allMembers.filter((m1 : any) => !members.some((m2 : any) => m1.ID === m2.ID))
 
         for (let i = 0; i < this.availMembers.length; i++)
           this.availMembers[i]['role'] = ''
         this.members = this.availMembers
-        console.log(members)
-        console.log(this.members)
+        //console.log(members)
+        //console.log(this.members)
       }
 
       // get teams
       getTeam() {
-        console.log('here')
+        //console.log('here')
         this.tmService.getTeams(localStorage.getItem('token')).subscribe((data) => {
-          console.log(data)
+         // console.log(data)
           this.teams = data['teams']
           this.teams.sort((a : any ,b : any) =>
               a.teamName.localeCompare(b.teamName)
           );
           this.availTeams = this.teams
-          console.log(this.teams)
+          //console.log(this.teams)
           this.getTeamMembers();
         },
         error => {
@@ -590,7 +594,7 @@ export class ProjectsComponent implements OnInit {
 
         this.availTeams = []
 
-        console.log(this.availTeams)
+        //console.log(this.availTeams)
 
         this.teams.forEach((t : any) => {
           let match = false
@@ -605,7 +609,7 @@ export class ProjectsComponent implements OnInit {
             this.availTeams.push(t)
         });
 
-        
+
         console.log(members)
         console.log(this.availTeams)
       }
@@ -625,7 +629,7 @@ export class ProjectsComponent implements OnInit {
       addTeam() {
         let req = { 'projectID' : this.pid, 'teamID' : this.tid}
         this.pmService.addTeam(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks()
         },
         error => {
@@ -642,9 +646,9 @@ export class ProjectsComponent implements OnInit {
 
       // add team member
       addTeamMember(uID : string, pID: string, role : string) {
-        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};
         this.pmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks();
         },
         error => {
@@ -660,30 +664,30 @@ export class ProjectsComponent implements OnInit {
       }
 
       addMember(m : any) {
-        console.log(m)
+        //console.log(m)
         let index = this.addMembers.findIndex(a => a == m)
         if (index == -1)
           this.addMembers.push(m)
         else
           this.addMembers.splice(index, 1)
-        console.log(this.addMembers)
+        //console.log(this.addMembers)
       }
 
       addRole(m : any, role : string) {
         let index = this.addMembers.findIndex(a => a == m)
         m['role'] = role
         this.addMembers[index] = m
-        console.log(this.addMembers)
+        //console.log(this.addMembers)
       }
 
       typeRole(event) {
         this.role = event.target.value
-        console.log(this.role)
+        //console.log(this.role)
       }
 
       addMembersToProject() {
         this.addMembers.forEach((m : any) => {
-          console.log(m)
+          //console.log(m)
           this.addTeamMember(m.ID, this.pid, m.role)
         });
       }
@@ -692,7 +696,7 @@ export class ProjectsComponent implements OnInit {
       removeProjectMember(userID : string) {
         let req = {"userID": userID, "projectID" : this.pid};
         this.pmService.removeTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks();
         },
         error => {
@@ -708,18 +712,18 @@ export class ProjectsComponent implements OnInit {
       }
 
       removeMember(m : any) {
-        console.log(m)
+        //console.log(m)
         let index = this.removeMembers.findIndex(a => a == m)
         if (index == -1)
           this.removeMembers.push(m)
         else
           this.removeMembers.splice(index, 1)
-        console.log(this.removeMembers)
+        //console.log(this.removeMembers)
       }
 
       removeMembersFromProject() {
         this.removeMembers.forEach((m : any) => {
-          console.log(m)
+          //console.log(m)
           this.removeProjectMember(m.ID)
         });
         this.removeMembers= []
@@ -730,18 +734,18 @@ export class ProjectsComponent implements OnInit {
         if (index == -1)
           this.editRoles.push(m)
 
-        console.log(this.editRoles)
+        //console.log(this.editRoles)
 
         index = this.editRoles.findIndex(a => a == m)
         m['role'] = role
         this.editRoles[index] = m
-        console.log(this.editRoles)
+        //console.log(this.editRoles)
       }
 
       changeRole(uID : string, pID: string, role : string) {
-        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};      
+        let req = {"userID" : uID, "projectID" : pID, "userRole" : role};
         this.pmService.changeRole(localStorage.getItem('token'), req).subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           this.getProAndTasks();
         },
         error => {
@@ -758,7 +762,7 @@ export class ProjectsComponent implements OnInit {
 
       editMemberRoles() {
         this.editRoles.forEach((m : any) => {
-          console.log(m)
+          //console.log(m)
           this.changeRole(m.ID, this.pid, m.role)
         });
         this.editRoles = []
@@ -772,7 +776,6 @@ export class ProjectsComponent implements OnInit {
           x['teamName'].toLowerCase().includes(text.toLowerCase())
         )
       }
-
 
   // reset forms
   resetProjectForm() {
