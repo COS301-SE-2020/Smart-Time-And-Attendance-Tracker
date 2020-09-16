@@ -16,7 +16,7 @@
           <mat-label>Description</mat-label>
           <input matInput formControlName="description" type="text" placeholder="Entrance 2" name="description">
         </mat-form-field>
-        <button mat-raised-button color="accent" class="float-right"
+        <button mat-raised-button color="accent" class="float-right" id="add_device"
               (click)="registerDevice(addDeviceForm.value); addDeviceForm.reset()"
               [disabled]="addDeviceForm.invalid">Add Device</button>
       </form>
@@ -54,6 +54,7 @@
                 matTooltip="Delete"
                 matTooltipClass="action-tooltip"
                 matTooltipPosition="below"
+                id="delete_device"
                 (click)="open(deregisterDeviceModal); dID = d.ID; deviceName = d.deviceName">
           <mat-icon inline="true">delete</mat-icon>
         </button>
@@ -83,7 +84,7 @@
       Are you sure you want to deregister this device?
     </div>
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click'); deregisterDevice(dID)">Yes</button>
+      <button mat-raised-button color="primary" id="delete_device2" (click)="modal.close('Save click'); deregisterDevice(dID)">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
     </div>
   </div>

@@ -23,6 +23,35 @@ describe('Unit tests:', () => {
     it('should be created', async() => {
       expect(service).toBeTruthy();
     });
+    describe('isAuthenticated()', () => {
+      it('should return a response object from the API via GET', async() => {
+        const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+        const res ={ autheticated: true };
+        service.isAuthenticated(req).subscribe(
+          response=> {
+            expect(response).toBe(res);
+          }
+        );
+  
+        const req2 = HttpMock.expectOne(ROOT_URL+'user/isAuthenticated');
+        expect(req2.request.method).toEqual('GET');
+        req2.flush(res);
+      });
+      it('should return an error object from the API via GET if request is incomplete', async() => {
+        const req ="";
+        const res ={ message: "No token provided" };
+  
+        service.isAuthenticated(req).subscribe(
+          () => {}, err => {
+            expect(err).toBe(res);
+          });
+  
+        const req2 = HttpMock.expectOne(ROOT_URL+'user/isAuthenticated');
+        expect(req2.request.method).toEqual('GET');
+        req2.flush(res);
+      });
+    });
+    ///////////////////////////////
       describe('signUp()', () => {
       it('should return a response object from the API via POST', async() => {
         const req =
@@ -54,7 +83,7 @@ describe('Unit tests:', () => {
       });
     });
     //////////////////////////////////////////
-    describe('signIn()', () => { 
+    describe('signIn()', () => {
     it('should return a response object from the API via POST', async() => {
       const req =
         { email:"suzieSmith@mail.com", password: "1234"};
@@ -85,7 +114,7 @@ describe('Unit tests:', () => {
     });
   });
   //////////////////////////////////
-  describe('getRoles()', () => { 
+  describe('getRoles()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={ roles: [
@@ -116,7 +145,7 @@ describe('Unit tests:', () => {
     });
   });
   /////////////////////////////////////
-  describe('getName()', () => { 
+  describe('getName()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={name: "Suzie", surname: "Smith", email:"suzieSmith@mail.com"};
@@ -145,7 +174,7 @@ describe('Unit tests:', () => {
     });
   });
   ///////////////////////////////////
-  describe('authenticate()', () => { 
+  describe('authenticate()', () => {
     it('should return a response object from the API via POST', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
@@ -174,7 +203,7 @@ describe('Unit tests:', () => {
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
     });
-    /*it('should return an error object from the API via POST when no userID is provided', async() => {
+    it('should return an error object from the API via POST when no userID is provided', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id ="";
       const res ={ message: "User not found" };
@@ -187,10 +216,10 @@ describe('Unit tests:', () => {
       const req2 = HttpMock.expectOne(ROOT_URL+'user/authenticateUser');
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
-    });*/
+    });
   });
   //////////////////////////////////////////
-  describe('reject()', () => { 
+  describe('reject()', () => {
     it('should return a response object from the API via POST', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
@@ -219,7 +248,7 @@ describe('Unit tests:', () => {
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
     });
-   /* it('should return an error object from the API via POST when no userID is provided', async() => {
+    it('should return an error object from the API via POST when no userID is provided', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const id ="";
       const res ={ message: "User not found" };
@@ -232,10 +261,10 @@ describe('Unit tests:', () => {
       const req2 = HttpMock.expectOne(ROOT_URL+'user/removeUser');
       expect(req2.request.method).toEqual('POST');
       req2.flush(res);
-    });*/
+    });
   });
   /////////////////////////////
-  describe('getUnauthenticatedUsers()', () => { 
+  describe('getUnauthenticatedUsers()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={ID : "5f17df909b3e2d42dcbc3efb", email : "suzieSmith@mail.com", name : "Suzie", surname : "Smith"};
@@ -264,7 +293,7 @@ describe('Unit tests:', () => {
     });
   });
   //////////////////////////////
-  describe('getAllUsers()', () => { 
+  describe('getAllUsers()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={ID : "5f17df909b3e2d42dcbc3efb", email : "suzieSmith@mail.com", name : "Suzie", surname : "Smith"};
@@ -293,7 +322,7 @@ describe('Unit tests:', () => {
     });
   });
   //////////////////////////////
-  describe('getProjectsAndTasks()', () => { 
+  describe('getProjectsAndTasks()', () => {
     it('should return a response object from the API via GET', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const res ={"projects": [
@@ -323,7 +352,7 @@ describe('Unit tests:', () => {
         }
       );
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'user/getTasks');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getProjects');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
@@ -336,13 +365,13 @@ describe('Unit tests:', () => {
           expect(err).toBe(res);
         });
 
-      const req2 = HttpMock.expectOne(ROOT_URL+'user/getTasks');
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/getProjects');
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
   });
 ////////////////////////////////////
-  describe('getTimeEntries()', () => { 
+  describe('getTimeEntries()', () => {
     it('should return a response object from the API via GET', async() => {
       const date = "2020/07/22";
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
@@ -374,8 +403,7 @@ describe('Unit tests:', () => {
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
-  });
-   /* it('should return an error object from the API via GET when no date is provided', async() => {
+   it('should return an error object from the API via GET when no date is provided', async() => {
       const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
       const date = "";
       const res ={ message: "No time entries for the given day were found" };
@@ -388,6 +416,180 @@ describe('Unit tests:', () => {
       const req2 = HttpMock.expectOne(ROOT_URL+'userTimeEntry/getDailyTimeEntries?date='+date);
       expect(req2.request.method).toEqual('GET');
       req2.flush(res);
-    });*/
+    });
   });
+
+   //////////////////////////////////////////
+   describe('removeUser()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={message: 'User removed'};
+      service.removeUser(req, id).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/removeUser');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ="";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={ message: "No token provided" };
+
+      service.removeUser(req, id).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        });
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/removeUser');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+    it('should return an error object from the API via POST when no userID is provided', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const id ="";
+      const res ={ message: "User not found" };
+
+      service.reject(req,id).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        });
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/removeUser');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+
+  //////////////////////////////////////////
+  describe('addRole()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={message: 'User role successfully updated'};
+      service.addRole(req, id).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/addRole');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ="";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={ message: "No token provided" };
+
+      service.addRole(req, id).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        });
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/addRole');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+
+  //////////////////////////////////////////
+  describe('removeRole()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={message: 'User role successfully removed'};
+      service.removeRole(req, id).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/removeRole');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ="";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={ message: "No token provided" };
+
+      service.removeRole(req, id).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        });
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/removeRole');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+
+   //////////////////////////////////////////
+   describe('editUser()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb", name: "Alex"};
+      const res ={message: 'User successfully updated'};
+      service.editUser(req, id).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/editUser');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ="";
+      const id = { userID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={ message: "No token provided" };
+
+      service.editUser(req, id).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        });
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/editUser');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+   //////////////////////////////////////////
+   describe('addProfilePicture()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const id = { profilePicture:"5f17df909b3e2d42dcbc3efb"};
+      const res ={message: 'User successfully updated'};
+      service.addProfilePicture(req, id).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/addProfilePicture');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ="";
+      const id = { UserID:"5f17df909b3e2d42dcbc3efb"};
+      const res ={ message: "No token provided" };
+
+      service.addProfilePicture(req, id).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        });
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'user/addProfilePicture');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+});
 });

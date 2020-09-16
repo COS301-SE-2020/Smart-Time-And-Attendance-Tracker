@@ -10,8 +10,28 @@
             <a class="nav-item nav-link" [routerLink]="['sign-up']">Sign Up</a>
         </div>
     </div>
+    <div *ngIf="isLoggedIn" class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" [routerLink]="['home']">Home</a>
+        <a class="nav-item nav-link" [routerLink]="['features']">Features</a>
+        <a class="nav-item nav-link" [routerLink]="['desktop']">STAT Desktop</a>
+        <a class="nav-item nav-link" [routerLink]="['main']">Dashboard</a>
+      </div>
+  </div>
     <button *ngIf="!isLoggedIn" mat-raised-button color="primary" [routerLink]="['sign-in']">Sign In</button>
-    <button *ngIf="isLoggedIn" mat-raised-button color="primary" (click)="open(mymodal)">Sign Out</button>
+    <button class="float-right" *ngIf="isLoggedIn" mat-raised-button color="primary" (click)="open(mymodal)">Sign Out</button>
+    <span *ngIf="isLoggedIn" class="proj-member" [routerLink]="['profile']">
+      <div  *ngIf="profilePic == 'none'"
+            class="pro-pic proj"
+            matTooltip="My Profile" 
+            matTooltipClass="pro-tooltip"
+            matTooltipPosition="below">{{name[0]}}{{surname[0]}}</div>
+      <img *ngIf="profilePic != 'none'" src="{{profilePic}}"
+            class="pro-pic"
+            matTooltip="My Profile" 
+            matTooltipClass="pro-tooltip"
+            matTooltipPosition="below">
+    </span>
 </nav>
 
 <!-- sign out modal -->

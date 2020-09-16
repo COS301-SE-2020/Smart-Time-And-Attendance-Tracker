@@ -56,7 +56,7 @@
           <ul class="members">
             <li *ngFor="let m of t.teamMembers">
               <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-              <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="assets/proPic3.jpg">
+              <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="{{m.profilePicture}}">
               <div class="col-10">
                 <p>{{m.name}} {{m.surname}}
                   <span class="member-edit">
@@ -87,121 +87,6 @@
             </button>
           </span>
         </mat-expansion-panel>
-        <!-- *************************************************** TEAM ***** 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Team B
-            <span class="tag numMembers">3 members</span>
-            <button mat-button class="teams-btn"
-                    matTooltip="Edit"
-                    matTooltipClass="teams-tooltip"
-                    matTooltipPosition="above"
-                    (click)="open(editTeamModal)">
-                    <mat-icon inline="true">edit</mat-icon>
-            </button>
-            <button mat-button class="teams-btn"
-                    matTooltip="Delete"
-                    matTooltipClass="teams-tooltip"
-                    matTooltipPosition="above"
-                    (click)="open(deleteTeamModal)">
-                    <mat-icon inline="true">delete</mat-icon>
-            </button>
-          </mat-expansion-panel-header>
-          <ul class="members">
-            <li>
-              <div>
-                <img
-                  matTooltip="Jaymie Farsee" matTooltipPosition="below"
-                  src="../../../assets/profilePicDefault.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Jaymie Farsee
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Team lead</span>
-                </p>
-                <p>jafar@yahoo.co.uk</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Zac Efron" matTooltipPosition="below"
-                  src="../../../assets/proPic1.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Zac Efron
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">UI/UX designer</span>
-                </p>
-                <p>zefron@gmail.com</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-            <li>
-              <div>
-                <img
-                  matTooltip="Henry Cavill" matTooltipPosition="below"
-                  src="../../../assets/proPic2.jpg"
-                  class="profile-pic" alt="Role Badge">
-              </div>
-              <div class="col-10">
-                <p>Henry Cavill
-                  <span class="member-edit">
-                    <button mat-button class="teams-btn"
-                            matTooltip="Edit"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">edit</mat-icon>
-                    </button>
-                    <button mat-button class="teams-btn"
-                            matTooltip="Remove"
-                            matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
-                            <mat-icon inline="true">remove_circle</mat-icon>
-                    </button>
-                  </span>
-                  <span class="member-role tag">Programmer</span>
-                </p>
-                <p>henrycav@hotmail.co.us</p>
-              </div>
-              <mat-divider></mat-divider>
-            </li>
-          </ul>
-          <span class="float-right">
-            <button mat-button (click)="open(addMemberModal)">
-              <mat-icon inline="true">add</mat-icon>New member
-            </button>
-          </span>
-        </mat-expansion-panel>-->
   
       </mat-accordion>
     </div>
@@ -232,7 +117,7 @@
               </mat-option>
               <mat-option class="member-button" *ngFor="let m of members" (click)="addMember(m)">
                 <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="{{m.profilePicture}}">
                 <span>{{m.name}} {{m.surname}}</span>
               </mat-option>
             </mat-select>
@@ -243,7 +128,7 @@
             <li *ngFor="let m of addMembers">
               <div class="col-7">
                 <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="{{m.profilePicture}}">
                 <span>{{m.name}} {{m.surname}}</span>
 
                 <!-- role -->
@@ -311,7 +196,7 @@
               </mat-option>
               <mat-option class="member-button" *ngFor="let m of allMembers" (click)="addMember(m)">
                 <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="{{m.profilePicture}}">
                 <span>{{m.name}} {{m.surname}}</span>
               </mat-option>
             </mat-select>
@@ -322,7 +207,7 @@
             <li *ngFor="let m of addMembers">
               <div class="col-7">
                 <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-                <img *ngIf="m.profilePicture != 'none'" src="assets/proPic3.jpg">
+                <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="{{m.profilePicture}}">
                 <span>{{m.name}} {{m.surname}}</span>
 
                 <!-- role -->

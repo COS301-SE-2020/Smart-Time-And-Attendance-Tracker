@@ -1,0 +1,13 @@
+matrix:
+  include:
+  - language: node_js
+    node_js:
+    - 12.18.2
+    script:
+    - cd STAT
+    - npm install
+    - npm run test-headless
+  branches:
+    only:
+      - master
+      - /^(?i:app)-.*$/

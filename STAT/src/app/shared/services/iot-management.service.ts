@@ -14,7 +14,7 @@ export class IotManagementService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
-    return this.http.post(this.ROOT_URL+ '/iotDevice/register', JSON.stringify(values),{
+    return this.http.post(this.ROOT_URL+ 'iotDevice/register', JSON.stringify(values),{
       headers: headers
     });
   }
@@ -23,7 +23,7 @@ export class IotManagementService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
-    return this.http.post(this.ROOT_URL+ '/iotDevice/deregister', JSON.stringify(values),{
+    return this.http.post(this.ROOT_URL+ 'iotDevice/deregister', JSON.stringify(values),{
       headers: headers
     });
   }
@@ -32,7 +32,7 @@ export class IotManagementService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
-    return this.http.get(this.ROOT_URL+ '/iotDevice/getAllDevices', {
+    return this.http.get(this.ROOT_URL+ 'iotDevice/getAllDevices', {
       headers: headers
     });
   }
