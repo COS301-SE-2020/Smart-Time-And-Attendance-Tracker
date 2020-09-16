@@ -19,14 +19,14 @@ export class HeaderComponent implements OnInit {
     this.headerService.isUserLoggedIn.subscribe( value => {
       this.isLoggedIn = value;
     });
+    this.profilePic = localStorage.getItem('profilePic')
+    this.name = localStorage.getItem('name')
+    this.surname = localStorage.getItem('surname')
   }
 
   ngOnInit(): void {
     if (localStorage.getItem('loggedIn') == 'true') {
       this.headerService.isUserLoggedIn.next(true);
-      this.profilePic = localStorage.getItem('profilePic')
-      this.name = localStorage.getItem('name')
-      this.surname = localStorage.getItem('surname')
     }
   }
 
