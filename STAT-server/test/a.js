@@ -25,15 +25,15 @@ describe('test file 1', function() {
 
 
  describe('UNATHORISED USER SUITE', function() {
-  require ('../non-functional testing/unauthorized.js')
+  require ('../non-functional/unauthorized.js')
 })
 
 describe('ATHORISED USER SUITE', function() {
- require ('../non-functional testing/authorized.js')
+ require ('../non-functional/authorized.js')
 })
 
 describe('ADMIN USER SUITE', function() {
-require ('../non-functional testing/admin.js')
+require ('../non-functional/admin.js')
 })
 
  /*
