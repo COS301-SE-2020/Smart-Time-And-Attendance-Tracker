@@ -45,8 +45,7 @@ var UserSchema = new mongoose.Schema({
     },
     Email:{
         type: String,
-        required : "Email required.",
-        unique: true
+        required : "Email required."
     },
     Role:{
         type: Array,
