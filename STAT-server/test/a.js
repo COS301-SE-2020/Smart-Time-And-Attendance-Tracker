@@ -10,16 +10,26 @@ let should =chai.should()
 let expect =chai.expect()
 
 chai.use(chaiHttp)
-const request = require("supertest");
+//const request = require("supertest");
 
 
 describe('test file 1', function() {
 
 
     
-    describe('test USER', function() {
-       require ('./user.js')
+    describe('UNATHORISED USER SUITE', function() {
+       require ('../non-functional testing/unauthorized.js')
     })
+
+    describe('ATHORISED USER SUITE', function() {
+      require ('../non-functional testing/authorized.js')
+   })
+
+   describe('ADMIN USER SUITE', function() {
+    require ('../non-functional testing/admin.js')
+ })
+
+  /*
     describe('test PROJECT', function() {
        require ('./project.js')
       })
@@ -38,6 +48,6 @@ describe('test file 1', function() {
     describe('iotDevice', function() {
         require ('./role.js')
       })
-
+*/
 
   })

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --timeout 20000 test/a.js",
+    "test": " mocha --timeout 20000 test/a.js",
     "coverage": "nyc mocha cover _mocha  *",
     "start": "nodemon index.js"
   },
