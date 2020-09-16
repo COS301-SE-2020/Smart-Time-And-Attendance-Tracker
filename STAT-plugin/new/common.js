@@ -52,6 +52,7 @@ processDisplay();
     }
   }
   userLogin.onclick = function() {
+    var now = new Date();
     document.getElementById("errorMessage").innerHTML= "Loading. Might take long...";
     var http = new XMLHttpRequest();
     var url = BASE_URL + '/user/login';
@@ -64,7 +65,7 @@ processDisplay();
       {
         var data = JSON.parse(http.responseText);
         localStorage.setItem('token', data.token);
-        alert("getUserName");
+        //alert("getUserName");
         getUserName();
 
         getProjects();
@@ -104,15 +105,16 @@ function getUserName(){
   var http = new XMLHttpRequest();
   var url = BASE_URL + '/user/getName';
   http.open('GET', url, true);
-  http.setRequestHeader('Content-type', 'application/json');
   http.setRequestHeader('Access-Control-Allow-Origin', BASE_URL);
-  http.setRequestHeader('Authorization', `Bearer ${localStorage.getItem("token")}` );
+  http.setRequestHeader('Content-type', 'application/json');
+  http.setRequestHeader("authorization", "token "+ localStorage.getItem("token"));
   http.onreadystatechange = function()
   {
+    console.log(http.readyState + "  " + http.status);
     if(http.readyState == 4 && http.status == 200)
     {
       var data = JSON.parse(http.responseText);
-      alert(data);
+      //alert(data);
       localStorage.setItem('name', data.name);
       localStorage.setItem('surname', data.surname);
       document.getElementById("userName").innerHTML = data.name + " " + data.surname;
@@ -130,7 +132,7 @@ function getUserName(){
       document.getElementById("loginForm").style.display = "block";
       document.getElementById("popup").style.display = "none";
 
-      alert(data);
+      //alert(data);
     }
   }
   http.send();
@@ -261,10 +263,10 @@ function UpdateTimeEntry(endTime,currentID, duration, stop) {
 projectsDropdown = document.getElementById("projects");
 
 function getProjects() {
-  alert("name")
+  //alert("name")
   if(!user.getInstance().allProject)
   {
-    alert("name  2")
+    //alert("name  2")
     var http = new XMLHttpRequest();
     var apiURL = BASE_URL + '/user/getProjects';
     http.open('GET', apiURL, true);
@@ -294,7 +296,7 @@ function getProjects() {
   }
   else
   {
-    alert("name 3")
+    //alert("name 3")
     processProjects(user.getInstance().allProject, false);
   }
 }
