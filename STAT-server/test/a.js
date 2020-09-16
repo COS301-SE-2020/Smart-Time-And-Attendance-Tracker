@@ -23,7 +23,7 @@ describe('test file 1', function() {
      server.close();
  }); 
 
- 
+ /*
     describe('test USER', function() {
        require ('./user.js')
     })
@@ -50,6 +50,9 @@ describe('test file 1', function() {
     describe('test ROLE', function() {
          require ('./role.js')
       })
-
+*/
+describe('test ROLE', function() {
+  require ('./100.js')
+})
 
   })
