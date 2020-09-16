@@ -435,14 +435,17 @@ export class HistoryComponent implements OnInit {
   groupAndSort(data : any[]) {
     // group by month
     let grouped = data.reduce((r : any, e : any) => {
-      // get month and year of current element
-      let month = e.month;
 
-      // if there is no property in accumulator with this month create it
-      if (!r[month]) r[month] = { month, records: [e] }
+      if (e.month != 'Invalid Date') {
+        // get month and year of current element
+        let month = e.month;
 
-      // if there is push current element to children array for that month
-      else r[month].records.push(e);
+        // if there is no property in accumulator with this month create it
+        if (!r[month]) r[month] = { month, records: [e] }
+
+        // if there is push current element to children array for that month
+        else r[month].records.push(e);
+      }
 
       // return accumulator
       return r;
