@@ -68,7 +68,7 @@ export class AnalysisService {
   }
 
   //Get the amount of time each user spent on the project for the last week
-  public getProjectMembersTotalTime(key, pID){
+  public getProjectMembersTotalTime(key, pID) {
     let parameters = new HttpParams();
     parameters = parameters.append('projectID', pID);
     const headers = new HttpHeaders()

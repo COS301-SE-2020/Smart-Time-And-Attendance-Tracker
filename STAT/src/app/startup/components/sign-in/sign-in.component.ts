@@ -151,9 +151,10 @@ export class SignInComponent implements OnInit {
       this.service.getName(localStorage.getItem('token')).subscribe(res => {
         //console.log(res['roles']);
         localStorage.setItem('name', res['name']);
-        localStorage.setItem('surname', res['surname']);
+        localStorage.setItem('surname', res['surname'])
+        localStorage.setItem('profilePic', res['profilePicture'])
         this.headerService.isUserLoggedIn.next(true);
-        //this.router.navigate(['main']);
+        this.router.navigate(['main']);
       });
 
       this.service.isAuthenticated(localStorage.getItem('token')).subscribe(res => {
@@ -188,6 +189,8 @@ export class SignInComponent implements OnInit {
         //console.log(res['roles']);
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
+        localStorage.setItem('profilePic', res['profilePicture'])
+        localStorage.setItem('email', form['email'])
         this.headerService.isUserLoggedIn.next(true);
         //this.router.navigate(['main']);
       });
