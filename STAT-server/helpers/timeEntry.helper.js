@@ -50,6 +50,7 @@ module.exports.getTimeEntry = (id, done)=>{
  * @param {Object} user The user who's time entries are being fetched.
  * @param {*} done 
  * @returns {Object} Time Entry document(object).
+ * ///
  */
 
 module.exports.getAllTimeEntries = async (ids,req)=> {

@@ -39,16 +39,16 @@ module.exports.add = (req, res) => {
         var role = new RoleModel();
         role.ID = currentID;
         role.Role = req.body.role;
-        role.updateOne((err, doc) => {
+        role.save((err, doc) => {
             if(!err)
-                return res.status(201).json({ message: "Role created"});
+                return res.status(201).json({ message: "Role created" ,role:doc});
             
             else{
                 if (err.code == 11000){
                     return res.status(409).json({message: "Role already exists"});
                 }
                 else{
-                    return next(err);
+                    return res.status(409).json({message: err});///next(err);
                 }
             }
         })
@@ -64,7 +64,7 @@ module.exports.add = (req, res) => {
  */
 module.exports.getRole = (req, res) => {
 
-    RoleModel.findOne({ ID: req.body.ID},(err, result) => {
+    RoleModel.findOne({ ID: req.query.ID},(err, result) => {
         if(err) 
         {
             return res.status(500).send({message: 'Internal Server Error: ' + error});
