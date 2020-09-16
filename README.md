@@ -28,7 +28,7 @@
 <p>
     Testing <br>
     <img alt="angular-build badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular-build/badge.svg">
-    <img alt="angular-tests badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular-tests/badge.svg">
+    <img alt="angular-tests badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular-test/badge.svg">
 </p>
 
 ## Contents
