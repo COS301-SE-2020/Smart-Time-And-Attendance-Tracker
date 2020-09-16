@@ -20,8 +20,8 @@
     Languages <br>
     <img alt="html badge" src="https://img.shields.io/badge/html-%2075.8%25-e34c26.svg">
     <img alt="javascript badge" src="https://img.shields.io/badge/javascript-%2018.1%25-f1e05a.svg">
-    <img alt="typescript badge" src="https://img.shields.io/badge/typescript-%2034.3%25-2b7489.svg">
-    <img alt="sass badge" src="https://img.shields.io/badge/css-%201.5%25-a53b70.svg">
+    <img alt="typescript badge" src="https://img.shields.io/badge/typescript-%204.3%25-2b7489.svg">
+    <img alt="sass badge" src="https://img.shields.io/badge/sass-%201.5%25-a53b70.svg">
     <img alt="css badge" src="https://img.shields.io/badge/css-%200.3%25-563d7c.svg">
 </p>
 
