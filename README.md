@@ -100,7 +100,7 @@ STAT accepts tracking data in various formats so you can track how you spend you
 - Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
 - Testing Policy: 
 - User Manual: 
-- Video: 
+- Video: https://drive.google.com/file/d/1JiqEDQHA545Th2G2_WyD5l9o3iHrlvBa/view?usp=sharing
 - SRS Document: 
 
 ## Deployed links
