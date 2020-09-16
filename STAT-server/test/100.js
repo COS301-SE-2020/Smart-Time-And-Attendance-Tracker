@@ -27,7 +27,7 @@ describe("USER endpoints", ()=>{
             let user = {
                 name:Name,
                 surname:Surname,
-                email: user1Email,
+                email: date,
                 password: user1Password,
                 passwordConf:PasswordConf
             }
