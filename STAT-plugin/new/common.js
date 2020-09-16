@@ -1,6 +1,6 @@
 const WEBSITE_USRL = "localhost:4200";
-
-const BASE_URL = "http://localhost:3000/api";
+//
+const BASE_URL = "https://stat-server.azurewebsites.net/api"
 var user = new User();
 
 var userLogin = document.getElementById("login");
