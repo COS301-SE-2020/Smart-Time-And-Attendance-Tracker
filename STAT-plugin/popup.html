@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>STAT timer</title>
+      <meta charset="utf-8">
+
+      <link rel="stylesheet" href="style\bootstrap-4.5.0\dist\css\bootstrap.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Righteous">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+
+      <link rel="stylesheet" href="style\style.css">
+  </head>
+  <body>
+    <div class="container justify-content-center">
+      <div class="jumbotron jumbotron-fluid align-self-center col-12 mx-auto" id="loginForm">
+        <div class="logo col-12 mb-4">
+          <img src="images/STAT-logo.png" id="logo" class="img-fluid align-self-center" alt="STAT logo">
+        </div>
+        <h1 class="col-10 display-4-modified mx-auto">Log in</h1>
+        <h6 class="col-10 text-danger h6 mx-auto" id="errorMessage"></h6>
+        <hr class="my-4">
+        <form class="col-12 form-group form-group-modified" action="" method="post">
+          <div class="col-10 mb-3 mx-auto p-0 row">
+            <label for="email" class="align-items-center col-3">Email</label>
+            <input type="email" class="form-control loginInput col-9" id="email" placeholder="johndoe@gmail.com" required><br>
+          </div>
+          <div class="col-10 mb-3 mx-auto p-0 row">
+            <label for="password" class="align-items-center col-3">Password</label>
+            <input type="password"  class="form-control loginInput col-9" id="password" placeholder="********" required><br>
+          </div>
+          <button class="btn btn-md mt-3 mx-auto py-1" type="button" name="login" id="login">Log in</button>
+        </form>
+      </div>
+      <div class="jumbotron jumbotron-fluid align-self-center col-12 mx-auto" id="popup">
+        <button class="btn btn-md mt-1 py-1" type="button" name="logout" value="logout" id="logout_btn">Log out</button>
+        <div class="logo col-12 mb-4">
+          <img src="images/STAT-logo.png" id="logo" class="img-fluid align-self-center" alt="STAT logo">
+        </div>
+        <h1 class="col-12 display-4-modified mx-auto" id="userName">Name Surname</h1>
+        <p class="col-12" id="userEmail">emailaddress@host.org</p>
+        <hr class="my-4">
+        <!--<div class="flex-column row"></div>-->
+        <h6 class="text-danger h6" id="task_error"></h6>
+        <div class="col-12 lead" id="loading_projects">Loading Projects...</div>
+        <div id="selected_task" class="col-12 mx-auto">
+          <p class="lead col-12 mx-auto" id="project"></p>
+          <p class="lead col-12 mx-auto" id="task"></p>
+          <button class="btn btn-md mt-3 mx-auto py-2" type="button" name="button" id="reselect_task">Edit</button>
+        </div>
+        <div id="select_task_form" class="col-12 mx-auto">
+          <form class="col-12 form-group form-group-modified mx-auto" action="" method="post">
+            <label for="projects" class="col-10">Project</label>
+            <select class="col-10 mx-auto form-control" id="projects">
+            </select>
+            <br>
+            <label for="tasks" class="col-10">Task</label>
+            <select class="col-10 mx-auto form-control" id="tasks">
+            </select>
+            <br>
+            <button class="btn btn-md mt-3 py-2" type="button" name="button" id="select_task">Save</button>
+            <br>
+          </form>
+        </div>
+        <hr class="my-4">
+        <p class="col-12 mx-auto">
+          <span class="col-4 p-0 m-1">Time elapsed: </span>
+          <span class="col-6 p-0 m-1 lead" id="timer"></span>
+        </p>
+        <form class="col-12 form-group form-group-modified mx-auto" action="" method="post">
+          <button class="btn btn-md mx-auto py-1" type="button" name="stop" value="stop" id="start_stop">Stop</button>
+          <!--<button class="py-1 btn btn-dark btn-lg float-right" href="#" role="button" id="start">Start</button>
+            <br>
+            Can be implemented for next phase ==> nice to have feature
+            <button class="py-1 btn btn-dark btn-lg float-right" type="button" name="button" id="pause_resume">pause</button>
+          -->
+        </form>
+      </div>
+    </div>
+
+    <script src="./new/user.js"></script>
+    <script src="./new/common.js"></script>
+    <script src="./new/background.js"></script>
+    <script src="./new/popup.js"></script>
+  </body>
+</html>

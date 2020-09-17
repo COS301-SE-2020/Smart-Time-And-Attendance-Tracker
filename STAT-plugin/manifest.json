@@ -1,0 +1,34 @@
+{
+  "manifest_version": 2,
+
+  "name": "STAT",
+  "description": "",
+  "version": "1.0",
+  "author": "Team Visionary",
+  "permissions": [
+        "storage",
+        "tabs",
+        "http://localhost",
+        "https://localhost"
+    ],
+  "icons": {
+   "16": "images/STAT-icon.png",
+   "48": "images/STAT-icon.png",
+    "128": "images/STAT-icon.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "images/STAT-icon.png",
+      "38": "images/STAT-icon.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": [
+      "new/common.js",
+      "new/background.js"
+      ],
+    "persistent": true
+  },
+  "content_security_policy": "script-src 'self' localhost:3000; object-src 'self'"
+}
