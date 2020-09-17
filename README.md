@@ -98,8 +98,8 @@ STAT accepts tracking data in various formats so you can track how you spend you
 ## Demo 4
 - Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
 - Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
-- Testing Policy: https://drive.google.com/file/d/1oWs1DmT0zG0udGb3FeI38SuxevHOsShy/view?usp=sharing
-- User Manual: https://drive.google.com/file/d/1QrSagaAZeuEB93qZvzJkBcWbJmkVwVKj/view?usp=sharing
+- Testing Policy: https://drive.google.com/file/d/1prRr33Iz0iAF6g1YtNbKxGu7tQ02OWr7/view?usp=sharing
+- User Manual: https://drive.google.com/file/d/1fyxoKQkhNwwXZbIjJZHwk5Iq62xTHouv/view?usp=sharing
 - Video: https://drive.google.com/file/d/1JiqEDQHA545Th2G2_WyD5l9o3iHrlvBa/view?usp=sharing
 - SRS Document: 
 
