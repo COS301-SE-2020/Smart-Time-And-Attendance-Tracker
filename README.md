@@ -38,7 +38,7 @@
 - [Demo 2](#demo-2)
 - [Demo 3](#demo-3)
 - [Demo 4](#demo-3)
-- [Deployed links](#deployed-links)
+- [Deployed Links](#deployed-links)
 - [Project Management Tools](#project-management-tools)
 - [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
