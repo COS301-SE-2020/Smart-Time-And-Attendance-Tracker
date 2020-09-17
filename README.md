@@ -38,7 +38,7 @@
 - [Demo 2](#demo-2)
 - [Demo 3](#demo-3)
 - [Demo 4](#demo-3)
-- [Deployed links](#project-management-tools)
+- [Deployed links](#deployed-links)
 - [Project Management Tools](#project-management-tools)
 - [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
@@ -103,9 +103,16 @@ STAT accepts tracking data in various formats so you can track how you spend you
 - Video: https://drive.google.com/file/d/1JiqEDQHA545Th2G2_WyD5l9o3iHrlvBa/view?usp=sharing
 - SRS Document: 
 
-## Deployed links
-- Web Application: 
-- Mobile Application: 
+## Deployed Links
+- Web Application: https://stat-c71ac.web.app/
+- Desktop Application: https://drive.google.com/drive/folders/1LAy6MUHw4nc7UWYPbP2AgOreGqgHa92p?usp=sharing
+<br><i>Available distributions: Windows 32-bit, Windows 64-bit, Linux 32-bit & Linux 64-bit</i>
+<br><ul>
+    <li>Open the Google Drive folder and find your distribution's folder</li>
+    <li>Download the folder to your device</li>
+    <li>Unzip the downloaded folder</li>
+    <li>Launch the application by clicking on the stat-desktop file</li>
+    </ul>
 - Plugin: 
 
 ## Project Management Tools
