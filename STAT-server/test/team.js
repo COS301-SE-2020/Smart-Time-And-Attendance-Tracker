@@ -1,11 +1,7 @@
 let chai =require('chai')
 let chaiHttp =require('chai-http');
-//let server =require('../index')
-
-
 let should =chai.should()
 let expect =chai.expect()
-
 chai.use(chaiHttp)
 
 
@@ -19,6 +15,7 @@ var user1Email=date+"@gmail.com";
 var user1Password=date;
 var PasswordConf=user1Password;
 var user1Token;
+
 describe("USER endpoints", ()=>{
     describe("POST api/user/register", ()=>{
         it("register a user", (done) =>{
@@ -431,7 +428,7 @@ describe("TEAM endpoints", ()=>{
                  .set("Authorization", "Bearer " + adminToken)
                  .send(data)
                  .end((err,res) => {
-                    //console.log(res.body)
+                    
                     res.body.should.be.a('object');
                     res.should.have.status(200);
                     res.body.message.should.be.eq('Team created');

@@ -16,7 +16,7 @@ chai.use(chaiHttp)
 describe('test file 1', function() {
 
 
-    
+/*  
     describe('UNATHORISED USER SUITE', function() {
        require ('../non-functional testing/unauthorized.js')
     })
@@ -28,8 +28,8 @@ describe('test file 1', function() {
    describe('ADMIN USER SUITE', function() {
     require ('../non-functional testing/admin.js')
  })
+*/
 
-  /*
     describe('test PROJECT', function() {
        require ('./project.js')
       })
@@ -48,6 +48,6 @@ describe('test file 1', function() {
     describe('iotDevice', function() {
         require ('./role.js')
       })
-*/
+
 
   })
