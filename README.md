@@ -114,9 +114,9 @@ STAT accepts tracking data in various formats so you can track how you spend you
     <li>Launch the application by clicking on the stat-desktop file</li>
     </ul>
 - Plugin: https://drive.google.com/file/d/1a2ASX1jPSM07hGt6bs5fgO8nSOh8O00E/view?usp=sharing
-<br><i>Only available on Google Chrome</>
+<br><i>Only available on Google Chrome</i>
 <br><ul>
-    <li>Click on the link above
+    <li>Click on the link above</li>
     <li>Download the plug-in zip file</li>
     <li>Unzip the folder</li>
     <li>Open Google Chrome and navigate to Extensions (bottom-left of the Settings screen)</li>
