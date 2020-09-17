@@ -113,7 +113,21 @@ STAT accepts tracking data in various formats so you can track how you spend you
     <li>Unzip the downloaded folder</li>
     <li>Launch the application by clicking on the stat-desktop file</li>
     </ul>
-- Plugin: https://drive.google.com/file/d/1IhnqzNbVcc5x8EGLMjPuMxNFQojjtekE/view?usp=sharing
+- Plugin: https://drive.google.com/file/d/1a2ASX1jPSM07hGt6bs5fgO8nSOh8O00E/view?usp=sharing
+<br><i>Only available on Google Chrome</>
+<br><ul>
+    <li>Click on the link above
+    <li>Download the plug-in zip file</li>
+    <li>Unzip the folder</li>
+    <li>Open Google Chrome and navigate to Extensions (bottom-left of the Settings screen)</li>
+    <li>Enable developer mode (top-right corner)</li>
+    <li>Select "Load unpacked" (top-left corner)</li>
+    <li>Select the "STAT-plugin" folder - ensure the HTML file is an immediate child of this folder</li>
+    <li>Make sure the plugin is switched on</li>
+    <li>If STAT is not visible in your toolbar, select the extension icon in the right of the toolbar and select STAT in the drop down"</li>
+    <li>After following these steps, you should be ready to go</li>
+    </ul>
+
 
 ## Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
