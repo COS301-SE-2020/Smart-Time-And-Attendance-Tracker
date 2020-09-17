@@ -163,7 +163,7 @@ I'm extremely ambitious, adaptable and a great problem-solver. My creativity and
 I have an interest in data mining, Fintech, digital marketing, android and web deveopment. I am an open-minded invidual and pride myself in my ability to keep progressing and thriving under new or tough conditions.
 
 **Jana Sander**
-- https://18102639.github.io/
+- https://jana-git.github.io/
 > I am a final year Information and Knowledge Systems (Data Science Elective) student at the University of Pretoria. My interests in the field include data science, data mining and digital forensics, all of which I intend on on persuing further during my Honours degree next year. I am determined and hard-working, and keen to continue learning something new everyday.
 
 **Vedha Krishna Velthapu**
