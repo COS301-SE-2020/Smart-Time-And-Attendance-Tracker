@@ -106,7 +106,6 @@ STAT accepts tracking data in various formats so you can track how you spend you
 ## Deployed Links
 - Web Application: https://stat-c71ac.web.app/
 - Desktop Application: https://drive.google.com/drive/folders/1LAy6MUHw4nc7UWYPbP2AgOreGqgHa92p?usp=sharing
-- Plugin Application: https://drive.google.com/file/d/1IhnqzNbVcc5x8EGLMjPuMxNFQojjtekE/view?usp=sharing
 <br><i>Available distributions: Windows 32-bit, Windows 64-bit, Linux 32-bit & Linux 64-bit</i>
 <br><ul>
     <li>Open the Google Drive folder and find your distribution's folder</li>
@@ -114,7 +113,7 @@ STAT accepts tracking data in various formats so you can track how you spend you
     <li>Unzip the downloaded folder</li>
     <li>Launch the application by clicking on the stat-desktop file</li>
     </ul>
-- Plugin: 
+- Plugin: https://drive.google.com/file/d/1IhnqzNbVcc5x8EGLMjPuMxNFQojjtekE/view?usp=sharing
 
 ## Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
