@@ -1,0 +1,23 @@
+matrix:
+  include:
+  - name: "angular-build"
+    language: node_js
+    node_js:
+    - 12.18.2
+    script:
+    - cd STAT
+    - npm install @angular/cli
+    - ng build    
+  - name: "angular-test"
+    language: node_js
+    node_js:
+    - 12.18.2
+    script:
+    - cd STAT
+    - npm install
+    - npm rebuild
+    - ng test --browsers ChromeHeadless --no-watch
+  branches:
+    only:
+      - master
+      - /^(?i:app)-.*$/

@@ -131,6 +131,25 @@ module.exports.changePass = (req, res, next) => {
 } */  
 
 /**
+ * This function allows the user to add a photo.
+ * @param {*} req HTTP request 
+ * @param {*} res HTTP response 
+ * @return {Http Response} - If adding a photo is a success a success message is returned, otherwise a error message is returned
+*/ 
+module.exports.addProfilePicture = (req, res) => {
+    UserModel.updateOne({ _id: req.ID},{ProfilePicture: req.body.profilePicture},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (result.n ==0)
+            return res.status(404).json({ message: 'User not found' }); 
+        else
+            return res.status(200).json({message: 'Profile picture added'});
+               
+    });
+   
+}
+
+/**
  * This function returns the name and surname of the user.
  * @param {*} req HTTP request 
  * @param {*} res HTTP response 
@@ -138,13 +157,13 @@ module.exports.changePass = (req, res, next) => {
  * fecthing the user's details from the database.
  */
 module.exports.getName = (req, res, next) => {
-    UserModel.findOne({ _id: req.ID},{Name: 1, Surname: 1},(err, result) => {
+    UserModel.findOne({ _id: req.ID},{Name: 1, Surname: 1, ProfilePicture: 1},(err, result) => {
         if (err) 
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         else if (!result)
             return res.status(404).json({ message: 'User not found' });
         else
-            return res.status(200).json({name : result.Name, surname : result.Surname});
+            return res.status(200).json({name : result.Name, surname : result.Surname, profilePicture: result.ProfilePicture});
         
     });
 }
@@ -258,7 +277,7 @@ module.exports.getAllUsers = (req, res) => {
     }
     else
     {
-        UserModel.find({ Authenticate : true},(err, result) => {
+        UserModel.find({ Authenticate : true, Removed: false},(err, result) => {
             if (err) 
                 return res.status(500).send({message: 'Internal Server Error: ' + err});
             else if (!result)
@@ -376,7 +395,7 @@ module.exports.remove = (req, res, next) => {
                             return res.status(500).send({message: 'Internal Server Error: ' + err});
                         else
                         {
-                            UserModel.updateOne({ _id: req.body.userID},{Authenticate: false, Removed : true, DateOfRemoval :new Date().getTime()},
+                            UserModel.updateOne({ _id: req.body.userID},{Name: "[Deleted]", Surname: "[Deleted]", Email: "[Deleted]", Password: null, ProfilePicture: "none", Authenticate: false, Removed : true, DateOfRemoval :new Date().getTime()},
                                 (err, result) => {
                                 if (err) 
                                     return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -442,9 +461,53 @@ module.exports.getProjects = (req, res) => {
                         projectsOfUser.push(val);
 
                     if(count == result.Projects.length)
+                         return res.status(200).json({projects : projectsOfUser});
+                    
+                }); 
+                
+            
+            }
+            
+        }
+    });
+}
+
+/**
+ * This function gets all the projects (and associated details) a user is working on to be used for the predictive analysis.
+ * @param {HTTP Request} req Request - ID of user.
+ * @param {HTTP Response} res 
+ * @param {Function} next 
+ */
+module.exports.getProjects2 = (req, res, next) => {
+    let count = 0;
+    let projectsOfUser = [];
+    UserModel.findOne({ _id: req.ID},{Projects: 1},(err, result) => {
+        if (err) 
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
+        else if (!result)
+            return res.status(404).json({ message: 'User not found' });
+        
+        else
+        {
+            if(result.Projects.length == 0)
+                return res.status(404).json({ message: 'User is not assigned to any projects' });
+
+            for(i=0; i<result.Projects.length; i++)
+            {      
+                ProjectHelper.getProjectDetails(result.Projects[i],(err,val)=> {
+                    count = count +1;
+                    if(err)
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
+                   
+                    else if(val)
+                        projectsOfUser.push(val);
+
+                    if(count == result.Projects.length)
                     {
-                        return res.status(200).json({projects : projectsOfUser});
-                    };
+                        req.projects = projectsOfUser;
+                        next();
+                    }
+                    
                 }); 
                 
             

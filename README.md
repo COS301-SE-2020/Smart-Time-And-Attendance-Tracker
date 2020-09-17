@@ -18,16 +18,17 @@
 
 <p>
     Languages <br>
-    <img alt="typescript badge" src="https://img.shields.io/badge/typescript-%2035.3%25-blue.svg">
-    <img alt="javascript badge" src="https://img.shields.io/badge/javascript-%2022.4%25-yellow.svg">
-    <img alt="html badge" src="https://img.shields.io/badge/html-%2025.0%25-red.svg">
-    <img alt="css badge" src="https://img.shields.io/badge/css-%2025.0%25-purple.svg">
+    <img alt="html badge" src="https://img.shields.io/badge/html-%2075.8%25-e34c26.svg">
+    <img alt="javascript badge" src="https://img.shields.io/badge/javascript-%2018.1%25-f1e05a.svg">
+    <img alt="typescript badge" src="https://img.shields.io/badge/typescript-%204.3%25-2b7489.svg">
+    <img alt="sass badge" src="https://img.shields.io/badge/sass-%201.5%25-a53b70.svg">
+    <img alt="css badge" src="https://img.shields.io/badge/css-%200.3%25-563d7c.svg">
 </p>
 
 <p>
     Testing <br>
-    <img alt="build badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/build/badge.svg">
-    <img alt="angular badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular/badge.svg">
+    <img alt="angular-build badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular-build/badge.svg">
+    <img alt="angular-tests badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular-test/badge.svg">
 </p>
 
 ## Contents
@@ -36,6 +37,8 @@
 - [Demo 1](#demo-1)
 - [Demo 2](#demo-2)
 - [Demo 3](#demo-3)
+- [Demo 4](#demo-3)
+- [Deployed Links](#deployed-links)
 - [Project Management Tools](#project-management-tools)
 - [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
@@ -43,32 +46,35 @@
 - [Repository](#repository)
 
 ## Introduction
-STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
+STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT, and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
 
 ## Features
 **Automatic Tracking**\
-Automatically track time spent on your browser and emails without having to manually start and stop the timer. STAT will record the total time spent on these applications. You can even split the total time and allocate it to specific activities
+STAT makes it easy track time spent on activities via the dashboard and using hot keys. STAT will record the total time spent on these activities.
 
-**Chrome plug-in**\
-Automatic tracking is even easier with the STAT plug-in. The plug-in automatically starts timing when you open your browser. All you have to do is classify the entry so that STAT knows where to put it.
+**Google Chrome plug-in**\
+Automatic tracking is even easier with the STAT plug-in, which automatically starts tracking when you open your browser. All you have to do is classify the entry so that STAT knows where to put it.
 
 **Manual Tracking**\
-Prefer the pen and paper method? No problem. Track your time any way you like and simply use those details to create a time entry.
+Prefer the pen and paper method? No problem. Track your time and monetary expenditure any way you like and simply use those details to create a time entry.
 
 **Calendar Syncing**\
-STAT automatically tracks your attendance when you connect it to your calendar. No need to worry about recording events in more than one place. STAT will retrieve the data from your calendar and automatically record your presence and track record the relevant time data.
+STAT tracks your time and attendance using your calendar entries. No need to worry about recording events in more than one place. STAT will retrieve the data from your calendar and automatically record the relevant time data.
 
 **IOT Integration**\
-You can use STAT almost anywhere. STAT is designed to work with external devices like cameras to help you track time and attendance more efficiently. Simply connect your IOT device to the system and STAT will receive time and attendance data from the device and track your time accordingly.
+You can use STAT almost anywhere. STAT is designed to work with external devices like cameras to help you track time and attendance more efficiently. Simply connect your IOT device to the system and STAT will receive time and attendance data from the device, and track your time accordingly.
 
 **Predictive Analysis**\
-STAT produces graphs that allow you to view how time is being or was spent during the course of a project and help to manage your team better. Using historical data, STAT can even predict how much more time will need to be allocated to a project.
+STAT produces graphs that allow you to view how time was spent during the course of a project and help to manage your team better. Using historical data, STAT can estimate how many hours you will log in the coming week.
+
+**Project Management**\
+You can manage your projects, tasks, and teams. STAT's dashboard makes it easy to see upcoming due dates, tracking history, and overdue tasks and projects.
 
 **Organisation Management**\
 Authentication requests are automatically sent to your administrator each time a new user registers, which allows you to control who has access to your system by accepting and rejecting requests. You can also control what information and functionality each user has using STAT's role assignment functionality.
 
 **Import/Export Functionality**\
-STAT accepts tracking data in various formats so you can track how you spend your time any way you want. When you import CVS or JSON data, STAT automatically creates the time entries for you. You can even export all of your tracking data to a JSON, CVS, or PDF file.
+STAT accepts tracking data in various formats so you can track how you spend your time any way you want. When you import CSV or JSON data, STAT automatically creates the time entries for you. You can even export all of your tracking data to a JSON, CVS, or PDF file.
 
 ## Demo 1
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
@@ -88,6 +94,40 @@ STAT accepts tracking data in various formats so you can track how you spend you
 - Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
 - Video: https://drive.google.com/file/d/1zUjqtTmcJDGeoipVc3awsqgtnbAcBrvC/view?usp=sharing
 - SRS Document: https://drive.google.com/file/d/1eyT3XSIN02zO8fkohkQpa3Wz4tB2BQYe/view?usp=sharing
+
+## Demo 4
+- Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
+- Technical Installation Manual: https://drive.google.com/file/d/1I2uvzIIMCLnW4Jn0xe8aQZF_v3QgwliB/view?usp=sharing
+- Testing Policy: https://drive.google.com/file/d/1prRr33Iz0iAF6g1YtNbKxGu7tQ02OWr7/view?usp=sharing
+- User Manual: https://drive.google.com/file/d/1fyxoKQkhNwwXZbIjJZHwk5Iq62xTHouv/view?usp=sharing
+- Video: https://drive.google.com/file/d/1JiqEDQHA545Th2G2_WyD5l9o3iHrlvBa/view?usp=sharing
+- SRS Document: 
+
+## Deployed Links
+- Web Application: https://stat-c71ac.web.app/
+- Desktop Application: https://drive.google.com/drive/folders/1LAy6MUHw4nc7UWYPbP2AgOreGqgHa92p?usp=sharing
+<br><i>Available distributions: Windows 32-bit, Windows 64-bit, Linux 32-bit & Linux 64-bit</i>
+<br><ul>
+    <li>Open the Google Drive folder and find your distribution's folder</li>
+    <li>Download the folder to your device</li>
+    <li>Unzip the downloaded folder</li>
+    <li>Launch the application by clicking on the stat-desktop file</li>
+    </ul>
+- Plugin: https://drive.google.com/file/d/1a2ASX1jPSM07hGt6bs5fgO8nSOh8O00E/view?usp=sharing
+<br><i>Only available on Google Chrome</i>
+<br><ul>
+    <li>Click on the link above</li>
+    <li>Download the plug-in zip file</li>
+    <li>Unzip the folder</li>
+    <li>Open Google Chrome and navigate to Extensions (bottom-left of the Settings screen)</li>
+    <li>Enable developer mode (top-right corner)</li>
+    <li>Select "Load unpacked" (top-left corner)</li>
+    <li>Select the "STAT-plugin" folder - ensure the HTML file is an immediate child of this folder</li>
+    <li>Make sure the plugin is switched on</li>
+    <li>If STAT is not visible in your toolbar, select the extension icon in the right of the toolbar and select STAT in the drop down"</li>
+    <li>After following these steps, you should be ready to go</li>
+    </ul>
+
 
 ## Project Management Tools
 - ClickUp: https://app.clickup.com/2546018/v/l/s/2693539
