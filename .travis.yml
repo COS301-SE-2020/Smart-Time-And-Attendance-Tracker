@@ -6,7 +6,7 @@ matrix:
     - 12.18.2
     script:
     - cd STAT
-    - npm install
+    - npm install @angular/cli
     - ng build    
   - name: "angular-test"
     language: node_js
