@@ -17,6 +17,7 @@ function createWindow() {
         icon: 'src/favicon.ico',
         webPreferences: {
             nodeIntegration: true,
+            nodeIntegrationInWorker: true,
             allowRunningInsecureContent: (serve) ? true : false,
         },
     });

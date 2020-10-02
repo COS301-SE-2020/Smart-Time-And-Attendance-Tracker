@@ -68,20 +68,14 @@ export class TrackingService {
       headers: headers
     });
   }
-  public saveSharedLocalStorage(iframe, saveKey, data)
-  { 
-    iframe.contentWindow.postMessage({
-      action: 'save',
-      key: saveKey,
-      value: data
-  });
-}
-public getSharedLocalStorage(iframe,getKey)
-  {
-    console.log("gettttt"+ getKey);
-      return iframe.contentWindow.postMessage({
-      action: 'get',
-      key: getKey
-  });
-}
+
+  //Get active window
+  public getActiveWindow(){
+    const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json');
+    return this.http.get("http://localhost:3001/activeWindow", {
+      headers: headers
+    });
+  }
+ 
 }
