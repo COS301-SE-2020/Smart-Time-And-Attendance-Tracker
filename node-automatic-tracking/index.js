@@ -17,7 +17,7 @@ application.get('/activeWindow', (req, res) => {
    
     (async () => {
         const win = await activeWin()
-        return res.status(200).json({ id : win.id, title : win.title , url : win.url});
+        return res.status(200).json({ id : win.id, title : win.title});
 
     })();
 

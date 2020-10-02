@@ -136,13 +136,17 @@ export class TodayComponent implements OnInit {
       console.log(this.currentlyTracking);
     }
     this.reload()
-
-    this.service.getActiveWindow().subscribe((data) => {
-      console.log(data)
-    },
-    error => {
-      console.log(error)
+    this.count = timer(6000);
+    this.countSub =this.count.subscribe(x => {
+       
+      this.service.getActiveWindow().subscribe((data) => {
+        console.log(data)
+      },
+      error => {
+        console.log(error)
+      });
     });
+    
   
   }
 
