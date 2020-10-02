@@ -87,6 +87,15 @@
       <div *ngIf="members && (members.length == 0 || members.length > 1)" id="total-members" class="col-auto">
         <b>{{members.length}}</b><br>MEMBERS
       </div>
+      <button mat-mini-fab id="export-menu" class="mx-1" matTooltip="Export" matTooltipClass="action-tooltip"
+        matTooltipPosition="above" [matMenuTriggerFor]="exportMenu">
+        <mat-icon>fact_check</mat-icon>
+      </button>
+      <mat-menu #exportMenu="matMenu">
+        <button mat-menu-item (click)="exportToJSON()">JSON</button>
+        <button mat-menu-item (click)="exportCSV()">Excel</button>
+        <button mat-menu-item (click)="exportPDF()">PDF</button>
+      </mat-menu>
     </div>
 
     <mat-spinner *ngIf="!members" class="req-spinner"></mat-spinner>
