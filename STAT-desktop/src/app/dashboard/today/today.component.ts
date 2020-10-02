@@ -136,16 +136,6 @@ export class TodayComponent implements OnInit {
       console.log(this.currentlyTracking);
     }
     this.reload()
-    this.count = timer(6000);
-    this.countSub =this.count.subscribe(x => {
-       
-      this.service.getActiveWindow().subscribe((data) => {
-        console.log(data)
-      },
-      error => {
-        console.log(error)
-      });
-    });
     
   
   }
@@ -245,6 +235,13 @@ export class TodayComponent implements OnInit {
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
+    this.service.getActiveWindow().subscribe((data) => {
+      console.log(data)
+    },
+    error => {
+      console.log(error)
+    });
+
     console.log("start");
     this.trackingNow =true;
     localStorage.setItem('trackingNow', 'true');
