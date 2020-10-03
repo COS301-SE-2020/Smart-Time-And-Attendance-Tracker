@@ -337,7 +337,7 @@ export class TodayComponent implements OnInit {
   track()
   {
     this.trackingNow =true;
-    console.log("tracking");
+    //console.log("tracking");
     this.countSub =this.count.subscribe(x => {
 
       this.service.getActiveWindow().subscribe((data) => {
@@ -351,6 +351,7 @@ export class TodayComponent implements OnInit {
           this.tracking[id]['description'] =  data['title']
           let now = new Date();
           this.tracking[id]['startTime'] = now.getTime()
+          console.log(this.tracking)
         }
         this.currentID = id;
         this.tracking[this.currentID].activeTime += 2;
@@ -391,7 +392,7 @@ export class TodayComponent implements OnInit {
             delete this.tracking[this.currentID];
         }
         localStorage.setItem("tracking", JSON.stringify(this.tracking));
-        console.log( this.tracking[this.currentID].activeTime);
+        //console.log( this.tracking[this.currentID].activeTime);
         this.track();
       },
       error => {
