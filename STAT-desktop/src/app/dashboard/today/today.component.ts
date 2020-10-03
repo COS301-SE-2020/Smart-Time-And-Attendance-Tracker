@@ -37,6 +37,7 @@ export class TodayComponent implements OnInit {
   closeResult: string;
   manualTrackingForm : FormGroup
   automaticTrackingForm: FormGroup
+  form: any
   editEntryForm : FormGroup
 
   projects : []
@@ -71,6 +72,8 @@ export class TodayComponent implements OnInit {
   tasksVal : any[] = []
 
   trackingNow =false;
+  tracking = [] as any;
+  currentID : any;
 
   currentlyTracking = { 'description' : 'No description', 'startTime' : '', 
                                   'activeTime' : 0, 'projectName' : 'Unspecified', 'taskName' : 'Unspecified'}
@@ -94,7 +97,6 @@ export class TodayComponent implements OnInit {
     this.manualTrackingForm.setValidators(this.checkTimes('startTime', 'endTime'));
 
     this.automaticTrackingForm = new FormGroup({
-      description : new FormControl('',[Validators.required]),
       projectID : new FormControl(''),
       taskID : new FormControl(''),
       projectName : new FormControl(''),
@@ -125,20 +127,16 @@ export class TodayComponent implements OnInit {
     this.date4.setDate(this.date.getDate()-4)
     this.date5.setDate(this.date.getDate()-5)
 
-    console.log(localStorage.getItem('trackingNow'));
-    if(localStorage.getItem('trackingNow')== 'true')
-    {
-      console.log("welcome back");
-      this.trackingNow = true;
-      this.cd.detectChanges();
-      this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
-      this.tracking();
-      console.log(this.currentlyTracking);
-    }
     this.reload()
-    
+    /*if( JSON.parse(localStorage.getItem("tracking")) != null)
+    {
+      this.tracking = JSON.parse(localStorage.getItem("tracking"));
+      console.log(this.tracking)
+      this.track()
+    }*/
   
   }
+  
 
   // reload page data
   reload() {
@@ -235,115 +233,58 @@ export class TodayComponent implements OnInit {
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
+    this.sync = timer(300000);
+    this.count = timer(2000);
     this.service.getActiveWindow().subscribe((data) => {
-      console.log(data)
+      console.log(data);
+      var id = data['id']
+      if (this.tracking[id] == undefined)
+      {
+        this.tracking[id]= { 'description' : 'No description', 'startTime' : '', 
+        'activeTime' : 0, 'projectName' : 'Unspecified', 'taskName' : 'Unspecified', 'isTracking' : true, 'lastUpdate': 0 };
+        this.tracking[id]['description'] =  data['title']
+        this.currentID = id;
+        let now = new Date();
+        this.tracking[id]['startTime'] = now.getTime()
+      }
+      this.form = form;
+      this.trackingNow =true;
+      this.stop = false;
+      let now = new Date();
+      this.tracking[this.currentID].activeTime= 0;
+
+      if( form['taskName']!= undefined )
+        this.tracking[this.currentID].taskName =form['taskName'];
+
+      if( form['projectName']!= undefined )
+        this.tracking[this.currentID].projectName =form['projectName'];
+        
+
+      this.startTime = now.getTime();
+      localStorage.setItem("form", JSON.stringify(this.form));
+      this.tracking[this.currentID].startTime = this.startTime
+      localStorage.setItem("tracking", JSON.stringify(this.tracking));
+      this.track();
     },
     error => {
       console.log(error)
     });
-
-    console.log("start");
-    this.trackingNow =true;
-    localStorage.setItem('trackingNow', 'true');
-    this.stop = false;
-    let now = new Date();
-    this.currentlyTracking.activeTime= 0;
-    this.currentlyTracking.description = form['description']
-    if( form['taskName']!= undefined )
-      this.currentlyTracking.taskName =form['taskName'];
-
-    if( form['projectName']!= undefined )
-      this.currentlyTracking.projectName =form['projectName'];
-      
-    localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
-
-    this.startTime = now.getTime();
-    form['startTime']= this.startTime;
-    this.currentlyTracking.startTime = new Date(this.startTime).toLocaleString('en-GB', { hour:'numeric', minute:'numeric', hour12:false } );
-    setTimeout (() => {
-      if(this.stop == false)
-      {
-        now = new Date();
-        form['endTime']=  now.getTime();
-
-        this.currentlyTracking.activeTime = 1;
-        form['activeTime'] = 1;
-        form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
-        localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
-        this.service.addATimeEntry(form, localStorage.getItem('token')).subscribe((data) => {
-          this.service.EntryID = data['timeEntryID'];
-          localStorage.setItem('currentlyTracking', data['timeEntryID']);
-          localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
-          //var details = {'description' : form['description'], 'projectName': form['projectName'], 'projectID': form['projectID'],'taskID': form['taskID'],'taskName':  form['taskName'] };
-
-          const options = {
-            year: "numeric",
-            month:"short",
-            day:"2-digit"
-          }
-
-          this.tracking();
-          },
-          error => {
-            console.log(error);
-            let errorCode = error['status'];
-            if (errorCode == '403')
-              this.headerService.kickOut();
-
-          });
-   }this.stop = false;
-  }, 60000);
-      
+    
+    
   }
-
-  stopTracking()
+  stopAllTracking()
   {
-    //this.automaticTrackingForm.reset()
     console.log("Stop");
     this.stop = true;
     this.trackingNow =false;
-  
-    this.updateEntry().subscribe((data) => {
-      this.service.EntryID = null;
-      localStorage.removeItem('trackingNow');
-      localStorage.removeItem('currentlyTracking');
-      localStorage.removeItem('currentlyTrackingDetails');
-    },
-      error => {
-        this.service.EntryID = null;
-        localStorage.removeItem('trackingNow');
-        localStorage.removeItem('currentlyTracking');
-        localStorage.removeItem('currentlyTrackingDetails');
-        console.log(error);
-        let errorCode = error['status'];
-        if (errorCode == '403')
-          this.headerService.kickOut();
-        });
-        this.countSub.unsubscribe();
-        this.syncSub.unsubscribe();
-        setTimeout(() => {
-          this.getEntries(this.formatDate(this.date));
-      }, 1000);
-  }
-  
-  tracking()
-  {
-    //console.log(this.service.getSharedLocalStorage(this.iframe.nativeElement, "token"));
-    this.trackingNow =true;
-    console.log("tracking");
-    this.count = timer(60000);
-    this.countSub =this.count.subscribe(x => {
-       
-        this.currentlyTracking.activeTime =  this.currentlyTracking.activeTime+1;
-        this.cd.detectChanges();
-        localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
-        console.log(this.currentlyTracking.activeTime);
-        this.tracking();
-    });
-    this.sync = timer(600000);
-    this.syncSub =this.sync.subscribe(x => {
-      
-        this.updateEntry().subscribe((data) => {
+    for (var key in this.tracking) {
+      console.log(key)
+      var value = this.tracking[key];
+      if(value.lastUpdate < value.activeTime &&value.EntryID != undefined )
+      {   
+          this.updateEntry(key).subscribe((data) => {
+          console.log(data);
+
         },
         error => {
           console.log(error);
@@ -352,28 +293,158 @@ export class TodayComponent implements OnInit {
             this.headerService.kickOut();
     
         });
+      }
+    }
+    this.tracking = []
+    localStorage.removeItem("tracking");
+    this.countSub.unsubscribe();
+    this.syncSub.unsubscribe();
+
+  }
+
+  stopTracking(id)
+  {
+    console.log("Stop");
+    this.stop = true;
+    this.trackingNow =false;
+    this.tracking[id].isTracking= false;
+    
+    if(this.tracking[id].lastUpdate < this.tracking[id].activeTime &&this.tracking[id].EntryID != undefined )
+    {
+    
+      this.updateEntry(id).subscribe((data) => {
+        console.log(data);
+      },
+        error => {
+    
+          console.log(error);
+          let errorCode = error['status'];
+          if (errorCode == '403')
+            this.headerService.kickOut();
+          });
+    }
+
+    delete this.tracking[id];
+    localStorage.setItem("tracking", JSON.stringify(this.tracking));
+
+    if(this.tracking.length == 0)
+    {
+      this.countSub.unsubscribe();
+      this.syncSub.unsubscribe();
+    }
+  }
+  
+  track()
+  {
+    this.trackingNow =true;
+    console.log("tracking");
+    this.countSub =this.count.subscribe(x => {
+
+      this.service.getActiveWindow().subscribe((data) => {
+        //console.log(data);
+        var id = data['id']
+        if (this.tracking[id] == undefined)
+        {
+          //console.log("in")
+          this.tracking[id]= { 'description' : 'No description', 'startTime' : '', 
+          'activeTime' : 0, 'projectName' : 'Unspecified', 'taskName' : 'Unspecified', 'isTracking' : true , 'lastUpdate': 0};
+          this.tracking[id]['description'] =  data['title']
+          let now = new Date();
+          this.tracking[id]['startTime'] = now.getTime()
+        }
+        this.currentID = id;
+        this.tracking[this.currentID].activeTime += 2;
+       // console.log(this.tracking[this.currentID].EntryID);
+        if(this.tracking[this.currentID] != undefined && this.tracking[this.currentID].activeTime >=60 &&this.tracking[this.currentID].EntryID == undefined )
+        {
+          //console.log('Hello')
+          if(this.tracking[this.currentID].isTracking != false)
+          {
+            this.tracking[this.currentID].lastUpdate = this.tracking[this.currentID].activeTime;
+            var now = new Date();
+            this.form = JSON.parse(localStorage.getItem("form"));
+            //console.log(this.form)
+            if( this.form['taskName']!= undefined )
+              this.tracking[this.currentID].taskName =this.form['taskName'];
+
+            if( this.form['projectName']!= undefined )
+              this.tracking[this.currentID].projectName =this.form['projectName'];
+            this.form['endTime']=  now.getTime();
+    
+            this.form['activeTime'] = 1;
+            this.form['date']= formatDate(now, 'yyyy/MM/dd', 'en-US');
+            this.form['startTime']= this.tracking[this.currentID].startTime;
+            this.form['description'] = this.tracking[this.currentID].description;
+            //console.log( this.form['startTime'])
+            this.service.addATimeEntry(this.form, localStorage.getItem('token')).subscribe((data) => {
+            this.tracking[this.currentID].EntryID = data['timeEntryID'];
+              },
+              error => {
+                console.log(error);
+                let errorCode = error['status'];
+                if (errorCode == '403')
+                  this.headerService.kickOut();
+    
+              });
+          }
+            else
+            delete this.tracking[this.currentID];
+        }
+        localStorage.setItem("tracking", JSON.stringify(this.tracking));
+        console.log( this.tracking[this.currentID].activeTime);
+        this.track();
+      },
+      error => {
+        console.log(error)
+      });
+  
+       
+    });
+    this.syncSub =this.sync.subscribe(x => {
+
+      for (var key in this.tracking) {
+        console.log(key)
+        var value = this.tracking[key];
+        if(value.lastUpdate < value.activeTime)
+        {   
+            this.tracking[key].lastUpdate = this.tracking[key].activeTime;
+            localStorage.setItem("tracking", JSON.stringify(this.tracking));
+            this.updateEntry(key).subscribe((data) => {
+            console.log(data);
+
+          },
+          error => {
+            console.log(error);
+            let errorCode = error['status'];
+            if (errorCode == '403')
+              this.headerService.kickOut();
+      
+          });
+        }
+      }
       
     });
 
   }
 
   //Update a time entry
-  updateEntry()
+  updateEntry(id)
   {
     console.log("update");
     var endTime = new Date().getTime();
 
-    this.hours =   this.currentlyTracking.activeTime / 60;
+    this.hours =  this.tracking[id].activeTime / 6000;
     if(this.hourlyRate == undefined)
       this.monetaryValue = 0
     else
-      this.monetaryValue = this.hours * this.hourlyRate
+      this.monetaryValue = this.hours * this.hourlyRate;
  
     if (isNaN(this.monetaryValue))
     {
-      this.monetaryValue = 0
+      this.monetaryValue = 0;
     }
-    let values = {"timeEntryID" : localStorage.getItem('currentlyTracking'), "endTime": endTime, "activeTime" :  this.currentlyTracking.activeTime," monetaryValue" : this.monetaryValue};
+    var time = Math.round(this.tracking[id].activeTime/60)
+    let values = {"timeEntryID" :  this.tracking[id].EntryID, "endTime": endTime, "activeTime" :  time," monetaryValue" : this.monetaryValue};
      return this.service.updateTimeEntry(values, localStorage.getItem('token'));
 
   }
