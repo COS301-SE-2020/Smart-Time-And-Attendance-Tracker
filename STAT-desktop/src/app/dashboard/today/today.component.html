@@ -57,17 +57,23 @@
       <!-- ENTRIES -->
       <!--<ngb-carousel *ngIf= "trackingNow" [showNavigationArrows]="false" interval="0">
         <ng-template ngbSlide>-->
-          <div>
-            <mat-card *ngIf= "trackingNow == true">
-              <button mat-mini-fab class="stop-tracking"  (click)="stopAllTracking()"><mat-icon inline="true">stop</mat-icon></button>
-              <mat-card-title>{{currentlyTracking.description}}</mat-card-title>
-              <mat-card-subtitle>{{getTime(currentlyTracking.activeTime)}}</mat-card-subtitle>
+          <div class="scroll">
+            <mat-card *ngFor="let c of cardsShow">
+              <!--<button mat-mini-fab class="stop-tracking"  (click)="stopAllTracking()"><mat-icon inline="true">stop</mat-icon></button>-->
+              <mat-card-title>{{c.app}}</mat-card-title>
+              <!--<mat-card-subtitle>{{getTime(t.activeTime)}}</mat-card-subtitle>-->
               <mat-divider [inset]="true"></mat-divider>
+              <ul class="entries">
+                <li *ngFor="let e of c.entries">
+                  <span class="float-right">{{getCardTime(e.activeTime)}}</span>
+                  <br><i>{{e.description}}</i>
+                </li>
+              </ul>
               <mat-card-footer>
                 <!-- <span>{{currentlyTracking.date}} | {{currentlyTracking.startTime}}</span>
-                  <span class="float-right">{{getTime(currentlyTracking.activeTime)}}</span>-->
-                <span class="float-left pro">{{currentlyTracking.projectName}}</span>
-                <span class="float-left tag">{{currentlyTracking.taskName}}</span>
+                  <span class="float-right">{{getTime(currentlyTracking.activeTime)}}</span>
+                <span class="float-left pro">{{t.projectName}}</span>
+                <span class="float-left tag">{{t.taskName}}</span>-->
               </mat-card-footer>
             </mat-card>
             <!--<mat-card>

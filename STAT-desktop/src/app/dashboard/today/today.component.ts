@@ -72,7 +72,9 @@ export class TodayComponent implements OnInit {
   tasksVal : any[] = []
 
   trackingNow =false;
-  tracking = [] as any;
+  tracking : any = [];
+  cards : any = []
+  cardsShow : any = []
   currentID : any;
 
   currentlyTracking = { 'description' : 'No description', 'startTime' : '', 
@@ -236,8 +238,8 @@ export class TodayComponent implements OnInit {
     this.sync = timer(300000);
     this.count = timer(2000);
     this.service.getActiveWindow().subscribe((data) => {
-      console.log(data);
-      var id = data['id']
+      //console.log(data);
+      var id = data['title']
       if (this.tracking[id] == undefined)
       {
         this.tracking[id]= { 'description' : 'No description', 'startTime' : '', 
@@ -246,6 +248,23 @@ export class TodayComponent implements OnInit {
         this.currentID = id;
         let now = new Date();
         this.tracking[id]['startTime'] = now.getTime()
+        //console.log(this.tracking)
+
+        // cards
+        let dash = data['title'].lastIndexOf('-') + 1
+        if (dash != 0)
+          dash++
+        let app = data['title'].substring(dash)
+        if (!this.cards[app])
+          this.cards[app] = { app, entries : []}
+        let temp = this.tracking[id]
+        let title = data['title'].lastIndexOf('-')
+        if (title != -1)
+          temp.description = data['title'].substring(0, title)
+        this.cards[app].entries.push(temp)
+        this.cardsShow = Object.values(this.cards)
+
+        console.log(this.cards)
       }
       this.form = form;
       this.trackingNow =true;
@@ -341,8 +360,8 @@ export class TodayComponent implements OnInit {
     this.countSub =this.count.subscribe(x => {
 
       this.service.getActiveWindow().subscribe((data) => {
-        //console.log(data);
-        var id = data['id']
+        console.log(data);
+        var id = data['title']
         if (this.tracking[id] == undefined)
         {
           //console.log("in")
@@ -352,6 +371,21 @@ export class TodayComponent implements OnInit {
           let now = new Date();
           this.tracking[id]['startTime'] = now.getTime()
           console.log(this.tracking)
+
+          // cards
+          let dash = data['title'].lastIndexOf('-') + 1
+          if (dash != 0)
+            dash++
+          let app = data['title'].substring(dash)
+          if (!this.cards[app])
+            this.cards[app] = { app, entries : []}
+          let temp = this.tracking[id]
+          let title = data['title'].lastIndexOf('-')
+          if (title != -1)
+            temp.description = data['title'].substring(0, title)
+          this.cards[app].entries.push(temp)
+          this.cardsShow = Object.values(this.cards)
+
         }
         this.currentID = id;
         this.tracking[this.currentID].activeTime += 2;
@@ -672,6 +706,14 @@ export class TodayComponent implements OnInit {
   getTime(mins : number) {
     var hours = Math.floor(mins / 60)
     var rem = mins % 60
+    return (hours + 'h ' + rem + 'm')
+  }
+
+  // get time spent - cards
+  getCardTime(mins : number) {
+    mins = mins / 60
+    var hours = Math.floor(mins / 60)
+    var rem = Math.floor(mins % 60)
     return (hours + 'h ' + rem + 'm')
   }
 
