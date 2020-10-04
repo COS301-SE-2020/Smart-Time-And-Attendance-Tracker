@@ -294,6 +294,8 @@ export class TodayComponent implements OnInit {
   stopAllTracking()
   {
     console.log("Stop");
+    this.cards = []
+    this.cardsShow = []
     this.stop = true;
     this.trackingNow =false;
     for (var key in this.tracking) {

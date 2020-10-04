@@ -2,7 +2,7 @@
 
 <!-- HOTKEYS -->
 <div (document:keydown.shift.b)="addAutomaticEntry(automaticTrackingForm.value)"></div>
-<div (document:keydown.shift.e)="stopTracking('id')"></div>
+<div (document:keydown.shift.e)="stopAllTracking()"></div>
 
 <div class="row">
   <!-- CURRENTLY TRACKING -->
@@ -45,9 +45,12 @@
           <input hidden formControlName="taskName" [(ngModel)]="tName" [value]="tName">
         </mat-form-field>
 
-        <button mat-raised-button color="accent" class="float-right" 
+        <button *ngIf="trackingNow == false" mat-raised-button color="accent" class="float-right" 
               (click)="editing = false; addAutomaticEntry(automaticTrackingForm.value); automaticTrackingForm.reset()"
               [disabled]="automaticTrackingForm.invalid">Start Tracking</button>
+        <button *ngIf="trackingNow == true" mat-raised-button color="primary" class="float-right" 
+            (click)="editing = false; stopAllTracking()"
+            [disabled]="automaticTrackingForm.invalid">Stop Tracking</button>
       </form>
       <span id="shortcuts">
         <b>Speed up your tracking with our keyboard shortcuts</b>
