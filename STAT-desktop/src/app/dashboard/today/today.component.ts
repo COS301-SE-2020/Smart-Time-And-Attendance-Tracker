@@ -320,6 +320,7 @@ export class TodayComponent implements OnInit {
     localStorage.removeItem("tracking");
     this.countSub.unsubscribe();
     this.syncSub.unsubscribe();
+    this.getEntries(this.formatDate(this.date))
 
   }
 
