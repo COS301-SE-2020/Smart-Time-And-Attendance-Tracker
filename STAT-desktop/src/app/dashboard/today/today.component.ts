@@ -260,7 +260,7 @@ export class TodayComponent implements OnInit {
         let temp = this.tracking[id]
         let title = data['title'].lastIndexOf('-')
         if (title != -1)
-          temp.description = data['title'].substring(0, title)
+          temp.desc = data['title'].substring(0, title)
         this.cards[app].entries.push(temp)
         this.cardsShow = Object.values(this.cards)
 
@@ -385,7 +385,7 @@ export class TodayComponent implements OnInit {
           let temp = this.tracking[id]
           let title = data['title'].lastIndexOf('-')
           if (title != -1)
-            temp.description = data['title'].substring(0, title)
+            temp.desc = data['title'].substring(0, title)
           this.cards[app].entries.push(temp)
           this.cardsShow = Object.values(this.cards)
 
