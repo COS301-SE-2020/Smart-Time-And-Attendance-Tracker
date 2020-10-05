@@ -19,7 +19,7 @@ export class TrackingService {
     values.endTime = epoch;
     if(!values.description)
       values.description = "Manual Entry";
-    values.device = "Website";
+    values.device = "Desktop Application";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
@@ -31,7 +31,7 @@ export class TrackingService {
   public addATimeEntry(values, token) {
     if(!values.description)
       values.description = "Timed Entry";
-    values.device = "Website";
+    values.device = "Desktop Application";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
