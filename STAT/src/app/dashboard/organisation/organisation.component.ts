@@ -44,13 +44,13 @@ export class OrganisationComponent implements OnInit {
   exportPDF()
   {
     var doc = new jsPDF("l");
-    var cols = ["Name", "Surname", "Email", "Role", "Removed"]
+    var cols = ["Name", "Surname", "Email", "ID"]
     var rows = [];
 
     for (let x = 0; x < this.members.length; x++) {
       let record = this.members[x];
       //console.log(record);
-      var temp = [record['name'], record['surname'], record['email'], record['role'], record['removed']]
+      var temp = [record['name'], record['surname'], record['email'], record['ID']]
       rows.push(temp)
     }
 
@@ -70,8 +70,7 @@ export class OrganisationComponent implements OnInit {
         'name' : record['name'],
         'surname' : record['surname'],
         'email' : record['email'],
-        'role' : record['role'],
-        'removed' : record['removed']}
+        'id' : record['ID']}
       rows.push(temp)
     }
 
@@ -90,8 +89,7 @@ export class OrganisationComponent implements OnInit {
       { label: 'Name', value: 'records.name' },
       { label: 'Surname', value: 'records.surname' },
       { label: 'Email', value: 'records.email' },
-      { label: 'Role', value: 'records.role' },
-      { label: 'Removed', value: 'records.removed' },
+      { label: 'ID', value: 'records.ID' }
     ];
     
     const transforms = [unwind({ paths: ['records'] })];
