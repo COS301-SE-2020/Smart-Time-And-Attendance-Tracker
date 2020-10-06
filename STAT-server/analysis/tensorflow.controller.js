@@ -24,7 +24,7 @@
 
 const AnalysisHelper = require('../helpers/analysis.helper');
 const tensor = require("@tensorflow/tfjs");
-const totalDays = 7*4;
+const totalweeks = 4;
 
 function getTimeEntriesForProject(entries)
 {
@@ -66,6 +66,101 @@ function sortByDate(entries) {
     return entries;
 }
 module.exports.try2 = function(req, res){
+    var totalDays = totalweeks*7;
+    if(req.body.weeks)
+        totalDays = req.body.weeks *7;
+    
+    var epoch = 500;
+    if(req.body.epoch)
+        epoch = req.body.epoch;
+    //console.log("epoch  : " + epoch + " days " + totalDays);
+    var userTimes = [];
+    for(var t = totalDays; t>0; t--)
+    {
+        var dateVar = new Date();
+        dateVar = new Date(dateVar.setDate(dateVar.getDate()-t));
+        const project = req.body.projectID;
+        AnalysisHelper.getUserTotalTimeForProject(project, dateVar, (err, result) => {
+            if (err) 
+                return res.status(500).send({message: 'Internal Server Error: ' + err});
+            else if (!result){}
+            else
+                userTimes.push(result);
+
+            if(totalDays == userTimes.length)
+            {
+                //console.log("RETURNING!!!!!!!!!!!!!!!!1");
+                //console.log(userTimes);
+                var sortedByPorjects = getTimeEntriesForProject(userTimes);
+                var sortedByDate = sortByDate(sortedByPorjects);
+                var newArr = [];
+                sortedByDate.forEach(async function(element){
+                    var xArr= [], yArr = [], t2=0, inn =0, inn2=1;
+                    for(t2 = 0; t2<totalDays/7; t2++)
+                    {
+                        var weekHours = 0;
+                        for(var t3 = 0; t3<7; t3++)
+                        {
+                            xArr.push(inn2);
+                            yArr.push(element[inn].Time);
+                            weekHours+= element[inn].Time;   
+                            inn++;
+                            inn2 += 1;
+                        }
+                        //xArr.push(t2+1);
+                        //yArr.push(weekHours);
+                    }
+                    console.log(yArr);
+                    console.log(xArr);
+                    
+                    const trainTensors = {
+                        day: tensor.tensor2d(xArr, [inn, 1]),  
+                        timeMin: tensor.tensor2d(yArr, [inn, 1])
+                    };    
+                    const predictionWeek = [[29], [30], [31], [32], [33], [34], [35]];                        
+                    //console.log("------------------");
+                    
+                    const model = tensor.sequential();
+                    
+                    model.add(tensor.layers.dense({inputShape: [1], units: 1}));
+
+                    const sgdOpt = tensor.train.sgd(0.025);
+                    model.compile({loss: 'meanAbsoluteError', optimizer: sgdOpt});
+                    var lastLoss;
+                    
+                    (async function() {
+
+                        for(var i=0; i<100; i++)
+                        {
+                            var result = await model.fit(trainTensors.day,
+                                trainTensors.timeMin,
+                                {epochs: epoch});
+                            //console.log("i : " + i + "    loss: " + result.history.loss[0]);
+                            lastLoss = result.history.loss[0] + "";
+                        }
+                        lastLoss = (Math.round(parseInt(lastLoss)) / inn);
+                    })().then(() => {  
+                        var predict = model.predict(tensor.tensor2d(predictionWeek));
+                        //console.log("lastLoss  "+ lastLoss);
+                        const ToReturn = {
+                            prediction : Array.from(predict.dataSync()),
+                            pastTime: Array.from(trainTensors.timeMin.dataSync()),
+                            percentageOfErrorOfModel: lastLoss
+                        };
+                        trainTensors.day.dispose();
+                        trainTensors.timeMin.dispose();
+                        //console.log(ToReturn);                            
+                        return res.status(200).send({results: ToReturn});
+                    });
+                });        
+            }
+        });
+        
+    }
+}
+
+/*
+module.exports.try2 = function(req, res){
     var userTimes = [];
     if(req.projects.length > 0)
     {
@@ -86,6 +181,7 @@ module.exports.try2 = function(req, res){
                     if(totalEntries == userTimes.length)
                     {
                         //console.log("RETURNING!!!!!!!!!!!!!!!!1");
+                        //console.log(userTimes);
                         var sortedByPorjects = getTimeEntriesForProject(userTimes);
                         var sortedByDate = sortByDate(sortedByPorjects);
                         var newArr = [];
@@ -105,40 +201,55 @@ module.exports.try2 = function(req, res){
                                 //xArr.push(t2+1);
                                 //yArr.push(weekHours);
                             }
-
-                            var ys = tensor.tensor1d(yArr, 'float32');
-                            var xs = tensor.tensor1d(xArr, 'int32');
+                            console.log(yArr);
+                            console.log(xArr);
+                            //var ys = tensor.tensor1d(yArr, 'float32');
+                            //var xs = tensor.tensor1d(xArr, 'int32');
+                            const trainTensors = {
+                                day: tensor.tensor2d(xArr, [inn, 1]),  
+                                timeMin: tensor.tensor2d(yArr, [inn, 1])
+                            };    
+                            const predictionWeek = [[29], [30], [31], [32], [33], [34], [35]];                        
                             //console.log("------------------");
                             
                             const model = tensor.sequential();
-                            model.add(tensor.layers.dense({units: 1, inputShape: [1]}));
-                            model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+                            //const layer = tensor.layers.batchNormalization({axis: 1});
+
+                            model.add(tensor.layers.dense({inputShape: [1], units: 1}));
+
+                            const sgdOpt = tensor.train.sgd(0.025);
+                            model.compile({loss: 'meanAbsoluteError', optimizer: sgdOpt});
+                            var lastLoss;
                             //console.log(totalDays + "    " + yArr.length);
-                            await model.fit(xs, ys, {epochs : 30}).then(() => {  
-                                ys.print();
-                                var nextElement = inn2; 
-                                //console.log(nextElement + "   " + inn + "  " + inn2);
-                                var prediction = [];     
-                                for(var i=0; i<7; i++)
+
+                            (async function() {
+    
+                                for(var i=0; i<500; i++)
                                 {
-                                    //var output = Array.from(model.predict(tensor.tensor1d([(nextElement/7)])).dataSync())[0];
-                                    var output = Array.from(model.predict(tensor.tensor1d([nextElement])).dataSync())[0];
-                                    //console.log("Predict     " + output +"    " + nextElement);
-                                    prediction.push(output);
-                                    nextElement += (1/7);
+                                    var result = await model.fit(trainTensors.day,
+                                        trainTensors.timeMin,
+                                        {epochs: 1000});
+                                //    console.log("i : " + i + "    loss: " + result.history.loss[0]);
+                                    lastLoss = result.history.loss[0] + " ";
+                                    //result.dispose();
+                                //    console.log('numTensors (outside tidy): ' + tf.memory().numTensors);
+                                
                                 }
-
-                                //console.log("------------------");
-
-                                var text = {
-                                    "projectID": element[0].ProjectID,
-                                    "projectName": element[0].ProjectName,
-                                    "pastTimes" : yArr,
-                                    "predictions" : prediction     
+                                lastLoss = Math.round(parseInt(lastLoss)) / inn;
+                                //console.log("lastLoss  " + lastLoss/numberOfDays);
+                            
+                            })().then(() => {  
+                                //ys.print();
+                                var predict = model.predict(tensor.tensor2d(predictionWeek));
+                                const ToReturn = {
+                                    prediction : Array.from(predict.dataSync()),
+                                    pastTime: Array.from(trainTensors.timeMin.dataSync()),
+                                    errorOfModel: lastLoss
                                 };
-                                newArr.push(text);
-                                if(sortedByDate.length == newArr.length)
-                                    return res.status(200).send({results: newArr});
+                                trainTensors.day.dispose();
+                                trainTensors.timeMin.dispose();
+                                console.log(ToReturn);                            
+                                return res.status(200).send({results: ToReturn});
                             });
                         });        
                     }
@@ -149,4 +260,4 @@ module.exports.try2 = function(req, res){
     else
         return res.status(200).send({results: userTimes});
 }
-
+*/
