@@ -16,8 +16,8 @@ import jsPDF from 'jspdf';
   styleUrls: ['./attendance.component.sass']
 })
 export class AttendanceComponent implements OnInit {
-  allColumns = ['Date', 'Start Time', 'End Time', 'Description'];
-  displayedColumns = ['Date', 'Start Time', 'End Time', 'Description']
+  allColumns = ['Date', 'Start Time', 'End Time', 'Device'];
+  displayedColumns = ['Date', 'Start Time', 'End Time', 'Device']
 
   roles: string = localStorage.getItem('roles')
 
@@ -39,7 +39,7 @@ export class AttendanceComponent implements OnInit {
   constructor(public headerService: HeaderService, public amService: AccountManagementService, public imService: IotManagementService, public attendanceService: AttendanceService) { }
 
   ngOnInit(): void {
-    if (this.roles.indexOf("Data Analyst != -1")) {
+    if (this.roles.indexOf("Data Analyst") != -1) {
       this.allColumns = ['Date', 'Start Time', 'End Time', 'Device', 'Name'];
       this.displayedColumns = this.allColumns
 
@@ -49,9 +49,6 @@ export class AttendanceComponent implements OnInit {
       this.getMembers()
     }
     else {
-      this.allColumns = ['Date', 'Start Time', 'End Time', 'Device'];
-      this.displayedColumns = this.allColumns
-
       this.attendanceType = 'general'
       this.getOwnAttendanceEntries()
     }
@@ -94,7 +91,6 @@ export class AttendanceComponent implements OnInit {
     
     this.attendanceService.getAllUsersAttendanceEntries(localStorage.getItem('token')).subscribe((data) => {
       let res: any[] = data['results']
-      console.log(res)
       res.forEach((element: any) => {
         element.attendanceEntries.forEach((entry: any) => {
           entry.name = element.name + " " + element.surname
@@ -120,6 +116,7 @@ export class AttendanceComponent implements OnInit {
     let req = {}
     if (this.dateFrom != null && this.dateTo != null)
       req = { 'minDate': this.dateFrom, 'maxDate': this.dateTo }
+      console.log(this.dateFrom)
 
     this.attendanceService.getOwnAttendanceEntries(localStorage.getItem('token'), req).subscribe((data) => {
       this.tableData = data['attendanceEntries']
