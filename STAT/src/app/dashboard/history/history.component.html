@@ -55,14 +55,16 @@
       <div class="col-12 header-row">
         <div *ngIf="roles.includes('Data Analyst') || roles.includes('Team Leader')">
         <mat-form-field *ngIf="toggle == false" appearance="standard" class="col-6">
-          <mat-label>View Project Entries</mat-label>
+          <mat-label>View project entries</mat-label>
           <mat-select [(ngModel)]="pSelected">
+            <mat-option value="all" (click)="getAllUser()">All projects</mat-option>
             <mat-option *ngFor="let p of projects" [value]="p.projectName" (click)="getAllProject(p.ID)">{{p.projectName}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="toggle == true" appearance="standard" class="col-6">
-          <mat-label>View Member Entries</mat-label>
+          <mat-label>View member entries</mat-label>
           <mat-select [(ngModel)]="mSelected">
+            <mat-option value="all" (click)="getAllUser()">All members</mat-option>
             <mat-option *ngFor="let m of members" [value]="m.name + ' ' + m.surname" (click)="getUser(m.ID)">{{m.name}} {{m.surname}}</mat-option>
           </mat-select>
         </mat-form-field>
