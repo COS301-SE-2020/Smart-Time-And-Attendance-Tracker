@@ -235,7 +235,7 @@ export class TodayComponent implements OnInit {
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
-    this.sync = timer(300000);
+    this.sync = timer(600000);
     this.count = timer(2000);
     this.service.getActiveWindow().subscribe((data) => {
       //console.log(data);
@@ -284,6 +284,7 @@ export class TodayComponent implements OnInit {
       this.tracking[this.currentID].startTime = this.startTime
       localStorage.setItem("tracking", JSON.stringify(this.tracking));
       this.track();
+      this.updateTimer();
     },
     error => {
       console.log(error)
@@ -438,6 +439,10 @@ export class TodayComponent implements OnInit {
   
        
     });
+  }
+
+updateTimer()
+{
     this.syncSub =this.sync.subscribe(x => {
 
       for (var key in this.tracking) {
@@ -460,10 +465,10 @@ export class TodayComponent implements OnInit {
           });
         }
       }
-      
+      this.updateTimer();
     });
 
-  }
+}
 
   //Update a time entry
   updateEntry(id)
