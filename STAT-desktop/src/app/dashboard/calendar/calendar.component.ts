@@ -21,7 +21,7 @@ export class CalendarComponent implements OnInit {
   private email;
   private user;
   private clientID;
-  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
+  private ROOT_URL = "http://localhost:3000/api/";
   public roles = localStorage.getItem('roles');
 
   constructor(public http: HttpClient, public headerService : HeaderService, private cd: ChangeDetectorRef) { }
