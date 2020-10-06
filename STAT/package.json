@@ -37,6 +37,7 @@
     "jspdf": "^2.0.0",
     "jspdf-autotable": "^3.5.9",
     "ngx-mat-select-search": "^3.0.2",
+    "ngx-spinner": "^10.0.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "xlsx": "^0.16.6",

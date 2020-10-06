@@ -331,28 +331,33 @@ img, .pro-pic
   top: -3.5em
 
   .data-card
-    margin-bottom: 2.5em
+    margin-bottom: 0.5em
 
   h2
     display: block !important
+    margin-bottom: 0em !important
 
   .charts>div>div
     display: flex
     align-content: center
     align-items: center
 
-  #hours, #money
+  #hours, #money, #error
     text-align: center
     color: #fff
+    padding: 0.8em
 
     b
-      font-size: 1.4em
+      font-size: 1em
 
   #hours
     background-color: #366ceb
 
   #money
     background-color: #17e883
+
+  #error
+    background-color: #7846eb
 
   .bad
     background-color: #ff444e !important
@@ -398,3 +403,57 @@ img, .pro-pic
   ul 
     margin-left: 0em
     padding-left: 10px
+
+.edit-btn
+  color: #4c585b90
+  text-transform: uppercase
+  font-size: 0.8em
+  line-height: normal
+  min-width: fit-content
+  margin-left: 0.6em
+  padding: 0.3em
+  border: 1px dashed #4c585b90
+  border-radius: 10em
+
+  mat-icon
+    font-size: 1.2em !important
+    vertical-align: top !important
+
+#pred-edit
+  color: #4c585b90
+
+  b 
+    color: #7846eb
+    margin-right: 0.5em
+
+    mat-icon
+      font-size: 1em
+      margin-left: 1.4em
+      font-weight: bold
+
+mat-progress-bar
+  margin-top: 0.5em
+
+.modal-title
+  margin-bottom: 0
+
+.modal-header
+  button:focus, button:active, button
+    border: none !important
+    outline: none
+    background-color: transparent !important
+
+.modal-footer
+  padding-left: 16px
+
+  button
+    font-size: 1em
+    margin-left: 0.5em
+
+#performance
+  mat-card-content span 
+    color: #4c585b
+
+ngx-spinner p 
+  margin-top: 1.5em
+  color: white

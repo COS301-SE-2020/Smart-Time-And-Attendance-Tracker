@@ -19,6 +19,7 @@ import {
   AngularFireStorageModule,
   AngularFireStorageReference,
   AngularFireUploadTask} from "@angular/fire/storage";
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {
     NgbModule,
     NgxMatSelectSearchModule,
     AngularFireStorageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig, "cloud")
+    AngularFireModule.initializeApp(environment.firebaseConfig, "cloud"),
+    NgxSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

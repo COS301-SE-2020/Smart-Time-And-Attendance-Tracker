@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="col-6 float-left">
                 <h2>Analysis</h2>
-                <h3><mat-slide-toggle (click)="toggleAnalysis(); getPredictive()">Predictive analysis</mat-slide-toggle></h3>
+                <h3><mat-slide-toggle (click)="toggleAnalysis();">Predictive analysis</mat-slide-toggle></h3>
             </div>
             <div class="col-lg-6 col-12 float-right text-right">
                 <!--<mat-form-field appearance="standard" class="col-6" *ngIf="projectView">
@@ -35,6 +35,14 @@
                         <mat-icon>people</mat-icon>Project
                     </mat-button-toggle>
                 </mat-button-toggle-group>
+                <mat-form-field appearance="standard" class="float-right" *ngIf="predictive">
+                    <mat-label>Project</mat-label>
+                    <mat-select [(value)]="pSelected">
+                      <mat-option (click)="pName = 'Unspecified'">None</mat-option>
+                      <mat-option *ngFor="let p of projects" [value]="p.ID" (click)="pName = p.projectName; getPredictionsForWeekForProjects(pSelected);" >{{p.projectName}}</mat-option>
+                    </mat-select>
+                    <mat-error>Please select a value</mat-error>
+                  </mat-form-field>
             </div>
         </div>
     </section>
@@ -345,14 +353,14 @@
 
     <!-- predictive analysis -->
     <section id="predictive-analysis" class="col-12" *ngIf="predictive">
+        
         <div class="charts">
-            <div *ngFor="let p of predictions" class="col-12">
+            <!--<div *ngFor="let p of predictions" class="col-12">
                 <h2>{{p.projectName}}</h2>
                 <div>
                 <div class="data-card float-left col-5 p-2">
                     <mat-card id="performance" class="col-12">
                         <mat-card-title>Expected performance</mat-card-title>
-                        <!-- two lines: hours per day + monetary value per day -->
                         <mat-card-content>
                             <canvas id="{{p.projectID}}">
                                 {{p.chart}}</canvas>
@@ -362,28 +370,116 @@
                 <div class="data-card float-left col-5 p-2">
                     <mat-card id="performance" class="col-12">
                         <mat-card-title>Expected earnings</mat-card-title>
-                        <!-- two lines: hours per day + monetary value per day -->
                         <mat-card-content>
                             <canvas id="{{p.projectName}}">
                                 {{p.mchart}}</canvas>
                         </mat-card-content>
                     </mat-card>
+                </div>-->
+                <div class="col-12">
+                <h2>{{pName}}</h2>
+                <div>
+                <div class="data-card float-left col-5 p-2">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Expected performance</mat-card-title>
+                        <mat-card-content id="predTime">
+                            <span *ngIf="predictions.pTime == 0 && pName == ''">Select a project to view the analysis</span>
+                            <mat-progress-bar *ngIf="pFetched == false && predictions.pTime == 0 && pName != ''" mode="indeterminate"></mat-progress-bar>
+                            <canvas id="predTimeChart">
+                                {{predTimeChart}}</canvas>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="data-card float-left col-5 p-2">
+                    <mat-card id="performance" class="col-12">
+                        <mat-card-title>Expected earnings</mat-card-title>
+                        <mat-card-content id="predMoney">
+                            <span *ngIf="predictions.pTime == 0 && pName == ''">Select a project to view the analysis</span>
+                            <mat-progress-bar *ngIf="pFetched == false && predictions.pTime == 0  && pName != ''" mode="indeterminate"></mat-progress-bar>
+                            <canvas id="predMoneyChart">
+                                {{predMoneyChart}}</canvas>
+                        </mat-card-content>
+                    </mat-card>
                 </div>
                 <div class="data-card float-left col-2 p-2">
-                    <mat-card id="hours" class="col-12" [ngClass]="{'bad': p.pTime < 300}">
+                    <mat-card id="hours" class="col-12" [ngClass]="{'bad': predictions.pTime < 300}">
                     <!-- number of hours for this week -->
                     <mat-icon>alarm_on</mat-icon><br>
-                    <b>{{getTime(p.pTime)}}</b><br>
+                    <b>{{getTime(predictions.pTime)}}</b><br>
                     </mat-card><br>
-                    <mat-card id="money" class="col-12" [ngClass]="{'bad': p.pMoney < 1000}">
+                    <mat-card id="money" class="col-12" [ngClass]="{'bad': predictions.pMoney < 1000}">
                     <!-- monetary value for this week -->
                     <mat-icon>monetization_on</mat-icon><br>
-                    <b>R{{p.pMoney}}</b><br>
+                    <b>R{{predictions.pMoney}}</b><br>
+                    </mat-card><br>
+                    <mat-card id="error" class="col-12" [ngClass]="{'bad': predictions.percentageOfErrorOfModel > 20}">
+                        <!-- monetary value for this week -->
+                        <mat-icon>error_outline</mat-icon><br>
+                        <b>{{round(predictions.percentageOfErrorOfModel)}}%</b><br>
                     </mat-card><br>
                 </div>
                 </div>
-                <mat-divider></mat-divider>
+                <div class="col-12" id="pred-edit" *ngIf="predictions.pTime != 0">
+                    <b>*</b> <i>Predictions based on last {{editWeeks}} week's values</i>
+                    <button mat-button class="edit-btn"
+                      matTooltip="Edit"
+                      matTooltipClass="entry-tooltip"
+                      matTooltipPosition="above"
+                      (click)="open(editModal);">
+                      <mat-icon inline="true">edit</mat-icon>
+                    </button>
+                    <b><mat-icon>error_outline</mat-icon></b> <i>Model error rate: {{round(predictions.percentageOfErrorOfModel)}}%</i>
+                </div>
             </div>
         </div>
     </section>
 </div>
+
+<!-- MODAL -->
+<ng-template #editModal let-modal id="edit-form">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Model
+          <br><h4>Select the new model details below</h4>
+        </h2>
+        <button (click)="modal.dismiss('Cross click');">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+  
+      <div class="modal-body">
+        <mat-form-field appearance="standard" class="col-6">
+            <mat-label>Number of Weeks</mat-label>
+            <mat-select [(value)]="editWeeks">
+              <mat-option [value]="4">4 weeks (default)</mat-option>
+              <mat-option [value]="8">8 weeks</mat-option>
+              <mat-option [value]="12">12 weeks</mat-option>
+            </mat-select>
+            <mat-error>Please select a value</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="standard" class="col-6">
+            <mat-label>Epoch</mat-label>
+            <mat-select [(value)]="editEpoch">
+              <mat-option [value]="500">500 (default)</mat-option>
+              <mat-option [value]="600">600</mat-option>
+              <mat-option [value]="700">700</mat-option>
+              <mat-option [value]="800">800</mat-option>
+              <mat-option [value]="900">900</mat-option>
+              <mat-option [value]="1000">1000</mat-option>
+            </mat-select>
+            <mat-error>Please select a value</mat-error>
+          </mat-form-field>
+      </div>
+
+      <div class="modal-footer">
+        <button mat-raised-button color="primary" (click)="modal.close('Save click'); spinnerShow(); getPredictionsForWeekForProjects(pSelected)">Train Model</button>
+        <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+      </div>
+
+    </div>
+
+</ng-template>
+
+<ngx-spinner size="medium" type="ball-atom" bdColor="rgba(77,89,119,0.6)">
+    <p>Training model...</p>
+</ngx-spinner>

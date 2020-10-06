@@ -6,6 +6,8 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 import { Chart } from 'chart.js';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
 import { Observable, forkJoin } from 'rxjs';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-analysis',
@@ -13,6 +15,8 @@ import { Observable, forkJoin } from 'rxjs';
   styleUrls: ['./analysis.component.sass']
 })
 export class AnalysisComponent implements OnInit {
+
+  closeResult: string;
 
   // analysis type
   graphical: boolean = true;
@@ -30,9 +34,11 @@ export class AnalysisComponent implements OnInit {
   date6 : Date = new Date()
   dates : any[] = []
 
-  projects : any[] = []
+  projects = []
   tasks : any[] = [0, 0, 0, 0]
   projectsBD : any[] = [0, 0, 0]
+  pSelected : any = ''
+  pName : any = ''
 
   // values
   numProjects : any = '-'
@@ -100,15 +106,21 @@ export class AnalysisComponent implements OnInit {
   ]
 
   // predictive
-  predictions : any[] = []
+  predictions : any
   predictiveCharts : any[] = []
+  predTimeChart : []
+  predMoneyChart : []
+  pFetched : boolean = false
+
+  editWeeks : any = 4
+  editEpoch : any = 500
 
   // view
   view : string = 'me'
 
   observables : Observable<any>[] = []
 
-  constructor(private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService) { }
+  constructor(private modalService: NgbModal, private cd: ChangeDetectorRef, public aService: AnalysisService, public service : TrackingService, public headerService: HeaderService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.reset()
@@ -138,7 +150,7 @@ export class AnalysisComponent implements OnInit {
     this.getWeeklyProjectsTimes();
     this.getWeeklyTasksTimes();
     this.getProAndTasks()
-    this.getPredictionsForWeekForProjects("5f6312669826c34e6815778c");          
+    //this.getPredictionsForWeekForProjects("5f6312669826c34e6815778c");          
   
     // reset variables
     this.numProjects = '-'
@@ -147,6 +159,11 @@ export class AnalysisComponent implements OnInit {
     this.numWorked = '-'
     this.numEarned = '-'
     this.numUnder = 0
+
+    this.predictions = {}
+    this.predictions.pTime = 0
+    this.predictions.pMoney = 0
+    this.predictions.percentageOfErrorOfModel = 0
   }
 
 
@@ -579,13 +596,41 @@ export class AnalysisComponent implements OnInit {
   //Get the prediction for next week for all projects (for team lead)
   getPredictionsForWeekForProjects(projectID:string)
   {
-    console.log("predict")
+    // reset values
+    this.predictions = {}
+    this.predictions.pTime = 0
+    this.predictions.pMoney = 0
+    this.predictions.percentageOfErrorOfModel = 0
+    this.predTimeChart = []
+    this.predMoneyChart = []
+
+    var canvas : any = document.getElementById('predTimeChart');
+    if (canvas){
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
+    }
+
+    /*var canvas1 : any = document.getElementById('predMoneyChart');
+    if (canvas1){
+        var ctx = canvas1.getContext('2d');
+        ctx.clearRect(0,0, ctx.canvas1.width, ctx.canvas1.height);
+    }*/
+
     var epochs = 0;
     var weeks = 0;
+
+    if (this.editEpoch != 500)
+      epochs = this.editEpoch
+
+    if (this.editWeeks != 4)
+      weeks = this.editWeeks
+
     this.aService.getPredictionsForWeek(localStorage.getItem('token'), epochs, weeks,projectID).subscribe((data) => {
       console.log(data);
       this.predictions = data['results']
       //console.log(this.predictions)
+      this.pFetched = true
+      this.getPredictive()
     },
     error => {
       console.log(error);
@@ -604,6 +649,7 @@ export class AnalysisComponent implements OnInit {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       //console.log(data)
       this.projects = data['projects']
+      console.log(this.dailyProjects)
 
       let p = ['5f5ddda04687873aa8e7eb8a', '5f5e07ab89f29228683341cd']
       let count = this.projects.length
@@ -611,6 +657,7 @@ export class AnalysisComponent implements OnInit {
       // project analysis
       this.dailyProjects = []
       this.projects.forEach((element : any) => {
+
         this.dailyProjects.push(element)
         this.getProjectDailyValues(element.ID)
       });
@@ -792,6 +839,8 @@ export class AnalysisComponent implements OnInit {
 
   // predictive analysis
   getPredictive() {
+    this.spinner.hide()
+
     // dates
     let date1 : Date = new Date()
     let date2 : Date = new Date()
@@ -823,7 +872,64 @@ export class AnalysisComponent implements OnInit {
     // monetary values
     let counter = 0
     let count = 0
-    this.predictions.forEach((element : any) => {
+
+    let index = this.dailyProjects.findIndex((a : any) => a.ID === this.pSelected)
+    let rate = this.dailyProjects[index].hourlyRate
+
+    let values = this.predictions.prediction.map(d => Math.abs(Math.round(( ((d / 60) + Number.EPSILON) * 100) * rate) / 100))
+    
+    console.log(this.predictions)
+
+    this.predMoneyChart = new Chart(
+      'predMoneyChart', {
+        type: 'line',
+        data: { 
+          datasets: [{
+            data: values,
+            backgroundColor: 'rgba(23, 232, 131, 0.4)',
+            pointColor: '#17e883',
+            borderColor: '#17e883',
+            borderWidth: 1
+          }
+        ],
+          labels: tempDates
+        },
+        options: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    )
+
+    this.predTimeChart = new Chart(
+      'predTimeChart', {
+        type: 'line',
+        data: { 
+          datasets: [{
+            data: this.predictions.prediction.map(d => Math.abs(Math.round(( (d / 60) + Number.EPSILON) * 100) / 100)),
+            backgroundColor: 'rgba(54, 108, 235, 0.4)',
+            pointColor: '#366ceb',
+            borderColor: '#366ceb',
+            borderWidth: 1
+          }
+        ],
+          labels: tempDates
+        },
+        options: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    )
+
+    this.predictions.pMoney = Math.round(( (values.reduce((a, b) => a + b, 0)) + Number.EPSILON) * 100) / 100
+    this.predictions.pTime = Math.abs(this.predictions.prediction.reduce((a, b) => a + b, 0))
+    console.log(this.predMoneyChart)
+    console.log(this.predTimeChart)
+
+    /*this.predictions.forEach((element : any) => {
       let index = this.dailyProjects.findIndex((a : any) => a.ID === element.projectID)
       let rate = this.dailyProjects[index].hourlyRate
 
@@ -892,7 +998,7 @@ export class AnalysisComponent implements OnInit {
 
       element.chart = temp
       count++
-    });
+    });*/
     
   }
 
@@ -922,4 +1028,32 @@ export class AnalysisComponent implements OnInit {
 
     return toReturn
   }
+
+  round(val) {
+    return Math.round(( val + Number.EPSILON) * 100) / 100
+  }
+
+  // modal
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+
+  spinnerShow() {
+    this.spinner.show()
+  }
+
 }
