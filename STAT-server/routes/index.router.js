@@ -127,7 +127,7 @@ router.post("/iotDevice/clockOut", iotDevice.clockOut, attendanceEntry.updateAtt
 //tensorFlowAnalysis
 //router.post("/analysis/userWeeklyHoursPrediction", jwtHelper.verifyJWTtoken, user.getProjects, tensorFlowAnalysis.getFourWeekData, tensorFlowAnalysis.userWeeklyHoursPrediction);
 
-router.get("/analysis/projectWeeklyHoursPrediction", jwtHelper.verifyJWTtoken,  userHelper.isTeamLeader, user.getProjects2, tensorFlowAnalysis.try2);
+router.post("/analysis/projectWeeklyHoursPrediction", jwtHelper.verifyJWTtoken,  userHelper.isTeamLeader, user.getProjects2, tensorFlowAnalysis.try2);
 
 // annalysis
 //router.get("/analysis/getUserAverageTime", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated ,analysis.getUserAverageTime);

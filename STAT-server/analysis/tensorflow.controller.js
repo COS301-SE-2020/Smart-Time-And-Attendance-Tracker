@@ -110,8 +110,8 @@ module.exports.try2 = function(req, res){
                         //xArr.push(t2+1);
                         //yArr.push(weekHours);
                     }
-                    console.log(yArr);
-                    console.log(xArr);
+                    //console.log(yArr);
+                    //console.log(xArr);
                     
                     const trainTensors = {
                         day: tensor.tensor2d(xArr, [inn, 1]),  
