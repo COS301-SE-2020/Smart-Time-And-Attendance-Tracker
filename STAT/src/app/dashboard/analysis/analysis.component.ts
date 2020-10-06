@@ -138,7 +138,7 @@ export class AnalysisComponent implements OnInit {
     this.getWeeklyProjectsTimes();
     this.getWeeklyTasksTimes();
     this.getProAndTasks()
-    this.getPredictionsForWeekForProjects();          
+    this.getPredictionsForWeekForProjects("5f6312669826c34e6815778c");          
   
     // reset variables
     this.numProjects = '-'
@@ -577,10 +577,13 @@ export class AnalysisComponent implements OnInit {
   }
 
   //Get the prediction for next week for all projects (for team lead)
-  getPredictionsForWeekForProjects()
+  getPredictionsForWeekForProjects(projectID:string)
   {
-    this.aService.getPredictionsForWeek(localStorage.getItem('token')).subscribe((data) => {
-      //console.log(data);
+    console.log("predict")
+    var epochs = 0;
+    var weeks = 0;
+    this.aService.getPredictionsForWeek(localStorage.getItem('token'), epochs, weeks,projectID).subscribe((data) => {
+      console.log(data);
       this.predictions = data['results']
       //console.log(this.predictions)
     },
