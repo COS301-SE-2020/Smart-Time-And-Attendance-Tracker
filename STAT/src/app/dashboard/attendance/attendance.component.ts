@@ -82,7 +82,8 @@ export class AttendanceComponent implements OnInit {
         this.getAllUsersAttendanceEntries()
         break
       case 'user':
-        this.getUserAttendanceEntries(this.mSelected)
+        let id = this.members[this.mSelected].ID
+        this.getUserAttendanceEntries(id)
         break
     }
   }
@@ -149,7 +150,7 @@ export class AttendanceComponent implements OnInit {
 
       console.log(this.tableData);
       this.tableData.forEach((element: any) => {
-        element.name = this.mSelected
+        element.name = this.members[this.mSelected].name + " " + this.members[this.mSelected].surname
       });
 
       this.allData = this.tableData
@@ -260,6 +261,16 @@ export class AttendanceComponent implements OnInit {
     return new Date(d)
   }
 
+  sort(type: string) {
+    if (type == 'o' && this.sorted == 'newest') {
+      this.sorted = 'oldest'
+      this.tableData = this.tableData.reverse()
+    } else if (type == 'n' && this.sorted == 'oldest') {
+      this.sorted = 'newest'
+      this.tableData = this.tableData.reverse()
+    }
+  }
+
   // export and download
 
   exportToJSON() {
@@ -285,13 +296,12 @@ export class AttendanceComponent implements OnInit {
   exportPDF() {
 
     var doc = new jsPDF("l");
-    var cols = ["Date", "Start time", "End time", "Description", "Name", "Email"]
+    var cols = ["Date", "Start time", "End time", "Device", "Name"]
     var rows = [];
 
     this.tableData.forEach((element: any) => {
       element.records.forEach((record: any) => {
-        var temp = [record.fDate, record.startTime, record.endTime, record.activeTime, record.project,
-        record.task, record.monetaryValue, record.member]
+        var temp = [record.fDate, record.startTime, record.endTime, record.device, record.name]
         rows.push(temp)
       })
     })
@@ -304,13 +314,12 @@ export class AttendanceComponent implements OnInit {
 
   downloadPDF() {
     var doc = new jsPDF("l");
-    var cols = ["Date", "Start time", "End time", "Active time", "Project", "Task", "Monetary Value", "Member"]
+    var cols = ["Date", "Start time", "End time", "Device", "Name"]
     var rows = [];
 
     this.tableData.forEach((element: any) => {
       element.records.forEach((record: any) => {
-        var temp = [record.fDate, record.startTime, record.endTime, record.activeTime, record.project,
-        record.task, record.monetaryValue, record.member]
+        var temp = [record.fDate, record.startTime, record.endTime, record.device, record.name]
         rows.push(temp)
       })
     })
@@ -328,19 +337,15 @@ export class AttendanceComponent implements OnInit {
       { label: 'Date', value: 'records.date' },
       { label: 'Start Time', value: 'records.startTime' },
       { label: 'End Time', value: 'records.endTime' },
-      { label: 'Active Time', value: 'records.activeTime' },
-      { label: 'Project', value: 'records.project' },
-      { label: 'Task', value: 'records.task' },
-      { label: 'Monetary Value', value: 'records.monetaryValue' },
-      { label: 'Member', value: 'records.member' }
+      { label: 'Device', value: 'records.device' },
+      { label: 'Name', value: 'records.name' }
     ];
-    const transforms = [unwind({ paths: ['records'] })];
 
+    const transforms = [unwind({ paths: ['records'] })];
     const json2csvParser = new Parser({ fields, transforms });
     const csv = json2csvParser.parse(this.tableData);
 
     let dataUri = 'data:text/csv;charset=utf-8,' + csv;
-
     let exportFileDefaultName = 'TrackingEntries.csv';
 
     let linkElement = document.createElement('a');
@@ -357,37 +362,21 @@ export class AttendanceComponent implements OnInit {
       { label: 'Date', value: 'records.date' },
       { label: 'Start Time', value: 'records.startTime' },
       { label: 'End Time', value: 'records.endTime' },
-      { label: 'Active Time', value: 'records.activeTime' },
-      { label: 'Project', value: 'records.project' },
-      { label: 'Task', value: 'records.task' },
-      { label: 'Monetary Value', value: 'records.monetaryValue' },
-      { label: 'Member', value: 'records.member' }
+      { label: 'Device', value: 'records.device' },
+      { label: 'Name', value: 'records.name' }
     ];
-    const transforms = [unwind({ paths: ['records'] })];
 
+    const transforms = [unwind({ paths: ['records'] })];
     const json2csvParser = new Parser({ fields, transforms });
     const csv = json2csvParser.parse(this.tableData);
 
     let dataUri = 'data:text/csv;charset=utf-8,' + csv;
-
     let exportFileDefaultName = 'TrackingEntries.csv';
-
 
     var x = window.open();
     x.document.open();
     x.document.write('<html><body><pre>' + csv + '</pre></body></html>');
     x.document.close();
-  }
-
-  sort(type : string) {
-    if (type == 'o' && this.sorted == 'newest') {
-      this.sorted = 'oldest'
-      this.tableData = this.tableData.reverse()
-    } else if (type == 'n' && this.sorted == 'oldest') {
-      this.sorted = 'newest'
-      this.tableData = this.tableData.reverse()
-    }
-    console.log(this.tableData)
   }
 }
 

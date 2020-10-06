@@ -37,7 +37,7 @@
               <mat-option value="all" (click)="getAllUsersAttendanceEntries()">
                 All members
               </mat-option>
-              <mat-option *ngFor="let m of members" [value]="m.name + ' ' + m.surname" (click)="getUserAttendanceEntries(m.ID)">
+              <mat-option *ngFor="let m of members" [value]="members.indexOf(m)" (click)="getUserAttendanceEntries(m.ID)">
                 {{m.name}} {{m.surname}}</mat-option>
             </mat-select>
           </mat-form-field>
