@@ -111,7 +111,7 @@
                 </div>
                 <div class="data-card col-12">
                     <mat-card id="project-status" class="col-12">
-                        <mat-card-title>Earnings</mat-card-title>
+                        <mat-card-title>Earnings (in Rands)</mat-card-title>
                         <mat-card-content>
                             <canvas id="monetaryChart">
                                 {{monetaryChart}}</canvas>
@@ -260,7 +260,7 @@
                         <ul>
                             <li>
                                 <mat-icon class="risk-warn" *ngIf="p.completed == 0">priority_high</mat-icon>
-                                <mat-icon class="risk-pending" *ngIf="p.completed > 0">more_horiz</mat-icon>
+                                <mat-icon class="risk-pending" *ngIf="p.completed > 0 && p.completed != 100">more_horiz</mat-icon>
                                 <mat-icon class="risk-done" *ngIf="p.completed == 100">done</mat-icon>
                                 {{p.completed}}% complete
                             </li>
@@ -381,7 +381,7 @@
                 <div>
                 <div class="data-card float-left col-5 p-2">
                     <mat-card id="performance" class="col-12">
-                        <mat-card-title>Expected performance</mat-card-title>
+                        <mat-card-title>Expected performance (daily number of hours)</mat-card-title>
                         <mat-card-content id="predTime">
                             <span *ngIf="predictions.pTime == 0 && pName == ''">Select a project to view the analysis</span>
                             <mat-progress-bar *ngIf="pFetched == false && predictions.pTime == 0 && pName != ''" mode="indeterminate"></mat-progress-bar>
@@ -392,7 +392,7 @@
                 </div>
                 <div class="data-card float-left col-5 p-2">
                     <mat-card id="performance" class="col-12">
-                        <mat-card-title>Expected earnings</mat-card-title>
+                        <mat-card-title>Expected earnings (in Rands)</mat-card-title>
                         <mat-card-content id="predMoney">
                             <span *ngIf="predictions.pTime == 0 && pName == ''">Select a project to view the analysis</span>
                             <mat-progress-bar *ngIf="pFetched == false && predictions.pTime == 0  && pName != ''" mode="indeterminate"></mat-progress-bar>
@@ -454,6 +454,8 @@
               <mat-option [value]="4">4 weeks (default)</mat-option>
               <mat-option [value]="8">8 weeks</mat-option>
               <mat-option [value]="12">12 weeks</mat-option>
+              <mat-option [value]="16">16 weeks</mat-option>
+              <mat-option [value]="20">20 weeks</mat-option>
             </mat-select>
             <mat-error>Please select a value</mat-error>
           </mat-form-field>
@@ -469,6 +471,16 @@
             </mat-select>
             <mat-error>Please select a value</mat-error>
           </mat-form-field>
+          <mat-divider inset="true"></mat-divider>
+          <p>
+              <mat-icon>info</mat-icon> <b>Model Properties</b>
+          </p>
+          <p>
+            <i>Number of Weeks</i> - the tracking data for the previous x weeks will be used to train the model
+          </p>
+          <p>
+            <i>Epoch</i> - the number of times the model will be trained with the tracking data
+          </p>
       </div>
 
       <div class="modal-footer">
