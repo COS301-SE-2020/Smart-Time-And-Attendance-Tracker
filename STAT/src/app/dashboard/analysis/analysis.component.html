@@ -381,7 +381,7 @@
                 <div>
                 <div class="data-card float-left col-5 p-2">
                     <mat-card id="performance" class="col-12">
-                        <mat-card-title>Expected performance (daily number of hours)</mat-card-title>
+                        <mat-card-title>Expected performance (daily hours)</mat-card-title>
                         <mat-card-content id="predTime">
                             <span *ngIf="predictions.pTime == 0 && pName == ''">Select a project to view the analysis</span>
                             <mat-progress-bar *ngIf="pFetched == false && predictions.pTime == 0 && pName != ''" mode="indeterminate"></mat-progress-bar>
