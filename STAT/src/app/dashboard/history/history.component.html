@@ -89,7 +89,7 @@
               (click)="getHistory()">
         <mat-icon>check</mat-icon>
       </button>
-        <mat-form-field class="col-4" appearance="standard">
+        <mat-form-field class="col-2" appearance="standard">
           <mat-label>Show Fields</mat-label>
           <mat-select multiple [(ngModel)]="displayedColumns" name="item">
             <mat-option *ngFor="let c of allColumns" [value]="c">{{c}}</mat-option>

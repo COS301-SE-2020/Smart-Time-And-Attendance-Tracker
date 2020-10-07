@@ -58,7 +58,7 @@
           matTooltipPosition="above" [disabled]="dateFrom == null || dateTo == null" (click)="getAttendance()">
           <mat-icon>check</mat-icon>
         </button>
-        <mat-form-field class="col-4" appearance="standard">
+        <mat-form-field class="col-2" appearance="standard">
           <mat-label>Show Fields</mat-label>
           <mat-select multiple [(ngModel)]="displayedColumns" name="item">
             <mat-option *ngFor="let c of allColumns" [value]="c">{{c}}</mat-option>
@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <div id="attendance" class="scroll">
+    <div id="history" class="scroll">
       <mat-spinner *ngIf="tableData == []"></mat-spinner>
       <!-- display data -->
       <div>
@@ -94,20 +94,15 @@
                 <th mat-header-cell *matHeaderCellDef> End </th>
                 <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
               </ng-container>
-              <!-- name -->
-              <ng-container matColumnDef="Name">
-                <th mat-header-cell *matHeaderCellDef> Name </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-              </ng-container>
-              <!-- device -->
+              <!-- description -->
               <ng-container class="device-col" matColumnDef="Device">
                 <th mat-header-cell *matHeaderCellDef> Device </th>
                 <td mat-cell *matCellDef="let element"> {{element.device}} </td>
               </ng-container>
-              <!-- device description -->
-              <ng-container class="device-col" matColumnDef="Device Description">
-                <th mat-header-cell *matHeaderCellDef> Device Description </th>
-                <td mat-cell *matCellDef="let element"> {{element.deviceDescription}} </td>
+              <!-- name -->
+              <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
