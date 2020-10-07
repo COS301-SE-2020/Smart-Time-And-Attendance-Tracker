@@ -16,8 +16,8 @@ import jsPDF from 'jspdf';
   styleUrls: ['./attendance.component.sass']
 })
 export class AttendanceComponent implements OnInit {
-  allColumns = ['Date', 'Start Time', 'End Time', 'Device'];
-  displayedColumns = ['Date', 'Start Time', 'End Time', 'Device']
+  allColumns = ['Date', 'Start Time', 'End Time', 'Device', "Device Description"];
+  displayedColumns = ['Date', 'Start Time', 'End Time', 'Device', "Device Description"]
 
   roles: string = localStorage.getItem('roles')
 
@@ -40,7 +40,7 @@ export class AttendanceComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.roles.indexOf("Data Analyst") != -1) {
-      this.allColumns = ['Date', 'Start Time', 'End Time', 'Device', 'Name'];
+      this.allColumns = ['Date', 'Start Time', 'End Time', 'Name', 'Device', 'Device Description'];
       this.displayedColumns = this.allColumns
 
       // set up table
@@ -90,11 +90,11 @@ export class AttendanceComponent implements OnInit {
     this.tableData = []
     
     this.attendanceService.getAllUsersAttendanceEntries(localStorage.getItem('token')).subscribe((data) => {
-      let res: any[] = data['results']
+      let res: any[] = data['results']; console.log(data['results'])
       res.forEach((element: any) => {
         element.attendanceEntries.forEach((entry: any) => {
           entry.name = element.name + " " + element.surname
-          entry.email = element.email
+          entry.deviceDescription = element.deviceDescription
           this.tableData.push(entry)
         });
       });
@@ -142,9 +142,9 @@ export class AttendanceComponent implements OnInit {
     else
       req = { 'userID': userID }
     this.attendanceService.getUserAttendanceEntries(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.tableData = data['attendanceEntries']
-
+ 
       console.log(this.tableData);
       this.tableData.forEach((element: any) => {
         element.name = this.members[this.mSelected].name + " " + this.members[this.mSelected].surname
@@ -167,6 +167,8 @@ export class AttendanceComponent implements OnInit {
   formatTableData() {
     this.tableData.forEach((element: any) => {
       element.date = this.sameFormat(element.date)
+      if (element.deviceDescription = " ")
+        element.deviceDescription = "No description provided"
     });
 
     this.tableData.sort((a: any, b: any) =>
@@ -293,12 +295,12 @@ export class AttendanceComponent implements OnInit {
   exportPDF() {
 
     var doc = new jsPDF("l");
-    var cols = ["Date", "Start time", "End time", "Device", "Name"]
+    var cols = ["Date", "Start time", "End time", "Name", "Device", "Device Description"]
     var rows = [];
 
     this.tableData.forEach((element: any) => {
       element.records.forEach((record: any) => {
-        var temp = [record.fDate, record.startTime, record.endTime, record.device, record.name]
+        var temp = [record.fDate, record.startTime, record.endTime, record.name, record.device, record.deviceDescription]
         rows.push(temp)
       })
     })
@@ -311,12 +313,12 @@ export class AttendanceComponent implements OnInit {
 
   downloadPDF() {
     var doc = new jsPDF("l");
-    var cols = ["Date", "Start time", "End time", "Device", "Name"]
+    var cols = ["Date", "Start time", "End time", "Name", "Device", "Device Description"]
     var rows = [];
 
     this.tableData.forEach((element: any) => {
       element.records.forEach((record: any) => {
-        var temp = [record.fDate, record.startTime, record.endTime, record.device, record.name]
+        var temp = [record.fDate, record.startTime, record.endTime, record.name, record.device, record.deviceDescription]
         rows.push(temp)
       })
     })
@@ -334,8 +336,9 @@ export class AttendanceComponent implements OnInit {
       { label: 'Date', value: 'records.date' },
       { label: 'Start Time', value: 'records.startTime' },
       { label: 'End Time', value: 'records.endTime' },
+      { label: 'Name', value: 'records.name' },
       { label: 'Device', value: 'records.device' },
-      { label: 'Name', value: 'records.name' }
+      { label: 'Device Description', value: 'records.deviceDescription' }
     ];
 
     const transforms = [unwind({ paths: ['records'] })];
@@ -359,8 +362,9 @@ export class AttendanceComponent implements OnInit {
       { label: 'Date', value: 'records.date' },
       { label: 'Start Time', value: 'records.startTime' },
       { label: 'End Time', value: 'records.endTime' },
+      { label: 'Name', value: 'records.name' },
       { label: 'Device', value: 'records.device' },
-      { label: 'Name', value: 'records.name' }
+      { label: 'Device Description', value: 'records.deviceDescription' }
     ];
 
     const transforms = [unwind({ paths: ['records'] })];
@@ -381,7 +385,7 @@ export interface Element {
   date: string;
   startTime: string;
   endTime: string;
-  device: string;
   name: string;
-  email: string;
+  device: string;
+  deviceDescription: string;
 }
