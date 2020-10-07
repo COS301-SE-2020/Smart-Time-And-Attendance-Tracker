@@ -32,6 +32,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     SharedModule,
     StartupModule,
     MaterialComponentsModule,
+    MatIconModule,
     FormsModule,
     DashboardModule,
     HttpClientModule,

@@ -1,11 +1,13 @@
 {
   "name": "stat",
   "version": "0.0.0",
+  "lockfileVersion": 1,
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "test-headless": "ng test --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -44,12 +46,12 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1000.6",
+    "@angular-devkit/build-angular": "~0.901.12",
     "@angular/cli": "~9.0.2",
     "@angular/compiler-cli": "~9.0.1",
     "@angular/language-service": "~9.0.1",
     "@types/gapi": "0.0.39",
-    "@types/jasmine": "~3.5.0",
+    "@types/jasmine": "^3.5.14",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
