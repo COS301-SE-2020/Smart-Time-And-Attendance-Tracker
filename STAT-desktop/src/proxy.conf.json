@@ -1,0 +1,12 @@
+{
+    "/user/*": {
+        "target": "http://localhost:3000",
+        "secure": false,
+        "logLevel": "debug"
+    },
+    "/activeWindow": {
+        "target": "http://localhost:3001",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}

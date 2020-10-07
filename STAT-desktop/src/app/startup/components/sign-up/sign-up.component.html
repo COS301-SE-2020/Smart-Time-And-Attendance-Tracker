@@ -1,0 +1,66 @@
+<div class="container right-panel-active" id="container">
+	<div class="form-container sign-up-container">
+		<form [formGroup]="signUpForm" (ngSubmit)="signUp(signUpForm.value)">
+            <h1>Sign Up</h1>
+            <mat-error class="form-error" *ngIf="signUpError">{{signUpError}}</mat-error>
+                <mat-form-field appearance="standard" >
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" placeholder="John" name = "name" required>
+                    <mat-error *ngIf="su.name.errors">Please enter a value</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="standard" >
+                    <mat-label>Surname</mat-label>
+                    <input matInput formControlName="surname" placeholder="Doe" name = "surname" required>
+                    <mat-error *ngIf="su.surname.errors">Please enter a value</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="standard" type="email" >
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" type="email" placeholder="johndoe@example.com" name = "email" required>
+                    <mat-error *ngIf="su.email.errors">{{getEmailError()}}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="standard" >
+                    <mat-label>Enter password</mat-label>
+                    <input matInput formControlName="password" type="password" placeholder="" name = "password" required>
+                    <mat-hint>Hint: Password should be at least 8 characters long</mat-hint>
+                    <mat-error *ngIf="su.password.errors">{{getPassError()}}</mat-error>
+                </mat-form-field><br>
+                <mat-form-field appearance="standard" >
+                    <mat-label>Confirm password</mat-label>
+                    <input matInput formControlName="passwordConf" type="password" placeholder="" name = "passwordConf" required>
+                    <mat-error *ngIf="su.passwordConf.errors">{{getConfError()}}</mat-error>
+                </mat-form-field>
+			<button [disabled]="signUpForm.invalid" mat-raised-button color="primary" id="sign_up" type="submit">Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form [formGroup]="signInForm" (ngSubmit)="signIn(signInForm.value)">
+            <h1>Sign In</h1>
+            <mat-error class="form-error" *ngIf="signInError">{{signInError}}</mat-error>
+            <mat-form-field appearance="standard" type="email">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" placeholder="johndoe@example.com" name = "email" required>
+                <mat-error *ngIf="si.email.errors">{{getEmailErrorSI()}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" type="password" placeholder="" name = "password" required>
+                <mat-error *ngIf="si.password.errors">{{getPassErrorSI()}}</mat-error>
+            </mat-form-field>
+			<button [disabled]="signInForm.invalid" mat-raised-button color="primary" id="sign_in" type="submit">Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us, please sign in with your info</p>
+				<button mat-raised-button color="accent" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>You're just a few clicks away from starting your journey with us</p>
+				<button mat-raised-button color="accent" id="signUp" >Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>

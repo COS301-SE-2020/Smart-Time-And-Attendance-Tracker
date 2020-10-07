@@ -80,10 +80,21 @@ export class AnalysisService {
   }
 
   //Get the amount of time each user spent on the project for the last week
-  public getPredictionsForWeek(key){
+  public getPredictionsForWeek(key,epochs,weeks,pID){
+    var obj = {};
+    if(weeks != 0)
+    {
+      obj['weeks'] = weeks;
+    }
+    if(epochs != 0)
+    {
+      obj['epoch'] = epochs;
+    }
+    obj['projectID']= pID;
+    console.log(obj);
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+key);
-    return this.http.get(this.ROOT_URL+ 'analysis/projectWeeklyHoursPrediction', {
+    return this.http.post(this.ROOT_URL+ 'analysis/projectWeeklyHoursPrediction', JSON.stringify(obj), {
       headers: headers
     });
   }
