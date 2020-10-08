@@ -11,6 +11,7 @@ import { element } from 'protractor';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { table } from 'console';
 
 @Component({
   selector: 'app-history',
@@ -125,8 +126,10 @@ export class HistoryComponent implements OnInit {
       let res : any[] = data['results']
       res.forEach((element : any) => {
         element.timeEntries.forEach((entry : any) => {
-          entry.member = element.name + " " + element.surname
-          this.tableData.push(entry)
+          if (entry.date != "Invalid Date") {
+            entry.member = element.name + " " + element.surname
+            this.tableData.push(entry)
+          }
         });
       });
       this.allData = this.tableData
@@ -428,7 +431,19 @@ export class HistoryComponent implements OnInit {
       element.fDate = this.formatDate(element.date)
     });
 
+    let temp = []
+    this.tableData.forEach((element : any) => {
+      if (!isNaN(element.date.getTime()))
+        temp.push(element)
+    });
+
+    temp.sort((a : any ,b : any) =>
+      a.date - b.date || a.timeEntryID.localeCompare(b.timeEntryID)
+    );
+    this.tableData = temp.reverse()
+
     this.groupAndSort(this.tableData)
+
   }
 
   // group and sort entries
