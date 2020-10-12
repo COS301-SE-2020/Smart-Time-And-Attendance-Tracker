@@ -74,7 +74,7 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe(url => {
         if (url) {
-          console.log(url);
+          //console.log(url);
         }
       });
   }
@@ -83,7 +83,7 @@ export class ProfileComponent implements OnInit {
   addPic(pic : String) {
     let req ={"profilePicture": pic}
     this.service.addProfilePicture(localStorage.getItem('token'),req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       let el = document.getElementById('picProgress')
       el.setAttribute('hidden', 'true')
     },

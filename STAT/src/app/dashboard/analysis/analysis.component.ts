@@ -270,7 +270,7 @@ export class AnalysisComponent implements OnInit {
       )
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -282,14 +282,14 @@ export class AnalysisComponent implements OnInit {
   getProjectDailyValues(projectID : string)
   {
     this.aService.getProjectDailyValues(localStorage.getItem('token'), projectID).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
       this.dailyProjects[index].daily = data['totalDailyValues']
-      console.log(this.dailyProjects)
+      //console.log(this.dailyProjects)
 
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -369,7 +369,7 @@ export class AnalysisComponent implements OnInit {
 
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -436,7 +436,7 @@ export class AnalysisComponent implements OnInit {
       }
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -492,7 +492,7 @@ export class AnalysisComponent implements OnInit {
 
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -536,7 +536,7 @@ export class AnalysisComponent implements OnInit {
     
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -559,7 +559,7 @@ export class AnalysisComponent implements OnInit {
   {
 
     this.aService.getProjectMembersTotalTime(localStorage.getItem('token'), projectID).subscribe(data => {
-      console.log(data)
+      //console.log(data)
       let index = this.dailyProjects.findIndex((a : any) => a.ID === projectID)
       let element = this.dailyProjects[index]
       element.membersTimes = data['membersTotalTime']
@@ -581,10 +581,10 @@ export class AnalysisComponent implements OnInit {
           count++
         });
       }
-      console.log(this.dailyProjects)
+      //console.log(this.dailyProjects)
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -626,14 +626,14 @@ export class AnalysisComponent implements OnInit {
       weeks = this.editWeeks
 
     this.aService.getPredictionsForWeek(localStorage.getItem('token'), epochs, weeks,projectID).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.predictions = data['results']
       //console.log(this.predictions)
       this.pFetched = true
       this.getPredictive()
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -649,7 +649,7 @@ export class AnalysisComponent implements OnInit {
     this.service.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
       //console.log(data)
       this.projects = data['projects']
-      console.log(this.dailyProjects)
+      //console.log(this.dailyProjects)
 
       let p = ['5f5ddda04687873aa8e7eb8a', '5f5e07ab89f29228683341cd']
       let count = this.projects.length
@@ -878,7 +878,7 @@ export class AnalysisComponent implements OnInit {
 
     let values = this.predictions.prediction.map(d => Math.abs(Math.round(( ((d / 60) + Number.EPSILON) * 100) * rate) / 100))
     
-    console.log(this.predictions)
+    //console.log(this.predictions)
 
     this.predMoneyChart = new Chart(
       'predMoneyChart', {
@@ -926,8 +926,8 @@ export class AnalysisComponent implements OnInit {
 
     this.predictions.pMoney = Math.round(( (values.reduce((a, b) => a + b, 0)) + Number.EPSILON) * 100) / 100
     this.predictions.pTime = Math.abs(this.predictions.prediction.reduce((a, b) => a + b, 0))
-    console.log(this.predMoneyChart)
-    console.log(this.predTimeChart)
+    //console.log(this.predMoneyChart)
+    //console.log(this.predTimeChart)
 
     /*this.predictions.forEach((element : any) => {
       let index = this.dailyProjects.findIndex((a : any) => a.ID === element.projectID)

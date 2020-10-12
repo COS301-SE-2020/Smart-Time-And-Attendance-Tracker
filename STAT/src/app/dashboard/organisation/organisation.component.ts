@@ -117,7 +117,7 @@ export class OrganisationComponent implements OnInit {
   {
     let req = {"userID": id};
     this.service.removeUser(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       this.getMembers()
     },
     error => {
@@ -158,7 +158,7 @@ export class OrganisationComponent implements OnInit {
     this.getMembers()
     },
     error => {
-      console.log(error);
+      //console.log(error);
       //console.log(error.error.message);
       let errorCode = error['status'];
       if (errorCode == '403')
@@ -172,7 +172,7 @@ export class OrganisationComponent implements OnInit {
 
   editUser()
   {
-    console.log(this.editMember)
+    //console.log(this.editMember)
     let req = {"userID": this.editMember.ID,
                 "name": this.editMember.name,
                 "surname": this.editMember.surname,
@@ -206,12 +206,12 @@ export class OrganisationComponent implements OnInit {
   }
 
   changeRoles() {
-    console.log('EDIT\n' + this.editRoles)
+    //console.log('EDIT\n' + this.editRoles)
     this.editRoles.forEach(r => {
         this.addRole(this.editMember.ID, r)
     });
 
-    console.log('REMOVE\n' + this.removeRoles)
+    //console.log('REMOVE\n' + this.removeRoles)
     this.removeRoles.forEach(r => {
       this.removeRole(this.editMember.ID, r)
     });
@@ -408,7 +408,7 @@ export class OrganisationComponent implements OnInit {
     // add class to new letter
     while (!active) {
       if (alpha[i].innerHTML == alphabet) {
-        console.log(alpha[i])
+        //console.log(alpha[i])
         active = alpha[i]
         active.classList.add('active')
       }

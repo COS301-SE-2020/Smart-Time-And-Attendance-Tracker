@@ -42,7 +42,7 @@ export class IOTComponent implements OnInit {
       this.devices = data['iotDevices'];
     },
     error => {
-      console.log(error)
+      //console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {

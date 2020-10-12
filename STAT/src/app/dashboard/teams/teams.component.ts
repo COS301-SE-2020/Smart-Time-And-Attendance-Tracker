@@ -85,7 +85,7 @@ export class TeamsComponent implements OnInit {
       this.teams.sort((a : any ,b : any) =>
           a.teamName.localeCompare(b.teamName)
       );
-      console.log(this.teams)
+      //console.log(this.teams)
       this.getMembers();
     },
     error => {
@@ -110,7 +110,7 @@ export class TeamsComponent implements OnInit {
         a.name.localeCompare(b.name) || a.surname.localeCompare(b.surname) || a.email.localeCompare(b.email)
       );
       this.members = this.allMembers
-      console.log(this.allMembers)
+      //console.log(this.allMembers)
     },
     error => {
       //console.log(error);
@@ -132,8 +132,8 @@ export class TeamsComponent implements OnInit {
     for (let i = 0; i < this.availMembers.length; i++)
       this.availMembers[i]['role'] = ''
     this.members = this.availMembers
-    console.log(members)
-    console.log(this.members)
+    //console.log(members)
+    //console.log(this.members)
   }
 
 
@@ -141,9 +141,9 @@ export class TeamsComponent implements OnInit {
   createTeam(name : string) {
     let req = { 'teamName' : name }
     this.tmService.createTeam(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.tid = data['teamID']
-      console.log(this.tid)
+      //console.log(this.tid)
       this.addMembersToTeam()
     },
     error => {
@@ -162,7 +162,7 @@ export class TeamsComponent implements OnInit {
     let req = {"teamID" : tID, "userID" : uID, "userRole" : role};      
 
     this.tmService.addTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getTeams()
     },
     error => {
@@ -179,7 +179,7 @@ export class TeamsComponent implements OnInit {
 
   // search members
   searchMembers(text : string) {
-    console.log(this.searchMem)
+    //console.log(this.searchMem)
     if (!this.searchMem)
       this.allMembers = this.searchedMembers
     this.allMembers = this.searchedMembers.filter((x : any) =>
@@ -190,30 +190,30 @@ export class TeamsComponent implements OnInit {
   }
 
   addMember(m : any) {
-    console.log(m)
+    //console.log(m)
     let index = this.addMembers.findIndex(a => a['ID'] == m['ID'])
     if (index == -1)
       this.addMembers.push(m)
     else
       this.addMembers.splice(index, 1)
-    console.log(this.addMembers)
+    //console.log(this.addMembers)
   }
 
   addRole(m : any, role : string) {
     let index = this.addMembers.findIndex(a => a['ID'] == m['ID'])
     m['teamRole'] = role
     this.addMembers[index] = m
-    console.log(this.addMembers)
+    //console.log(this.addMembers)
   }
 
   typeRole(event) {
     this.role = event.target.value
-    console.log(this.role)
+    //console.log(this.role)
   }
 
   addMembersToTeam() {
     this.addMembers.forEach((m : any) => {
-      console.log(m)
+      //console.log(m)
       this.addTeamMember(this.tid, m.ID, m.teamRole)
     });
   }
@@ -223,7 +223,7 @@ export class TeamsComponent implements OnInit {
     // get user id
     let req = {"teamID": teamID, "userID": userID};
     this.tmService.removeTeamMember(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getTeams();
     },
     error => {
@@ -260,13 +260,13 @@ export class TeamsComponent implements OnInit {
   changeRole(uID : string, tID: string, role : string) {
     //console.log(form);
     let req = {"userID" : uID, "teamID" : tID, "userRole" : role};
-    console.log(req)
+    //console.log(req)
     this.tmService.changeRole(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getTeams()
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -302,7 +302,7 @@ export class TeamsComponent implements OnInit {
   editTeam(id: string, name : string) {
     let req = {"teamID": id, "teamName": name};
     this.tmService.editTeam(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
     },
     error => {
       //console.log(error);
@@ -318,7 +318,7 @@ export class TeamsComponent implements OnInit {
   // delete team
   deleteTeam(id : string) {
     this.tmService.deleteTeam(localStorage.getItem('token'), id).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.getTeams();
     },
     error => {

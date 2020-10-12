@@ -116,7 +116,7 @@ export class AttendanceComponent implements OnInit {
     let req = {}
     if (this.dateFrom != null && this.dateTo != null)
       req = { 'minDate': this.dateFrom, 'maxDate': this.dateTo }
-      console.log(this.dateFrom)
+      //console.log(this.dateFrom)
 
     this.attendanceService.getOwnAttendanceEntries(localStorage.getItem('token'), req).subscribe((data) => {
       this.tableData = data['attendanceEntries']
@@ -124,7 +124,7 @@ export class AttendanceComponent implements OnInit {
       this.formatTableData()
     },
     error => {
-      console.log(error)
+      //console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403') {
         this.headerService.kickOut();
@@ -142,10 +142,10 @@ export class AttendanceComponent implements OnInit {
     else
       req = { 'userID': userID }
     this.attendanceService.getUserAttendanceEntries(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.tableData = data['attendanceEntries']
 
-      console.log(this.tableData);
+      //console.log(this.tableData);
       this.tableData.forEach((element: any) => {
         element.name = this.members[this.mSelected].name + " " + this.members[this.mSelected].surname
       });
@@ -154,7 +154,7 @@ export class AttendanceComponent implements OnInit {
       this.formatTableData()
     },
       error => {
-        console.log(error)
+        //console.log(error)
         let errorCode = error['status'];
         if (errorCode == '403') {
           this.headerService.kickOut();
