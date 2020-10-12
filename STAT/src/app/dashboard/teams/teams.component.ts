@@ -36,6 +36,11 @@ export class TeamsComponent implements OnInit {
 
   error : string
 
+  editMember : any 
+  editTeamMembers : Object[]
+  editRoles : Object[] = []
+  removeMembers : Object[] = []
+
   ngOnInit(): void {
     // page setup
     this.roles = localStorage.getItem('roles');
@@ -232,14 +237,36 @@ export class TeamsComponent implements OnInit {
       }
     });
   }
+
+  removeMembersFromTeam() {
+    this.removeMembers.forEach((m : any) => {
+      //console.log(m)
+      this.removeTeamMember(this.tid, m.ID)
+    });
+    this.removeMembers= []
+  }
+
+  removeMember(m : any) {
+    //console.log(m)
+    let index = this.removeMembers.findIndex(a => a == m)
+    if (index == -1)
+      this.removeMembers.push(m)
+    else
+      this.removeMembers.splice(index, 1)
+    //console.log(this.removeMembers)
+  }
+
   // change role in team
-  changeRole(form : NgForm) {
+  changeRole(uID : string, tID: string, role : string) {
     //console.log(form);
-    this.tmService.changeRole(localStorage.getItem('token'), form).subscribe((data) => {
+    let req = {"userID" : uID, "teamID" : tID, "userRole" : role};
+    console.log(req)
+    this.tmService.changeRole(localStorage.getItem('token'), req).subscribe((data) => {
       console.log(data);
+      this.getTeams()
     },
     error => {
-      //console.log(error);
+      console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -249,6 +276,28 @@ export class TeamsComponent implements OnInit {
       }
     });
   }
+
+  editRole(m : any, role : string) {
+    let index = this.editRoles.findIndex(a => a['ID'] == m['ID'])
+    if (index == -1)
+      this.editRoles.push(m)
+
+    //console.log(this.editRoles)
+
+    index = this.editRoles.findIndex(a => a == m)
+    m['role'] = role
+    this.editRoles[index] = m
+    //console.log(this.editRoles)
+  }
+
+  editMemberRoles() {
+    this.editRoles.forEach((m : any) => {
+      //console.log(m)
+      this.changeRole(m.ID, this.tid, m.role)
+    });
+    this.editRoles = []
+  }
+
   // edit team
   editTeam(id: string, name : string) {
     let req = {"teamID": id, "teamName": name};
