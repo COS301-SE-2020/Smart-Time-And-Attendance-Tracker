@@ -79,7 +79,7 @@ router.post("/userTimeEntry/importTimeEntry", jwtHelper.verifyJWTtoken,userHelpe
 //attendance
 router.get("/attendance/getOwnAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, attendanceEntry.getOwnAttendanceEntries);
 router.get("/attendance/getUserAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, attendanceEntry.getUserAttendanceEntries);
-router.get("/attendance/getIOTAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, attendanceEntry.getIOTAttendanceEntries);
+//router.get("/attendance/getIOTAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, attendanceEntry.getIOTAttendanceEntries);
 router.get("/attendance/getAllUsersAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsersTimeEntries, attendanceEntry.getAllUsersAttendanceEntries);
 
 // team  

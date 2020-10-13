@@ -468,10 +468,8 @@ module.exports.deleteTimeEntry = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} returns all time entries and entry information in an array ie - name, email
  */  
-module.exports.getOwnTimeEntries = (req, res) => {  
-    var count = true;
-    var count3 = 0;
-    UserTimeEntryModel.findOne({  UserID : req.ID},(err, result) => {
+module.exports.getOwnTimeEntries = async(req, res) => {  
+    UserTimeEntryModel.findOne({  UserID : req.ID},async(err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -479,14 +477,76 @@ module.exports.getOwnTimeEntries = (req, res) => {
             return res.status(404).json({ message: 'No time entries for the given user were found' }); 
         }
         else{
-            var timeEntries=[];
             var times = result.TimeEntries.length
            
             if(times == 0){
                 return res.status(404).json({ message: 'No time entries were found' });
             }
             else{
-                if(req.query.hasOwnProperty("minDate"))
+                try {
+                    if(req.query.hasOwnProperty("minDate"))
+                    {
+                        var min = new Date(req.query.minDate).getTime();
+                        if(req.query.hasOwnProperty("maxDate"))
+                        {
+                            var max = new Date(req.query.maxDate);
+                            max.setDate(max.getDate() + 1);
+                            max = max.getTime()
+                        }
+                        else
+                            var max = new Date().getTime(); 
+
+
+                        const  val = await TimeEntryModel.aggregate([
+                            { $match: { $and: [{_id:{"$in": result.TimeEntries } },{StartTime: {$gte: min,$lte: max}}] } },
+                            {
+                                $project: {
+                                '_id':0,
+                                'timeEntryID':'$_id',
+                                'date': '$Date',
+                                'startTime': '$StartTime',
+                                'endTime': '$EndTime',
+                                'duration':'$Duration', 
+                                'description': '$Description',
+                                'project': '$ProjectName',
+                                'task': '$TaskName',
+                                'activeTime':'$ActiveTime',
+                                'monetaryValue':'$MonetaryValue'  
+                                }
+                            }
+                            ]);
+
+                        return res.status(200).json({timeEntries: val});
+                    }
+                    else{
+                        const  val = await TimeEntryModel.aggregate([
+                            { $match: { _id:{"$in": result.TimeEntries } }},
+                            {
+                                $project: {
+                                    '_id':0,
+                                    'timeEntryID':'$_id',
+                                    'date': '$Date',
+                                    'startTime': '$StartTime',
+                                    'endTime': '$EndTime',
+                                    'duration':'$Duration', 
+                                    'description': '$Description',
+                                    'project': '$ProjectName',
+                                    'task': '$TaskName',
+                                    'activeTime':'$ActiveTime',
+                                    'monetaryValue':'$MonetaryValue'    
+                                }
+                            }
+                            ]);
+
+                        return res.status(200).json({timeEntries: val});
+
+                    }
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+               }
+                /*if(req.query.hasOwnProperty("minDate"))
                 {
                     var min = new Date(req.query.minDate).getTime();
                     if(req.query.hasOwnProperty("maxDate"))
@@ -538,8 +598,7 @@ module.exports.getOwnTimeEntries = (req, res) => {
                             }
                         });
                     }
-                }
-            }
+                }*/
         }
     });
 }
@@ -550,13 +609,11 @@ module.exports.getOwnTimeEntries = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} returns all time entries and entry information in an array ie - name, email
  */  
-module.exports.getUserTimeEntries = (req, res) => {  
-    var count = true;
-    var count3 = 0;
+module.exports.getUserTimeEntries = async(req, res) => {  
     if(!req.query.hasOwnProperty("userID"))
         return res.status(400).send({message: 'No user ID provided'});
 
-    UserTimeEntryModel.findOne({  UserID : req.query.userID},(err, result) => {
+    UserTimeEntryModel.findOne({  UserID : req.query.userID},async(err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -564,13 +621,76 @@ module.exports.getUserTimeEntries = (req, res) => {
             return res.status(404).json({ message: 'No time entries for the given user were found' }); 
         }
         else{
-            var timeEntries=[];
             var times = result.TimeEntries.length;
            
             if(times == 0){
                 return res.status(404).json({ message: 'No time entries for the given user were found' });
             }
             else{
+                try {
+                    if(req.query.hasOwnProperty("minDate"))
+                    {
+                        var min = new Date(req.query.minDate).getTime();
+                        if(req.query.hasOwnProperty("maxDate"))
+                        {
+                            var max = new Date(req.query.maxDate);
+                            max.setDate(max.getDate() + 1);
+                            max = max.getTime()
+                        }
+                        else
+                            var max = new Date().getTime(); 
+
+
+                        const  val = await TimeEntryModel.aggregate([
+                            { $match: { $and: [{_id:{"$in": result.TimeEntries } },{StartTime: {$gte: min,$lte: max}}] } },
+                            {
+                                $project: {
+                                '_id':0,
+                                'timeEntryID':'$_id',
+                                'date': '$Date',
+                                'startTime': '$StartTime',
+                                'endTime': '$EndTime',
+                                'duration':'$Duration', 
+                                'description': '$Description',
+                                'project': '$ProjectName',
+                                'task': '$TaskName',
+                                'activeTime':'$ActiveTime',
+                                'monetaryValue':'$MonetaryValue'  
+                                }
+                            }
+                            ]);
+
+                        return res.status(200).json({timeEntries: val});
+                    }
+                    else{
+                        const  val = await TimeEntryModel.aggregate([
+                            { $match: { _id:{"$in": result.TimeEntries } }},
+                            {
+                                $project: {
+                                    '_id':0,
+                                    'timeEntryID':'$_id',
+                                    'date': '$Date',
+                                    'startTime': '$StartTime',
+                                    'endTime': '$EndTime',
+                                    'duration':'$Duration', 
+                                    'description': '$Description',
+                                    'project': '$ProjectName',
+                                    'task': '$TaskName',
+                                    'activeTime':'$ActiveTime',
+                                    'monetaryValue':'$MonetaryValue'    
+                                }
+                            }
+                            ]);
+
+                        return res.status(200).json({timeEntries: val});
+
+                    }
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+            }
+            /*else{
                 if(req.query.hasOwnProperty("minDate"))
                 {
                     var min = new Date(req.query.minDate).getTime();
@@ -625,7 +745,7 @@ module.exports.getUserTimeEntries = (req, res) => {
                     }
                 }
                 
-            }
+            }*/
         }
     });
 }
@@ -737,7 +857,6 @@ module.exports.getIOTTimeEntries = (req, res) => {
  */  
 module.exports.getAllUsersTimeEntries = async function(req, res) {  
     var count4 =0;
-    var timeEntries=[];
     UserHelper.getAllUsers(async (err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
@@ -776,21 +895,74 @@ module.exports.getAllUsersTimeEntries = async function(req, res) {
                              }
                         }
                         else{
-                               
                             try {
-                                const  val = await TimeEntryHelper.getAllTimeEntries(result.TimeEntries,req.query);
-                                var filtered = val.filter(function (el) {
-                                    return el != null;
-                                  });
-                                finalobject.push({ name:name, surname:surname, email: email, timeEntries: filtered });
-                                
-                                if (count4 == allcounts && finalobject.length == allcounts)  {
-                                return res.status(200).json({results: finalobject});
+                                if(req.query.hasOwnProperty("minDate"))
+                                {
+                                    var min = new Date(req.query.minDate).getTime();
+                                    if(req.query.hasOwnProperty("maxDate"))
+                                    {
+                                        var max = new Date(req.query.maxDate);
+                                        max.setDate(max.getDate() + 1);
+                                        max = max.getTime()
+                                    }
+                                    else
+                                        var max = new Date().getTime(); 
+            
+            
+                                    const  val = await TimeEntryModel.aggregate([
+                                        { $match: { $and: [{_id:{"$in": result.TimeEntries } },{StartTime: {$gte: min,$lte: max}}] } },
+                                        {
+                                            $project: {
+                                            '_id':0,
+                                            'timeEntryID':'$_id',
+                                            'date': '$Date',
+                                            'startTime': '$StartTime',
+                                            'endTime': '$EndTime',
+                                            'duration':'$Duration', 
+                                            'description': '$Description',
+                                            'project': '$ProjectName',
+                                            'task': '$TaskName',
+                                            'activeTime':'$ActiveTime',
+                                            'monetaryValue':'$MonetaryValue'  
+                                            }
+                                        }
+                                        ]);
+            
+                                        finalobject.push({ name:name, surname:surname, email:email, timeEntries:val });
+                                        if (count4 == allcounts && finalobject.length == allcounts)  {
+                                            return res.status(200).json({results: finalobject}); 
+                                        }
+                                }
+                                else{
+                                    const  val = await TimeEntryModel.aggregate([
+                                        { $match: { _id:{"$in": result.TimeEntries } }},
+                                        {
+                                            $project: {
+                                                '_id':0,
+                                                'timeEntryID':'$_id',
+                                                'date': '$Date',
+                                                'startTime': '$StartTime',
+                                                'endTime': '$EndTime',
+                                                'duration':'$Duration', 
+                                                'description': '$Description',
+                                                'project': '$ProjectName',
+                                                'task': '$TaskName',
+                                                'activeTime':'$ActiveTime',
+                                                'monetaryValue':'$MonetaryValue'    
+                                            }
+                                        }
+                                        ]);
+            
+                                        finalobject.push({ name:name, surname:surname, email:email, timeEntries:val });
+                                        if (count4 == allcounts && finalobject.length == allcounts)  {
+                                            return res.status(200).json({results: finalobject}); 
+                                        }
+            
                                 }
                             } 
                             catch (error) {
-                                return res.status(500).send({message: 'Internal Server Error: ' + err})
-                           }
+                                return res.status(500).send({message: 'Internal Server Error: ' + error})
+                            }
                         }
                     }
                 });
@@ -870,29 +1042,79 @@ module.exports.getAllProjectMembersTimeEntries = async (req, res) => {
                                         }
                                 }
                                 else{
-                                    ///
-                                    timeEntries=[];
                                     try {
-                                        const  val = await TimeEntryHelper.getAllTimeEntriesForProject(result.TimeEntries, projectID,req.query);
-                                        var filtered = val.filter(function (el) {
-                                            return el != null;
-                                          });
-                                        finalobject.TeamMembers.push({ name:name, surname:surname, email: email, timeEntries: filtered });
-                                        
-                                        if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
-                                            return res.status(200).json({results: finalobject}); 
+                                        if(req.query.hasOwnProperty("minDate"))
+                                        {
+                                            var min = new Date(req.query.minDate).getTime();
+                                            if(req.query.hasOwnProperty("maxDate"))
+                                            {
+                                                var max = new Date(req.query.maxDate);
+                                                max.setDate(max.getDate() + 1);
+                                                max = max.getTime()
+                                            }
+                                            else
+                                                var max = new Date().getTime(); 
+                    
+                                            const  val = await TimeEntryModel.aggregate([
+                                                { $match: { $and: [{_id:{"$in": result.TimeEntries } },{StartTime: {$gte: min,$lte: max}}, {ProjectID :new mongoose.Types.ObjectId( projectID)}] } },
+                                                {
+                                                    $project: {
+                                                    '_id':0,
+                                                    'timeEntryID':'$_id',
+                                                    'date': '$Date',
+                                                    'startTime': '$StartTime',
+                                                    'endTime': '$EndTime',
+                                                    'duration':'$Duration', 
+                                                    'description': '$Description',
+                                                    'project': '$ProjectName',
+                                                    'task': '$TaskName',
+                                                    'activeTime':'$ActiveTime',
+                                                    'monetaryValue':'$MonetaryValue'  
+                                                    }
+                                                }
+                                                ]);
+                    
+                                                finalobject.TeamMembers.push({name:name, surname:surname, email:email, role: role, timeEntries:val });
+                                                if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
+                                                    return res.status(200).json({results: finalobject}); 
+                                                }
+                                        }
+                                        else{
+                                            const  val = await TimeEntryModel.aggregate([
+                                                { $match: {$and: [ {_id:{"$in": result.TimeEntries }},  {ProjectID : new mongoose.Types.ObjectId(projectID)}] }},
+                                                {
+                                                    $project: {
+                                                        '_id':0,
+                                                        'timeEntryID':'$_id',
+                                                        'date': '$Date',
+                                                        'startTime': '$StartTime',
+                                                        'endTime': '$EndTime',
+                                                        'duration':'$Duration', 
+                                                        'description': '$Description',
+                                                        'project': '$ProjectName',
+                                                        'task': '$TaskName',
+                                                        'activeTime':'$ActiveTime',
+                                                        'monetaryValue':'$MonetaryValue'    
+                                                    }
+                                                }
+                                                ]);
+                    
+                                                finalobject.TeamMembers.push({ name:name, surname:surname, email:email, role: role, timeEntries:val });
+                                                if (count4 == allcounts && finalobject.TeamMembers.length == allcounts)  {
+                                                    return res.status(200).json({results: finalobject}); 
+                                                }
+                    
                                         }
                                     } 
                                     catch (error) {
-                                        return res.status(500).send({message: 'Internal Server Error: ' + err})
-                                   
-                                        }
-                                   
+                                        return res.status(500).send({message: 'Internal Server Error: ' + error})
                                     }
                                 }
-                            });
+                            }
+                           
+                        });
 
-                        }
+                    }
                 });
             });
         }

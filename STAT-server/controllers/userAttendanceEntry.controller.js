@@ -106,10 +106,8 @@ module.exports.updateAttendanceEntry = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} returns all time entries and entry information in an array ie - name, email
  */  
-module.exports.getOwnAttendanceEntries = (req, res) => {  
-    var count = true;
-    var count3 = 0;
-    AttendanceModel.findOne({  UserID : req.ID},(err, result) => {
+module.exports.getOwnAttendanceEntries = async(req, res) => {  
+    AttendanceModel.findOne({  UserID : req.ID}, async(err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -117,14 +115,80 @@ module.exports.getOwnAttendanceEntries = (req, res) => {
             return res.status(404).json({ message: 'No attendance entries for the given user were found' }); 
         }
         else{
-            var attendanceEntries=[];
             var times = result.AttendanceEntries.length
-           
             if(times == 0){
                 return res.status(404).json({ message: 'No attendance entries were found' });
             }
             else{
-                if(req.query.hasOwnProperty("minDate"))
+                try {
+                    if(req.query.hasOwnProperty("minDate"))
+                    {
+                        var min = new Date(req.query.minDate).getTime();
+                        if(req.query.hasOwnProperty("maxDate"))
+                        {
+                            var max = new Date(req.query.maxDate);
+                            max.setDate(max.getDate() + 1);
+                            max = max.getTime()
+                        }
+                        else
+                            var max = new Date().getTime(); 
+
+
+                        const  val = await attendanceEntryModel.aggregate([
+                            { $match: { $and: [{_id:{"$in": result.AttendanceEntries } },{StartTime: {$gte: min,$lte: max}}] } },
+                            {
+                                $project: {
+                                "_id":0,
+                                'attendanceEntryID':'$_id',
+                                'date': '$Date',
+                                'startTime': '$StartTime',
+                                'endTime': '$EndTime',
+                                'device':'$Device'    
+                                }
+                            }
+                            ]);
+
+                        return res.status(200).json({attendanceEntries: val});
+                    }
+                    else{
+                        const  val = await attendanceEntryModel.aggregate([
+                            { $match: { _id:{"$in": result.AttendanceEntries } }},
+                            {
+                                $project: {
+                                 "_id":0,
+                                'attendanceEntryID':'$_id',
+                                'date': '$Date',
+                                'startTime': '$StartTime',
+                                'endTime': '$EndTime',
+                                'device':'$Device'    
+                                }
+                            }
+                            ]);
+
+                        return res.status(200).json({attendanceEntries: val});
+
+                    }
+                } 
+                catch (error) {
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+                }
+               }
+
+                /*try {
+                    const  val = await AttendanceEntryHelper.getAllEntries(result.AttendanceEntries,req.query);
+                    var filtered = val.filter(function (el) {
+                        return el != null;
+                      });
+
+                    return res.status(200).json({attendanceEntries: filtered});
+                    
+                } 
+                catch (error) {
+                    console.log('hello')
+                    //return res.status(200).json({attendanceEntries: finalobject});
+                    return res.status(500).send({message: 'Internal Server Error: ' + error})
+               }*/
+                /*if(req.query.hasOwnProperty("minDate"))
                 {
                     var min = new Date(req.query.minDate).getTime();
                     if(req.query.hasOwnProperty("maxDate"))
@@ -140,7 +204,7 @@ module.exports.getOwnAttendanceEntries = (req, res) => {
                         AttendanceEntryModel.findOne({_id: result.AttendanceEntries[a], StartTime: {$gte: min,$lte: max}},(err,val)=>{   
                             count3= count3+1; 
                             if(err){
-                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+                                return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                             }
                             else if(val){
@@ -161,7 +225,7 @@ module.exports.getOwnAttendanceEntries = (req, res) => {
                         AttendanceEntryModel.findOne({_id: result.AttendanceEntries[a]},(err,val)=>{   
                             count3= count3+1; 
                             if(err){
-                                return res.status(500).send({message: 'Internal Server Error: ' + error});
+                                return res.status(500).send({message: 'Internal Server Error: ' + err});
 
                             }
                             else if(val){
@@ -176,8 +240,7 @@ module.exports.getOwnAttendanceEntries = (req, res) => {
                             }
                         });
                     }
-                }
-            }
+                }*/
         }
     });
 }
@@ -187,13 +250,11 @@ module.exports.getOwnAttendanceEntries = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} returns all time entries and entry information in an array ie - name, email
  */  
-module.exports.getUserAttendanceEntries = (req, res) => {  
-    var count = true;
-    var count3 = 0;
+module.exports.getUserAttendanceEntries = async(req, res) => {  
     if(!req.query.hasOwnProperty("userID"))
         return res.status(400).send({message: 'No user ID provided'});
 
-    AttendanceModel.findOne({  UserID : req.query.userID},(err, result) => {
+    AttendanceModel.findOne({  UserID : req.query.userID},async(err, result) => {
         if (err) {
             return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
@@ -201,14 +262,65 @@ module.exports.getUserAttendanceEntries = (req, res) => {
             return res.status(404).json({ message: 'No attendance entries for the given user were found' }); 
         }
         else{
-            var attendanceEntries=[];
             var times = result.AttendanceEntries.length;
-           
             if(times == 0){
                 return res.status(404).json({ message: 'No attendance entries for the given user were found' });
             }
             else{
-                if(req.query.hasOwnProperty("minDate"))
+                    try {
+                        if(req.query.hasOwnProperty("minDate"))
+                        {
+                            var min = new Date(req.query.minDate).getTime();
+                            if(req.query.hasOwnProperty("maxDate"))
+                            {
+                                var max = new Date(req.query.maxDate);
+                                max.setDate(max.getDate() + 1);
+                                max = max.getTime()
+                            }
+                            else
+                                var max = new Date().getTime(); 
+
+                            const  val = await attendanceEntryModel.aggregate([
+                                { $match: { $and: [{_id:{"$in": result.AttendanceEntries } },{StartTime: {$gte: min,$lte: max}}] } },
+                                {
+                                    $project: {
+                                    "_id":0,
+                                    'attendanceEntryID':'$_id',
+                                    'date': '$Date',
+                                    'startTime': '$StartTime',
+                                    'endTime': '$EndTime',
+                                    'device':'$Device'    
+                                    }
+                                }
+                                ]);
+    
+                            return res.status(200).json({attendanceEntries: val});
+                        }
+                        else{
+                            const  val = await attendanceEntryModel.aggregate([
+                                { $match: { _id:{"$in": result.AttendanceEntries } }},
+                                {
+                                    $project: {
+                                    "_id":0,
+                                    'attendanceEntryID':'$_id',
+                                    'date': '$Date',
+                                    'startTime': '$StartTime',
+                                    'endTime': '$EndTime',
+                                    'device':'$Device'    
+                                    }
+                                }
+                                ]);
+
+                            return res.status(200).json({attendanceEntries: val});
+
+                        }
+                    }
+                    catch (error) {
+                      return res.status(500).send({message: 'Internal Server Error: ' + error})
+                    }
+                        
+            }
+                /*if(req.query.hasOwnProperty("minDate"))
                 {
                     var min = new Date(req.query.minDate).getTime();
                     if(req.query.hasOwnProperty("maxDate"))
@@ -262,7 +374,7 @@ module.exports.getUserAttendanceEntries = (req, res) => {
                     }
                 }
                 
-            }
+            }*/
         }
     });
 }
@@ -274,7 +386,7 @@ module.exports.getUserAttendanceEntries = (req, res) => {
  * @param {HTTP Response} res 
  * @returns {JSON Object} returns all time entries and attendance information in an array ie - name, email
  */  
-module.exports.getIOTAttendanceEntries = (req, res) => {  
+/*module.exports.getIOTAttendanceEntries = (req, res) => {  
     if(!req.query.hasOwnProperty("deviceID"))
         return res.status(400).send({message: 'No device ID provided'});
 
@@ -350,7 +462,7 @@ module.exports.getIOTAttendanceEntries = (req, res) => {
             }
         }
     });
-}
+}*/
 
 /**
  * This function returns returns an array with all users + time entries for each user
@@ -362,7 +474,7 @@ module.exports.getAllUsersAttendanceEntries = async function(req, res) {
     var count4 =0;
     UserHelper.getAllUsers(async (err, result) => {
         if (err) {
-            return res.status(500).send({message: 'Internal Server Error:1 ' + err});
+            return res.status(500).send({message: 'Internal Server Error: ' + err});
         }
         else if (!result){
             return res.status(404).json({ message: 'No users found' }); 
@@ -379,7 +491,7 @@ module.exports.getAllUsersAttendanceEntries = async function(req, res) {
 
                 AttendanceModel.findOne({  UserID :userid},async (err, result) => {
                     if (err) {
-                        return res.status(500).send({message: 'Internal Server Error:2 ' + err});
+                        return res.status(500).send({message: 'Internal Server Error: ' + err});
                     }
                     else if (!result){ ///no time entries for this user
                         finalobject.push({ name:name, surname:surname, email:email, attendanceEntries:[] });
@@ -393,25 +505,89 @@ module.exports.getAllUsersAttendanceEntries = async function(req, res) {
                         if(result.AttendanceEntries.length == 0){  
                             finalobject.push({ name:name, surname:surname, email:email, attendanceEntries:[] });
                             if (count4 == allcounts && finalobject.length == allcounts)  {
-                                return res.status(200).json({finalobject}); 
+                                return res.status(200).json({results:finalobject}); 
                              }
                         }
                         else{
+                            try {
+                                if(req.query.hasOwnProperty("minDate"))
+                                {
+                                    var min = new Date(req.query.minDate).getTime();
+                                    if(req.query.hasOwnProperty("maxDate"))
+                                    {
+                                        var max = new Date(req.query.maxDate);
+                                        max.setDate(max.getDate() + 1);
+                                        max = max.getTime()
+                                    }
+                                    else
+                                        var max = new Date().getTime(); 
+        
+                                    const  val = await attendanceEntryModel.aggregate([
+                                        { $match: { $and: [{_id:{"$in": result.AttendanceEntries } },{StartTime: {$gte: min,$lte: max}}] } },
+                                        {
+                                            $project: {
+                                            "_id":0,
+                                            'attendanceEntryID':'$_id',
+                                            'date': '$Date',
+                                            'startTime': '$StartTime',
+                                            'endTime': '$EndTime',
+                                            'device':'$Device'    
+                                            }
+                                        }
+                                        ]);
+            
+                                        finalobject.push({ name:name, surname:surname, email:email, attendanceEntries:val });
+                                        if (count4 == allcounts && finalobject.length == allcounts)  {
+                                            return res.status(200).json({results:finalobject}); 
+                                         }
+                                }
+                                else{
+                                    const  val = await attendanceEntryModel.aggregate([
+                                        { $match: { _id:{"$in": result.AttendanceEntries } }},
+                                        {
+                                            $project: {
+                                            "_id":0,
+                                            'attendanceEntryID':'$_id',
+                                            'date': '$Date',
+                                            'startTime': '$StartTime',
+                                            'endTime': '$EndTime',
+                                            'device':'$Device'    
+                                            }
+                                        }
+                                        ]);
+        
+                                        finalobject.push({ name:name, surname:surname, email:email, attendanceEntries:val });
+                                        if (count4 == allcounts && finalobject.length == allcounts)  {
+                                            return res.status(200).json({results:finalobject}); 
+                                         }
+        
+                                }
+                            }
+                            catch (error) {
+                              return res.status(500).send({message: 'Internal Server Error: ' + error})
+                            }
+                                
+                    }
+                        /*else{
                             try {
                                 const  val = await AttendanceEntryHelper.getAllEntries(result.AttendanceEntries,req.query);
                                 var filtered = val.filter(function (el) {
                                     return el != null;
                                   });
+                                console.log(filtered.length);
                                 finalobject.push({ name:name, surname:surname, email: email, attendanceEntries: filtered });
                                 
                                 if (count4 == allcounts && finalobject.length == allcounts)  {
+                                    console.log('inside')
                                 return res.status(200).json({results: finalobject});
                                 }
                             } 
                             catch (error) {
-                                return res.status(500).send({message: 'Internal Server Error: 3' + err})
+                                console.log(error);
+                                return res.status(200).json({results: finalobject});
+                                //return res.status(500).send({message: 'Internal Server Error: ' + err})
                            }
-                        }
+                        }*/
                     }
                 });
             });

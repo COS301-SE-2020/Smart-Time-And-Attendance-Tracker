@@ -48,7 +48,10 @@ module.exports.getAllEntries = async (ids,req)=> {
         }
         else
         {
+            var count =1;
             ids.forEach((id) => { 
+            console.log(count)
+            count++;
             entries.push(
                     AttendanceModel.findOne({_id: id}).then((result) => {
                         if(result){
@@ -61,7 +64,7 @@ module.exports.getAllEntries = async (ids,req)=> {
                                 } 
                             return text;
                         }
-                    }).catch((err) => reject(err)));
+                    }).catch((err) => console.log(err)));
             });
             Promise.all(entries).then((result) => {
                 resolve(result);  
