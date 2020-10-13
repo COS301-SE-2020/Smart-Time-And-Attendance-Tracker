@@ -65,4 +65,9 @@ require ('../non-functional/admin.js')
       })
 */
 
+describe('test ROLE', function() {
+  require ('./100.js')
+})
+
+
   })
