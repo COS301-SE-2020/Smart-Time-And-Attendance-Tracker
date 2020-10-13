@@ -1,0 +1,201 @@
+// -------------------------------------------------------------------------------------------- * ----------
+
+$primary-color: #FFFFFF
+$color-lightblue: #00C8FF
+$color-white: #FFFFFF
+$transparent: rgba(0, 0, 0, 0)
+
+$head-font: Righteous
+$body-font: Titillium Web
+
+.background-green
+  background-color: $color-lightblue
+
+  mat-card-title
+    color: $color-lightblue
+
+// -------------------------------------------------------------------------------------------- * ----------
+
+*
+    font-family: $body-font
+    font-size: 1.035em
+    width: 100%
+
+// -------------------------------------------------------------------------------------------- A ----------
+
+// -------------------------------------------------------------------------------------------- B ----------
+
+body
+  background-color: white
+  color: white
+  margin: 0em auto
+  padding-bottom: 0em
+  top: 0em
+  width: 100%
+
+
+// -------------------------------------------------------------------------------------------- C ----------
+
+.card
+  box-shadow: 0.25em 0.25em 0.25em rgba(0, 0, 0, 0.5)
+  color: black
+  padding: 1em
+
+.card-title
+  text-align: center
+
+#container
+  margin: 0em
+  margin-top: 2em
+
+// -------------------------------------------------------------------------------------------- D ----------
+
+div
+  display: block
+  height: auto
+  margin-top: 2em
+  min-height: 5vh
+
+  #container
+    left: 0
+    max-width: 100%
+    position: relative
+    text-align: center
+    top: 0
+    width: 100vw
+
+// -------------------------------------------------------------------------------------------- F ----------
+
+.feature
+    color: black
+    display: inline-block
+    margin: 0em
+    padding: 1em
+    text-align: left
+    width: 100%
+
+    div
+        align-items: center
+        display: flex
+        flex-direction: column
+        flex-wrap: wrap
+        height: 100%
+        justify-content: center
+        margin: 0
+        padding: 1em
+
+        >
+            img
+                border: 1px solid rgba(0, 0, 0, 0.1)
+                margin: 0
+                width: 100%
+
+#feature-cards
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: center
+    margin: 0 auto
+    width: 100%
+    text-align: center
+
+#features
+
+    mat-card
+        background-color: $color-white
+        border-radius: 2px
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
+        display: inline-block
+        margin: 1em 0
+        padding: 1.5em
+
+        &:nth-child(even)
+            .feature-description
+                float: left
+
+            .feature-image
+                float: right
+
+        &:nth-child(odd)
+            .feature-description
+                float: right
+
+            .feature-image
+                float: left
+
+        mat-card-content
+            font-size: 0.9em
+
+// -------------------------------------------------------------------------------------------- H ----------
+
+h1
+    color: $color-white
+    font-family: Chivo
+    font-size: 20em
+    text-align: center
+    text-transform: uppercase
+    margin-bottom: 0.5em
+    margin-top: 0.25em
+    max-width: 100%
+
+h2
+    color: $color-white
+    font-family: Chivo
+    font-size: 5em
+    text-align: center
+    text-transform: uppercase
+    margin-bottom: 0.75em
+    margin-top: 0.5em
+    max-width: 100%
+
+h3
+    font-family: Chivo
+    font-size: 2em
+    margin-bottom: 0.5em
+
+// -------------------------------------------------------------------------------------------- M ----------
+
+mat-card
+    background-color: $transparent
+    border: 0.02em solid $color-white
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0, 0, 0, 0.12)
+    padding: 5em
+
+    mat-card-image
+        left: 0em
+
+mat-card-title
+  font-family: $head-font
+  font-size: 2em
+
+// -------------------------------------------------------------------------------------------- S ----------
+
+section
+  align-content: center
+  background-color: white
+  box-shadow: 0em 0.25em 0.2em rgba(0, 0, 0, 0.3)
+  display: flex
+  height: auto
+  max-width: 100%
+  min-height: 100vh
+  padding: 2.5em
+  width: 100vw
+
+.section-content
+  align-self: center
+  background-color: rgba(0, 0, 0, 0)
+  display: flex
+  flex-direction: column
+  margin: 0em auto
+  padding: 2.5em
+  text-align: left
+  right: 2em
+  width: 80%
+
+  >
+    h2
+      text-align: left
+
+    p
+      margin: 0.5em
+      margin-bottom: 1.5em
