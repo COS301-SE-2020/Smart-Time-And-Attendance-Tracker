@@ -28,6 +28,7 @@ const router = asyncify(express.Router());
 const user = require('../controllers/user.controller');
 const role = require('../controllers/role.controller');
 const userTimeEntry = require('../controllers/userTimeEntry.controller');
+const attendanceEntry = require('../controllers/userAttendanceEntry.controller');
 const team = require('../controllers/team.controller');
 const task = require('../controllers/task.controller');
 const project = require('../controllers/project.controller');
@@ -75,6 +76,11 @@ router.get("/userTimeEntry/getAllUsersTimeEntries", jwtHelper.verifyJWTtoken,use
 router.get("/userTimeEntry/getProjectTimeEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsers, userTimeEntry.getAllProjectMembersTimeEntries);
 router.post("/userTimeEntry/importTimeEntry", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, userTimeEntry.importTimeEntry);
 
+//attendance
+router.get("/attendance/getOwnAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isAuthenticated, attendanceEntry.getOwnAttendanceEntries);
+router.get("/attendance/getUserAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, attendanceEntry.getUserAttendanceEntries);
+//router.get("/attendance/getIOTAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isDataAnalyst, attendanceEntry.getIOTAttendanceEntries);
+router.get("/attendance/getAllUsersAttendanceEntries", jwtHelper.verifyJWTtoken,userHelper.isAllowedToGetUsersTimeEntries, attendanceEntry.getAllUsersAttendanceEntries);
 
 // team  
 router.post("/team/add",jwtHelper.verifyJWTtoken,userHelper.isTeamLeader,team.createTeam);
@@ -113,14 +119,15 @@ router.get("/calendar/getCredentials", jwtHelper.verifyJWTtoken,calendar.getCred
 router.post("/iotDevice/register", jwtHelper.verifyJWTtoken, userHelper.isSystemAdmin, iotDevice.register);
 router.post("/iotDevice/deregister", jwtHelper.verifyJWTtoken, userHelper.isSystemAdmin, iotDevice.deregister);
 router.get("/iotDevice/getAllDevices", jwtHelper.verifyJWTtoken,  userHelper.isSystemAdmin, iotDevice.getAllDevices);
-router.post("/iotDevice/startTimer", iotDevice.startTimer, userTimeEntry.addTimeEntry);
-router.post("/iotDevice/stopTimer", iotDevice.stopTimer, userTimeEntry.updateTimeEntry);
+
+router.post("/iotDevice/clockIn", iotDevice.clockIn, attendanceEntry.addAttendanceEntry);
+router.post("/iotDevice/clockOut", iotDevice.clockOut, attendanceEntry.updateAttendanceEntry);
 
 
 //tensorFlowAnalysis
 //router.post("/analysis/userWeeklyHoursPrediction", jwtHelper.verifyJWTtoken, user.getProjects, tensorFlowAnalysis.getFourWeekData, tensorFlowAnalysis.userWeeklyHoursPrediction);
 
-router.get("/analysis/projectWeeklyHoursPrediction", jwtHelper.verifyJWTtoken,  userHelper.isTeamLeader, user.getProjects2, tensorFlowAnalysis.try2);
+router.post("/analysis/projectWeeklyHoursPrediction", jwtHelper.verifyJWTtoken,  userHelper.isTeamLeader, user.getProjects2, tensorFlowAnalysis.try2);
 
 // annalysis
 //router.get("/analysis/getUserAverageTime", jwtHelper.verifyJWTtoken, userHelper.isAuthenticated ,analysis.getUserAverageTime);
