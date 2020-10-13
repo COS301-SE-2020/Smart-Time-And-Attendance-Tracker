@@ -1,7 +1,7 @@
 name: angular
 on: 
     push:
-        branches: [ master, 'app-*' ]
+        branches: [  ]
 
 jobs:
   app-test:

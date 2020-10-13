@@ -40,6 +40,7 @@ export class IOTComponent implements OnInit {
   getDevices() {
     this.iotService.getDevices(localStorage.getItem('token')).subscribe((data) => {
       this.devices = data['iotDevices'];
+      console.log(data['iotDevices'])
     },
     error => {
       console.log(error)
