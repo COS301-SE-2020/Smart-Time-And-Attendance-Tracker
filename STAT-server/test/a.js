@@ -23,6 +23,19 @@ describe('test file 1', function() {
      server.close();
  }); 
 
+
+ describe('UNATHORISED USER SUITE', function() {
+  require ('../non-functional/unauthorized.js')
+})
+
+describe('ATHORISED USER SUITE', function() {
+ require ('../non-functional/authorized.js')
+})
+
+describe('ADMIN USER SUITE', function() {
+require ('../non-functional/admin.js')
+})
+
  /*
     describe('test USER', function() {
        require ('./user.js')
@@ -51,8 +64,10 @@ describe('test file 1', function() {
          require ('./role.js')
       })
 */
+
 describe('test ROLE', function() {
   require ('./100.js')
 })
+
 
   })
