@@ -38,7 +38,7 @@ export class AttendanceComponent implements OnInit {
 
   constructor(public headerService: HeaderService, public amService: AccountManagementService, public imService: IotManagementService, public attendanceService: AttendanceService) { }
 
-  ngOnInit(): void {this.roles = ["General User"]
+  ngOnInit(): void {
     if (this.roles.indexOf("Data Analyst") != -1) {
       this.allColumns = ['Date', 'Start Time', 'End Time', 'Device', 'Name'];
       this.displayedColumns = this.allColumns
