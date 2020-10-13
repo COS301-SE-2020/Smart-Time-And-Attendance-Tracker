@@ -38,7 +38,7 @@ export class AttendanceComponent implements OnInit {
 
   constructor(public headerService: HeaderService, public amService: AccountManagementService, public imService: IotManagementService, public attendanceService: AttendanceService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {this.roles = ["General User"]
     if (this.roles.indexOf("Data Analyst") != -1) {
       this.allColumns = ['Date', 'Start Time', 'End Time', 'Device', 'Name'];
       this.displayedColumns = this.allColumns
@@ -88,8 +88,13 @@ export class AttendanceComponent implements OnInit {
   getAllUsersAttendanceEntries() {
     this.attendanceType = 'da'
     this.tableData = []
+
+    // date filtering
+    let req = {}
+    if (this.dateFrom != null && this.dateTo != null)
+      req = { 'minDate': this.dateFrom, 'maxDate': this.dateTo }
     
-    this.attendanceService.getAllUsersAttendanceEntries(localStorage.getItem('token')).subscribe((data) => {
+    this.attendanceService.getAllUsersAttendanceEntries(localStorage.getItem('token'), req).subscribe((data) => {
       let res: any[] = data['results']
       res.forEach((element: any) => {
         element.attendanceEntries.forEach((entry: any) => {
