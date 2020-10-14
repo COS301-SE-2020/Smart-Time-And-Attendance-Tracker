@@ -9,7 +9,7 @@
           <input matInput formControlName="deviceName" type="text" placeholder="Camera 1" name="deviceName" required>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Mac address</mat-label>
+          <mat-label>MAC address</mat-label>
           <input matInput formControlName="macAddress" type="text" placeholder="" name="macAddress" required>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-12">
@@ -42,7 +42,6 @@
       </div>
     </div>
 
-    <mat-spinner *ngIf="!devices" class="req-spinner"></mat-spinner>
 
     <!-- devices -->
     <div id="devices" class="pr-3 row scroll">
@@ -60,10 +59,13 @@
         </button>
           <!-- details -->
         <mat-card-title>{{d.deviceName}}</mat-card-title>
-        <mat-card-subtitle>{{d.macAddress}}</mat-card-subtitle>
+        <mat-card-subtitle>MAC: {{d.macAddress}}</mat-card-subtitle>
+        <mat-card-content>
+          <p>{{d.description}}</p>
+        </mat-card-content>
         <mat-divider [inset]="true"></mat-divider>
         <mat-card-footer class="px-3">
-          {{d.description}}
+          ID: {{d.ID}}
         </mat-card-footer>
       </mat-card>
     </div>

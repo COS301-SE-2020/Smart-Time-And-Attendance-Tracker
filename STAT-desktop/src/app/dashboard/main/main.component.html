@@ -43,6 +43,14 @@
                   </a>
                 </li>
                 <li>
+                  <a id="attendance" (click)="setActive('attendance')">
+                    <span class="icon">
+                      <mat-icon>assignment_ind</mat-icon>
+                    </span>
+                    <span class="list">Attendance</span>
+                  </a>
+                </li>
+                <li *ngIf="roles && roles.includes('Team Leader')">
                   <a id="teams" (click)="setActive('teams')">
                     <span class="icon">
                       <mat-icon>group</mat-icon>
@@ -96,6 +104,7 @@
           <app-organisation *ngIf="active=='organisation'"></app-organisation>
           <app-teams *ngIf="active=='teams'"></app-teams>
           <app-history *ngIf="active=='history'"></app-history>
+          <app-attendance *ngIf="active=='attendance'"></app-attendance>
           <app-analysis *ngIf="active=='analysis'"></app-analysis>
         </div>
 

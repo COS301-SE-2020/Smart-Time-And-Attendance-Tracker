@@ -3,6 +3,10 @@ import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/templa
 import { AccountManagementService } from 'src/app/shared/services/account-management.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import * as XLSX from 'xlsx';
+import { element } from 'protractor';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
 @Component({
   selector: 'app-organisation',
@@ -30,16 +34,90 @@ export class OrganisationComponent implements OnInit {
 
   roles : string[] = ['Data Analyst', 'System Administrator', 'Security Administrator', 'Team Leader', 'General Team Member']
 
+  tableData: Object[] = []
+
   ngOnInit(): void {
     this.getAllUnauthenticatedUsers('n')
     this.getMembers()
+  }
+
+  exportPDF()
+  {
+    var doc = new jsPDF("l");
+    var cols = ["Name", "Surname", "Email", "ID"]
+    var rows = [];
+
+    for (let x = 0; x < this.members.length; x++) {
+      let record = this.members[x];
+      //console.log(record);
+      var temp = [record['name'], record['surname'], record['email'], record['ID']]
+      rows.push(temp)
+    }
+
+    autoTable(doc, { head: [cols], body: rows })
+
+    doc.output('dataurlnewwindow');
+    //doc.save('Test.pdf');
+  }
+
+  exportToJSON()
+  {
+    let rows = []
+
+    for (let x = 0; x < this.members.length; x++) {
+      let record = this.members[x];
+      var temp = {
+        'name' : record['name'],
+        'surname' : record['surname'],
+        'email' : record['email'],
+        'id' : record['ID']}
+      rows.push(temp)
+    }
+
+    let dataStr = JSON.stringify(rows, null, 4);
+    var x = window.open();
+    x.document.open();
+    x.document.write('<html><body><pre>' + dataStr + '</pre></body></html>');
+    x.document.close();
+  }
+
+  exportCSV()
+  {
+    const { Parser, transforms: { unwind } } = require('json2csv');
+
+    const fields = [
+      { label: 'Name', value: 'records.name' },
+      { label: 'Surname', value: 'records.surname' },
+      { label: 'Email', value: 'records.email' },
+      { label: 'ID', value: 'records.ID' }
+    ];
+    
+    const transforms = [unwind({ paths: ['records'] })];
+    const json2csvParser = new Parser({ fields, transforms });
+
+    let grouped = this.members.reduce((r: any, e: any) => {
+      let name = e.name;
+      r[name] = { name, records: [e] }
+      return r;
+    }, {});
+
+    this.tableData = Object.values(grouped);
+
+    const csv = json2csvParser.parse(this.tableData);
+    let dataUri = 'data:text/csv;charset=utf-8,' + csv;
+    let exportFileDefaultName = 'OrganisationMembers.csv';
+
+    var x = window.open();
+    x.document.open();
+    x.document.write('<html><body><pre>' + csv + '</pre></body></html>');
+    x.document.close();
   }
 
   removeUser(id : string)
   {
     let req = {"userID": id};
     this.service.removeUser(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       this.getMembers()
     },
     error => {
@@ -80,7 +158,7 @@ export class OrganisationComponent implements OnInit {
     this.getMembers()
     },
     error => {
-      console.log(error);
+      //console.log(error);
       //console.log(error.error.message);
       let errorCode = error['status'];
       if (errorCode == '403')
@@ -94,7 +172,7 @@ export class OrganisationComponent implements OnInit {
 
   editUser()
   {
-    console.log(this.editMember)
+    //console.log(this.editMember)
     let req = {"userID": this.editMember.ID,
                 "name": this.editMember.name,
                 "surname": this.editMember.surname,
@@ -128,12 +206,12 @@ export class OrganisationComponent implements OnInit {
   }
 
   changeRoles() {
-    console.log('EDIT\n' + this.editRoles)
+    //console.log('EDIT\n' + this.editRoles)
     this.editRoles.forEach(r => {
         this.addRole(this.editMember.ID, r)
     });
 
-    console.log('REMOVE\n' + this.removeRoles)
+    //console.log('REMOVE\n' + this.removeRoles)
     this.removeRoles.forEach(r => {
       this.removeRole(this.editMember.ID, r)
     });
@@ -241,7 +319,8 @@ export class OrganisationComponent implements OnInit {
         m.role = temp
       });
       this.groupAndSort(this.members)
-      console.log(this.members)
+      //console.log(this.members)
+      this.tableData = data['users']
     },
     error => {
       //console.log(error);
@@ -329,7 +408,7 @@ export class OrganisationComponent implements OnInit {
     // add class to new letter
     while (!active) {
       if (alpha[i].innerHTML == alphabet) {
-        console.log(alpha[i])
+        //console.log(alpha[i])
         active = alpha[i]
         active.classList.add('active')
       }

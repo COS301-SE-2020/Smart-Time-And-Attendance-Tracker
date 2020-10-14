@@ -144,13 +144,23 @@ export class SignUpComponent implements OnInit {
       localStorage.setItem('roles', res['roles']);
       });
       this.service.getName(localStorage.getItem('token')).subscribe(res => {
-    
+        //console.log(res['roles']);
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
         localStorage.setItem('profilePic', res['profilePicture'])
         this.headerService.isUserLoggedIn.next(true);
-        this.router.navigate(['main']);
+        //this.router.navigate(['main']);
       });
+
+      this.service.isAuthenticated(localStorage.getItem('token')).subscribe(res => {
+        if (res['authenticated'])
+          this.router.navigate(['main']);
+        else
+          this.router.navigate(['unauthorised']);
+      },
+        error => {
+          //console.log(error);
+        });
     },
     error => {
       //console.log(error.error.message);  
@@ -169,13 +179,23 @@ export class SignUpComponent implements OnInit {
       localStorage.setItem('roles', res['roles']);
       });
       this.service.getName(localStorage.getItem('token')).subscribe(res => {
-
+        //console.log(res['roles']);
         localStorage.setItem('name', res['name']);
         localStorage.setItem('surname', res['surname']);
         localStorage.setItem('profilePic', res['profilePicture'])
         this.headerService.isUserLoggedIn.next(true);
-        this.router.navigate(['main']);
-        });
+        //this.router.navigate(['main']);
+      });
+        
+      this.service.isAuthenticated(localStorage.getItem('token')).subscribe(res => {
+        if (res['authenticated'])
+          this.router.navigate(['main']);
+        else
+          this.router.navigate(['unauthorised']);
+      },
+      error => {
+        //console.log(error);
+      });
     },
     error => {
       localStorage.setItem('loggedIn', 'false'); 

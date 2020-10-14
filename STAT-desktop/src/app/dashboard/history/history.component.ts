@@ -71,13 +71,13 @@ export class HistoryComponent implements OnInit {
       req = {'minDate' : this.dateFrom, 'maxDate' : this.dateTo}
 
     this.historyService.getOwnEntries(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.tableData = data['timeEntries']
       this.allData = this.tableData
       this.formatTableData()
     },
     error => {
-      console.log(error)
+      //console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -97,7 +97,7 @@ export class HistoryComponent implements OnInit {
       req = {'userID' : userID
     }
     this.historyService.getUserEntries(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.tableData = data['timeEntries']
 
       this.tableData.forEach((element : any) => {
@@ -108,7 +108,7 @@ export class HistoryComponent implements OnInit {
       this.formatTableData()
     },
     error => {
-      console.log(error)
+      //console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -122,7 +122,7 @@ export class HistoryComponent implements OnInit {
     this.historyType = 'da'
     this.tableData = []
     this.historyService.getAllUserEntries(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       let res : any[] = data['results']
       res.forEach((element : any) => {
         element.timeEntries.forEach((entry : any) => {
@@ -156,9 +156,9 @@ export class HistoryComponent implements OnInit {
     }
 
     this.historyService.getAllProjectEntries(localStorage.getItem('token'), req).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       let res : any[] = data['results']['TeamMembers']
-      console.log(res)
+      //console.log(res)
       res.forEach((element : any) => {
         element.timeEntries.forEach((entry : any) => {
           entry.member = element.name + " " + element.surname
@@ -167,11 +167,11 @@ export class HistoryComponent implements OnInit {
         });
       });
       this.allData = this.tableData
-      console.log(this.tableData)
+     //console.log(this.tableData)
       this.formatTableData()
     },
     error => {
-      console.log(error)
+      //console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -197,7 +197,7 @@ export class HistoryComponent implements OnInit {
       let data
       reader.onload = function (evt : any) {
         data = JSON.parse(evt.target.result)
-        console.log(data)
+        //console.log(data)
         let values
         data.forEach((element : any) => {
           let start : any = new Date(element.date + " " + element.startTime)
@@ -221,7 +221,7 @@ export class HistoryComponent implements OnInit {
         });
       }
       reader.onerror = (evt) => {
-        console.log('error reading file');
+        //console.log('error reading file');
         this.snackbar.open("Incorrect JSON file format", "Dismiss", {
           duration: 5000,
         });
@@ -258,11 +258,11 @@ export class HistoryComponent implements OnInit {
 
       /* save data */
       data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
-      console.log(data); // Data will be logged in array format containing objects
+      //console.log(data); // Data will be logged in array format containing objects
     };
 
     reader.onerror = (evt) => {
-      console.log('error reading file');
+      //console.log('error reading file');
       this.snackbar.open("Incorrect Excel file format", "Dismiss", {
         duration: 5000,
       });
@@ -270,7 +270,7 @@ export class HistoryComponent implements OnInit {
 
     reader.onloadend = () => {
       data.forEach(element => {
-        console.log(element)
+        //console.log(element)
         let date = new Date(Math.round((element.date - 25569)*86400*1000))
         let sDate = date.getFullYear() + "/"
         if (date.getMonth() + 1 < 10)
@@ -283,13 +283,13 @@ export class HistoryComponent implements OnInit {
         else
           sDate += date.getDate()
 
-        console.log(sDate)
+        //console.log(sDate)
         element.date = sDate
         let start = new Date(sDate + " " + this.formatCSVTime(element.startTime))
         element.startTime = start.getTime()
         let end = new Date(sDate + " " + this.formatCSVTime(element.endTime))
         element.endTime = end.getTime()
-        console.log(element)
+        //console.log(element)
 
         this.import(element)
       });
@@ -317,10 +317,11 @@ export class HistoryComponent implements OnInit {
   // import time entry
   import(values : any) {
     this.historyService.import(localStorage.getItem('token'), values).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
+      this.getHistory()
     },
     error => {
-      console.log(error)
+      //console.log(error)
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -331,7 +332,7 @@ export class HistoryComponent implements OnInit {
 
   getProjectsTL() {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.projects = data['projects']
       this.members = []
       this.projects.forEach((element : any) => {
@@ -352,7 +353,7 @@ export class HistoryComponent implements OnInit {
 
   getProjectsDA() {
     this.pmService.getProjects(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.projects = data['projects']
     },
     error => {
@@ -366,7 +367,7 @@ export class HistoryComponent implements OnInit {
 
   getMembers() {
     this.amService.getAllUsers(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       this.members = data['users']
     },
     error => {
@@ -422,7 +423,7 @@ export class HistoryComponent implements OnInit {
       a.date - b.date || a.timeEntryID.localeCompare(b.timeEntryID)
     );
     this.tableData = this.tableData.reverse()
-    console.log(this.tableData)
+    //console.log(this.tableData)
 
     this.tableData.forEach((element : any) => {
       element.startTime = this.formatTime(element.startTime)
@@ -464,17 +465,17 @@ export class HistoryComponent implements OnInit {
     }, {});
 
     this.tableData = Object.values(grouped)
-    console.log(this.tableData)
+    //console.log(this.tableData)
   }
 
   filterDateRange() {
 
-    console.log(this.dateTo)
-    console.log(this.dateFrom)
+    //console.log(this.dateTo)
+    //console.log(this.dateFrom)
 
     this.tableData = []
 
-    console.log(this.allData)
+    //console.log(this.allData)
 
     if (this.dateFrom == null) {  
       this.allData.forEach((entry : any) => {
@@ -523,7 +524,7 @@ export class HistoryComponent implements OnInit {
       this.sorted = 'newest'
       this.tableData = this.tableData.reverse()
     }
-    console.log(this.tableData)
+    //console.log(this.tableData)
   }
 
   exportToJSON() {

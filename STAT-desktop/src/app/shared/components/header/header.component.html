@@ -1,12 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <a class="navbar-brand" [routerLink]="['home']">
-        <img src="https://firebasestorage.googleapis.com/v0/b/stat-images.appspot.com/o/STAT-logo.png?alt=media&token=053c472e-7386-4649-a200-b3c22d764f27" width="63" height="45" alt="logo" loading="lazy">
+        <img src="../../../../assets/STAT-logo.png" width="63" height="45" alt="logo" loading="lazy">
     </a>
     <div *ngIf="!isLoggedIn" class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link" [routerLink]="['home']">Home</a>
             <a class="nav-item nav-link" [routerLink]="['features']">Features</a>
-            <a class="nav-item nav-link" [routerLink]="['desktop']">STAT Desktop</a>
             <a class="nav-item nav-link" [routerLink]="['sign-up']">Sign Up</a>
         </div>
     </div>
@@ -14,7 +13,6 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link" [routerLink]="['home']">Home</a>
         <a class="nav-item nav-link" [routerLink]="['features']">Features</a>
-        <a class="nav-item nav-link" [routerLink]="['desktop']">STAT Desktop</a>
         <a class="nav-item nav-link" [routerLink]="['main']">Dashboard</a>
       </div>
   </div>

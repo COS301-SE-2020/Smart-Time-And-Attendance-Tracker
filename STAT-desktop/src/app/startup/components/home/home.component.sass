@@ -68,7 +68,7 @@ a.mat-raised-button
   padding-bottom: 0.1em
   padding-top: 0.1em
   right: 0em
-  width: 6.5em
+  width: 8em
   float: right
 
 // -------------------------------------------------------------------------------------------- B ----------
@@ -116,6 +116,11 @@ button
 
 // -------------------------------------------------------------------------------------------- D ----------
 
+#desktop-image
+  display: block
+  height: auto
+  width: 100%
+
 div
   display: block
   height: auto
@@ -139,17 +144,17 @@ div
   margin: 0em
   padding: 0.5em
   text-align: left
-  width: 48%
+  width: 45%
 
   >
     img
       display: block
       margin: 3em auto
-      height: auto
-      height: 12em
+      height: 10em
       width: auto
 
 #feature-cards
+  align-content: stretch
   display: flex
   flex-direction: row
   flex-wrap: wrap
@@ -166,18 +171,21 @@ div
     border-radius: 2px
     box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important
     display: inline-block
-    margin: 1em 0
+    margin: 1em
     padding: 1.5em
     padding-bottom: 2.25em
 
-    &:nth-child(even)
-      margin-left: 1.5em
+    // &:nth-child(even)
+    //   margin-left: 10%
 
-    &:nth-child(odd)
-      margin-left: 0
+    // &:nth-child(odd)
+    //   margin-left: 0
 
     mat-card-content
       font-size: 0.9em
+
+    mat-card-title
+      font-size: 1.5em !important
 
 footer
   background-color: $color-white

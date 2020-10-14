@@ -25,10 +25,11 @@ import {
   AngularFireUploadTask} from "@angular/fire/storage";
 import { ProfileComponent } from './profile/profile.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { AttendanceComponent } from './attendance/attendance.component';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent, ProfileComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent, ProfileComponent, AttendanceComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

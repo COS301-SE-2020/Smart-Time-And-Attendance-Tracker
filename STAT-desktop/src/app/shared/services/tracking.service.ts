@@ -19,7 +19,7 @@ export class TrackingService {
     values.endTime = epoch;
     if(!values.description)
       values.description = "Manual Entry";
-    values.device = "Desktop Application";
+    values.device = "Website";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
@@ -31,7 +31,7 @@ export class TrackingService {
   public addATimeEntry(values, token) {
     if(!values.description)
       values.description = "Timed Entry";
-    values.device = "Desktop Application";
+    values.device = "Website";
     const headers = new HttpHeaders()
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
 
@@ -54,7 +54,7 @@ export class TrackingService {
           .set('Content-Type', 'application/json').set( 'Authorization', "Bearer "+token);
     let parameters = new HttpParams();
     parameters = parameters.append('timeEntryID',values);
-    return this.http.delete(this.ROOT_URL+'/userTimeEntry/deleteTimeEntry',  {
+    return this.http.delete(this.ROOT_URL+'userTimeEntry/deleteTimeEntry',  {
       headers: headers,
       params: parameters
     });
@@ -68,6 +68,21 @@ export class TrackingService {
       headers: headers
     });
   }
+ /* public saveSharedLocalStorage(iframe, saveKey, data)
+  { 
+    iframe.contentWindow.postMessage({
+      action: 'save',
+      key: saveKey,
+      value: data
+  });
+}
+public getSharedLocalStorage(iframe,getKey)
+  {
+    console.log("gettttt"+ getKey);
+      return iframe.contentWindow.postMessage({
+      action: 'get',
+      key: getKey
+  });*/
 
   //Get active window
   public getActiveWindow(){
@@ -77,5 +92,5 @@ export class TrackingService {
       headers: headers
     });
   }
- 
+
 }

@@ -41,7 +41,7 @@
                     matTooltip="Edit"
                     matTooltipClass="teams-tooltip"
                     matTooltipPosition="above"
-                    (click)="open(editTeamModal)">
+                    (click)="open(editTeamModal); tid = t.ID; editTeamMembers = t.teamMembers;">
                     <mat-icon inline="true">edit</mat-icon>
             </button>
             <button mat-button class="teams-btn"
@@ -55,15 +55,23 @@
           <i *ngIf="t.teamMembers.length == 0">This team has no members.</i>
           <ul class="members">
             <li *ngFor="let m of t.teamMembers">
-              <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
-              <img *ngIf="m.profilePicture != 'none'" class="pro-pic" src="{{m.profilePicture}}">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic proj"
+                      matTooltip="{{m.name}} {{m.surname}} [{{m.role}}]"
+                      matTooltipClass="pro-tooltip"
+                      matTooltipPosition="below">{{m.name[0]}}{{m.surname[0]}}</div>
+
+                <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}" class="pro-pic proj"
+                      matTooltip="{{m.name}} {{m.surname}}" 
+                      matTooltipClass="pro-tooltip"
+                      matTooltipPosition="below">
               <div class="col-10">
                 <p>{{m.name}} {{m.surname}}
                   <span class="member-edit">
                     <button mat-button class="teams-btn"
                             matTooltip="Edit"
                             matTooltipClass="teams-tooltip"
-                            matTooltipPosition="above">
+                            matTooltipPosition="above"
+                            (click)="open(editMemberModal); editMember = m; tid = t.ID;">
                             <mat-icon inline="true">edit</mat-icon>
                     </button>
                     <button mat-button class="teams-btn"
@@ -134,8 +142,8 @@
                 <!-- role -->
                 <mat-chip-list #chipList aria-label="member selection">
                   <mat-chip>
-                    {{m.role}}
-                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                    {{m.teamRole}}
+                    <mat-icon matChipRemove (click)="m.teamRole = ''">cancel</mat-icon>
                   </mat-chip>
                 </mat-chip-list>
               </div>
@@ -145,12 +153,12 @@
                     placeholder="Add member role"
                     #memberInput
                     [matChipInputFor]="chipList"
-                    [(ngModel)]="m.role"
-                    (keyup)="addRole(m, m.role)"
+                    [(ngModel)]="m.teamRole"
+                    (keyup)="addRole(m, m.teamRole)"
                     [matAutocomplete]="auto">
                 <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option value="member" (click)="typeRole($event)">
-                    member
+                  <mat-option value="General Team Member" (click)="typeRole($event); m.teamRole = 'General Team Member'">
+                    General Team Member
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -228,8 +236,8 @@
                     (keyup)="addRole(m, m.teamRole)"
                     [matAutocomplete]="auto">
                 <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option value="member" (click)="typeRole($event)">
-                    member
+                  <mat-option value="General Team Member" (click)="typeRole($event)">
+                    General Team Member
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -250,60 +258,55 @@
   <div class="modal-content">
     <div class="modal-header">
       <h2> Edit team
-        <br><h4>Please enter the new team details below</h4>
+        <br><h4>Please edit the team details below</h4>
       </h2>
       <button (click)="modal.dismiss('Cross click')">
         <mat-icon>close</mat-icon>
       </button>
     </div>
     <div class="modal-body">
-      <form method="post">
-        <mat-form-field appearance="standard" class="col-12">
-          <mat-label>Team Name</mat-label>
-          <input matInput formControlName="name" placeholder="Team A" name = "name" required>
-        </mat-form-field>
-        <mat-divider></mat-divider>
-        <h3>Edit roles</h3>
-        <ul class="team-role-edit">
-          <li>
-            <span class="col-6">Jaymie Farsee</span>
-            <mat-form-field appearance="standard" class="col-6">
-              <mat-label>Role</mat-label>
-              <mat-select  value="Leader" matInput name="organisation-members">
-                <mat-option value="Leader">Leader</mat-option>
-                <mat-option value="Designer">Designer</mat-option>
-                <mat-option value="Programmer">Programmer</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </li>
-          <li>
-            <span class="col-6">Zac Efron</span>
-            <mat-form-field appearance="standard" class="col-6">
-              <mat-label>Role</mat-label>
-              <mat-select  value="Designer" matInput name="organisation-members">
-                <mat-option value="Leader">Leader</mat-option>
-                <mat-option value="Designer">Designer</mat-option>
-                <mat-option value="Programmer">Programmer</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </li>
-          <li>
-            <span class="col-6">Henry Cavill</span>
-            <mat-form-field appearance="standard" class="col-6">
-              <mat-label>Role</mat-label>
-              <mat-select  value="Programmer" matInput name="organisation-members">
-                <mat-option value="Leader">Leader</mat-option>
-                <mat-option value="Designer">Designer</mat-option>
-                <mat-option value="Programmer">Programmer</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </li>
-        </ul>
-      </form>
+        <div class="add-member">
+          <p>REMOVE</p>
+          <ul *ngIf="editTeamMembers.length > 0" class="members-to-add">
+            <li *ngFor="let m of editTeamMembers" class="editing">
+              <div class="col-7">
+                <div *ngIf="m.profilePicture == 'none'" class="pro-pic">{{m.name[0]}}{{m.surname[0]}}</div>
+                <img *ngIf="m.profilePicture != 'none'" src="{{m.profilePicture}}">
+                <span>{{m.name}} {{m.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{m.role}}
+                    <mat-icon matChipRemove (click)="m.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Edit member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="m.role"
+                    (keyup)="editRole(m, m.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="General Team Member" (click)="typeRole($event)">
+                    General Team Member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-checkbox class="example-margin" (click)="removeMember(m)"></mat-checkbox>
+
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
+        </div>
     </div>
     <div class="modal-footer">
-      <button mat-raised-button color="primary" (click)="modal.close('Save click')">Save</button>
-      <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); removeMembersFromTeam(); editMemberRoles();">Save changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click');">Cancel</button>
     </div>
   </div>
 </ng-template>
@@ -346,6 +349,61 @@
     <div class="modal-footer">
       <button mat-raised-button color="primary" (click)="modal.close('Save click'); removeTeamMember(tid, mid)">Yes</button>
       <button mat-raised-button color="accent" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- EDIT MEMBER -->
+<ng-template #editMemberModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2> Edit Team Member
+        <br><h4>Please edit the details below</h4>
+      </h2>
+      <button (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="add-member">
+          <ul class="members-to-add">
+            <li class="editing">
+              <div class="col-7">
+                <div *ngIf="editMember.profilePicture == 'none'" class="pro-pic">{{editMember.name[0]}}{{editMember.surname[0]}}</div>
+                <img *ngIf="editMember.profilePicture != 'none'" src="{{editMember.profilePicture}}">
+                <span>{{editMember.name}} {{editMember.surname}}</span>
+
+                <!-- role -->
+                <mat-chip-list #chipList aria-label="member selection">
+                  <mat-chip>
+                    {{editMember.role}}
+                    <mat-icon matChipRemove (click)="editMember.role = ''">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+
+              <mat-form-field class="example-chip-list" class="col-4 float-right">
+                  <input matInput name="role-input"
+                    placeholder="Edit member role"
+                    #memberInput
+                    [matChipInputFor]="chipList"
+                    [(ngModel)]="editMember.role"
+                    (keyup)="editRole(editMember, editMember.role)"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option value="General Team Member" (click)="typeRole($event)">
+                    General Team Member
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-divider></mat-divider>
+            </li>
+          </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" (click)="modal.close('Save click'); editMemberRoles();">Save changes</button>
+      <button mat-raised-button color="accent" (click)="modal.close('Save click');">Cancel</button>
     </div>
   </div>
 </ng-template>

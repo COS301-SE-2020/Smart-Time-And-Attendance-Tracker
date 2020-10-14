@@ -1,6 +1,9 @@
 *
   font-size: 1em
 
+button, button:focus
+  outline: none
+
 .container
   padding: 2em
 
@@ -188,7 +191,7 @@ section
 
 $colors : #7846eb, #00c8ff, #ff2885, #366ceb
 @for $i from 0 through 200
-  li:nth-child(#{$i}) .pro-pic
+  li:nth-child(#{$i}) div.pro-pic
     background-color: nth($colors, random(length($colors)))
 
 ul

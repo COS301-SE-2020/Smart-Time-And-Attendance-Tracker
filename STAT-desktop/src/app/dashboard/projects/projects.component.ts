@@ -22,7 +22,7 @@ export class ProjectsComponent implements OnInit {
   roles : string
   allProjects : Object[]
   projects : Object[]
-  tasks : Object[] = []
+  tasks : any = []
   tasksNum : number
   tasksDone : number
   tasksDue : number
@@ -113,7 +113,7 @@ export class ProjectsComponent implements OnInit {
   // get projects and tasks
   getProAndTasks() {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.allProjects = data['projects']
 
       this.allProjects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
@@ -130,6 +130,11 @@ export class ProjectsComponent implements OnInit {
         //console.log("Your session has expired. Please sign in again.");
         // kick user out
         this.headerService.kickOut();
+      }
+
+      if (errorCode == '404')
+      {
+        this.error = 'Not Found'
       }
     });
   }
@@ -400,29 +405,35 @@ export class ProjectsComponent implements OnInit {
     var startDate = new Date()
     var endDate = new Date()
     endDate.setDate(startDate.getDate()+6)
-    console.log(startDate)
+    //console.log(startDate)
     var weekTasks = this.tasks.filter((t : any) => t.dueDate > startDate && t.dueDate < endDate)
-    console.log(weekTasks)
+    //console.log(weekTasks)
     this.tasksNum = weekTasks.length
     this.tasksDone = weekTasks.filter((t : any) => t.taskStatus == 'Completed').length
     this.tasksDue = this.tasksNum - this.tasksDone
 
     this.loading = false
-    var taskSlides = this.tasks.length - this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
-    this.slides = Math.ceil(taskSlides / 4)
+    //var taskSlides = this.tasks.length - this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+    
 
 
     // get upcoming tasks
-    let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
+    //let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
+    let tempTasks = this.tasks.filter((t : any) => (t.dueDate > startDate && t.dueDate < endDate) || (t.taskStatus != 'Completed' && t.dueDate < endDate))
+    var taskSlides = weekTasks.length
+    this.slides = Math.ceil(taskSlides / 4)
     tempTasks.forEach((element : any) => {
-      if (element.dueDate < startDate)
+      if (element.dueDate < startDate && element.taskStatus != 'Completed')
         element['overdue'] = true
+      else if (element.dueDate >= startDate && element.taskStatus == 'Completed')
+        element['overdue'] = false
+
     });
 
     while (tempTasks.length) {
       this.upcoming.push(tempTasks.splice(0,4))
     }
-    console.log(this.upcoming)
+    //console.log(this.upcoming)
   }
 
   sortProTasks(tasks : any) {
@@ -501,7 +512,7 @@ export class ProjectsComponent implements OnInit {
       document.getElementById('hide-comp').setAttribute('hidden', 'true')
       document.getElementById('show-comp').removeAttribute('hidden')
     }
-    console.log('COMP\n' + this.showComp)
+    //console.log('COMP\n' + this.showComp)
   }
 
 
@@ -610,8 +621,8 @@ export class ProjectsComponent implements OnInit {
         });
 
 
-        console.log(members)
-        console.log(this.availTeams)
+        //console.log(members)
+        //console.log(this.availTeams)
       }
 
       // get team members

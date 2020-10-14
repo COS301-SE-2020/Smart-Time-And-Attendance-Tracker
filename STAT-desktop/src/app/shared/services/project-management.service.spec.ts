@@ -366,6 +366,40 @@ describe('ProjectManagementService', () => {
   });
 
   ////////////////////
+  describe('uncompleteProject()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        "projectID": "5f1302bd16a15a17140103f1" };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Project marked as uncompleted '};
+      service.uncompleteProject(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/uncomplete');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        "projectID": "5f1302bd16a15a17140103f1" };
+      const token ="";
+      const res = { message: 'No token provided'};
+      service.uncompleteProject(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/uncomplete');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+
+  ////////////////////
   describe('completeTask()', () => {
     it('should return a response object from the API via POST', async() => {
       const req ={
@@ -428,6 +462,230 @@ describe('ProjectManagementService', () => {
       );
       const req2 = HttpMock.expectOne(ROOT_URL+'task/start');
       expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+
+  //////////////////////////
+  describe('resetTask()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        "taskID": "5f1302bd16a15a17140103f1" };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Task status updated to "In Progress"'};
+      service.resetTask(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'task/reset');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        "taskID": "5f1302bd16a15a17140103f1" };
+      const token ="";
+      const res = { message: 'No token provided'}
+      service.resetTask(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'task/reset');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+  /////////////////////////////////
+
+  describe('addTeam()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        "teamID": "5f1302bd16a15a17140103f1" };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Team added to project'};
+      service.addTeam(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/addTeam');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        "teamID": "5f1302bd16a15a17140103f1" };
+      const token ="";
+      const res = { message: 'No token provided'}
+      service.addTeam(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/addTeam');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+  /////////////////////////////////
+
+  describe('addTeamMember()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        'userID': '5f17f6f4a3fe98481c47394f',
+        'userRole': 'Designer' };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Member added to project'};
+      service.addTeamMember(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/addMember');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        'userID': '5f17f6f4a3fe98481c47394f',
+        'userRole': 'Designer' };
+      const token ="";
+      const res = { message: 'No token provided'}
+      service.addTeamMember(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/addMember');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+  ///////////////////////////////////
+
+  describe('removeTeamMember()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        'userID': '5f17f6f4a3fe98481c47394f' };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Member removed from project'};
+      service.removeTeamMember(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/removeMember');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        'userID': '5f17f6f4a3fe98481c47394f' };
+      const token ="";
+      const res = { message: 'No token provided'}
+      service.removeTeamMember(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/removeMember');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+  /////////////////////////////////////////
+
+  describe('changeRole()', () => {
+    it('should return a response object from the API via POST', async() => {
+      const req ={
+        'userID': '5f17f6f4a3fe98481c47394f',
+        'userRole': 'Designer' };
+      const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res = { message: 'Member role successfully updated'};
+      service.changeRole(token,req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/changeRole');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+
+    it('should return an error object from the API via POST if request is incomplete', async() => {
+      const req ={
+        'userID': '5f17f6f4a3fe98481c47394f',
+        'userRole': 'Designer' };
+      const token ="";
+      const res = { message: 'No token provided'}
+      service.changeRole(token,req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        }
+      );
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/changeRole');
+      expect(req2.request.method).toEqual('POST');
+      req2.flush(res);
+    });
+  });
+  ////////////////////////
+
+  describe('getProjects()', () => {
+    it('should return a response object from the API via GET', async() => {
+      const req = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.nF8NXx7CHXdVBCYn7VPJaDYMUKLtTKEaryWOJvHIO18";
+      const res ={"projects": [
+        {
+            "ID": "5f17f6f4a3fe98481c47394f",
+            "projectName": "Life",
+            "dueDate": "2020/07/27",
+            "hourlyRate": 1000,
+            "tasks": [
+                {
+                    "ID": "5f17f72ba3fe98481c473953",
+                    "taskName": "Cry",
+                    "taskStatus": "Not Started",
+                    "dueDate": "2020/07/22"
+                },
+                {
+                    "ID": "5f17f721a3fe98481c473952",
+                    "taskName": "Sleep",
+                    "taskStatus": "Not Started",
+                    "dueDate": "2020/07/26"
+                }
+            ]
+        }]};
+      service.getProjects(req).subscribe(
+        response=> {
+          expect(response).toBe(res);
+        }
+      );
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/getProjects');
+      expect(req2.request.method).toEqual('GET');
+      req2.flush(res);
+    });
+    it('should return an error object from the API via GET if request is incomplete', async() => {
+      const req ="";
+      const res ={ message: "No token provided" };
+
+      service.getProjects(req).subscribe(
+        () => {}, err => {
+          expect(err).toBe(res);
+        });
+
+      const req2 = HttpMock.expectOne(ROOT_URL+'project/getProjects');
+      expect(req2.request.method).toEqual('GET');
       req2.flush(res);
     });
   });
