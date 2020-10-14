@@ -62,10 +62,10 @@ Prefer the pen and paper method? No problem. Track your time and monetary expend
 STAT tracks your time and attendance using your calendar entries. No need to worry about recording events in more than one place. STAT will retrieve the data from your calendar and automatically record the relevant time data.
 
 **IOT Integration**\
-You can use STAT almost anywhere. STAT is designed to work with external devices like cameras to help you track time and attendance more efficiently. Simply connect your IOT device to the system and STAT will receive time and attendance data from the device, and track your time accordingly.
+You can use STAT almost anywhere. STAT is designed to work with external devices like cameras to help you track time and attendance more efficiently. Simply connect your IOT device to the system and STAT will use the data from the device, and track your attendance accordingly.
 
 **Predictive Analysis**\
-STAT produces graphs that allow you to view how time was spent during the course of a project and help to manage your team better. Using historical data, STAT can estimate how many hours you will log in the coming week.
+STAT produces graphs that allow you to view how time was spent during the course of a project and help to manage your team better. Using historical data, STAT can estimate how many hours will be spent on a project in the coming week.
 
 **Project Management**\
 You can manage your projects, tasks, and teams. STAT's dashboard makes it easy to see upcoming due dates, tracking history, and overdue tasks and projects.
