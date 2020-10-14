@@ -54,6 +54,7 @@
     "jspdf": "^2.0.0",
     "jspdf-autotable": "^3.5.9",
     "ngx-mat-select-search": "^3.0.2",
+    "ngx-spinner": "^10.0.1",
     "os": "^0.1.1",
     "path": "^0.12.7",
     "run": "^1.4.0",

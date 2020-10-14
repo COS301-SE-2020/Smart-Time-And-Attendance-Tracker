@@ -24,6 +24,7 @@ import {
   AngularFireStorageReference,
   AngularFireUploadTask} from "@angular/fire/storage";
 import { ProfileComponent } from './profile/profile.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { ProfileComponent } from './profile/profile.component';
     NgxMatSelectSearchModule,
     MatIconModule,
     AngularFireStorageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig, "cloud")
+    AngularFireModule.initializeApp(environment.firebaseConfig, "cloud"),
+    NgxSpinnerModule
   ]
 })
 export class DashboardModule { }
