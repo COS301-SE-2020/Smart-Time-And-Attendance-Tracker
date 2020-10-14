@@ -8,7 +8,7 @@ import {formatDate} from '@angular/common';
 export class TrackingService {
 
   constructor(public http: HttpClient) { }
-  private ROOT_URL = "http://localhost:3000/api/";
+  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
   EntryID : string
 
   // Add manual time entry

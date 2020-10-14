@@ -9,7 +9,7 @@ import { templateJitUrl } from '@angular/compiler';
 export class TeamManagementService {
 
   constructor(public http: HttpClient) { }
-  private ROOT_URL = "http://localhost:3000/api/";
+  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
 
   // template
   /*public function(token, values) {

@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class AnalysisService {
 
-  private ROOT_URL = "http://localhost:3000/api/";
+  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
 
   constructor(public http: HttpClient) { }
 

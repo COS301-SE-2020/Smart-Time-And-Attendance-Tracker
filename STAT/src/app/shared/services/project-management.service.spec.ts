@@ -6,7 +6,7 @@ describe('Unit tests:', () => {
 describe('ProjectManagementService', () => {
   let service: ProjectManagementService;
   let HttpMock: HttpTestingController;
-  let ROOT_URL = "http://localhost:3000/api/";
+  let ROOT_URL = "https://stat-server.azurewebsites.net/api/";
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],

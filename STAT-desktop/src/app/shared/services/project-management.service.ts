@@ -9,7 +9,7 @@ export class ProjectManagementService {
 
   constructor(public http: HttpClient) { }
 
-  private ROOT_URL = "http://localhost:3000/api/";
+  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
 
   //add a task
   public addTask(token, values) {

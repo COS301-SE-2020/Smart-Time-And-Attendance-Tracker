@@ -26,7 +26,7 @@ export class AppComponent {
   title = 'mockIOT';
   private users = [];
   private deviceID = "5f3d860b805adb2978bc5612";
-  private ROOT_URL = "http://localhost:3000/api/";
+  private ROOT_URL = "https://stat-server.azurewebsites.net/api/";
 
   constructor(public http: HttpClient) {
     this.users['Vianka'] = new User("5f22b835dc9bb242f4e27a79");

@@ -7,7 +7,7 @@ describe('Unit Tests', () => {
 describe('IotManagementService:', () => {
   let service: IotManagementService;
     let HttpMock: HttpTestingController;
-    let ROOT_URL = "http://localhost:3000/api/";
+    let ROOT_URL = "https://stat-server.azurewebsites.net/api/";
     beforeEach(async() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
