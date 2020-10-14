@@ -112,10 +112,17 @@ async function mostVisitedWebsite(array){
  */
 module.exports.getUserTotalTimeForProject = async(project, datePassed, done) => {
     var getTime =  (datePassed.toISOString().slice(0,10)).replace(/-/g,"/");
-
+    var month = datePassed.getMonth()+1;
+    if(month< 10)
+        month = "0"+month
+    var date = datePassed.getDate();
+    if(date< 10)
+        date = "0"+date
+    getTime = date + "/" + month  + "/" + datePassed.getFullYear();
+//    console.log(getTime);
     try {
         const  val = await TimeEntryModel.aggregate([
-            { $match: { $and: [{ProjectID: new mongoose.Types.ObjectId(project.ID)}, {Date: getTime}] } },
+            { $match: { $and: [{ProjectID: new mongoose.Types.ObjectId(project)}, {Date: getTime}] } },
             {
               $group: {
                 _id: "$ProjectID",
@@ -126,16 +133,14 @@ module.exports.getUserTotalTimeForProject = async(project, datePassed, done) => 
           if(val.length == 0)
             { 
                var text = {
-                "ProjectID" : project.ID,
-                "ProjectName": project.projectName,
+                "ProjectID" : project,
                 "Time" : 0,
                 "Date": datePassed};
             }
         
             else{
                 var text = {
-                    "ProjectID" : project.ID,
-                    "ProjectName": project.projectName,
+                    "ProjectID" : project,
                     "Time" : val[0].Time,
                     "Date": datePassed
             }

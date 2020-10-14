@@ -166,13 +166,10 @@ module.exports.getAllDevices = (req, res) => {
  * @param {HTTP Response} res 
  * @param {Function} next The next function to be called.
  */
-module.exports.stopTimer = (req, res, next) => {
+module.exports.clockOut = (req, res, next) => {
     //change req.ID
-    if(!req.body.hasOwnProperty("timeEntryID"))
+    if(!req.body.hasOwnProperty("attendanceEntryID"))
         return res.status(400).send({message: 'No time entry ID provided'});
-
-    if(!req.body.hasOwnProperty("userID"))
-        return res.status(400).send({message: 'No user ID provided'});
 
     if(req.body.hasOwnProperty("deviceName") && req.body.hasOwnProperty("macAddress"))
     {
@@ -209,7 +206,7 @@ module.exports.stopTimer = (req, res, next) => {
         });
     }
     else
-        return res.status(400).send({message: 'No device ID or device MAC Address provided'});
+        return res.status(400).send({message: 'No device ID provided'});
 }
 
 /**
@@ -218,7 +215,7 @@ module.exports.stopTimer = (req, res, next) => {
  * @param {HTTP Response} res 
  * @param {Function} next The next function to be called.
  */
-module.exports.startTimer = (req, res, next) => {
+module.exports.clockIn = (req, res, next) => {
     //change req.ID
     if(!req.body.hasOwnProperty("userID"))
         return res.status(400).send({message: 'No user ID provided'});
@@ -238,8 +235,7 @@ module.exports.startTimer = (req, res, next) => {
                 req.body.date = date;
                 req.body.startTime = time;
                 req.body.endTime = time;
-                req.body.description =  req.body.deviceName;
-                req.body.device = req.body.macAddress;
+                req.body.device = result.DeviceName;
                 req.ID = req.body.userID;
                 next();
             }
@@ -260,8 +256,7 @@ module.exports.startTimer = (req, res, next) => {
                 req.body.date = date;
                 req.body.startTime = time;
                 req.body.endTime = time;
-                req.body.description = result.DeviceName;
-                req.body.device = result.MACAddress;
+                req.body.device = result.DeviceName;
                 req.ID = req.body.userID;
                 next();
             }
@@ -270,5 +265,5 @@ module.exports.startTimer = (req, res, next) => {
         });
     }
     else
-        return res.status(400).send({message: 'No device ID or device MAC Address provided'});
+        return res.status(400).send({message: 'No device ID  provided'});
 }
