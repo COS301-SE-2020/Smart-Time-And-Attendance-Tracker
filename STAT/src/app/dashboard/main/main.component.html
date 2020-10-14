@@ -50,7 +50,7 @@
                     <span class="list">Attendance</span>
                   </a>
                 </li>
-                <li>
+                <li *ngIf="roles && roles.includes('Team Leader')">
                   <a id="teams" (click)="setActive('teams')">
                     <span class="icon">
                       <mat-icon>group</mat-icon>

@@ -318,6 +318,7 @@ export class HistoryComponent implements OnInit {
   import(values : any) {
     this.historyService.import(localStorage.getItem('token'), values).subscribe((data) => {
       //console.log(data);
+      this.getHistory()
     },
     error => {
       //console.log(error)

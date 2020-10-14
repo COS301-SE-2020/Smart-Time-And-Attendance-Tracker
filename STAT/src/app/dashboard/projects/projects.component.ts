@@ -22,7 +22,7 @@ export class ProjectsComponent implements OnInit {
   roles : string
   allProjects : Object[]
   projects : Object[]
-  tasks : Object[] = []
+  tasks : any = []
   tasksNum : number
   tasksDone : number
   tasksDue : number
@@ -130,6 +130,11 @@ export class ProjectsComponent implements OnInit {
         //console.log("Your session has expired. Please sign in again.");
         // kick user out
         this.headerService.kickOut();
+      }
+
+      if (errorCode == '404')
+      {
+        this.error = 'Not Found'
       }
     });
   }
@@ -408,15 +413,21 @@ export class ProjectsComponent implements OnInit {
     this.tasksDue = this.tasksNum - this.tasksDone
 
     this.loading = false
-    var taskSlides = this.tasks.length - this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
-    this.slides = Math.ceil(taskSlides / 4)
+    //var taskSlides = this.tasks.length - this.tasks.filter((t : any) => t.taskStatus == 'Completed').length
+    
 
 
     // get upcoming tasks
-    let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
+    //let tempTasks : Object[] = this.tasks.filter((t : any) => t.taskStatus != 'Completed')
+    let tempTasks = this.tasks.filter((t : any) => (t.dueDate > startDate && t.dueDate < endDate) || (t.taskStatus != 'Completed' && t.dueDate < endDate))
+    var taskSlides = weekTasks.length
+    this.slides = Math.ceil(taskSlides / 4)
     tempTasks.forEach((element : any) => {
-      if (element.dueDate < startDate)
+      if (element.dueDate < startDate && element.taskStatus != 'Completed')
         element['overdue'] = true
+      else if (element.dueDate >= startDate && element.taskStatus == 'Completed')
+        element['overdue'] = false
+
     });
 
     while (tempTasks.length) {

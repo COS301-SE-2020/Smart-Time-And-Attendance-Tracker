@@ -246,7 +246,7 @@
             <ng-template ngbSlide *ngFor="let u of upcoming">
               <div>
                 <ul class="tasks">
-                  <li [ngClass]="{'task-od': t.overdue == true}" *ngFor="let t of u">
+                  <li [ngClass]="{'task-od': t.overdue == true, 'task-comp': t.overdue == false}" *ngFor="let t of u">
                     <small> {{t.projectName}} 
                       <span class="float-right">{{formatDate(t.dueDate)}}</span> 
                     </small> <span>{{t.taskName}}</span></li>
