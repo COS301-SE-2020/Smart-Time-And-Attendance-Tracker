@@ -125,15 +125,15 @@ export class TodayComponent implements OnInit {
     this.date4.setDate(this.date.getDate()-4)
     this.date5.setDate(this.date.getDate()-5)
 
-    console.log(localStorage.getItem('trackingNow'));
+    //console.log(localStorage.getItem('trackingNow'));
     if(localStorage.getItem('trackingNow')== 'true')
     {
-      console.log("welcome back");
+      //console.log("welcome back");
       this.trackingNow = true;
       this.cd.detectChanges();
       this.currentlyTracking = JSON.parse( localStorage.getItem('currentlyTrackingDetails'));
       this.tracking();
-      console.log(this.currentlyTracking);
+      //console.log(this.currentlyTracking);
     }
     this.reload()
   
@@ -178,10 +178,10 @@ export class TodayComponent implements OnInit {
   //Add a manual time entry from form
   addManualEntry(form : NgForm)
   {
-    console.log(form.value)
+    //console.log(form.value)
     form['date'] = form['date'].replace(/\-/g, '/')
     this.service.addMTimeEntry(localStorage.getItem('token'), form).subscribe((data) => {
-      console.log(data)
+      //console.log(data)
       this.reload()
     },
     error => {
@@ -234,7 +234,7 @@ export class TodayComponent implements OnInit {
   //Add an automatic time entry from form
   addAutomaticEntry(form : NgForm)
   {
-    console.log("start");
+    //console.log("start");
     this.trackingNow =true;
     localStorage.setItem('trackingNow', 'true');
     this.stop = false;
@@ -277,7 +277,7 @@ export class TodayComponent implements OnInit {
           this.tracking();
           },
           error => {
-            console.log(error);
+            //console.log(error);
             let errorCode = error['status'];
             if (errorCode == '403')
               this.headerService.kickOut();
@@ -291,7 +291,7 @@ export class TodayComponent implements OnInit {
   stopTracking()
   {
     //this.automaticTrackingForm.reset()
-    console.log("Stop");
+    //console.log("Stop");
     this.stop = true;
     this.trackingNow =false;
   
@@ -306,7 +306,7 @@ export class TodayComponent implements OnInit {
         localStorage.removeItem('trackingNow');
         localStorage.removeItem('currentlyTracking');
         localStorage.removeItem('currentlyTrackingDetails');
-        console.log(error);
+        //console.log(error);
         let errorCode = error['status'];
         if (errorCode == '403')
           this.headerService.kickOut();
@@ -322,14 +322,14 @@ export class TodayComponent implements OnInit {
   {
     //console.log(this.service.getSharedLocalStorage(this.iframe.nativeElement, "token"));
     this.trackingNow =true;
-    console.log("tracking");
+    //console.log("tracking");
     this.count = timer(60000);
     this.countSub =this.count.subscribe(x => {
        
         this.currentlyTracking.activeTime =  this.currentlyTracking.activeTime+1;
         this.cd.detectChanges();
         localStorage.setItem('currentlyTrackingDetails',JSON.stringify(this.currentlyTracking));
-        console.log(this.currentlyTracking.activeTime);
+        //console.log(this.currentlyTracking.activeTime);
         this.tracking();
     });
     this.sync = timer(600000);
@@ -338,7 +338,7 @@ export class TodayComponent implements OnInit {
         this.updateEntry().subscribe((data) => {
         },
         error => {
-          console.log(error);
+          //console.log(error);
           let errorCode = error['status'];
           if (errorCode == '403')
             this.headerService.kickOut();
@@ -352,7 +352,7 @@ export class TodayComponent implements OnInit {
   //Update a time entry
   updateEntry()
   {
-    console.log("update");
+    //console.log("update");
     var endTime = new Date().getTime();
 
     this.hours =   this.currentlyTracking.activeTime / 60;
@@ -403,10 +403,10 @@ export class TodayComponent implements OnInit {
       this.entryToEdit.taskName = this.tName
     }
 
-    console.log(this.entryToEdit)
+    //console.log(this.entryToEdit)
 
     this.service.updateTimeEntry(this.entryToEdit, localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       switch (this.entryToEdit.date) {
         case this.formatDate(this.date):
           this.week['today'] = []
@@ -454,10 +454,10 @@ export class TodayComponent implements OnInit {
   deleteEntry(id : string) {
 
     this.service.removeTimeEntry(localStorage.getItem('token'), id).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
     },
     error => {
-      console.log(error);
+      //console.log(error);
       let errorCode = error['status'];
       if (errorCode == '403')
       {
@@ -478,7 +478,7 @@ export class TodayComponent implements OnInit {
     },
     error => {
       let errorCode = error['status'];
-      console.log(error)
+      //console.log(error)
       if (errorCode == '403')
       {
         //console.log("Your session has expired. Please sign in again.");
@@ -515,7 +515,7 @@ export class TodayComponent implements OnInit {
   // get tracking entries
   getEntries(date : String) {
     this.amService.getTimeEntries(date, localStorage.getItem('token')).subscribe((data) => {
-      console.log(data)
+      //console.log(data)
 
       // values on dashboard
       if (this.editing == false) {
@@ -585,7 +585,7 @@ export class TodayComponent implements OnInit {
   }
 
   getWeek(date : String) {
-    console.log(this.getEntries(date))
+    //console.log(this.getEntries(date))
   }
 
   // get time spent
@@ -660,7 +660,7 @@ export class TodayComponent implements OnInit {
       var endTime = new Date('2020/01/01 ' + matchingControl.value)
       var diff = endTime.getTime() - startTime.getTime()
       var mins = diff / 60000
-      console.log(mins)
+      //console.log(mins)
 
       // set error on matchingControl if validation fails
       if (mins < 1) {

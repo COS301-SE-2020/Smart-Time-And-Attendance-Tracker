@@ -113,7 +113,7 @@ export class ProjectsComponent implements OnInit {
   // get projects and tasks
   getProAndTasks() {
     this.amService.getProjectsAndTasks(localStorage.getItem('token')).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.allProjects = data['projects']
 
       this.allProjects = this.allProjects.sort((a : any, b : any) => Date.parse(a.dueDate) - Date.parse(b.dueDate) || a.projectName - b.projectName)
@@ -400,9 +400,9 @@ export class ProjectsComponent implements OnInit {
     var startDate = new Date()
     var endDate = new Date()
     endDate.setDate(startDate.getDate()+6)
-    console.log(startDate)
+    //console.log(startDate)
     var weekTasks = this.tasks.filter((t : any) => t.dueDate > startDate && t.dueDate < endDate)
-    console.log(weekTasks)
+    //console.log(weekTasks)
     this.tasksNum = weekTasks.length
     this.tasksDone = weekTasks.filter((t : any) => t.taskStatus == 'Completed').length
     this.tasksDue = this.tasksNum - this.tasksDone
@@ -422,7 +422,7 @@ export class ProjectsComponent implements OnInit {
     while (tempTasks.length) {
       this.upcoming.push(tempTasks.splice(0,4))
     }
-    console.log(this.upcoming)
+    //console.log(this.upcoming)
   }
 
   sortProTasks(tasks : any) {
@@ -501,7 +501,7 @@ export class ProjectsComponent implements OnInit {
       document.getElementById('hide-comp').setAttribute('hidden', 'true')
       document.getElementById('show-comp').removeAttribute('hidden')
     }
-    console.log('COMP\n' + this.showComp)
+    //console.log('COMP\n' + this.showComp)
   }
 
 
@@ -610,8 +610,8 @@ export class ProjectsComponent implements OnInit {
         });
 
 
-        console.log(members)
-        console.log(this.availTeams)
+        //console.log(members)
+        //console.log(this.availTeams)
       }
 
       // get team members

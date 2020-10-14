@@ -51,10 +51,10 @@ export class CalendarComponent implements OnInit {
   }
 
   //check if logged in to display screen
-  checkLoggedIn(auth) {console.log('PIG');
+  checkLoggedIn(auth) {
   this.loading = false;
    this.authorised =  auth.isSignedIn.get();
-   console.log(this.authorised);
+   //console.log(this.authorised);
     if(this.authorised == true)
       this.authenticate(auth);
   }
