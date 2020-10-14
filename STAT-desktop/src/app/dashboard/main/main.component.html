@@ -18,15 +18,6 @@
                   </a>
                 </li>
                 <li>
-                  <a id="calendar" (click)="setActive('calendar')" class="prev">
-                    <span class="icon">
-                      <mat-icon>today</mat-icon>
-                    </span>
-                    <span class="list">Calendar</span>
-
-                  </a>
-                </li>
-                <li>
                   <a id="projects" (click)="setActive('projects')">
                     <span class="icon">
                       <mat-icon>assignment</mat-icon>
@@ -98,7 +89,6 @@
         <!-- dashboard -->
         <div class="container">
           <app-today *ngIf="active=='today'"></app-today>
-          <app-calendar *ngIf="active=='calendar'"></app-calendar>
           <app-projects *ngIf="active=='projects'"></app-projects>
           <app-iot *ngIf="active=='iot'"></app-iot>
           <app-organisation *ngIf="active=='organisation'"></app-organisation>
@@ -109,7 +99,7 @@
         </div>
 
     </div>
-  </div>
+  </div> 
 
 </body>
 

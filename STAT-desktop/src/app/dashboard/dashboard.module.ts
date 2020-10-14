@@ -6,7 +6,6 @@ import { MainComponent } from './main/main.component';
 import { MaterialComponentsModule } from '../material-components/material-components.module';
 import { MatIconModule } from '@angular/material/icon';
 import { TodayComponent } from './today/today.component';
-import { CalendarComponent } from './calendar/calendar.component';
 import { IOTComponent } from './iot/iot.component';
 import { OrganisationComponent } from './organisation/organisation.component';
 import { ProjectsComponent } from './projects/projects.component';
@@ -29,7 +28,7 @@ import { AttendanceComponent } from './attendance/attendance.component';
 
 
 @NgModule({
-  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, CalendarComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent, ProfileComponent, AttendanceComponent],
+  declarations: [MainComponent, TodayComponent, OrganisationComponent, ProjectsComponent, TeamsComponent, HistoryComponent, IOTComponent, UnauthorisedComponent, AnalysisComponent, ProfileComponent, AttendanceComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
