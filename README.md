@@ -79,7 +79,7 @@ STAT accepts tracking data in various formats so you can track how you spend you
 ## Documentation
 - User Manual:
 - SRS Document: 
-- Technical Installation Manual:
+- Technical Installation Manual: https://drive.google.com/file/d/1mXITKQK-5zqrE4gaWjUqTNeZFqqkdlik/view?usp=sharing
 - Testing Policy: https://drive.google.com/file/d/1YsSinEp7KmPgtFiG3ukgArcSreOB64Wq/view?usp=sharing
 - Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
 
@@ -184,5 +184,3 @@ I have an interest in data mining, Fintech, digital marketing, android and web d
 - Jana Sander: https://www.linkedin.com/in/jana-sander-72337a1a7/
 - Vedha Krishna Velthapu: https://www.linkedin.com/in/vedha-krishna-velthapu-983445187
 
-
-```
