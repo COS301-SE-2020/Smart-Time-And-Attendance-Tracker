@@ -40,7 +40,6 @@
 - [Demo 4](#demo-3)
 - [Deployed Links](#deployed-links)
 - [Project Management Tools](#project-management-tools)
-- [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
 - [Connect with Us](#connect-with-us)
 
@@ -140,8 +139,6 @@ STAT accepts tracking data in various formats so you can track how you spend you
 - Discord: https://discord.gg/teMKux
 - Microsoft Teams: https://teams.microsoft.com/l/team/19%3aefca1c4844c14661859786c02d55c48b%40thread.tacv2/conversations?groupId=1a1bcfe4-fd5a-4647-8363-e219880bbfb2&tenantId=ddfa59c8-38d0-49a3-822e-1d3bcb5bf85b
 
-## API documentation
- - https://app.swaggerhub.com/apis-docs/Visionary/STAT/1.0.0#/
  
 ## Meet the Team
 
