@@ -28,7 +28,6 @@
 <p>
     Testing <br>
     <img alt="angular-build badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular-build/badge.svg">
-    <img alt="angular-tests badge" src="https://github.com/COS301-SE-2020/Smart-Time-And-Attendance-Tracker/workflows/angular-test/badge.svg">
 </p>
 
 ## Contents
@@ -114,13 +113,11 @@ STAT accepts tracking data in various formats so you can track how you spend you
 
 ## Deployed Links
 - Web Application: https://stat-c71ac.web.app/
-- Desktop Application: https://drive.google.com/drive/folders/1LAy6MUHw4nc7UWYPbP2AgOreGqgHa92p?usp=sharing
-<br><i>Available distributions: Windows 32-bit, Windows 64-bit, Linux 32-bit & Linux 64-bit</i>
+- Desktop Application: https://drive.google.com/file/d/1_D0OsUs-R7JY_gIy4p0ItSq4NjUqR4DR/view?usp=sharing
 <br><ul>
-    <li>Open the Google Drive folder and find your distribution's folder</li>
     <li>Download the folder to your device</li>
     <li>Unzip the downloaded folder</li>
-    <li>Launch the application by clicking on the stat-desktop file</li>
+    <li>Launch the application by clicking on the stat-desktop.exe file</li>
     </ul>
 - Plugin: https://drive.google.com/file/d/1a2ASX1jPSM07hGt6bs5fgO8nSOh8O00E/view?usp=sharing
 <br><i>Only available on Google Chrome</i>
