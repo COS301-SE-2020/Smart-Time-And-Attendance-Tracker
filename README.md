@@ -79,7 +79,7 @@ Authentication requests are automatically sent to your administrator each time a
 STAT accepts tracking data in various formats so you can track how you spend your time any way you want. When you import CSV or JSON data, STAT automatically creates the time entries for you. You can even export all of your tracking data to a JSON, CVS, or PDF file.
 
 ## Documentation
-- User Manual:
+- User Manual: https://drive.google.com/file/d/1QCKEWemZLObjgtuZPOdGoscbhC5Nri8A/view?usp=sharing
 - SRS Document: https://drive.google.com/file/d/1ogNR-OYz-wE2-cc0zSHrrW8aQJu--ujU/view?usp=sharing
 - Technical Installation Manual: https://drive.google.com/file/d/1mXITKQK-5zqrE4gaWjUqTNeZFqqkdlik/view?usp=sharing
 - Testing Policy: https://drive.google.com/file/d/1YsSinEp7KmPgtFiG3ukgArcSreOB64Wq/view?usp=sharing
