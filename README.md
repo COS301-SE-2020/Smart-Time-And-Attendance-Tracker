@@ -48,6 +48,8 @@
 ## Introduction
 STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT, and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
 
+Please visit this website to learn more about our project: https://stat-info-2020.web.app/ 
+
 ## Features
 **Automatic Tracking**\
 STAT makes it easy track time spent on activities via the dashboard and using hot keys. STAT will record the total time spent on these activities.
@@ -78,7 +80,7 @@ STAT accepts tracking data in various formats so you can track how you spend you
 
 ## Documentation
 - User Manual:
-- SRS Document: 
+- SRS Document: https://drive.google.com/file/d/1ogNR-OYz-wE2-cc0zSHrrW8aQJu--ujU/view?usp=sharing
 - Technical Installation Manual: https://drive.google.com/file/d/1mXITKQK-5zqrE4gaWjUqTNeZFqqkdlik/view?usp=sharing
 - Testing Policy: https://drive.google.com/file/d/1YsSinEp7KmPgtFiG3ukgArcSreOB64Wq/view?usp=sharing
 - Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
