@@ -34,6 +34,7 @@
 ## Contents
 - [Introduction](#introduction)
 - [Features](#features)
+- [Documentation](#documentation)
 - [Demo 1](#demo-1)
 - [Demo 2](#demo-2)
 - [Demo 3](#demo-3)
@@ -43,7 +44,6 @@
 - [API Documentation](#api-documentation)
 - [Meet the Team](#meet-the-team)
 - [Connect with Us](#connect-with-us)
-- [Repository](#repository)
 
 ## Introduction
 STAT is a web and desktop application that allows people to track time and attendance based on what they are currently working on. With the use of the latest innovations in AI, IOT, and mobile platforms, we are allowing people to improve the hours in which they are productive while freeing up time for them to relax, all at the tap of a button.
@@ -75,6 +75,13 @@ Authentication requests are automatically sent to your administrator each time a
 
 **Import/Export Functionality**\
 STAT accepts tracking data in various formats so you can track how you spend your time any way you want. When you import CSV or JSON data, STAT automatically creates the time entries for you. You can even export all of your tracking data to a JSON, CVS, or PDF file.
+
+## Documentation
+- User Manual:
+- SRS Document: 
+- Technical Installation Manual:
+- Testing Policy: https://drive.google.com/file/d/1YsSinEp7KmPgtFiG3ukgArcSreOB64Wq/view?usp=sharing
+- Coding Standards: https://drive.google.com/file/d/118hj9M_TRXh1pitGJJRKLPULQqW22Irg/view?usp=sharing
 
 ## Demo 1
 - Video: https://drive.google.com/file/d/10lgGtsxXcjNqmAYqyF_zY5kwLUqUD7wp/view?usp=sharing
@@ -178,18 +185,4 @@ I have an interest in data mining, Fintech, digital marketing, android and web d
 - Vedha Krishna Velthapu: https://www.linkedin.com/in/vedha-krishna-velthapu-983445187
 
 
-## Repository 
-This is how the branches will be laid out
-
-```
-master
-  └── server-master
-      └──── server-develop
-        └──── server-feature-
-  └── app-master
-      └──── app-develop
-        └──── app-feature-
-  └── plugin-master
-      └──── plugin-develop
-        └──── plugin-feature-
 ```
